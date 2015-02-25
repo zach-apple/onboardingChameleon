@@ -1,4 +1,4 @@
-## Orasi Selenium Core for Java Project
+## Orasi Selenium Core Project
 
 This is the homepage for the Orasi Selenium Core libraries. These libraries contain both original code created by Orasi developers
 and open source code from various other projects which are listed further down. With these libraries, consumers have access to extended 
