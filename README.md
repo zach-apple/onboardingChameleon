@@ -4,19 +4,18 @@ This is the homepage for the Orasi Selenium Core libraries. These libraries cont
 and open source code from various other projects which are listed further down. With these libraries, consumers have access to extended 
 functionality for creating testing suites for Web Applications and API Web Services.
 
-#Web Application Testing
+## Web Application Testing
 
-#API Web Service Testing
+## API Web Service Testing
 
-#Third Party Resources
+## Third Party Resources
 These resources are being used directly, or have been extended upon.
-
 	* [Selenium 2.44](https://github.com/SeleniumHQ/selenium): The base library that allows for automation of web browsers.
 	* [TestNG 6.8.7](https://github.com/cbeust/testng/): Test execution framework that extends JUnit tests and allows more flexibility for testing.
 	* [Smartbear SoapUI 4.5.0](https://github.com/SmartBear/soapui): Allows consumer to build requests files at runtime and sends request through HTTPClient
 	* More to come...
 	
-#Accessing this module
+## Accessing this module
 	* Clone/Fork Git repository: This will be the preferred method if the consumer does not want all the functionality of the libraries,
 								but still wants access to some. This also allows the consumer to control what dependencies are used.
 	
