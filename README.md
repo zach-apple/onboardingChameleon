@@ -7,10 +7,10 @@ functionality for creating testing suites for Web Applications and API Web Servi
 ## Web Application Testing
 *ToDo*
 
-## API Web Service Testing
-#Soap Services  
+##API Web Service Testing
+###Soap Services  
 *ToDo*
-#REST Services  
+###REST Services  
 *ToDo*
 
 ## Third Party Resources
