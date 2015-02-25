@@ -8,9 +8,9 @@ functionality for creating testing suites for Web Applications and API Web Servi
 *ToDo*
 
 ## API Web Service Testing
-*Soap Services
+#Soap Services  
 *ToDo*
-*REST Services
+#REST Services  
 *ToDo*
 
 ## Third Party Resources
