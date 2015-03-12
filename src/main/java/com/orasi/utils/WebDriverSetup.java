@@ -68,7 +68,7 @@ public class WebDriverSetup {
 	public static void setRunLocation(String location) {System.setProperty(Constants.RUN_LOCATION, location);}
 	
 	public static String getSeleniumHubURL() { return System.getProperty(Constants.SELENIUM_HUB_URL);}
-	public static void setSeleniuumHubURL(String url) {System.setProperty(Constants.RUN_LOCATION, url);}	
+	public static void setSeleniumHubURL(String url) {System.setProperty(Constants.RUN_LOCATION, url);}	
 	
 	public void setDriver(WebDriver driverSession){driver = driverSession;}	
 	public WebDriver getDriver(){return driver;}	
