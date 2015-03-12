@@ -32,9 +32,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class RestService {
 
-
-	
-	
 	int statusCode = 0;
 	String responseFormat;
 	String responseAsString = null;
@@ -44,17 +41,23 @@ public class RestService {
 		      configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	
 	//constructor
-	public RestService() {
-		
-	}
+	public RestService() {}
 	
-	public void setUserAgent(String userAgent){
-	    this.userAgent = userAgent;
-	}
+	/*
+	 * Encapsulation area 
+	 */
 	
-	public String getUserAgent(){
-	    return this.userAgent;
-	}
+	public String getUserAgent(){ return this.userAgent;}
+	
+	public void setUserAgent(String userAgent){ this.userAgent = userAgent;	}	
+	
+	public int getStatusCode(){ return statusCode; }
+	
+	private void setStatusCode(HttpResponse httpResponse){ 	statusCode = httpResponse.getStatusLine().getStatusCode(); }
+	
+	public String getResponseFormat(){ return responseFormat; }
+	
+	private void setResponseFormat(HttpResponse httpResponse){ responseFormat = ContentType.getOrDefault(httpResponse.getEntity()).getMimeType().replace("application/", "");	}
 	
 	/**
 	 * Sends a GET request
@@ -211,24 +214,7 @@ public class RestService {
 
 	}
 	
-	private void setStatusCode(HttpResponse httpResponse){
-		statusCode = httpResponse.getStatusLine().getStatusCode();
-		System.out.println("Status Line: " + httpResponse.getStatusLine());
-		System.out.println("Status code: " + statusCode);
-	}
 
-	public int getStatusCode(){
-		return statusCode;
-	}
-	
-	public String getResponseFormat(){
-		return responseFormat;
-	}
-	
-	private void setResponseFormat(HttpResponse httpResponse){
-		responseFormat = ContentType.getOrDefault(httpResponse.getEntity()).getMimeType().replace("application/", "");
-		System.out.println(responseFormat);
-	}
 	
 	/**
 	 * Uses the class instance of the responeAsString to map to object

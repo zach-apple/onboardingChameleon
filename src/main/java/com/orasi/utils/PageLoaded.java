@@ -72,7 +72,7 @@ public class PageLoaded {
 		}
 		
 		//set the timeout for looking for an element back to the default timeout
-		driver.manage().timeouts().implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
 		
 		if (count < this.timeout){
 			return true;

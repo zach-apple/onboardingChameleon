@@ -64,7 +64,7 @@ public abstract class SoapService{
 	private String responseTemplate = null;
 	private static Document requestDocument = null;
 	private static Document responseDocument = null;
-	protected static  StringBuffer buffer = new StringBuffer();
+	protected static StringBuffer buffer = new StringBuffer();
 
 	/*****************************
 	 **** Start Gets and Sets ****
@@ -378,28 +378,6 @@ public abstract class SoapService{
 		return XMLTools.getValueByXpath(getResponseDocument(), xpath);
 	}
 
-
-	public String getResponseNodeValueByXPath(String xpath, String[][] namespaces) {
-		SimpleNamespaceContext nsContext = new SimpleNamespaceContext();
-		for(int nsCounter = 0; nsCounter < namespaces.length; nsCounter++){
-			nsContext.addNamespace(namespaces[nsCounter][0], namespaces[nsCounter][1]);
-		}
-		XPathFactory xPathFactory = XPathFactory.newInstance();
-		XPath xPath = xPathFactory.newXPath();
-		XPathExpression expr;
-		NodeList nList = null;
-		Document doc = getResponseDocument();
-
-		try {
-			expr = xPath.compile(xpath);
-			nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-		} catch (XPathExpressionException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		return nList.item(0).getTextContent();
-	}
 	/**
 	 * @summary Find and open the excel file sent. If successful, look and find
 	 *          the matching scenario name then return its xpath and value data.
@@ -762,32 +740,6 @@ public abstract class SoapService{
 		}
 
 		return rawResponse.toString();
-	}
-
-	protected void setEnvironmentServiceURL(String service, String environment) {
-		setEnvironment(environment);
-
-		// include the %20 as whitespace for URL format
-		if (environment.toLowerCase().contains(" ")){
-			environment.replaceAll(" ", "%20");
-		}
-
-		String url = "http://dmweb.wdw-ilab.wdw.disney.com:8081/EnvSrvcEndPntRepository/rest/retrieveServiceEndpoint/{environment}/{service}";
-		String responseXML = "";
-		Document responseDoc = null;
-		url = url.replace("{environment}", environment);
-		url = url.replace("{service}", service);
-
-		try {
-			responseXML = sendGetRequest(url);
-			responseDoc = XMLTools.makeXMLDocument(responseXML);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		setServiceURL(getFirstNodeValueByTagName(responseDoc, "endPoint") + "?wsdl");
-
 	}
 
 	protected void setEnvironmentServiceURL(String endpoint) {
