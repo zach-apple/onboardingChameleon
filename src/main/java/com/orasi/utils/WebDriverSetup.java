@@ -46,29 +46,30 @@ public class WebDriverSetup {
 	}
 	
 	//Getters & Setters
-	public static void setTestEnvironment(String environment){ System.setProperty(Constants.TEST_ENVIRONMENT,environment);	}	
 	public static String getTestEnvironment(){ return System.getProperty(Constants.TEST_ENVIRONMENT);}
+	public static void setTestEnvironment(String environment){ System.setProperty(Constants.TEST_ENVIRONMENT,environment);	}		
 
-	public static void setTestApplication(String application){System.setProperty(Constants.APPLICATION_UNDER_TEST,application);}
 	public static String getTestApplication(){return System.getProperty(Constants.APPLICATION_UNDER_TEST);}
+	public static void setTestApplication(String application){System.setProperty(Constants.APPLICATION_UNDER_TEST,application);}
 
 	public static String getOperatingSystem() {return System.getProperty(Constants.OPERATING_SYSTEM);}
 	public static void setOperatingSystem(String operatingSystem) {	System.setProperty(Constants.OPERATING_SYSTEM , operatingSystem);}
-
-	public static void setBrowserUnderTest(String browser) {System.setProperty(Constants.BROWSER, browser);}	
+	
 	public static String getBrowserUnderTest(){return System.getProperty(Constants.BROWSER);}
+	public static void setBrowserUnderTest(String browser) {System.setProperty(Constants.BROWSER, browser);}
 	
 	public static String getBrowserVersion() {return System.getProperty(Constants.BROWSER_VERSION);}
 	public static void setBrowserVersion(String browserVersion) {System.setProperty(Constants.BROWSER_VERSION, browserVersion);}
 
-	public static void setDefaultTestTimeout(int timeout){System.setProperty(Constants.TEST_DRIVER_TIMEOUT, Integer.toString(timeout));}
 	public static int getDefaultTestTimeout(){return Integer.parseInt(System.getProperty(Constants.TEST_DRIVER_TIMEOUT));}
+	public static void setDefaultTestTimeout(int timeout){System.setProperty(Constants.TEST_DRIVER_TIMEOUT, Integer.toString(timeout));}
+	public static void setDefaultTestTimeout(String timeout){System.setProperty(Constants.TEST_DRIVER_TIMEOUT, timeout);}
 	
 	public static String getRunLocation() {	return System.getProperty(Constants.RUN_LOCATION);}
 	public static void setRunLocation(String location) {System.setProperty(Constants.RUN_LOCATION, location);}
 	
 	public static String getSeleniumHubURL() { return System.getProperty(Constants.SELENIUM_HUB_URL);}
-	public static void setSeleniumHubURL(String url) {System.setProperty(Constants.RUN_LOCATION, url);}	
+	public static void setSeleniumHubURL(String url) {System.setProperty(Constants.SELENIUM_HUB_URL, url);}	
 	
 	public void setDriver(WebDriver driverSession){driver = driverSession;}	
 	public WebDriver getDriver(){return driver;}	
