@@ -1,27 +1,27 @@
-##Version History
+#Version History
 
-#Version 1.0.0
+##Version 1.0.0
 * Initial Creation
 
-#Version 1.0.1
+##Version 1.0.1
 * Updated POM.xml structure
 * Updated Selenium Version to 2.44.0
 * Started removal of unused imports
 * Started adding additional comments to RestService.java and SoapService
 
-#Version 1.0.2
-* *POM.xml* - Added Sauce Lab dependencies 
+##Version 1.0.2
+* **POM.xml** - Added Sauce Lab dependencies 
 	* sauce_java_common
 	* sauce_junit
 	* sauce-ondemand-driver
 	* selenium-client-factory
 
-* *utils.Constants*
+* **utils.Constants**
 	* Removed unused constants
 	* Removed client specific constants
 	* Added constants to reference system properties
 
-* *utils.WebDriverSetup*
+* **utils.WebDriverSetup**
 	* Removed the use of many fields to reference system properties instead
 	* Added gets/sets for remote Selenium Hub URL and Test name
 	* Added additional constructor to allow option for Test name
