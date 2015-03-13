@@ -51,6 +51,7 @@ public class Constants {
     public static final String SELENIUM_HUB_URL = "selenium.hubUrl";
     public static final String TEST_DRIVER_TIMEOUT = "selenium.testDriverTimeout";
     public static final String TEST_ENVIRONMENT = "selenium.testEnvironment";
+    public static final String TEST_NAME = "selenium.testName";
     
 	/**
      * Defaults to "./" if there's an exception of any sort.
