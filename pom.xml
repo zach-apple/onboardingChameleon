@@ -66,7 +66,21 @@
 	</build>
 	<dependencies>
 		<!-- Start Selenium requirements -->
-				<dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>2.44.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.8.21</version>
+		</dependency>
+
+		<!-- End Selenium requirements -->
+
+		<!-- Start Sauce Labs requirements -->
+		<dependency>
 			<groupId>com.saucelabs</groupId>
 			<artifactId>sauce_java_common</artifactId>
 			<version>2.1.18</version>
@@ -81,25 +95,14 @@
 			<artifactId>sauce-ondemand-driver</artifactId>
 			<version>1.2</version>
 		</dependency>
-
 		<dependency>
 			<groupId>com.saucelabs.selenium</groupId>
 			<artifactId>selenium-client-factory</artifactId>
 			<version>1.2</version>
 		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-java</artifactId>
-			<version>2.44.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>6.8.21</version>
-		</dependency>
 
-		<!-- End Selenium requirements -->
-
+		<!-- End Sauce Labs requirements -->
+		
 		<!-- Start HTML Unit Driver requirements -->
 
 		<dependency>
