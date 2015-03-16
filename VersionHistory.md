@@ -7,7 +7,7 @@
 * Updated POM.xml structure
 * Updated Selenium Version to 2.44.0
 * Started removal of unused imports
-* Started adding additional comments to RestService.java and SoapService
+* Started adding additional comments to RestService.java and SoapService.java
 
 ##Version 1.0.2 - 03/13/2015
 * **POM.xml** - Added Sauce Lab dependencies 
@@ -25,3 +25,7 @@
 	* Removed the use of many fields to reference system properties instead
 	* Added gets/sets for remote Selenium Hub URL and Test name
 	* Added additional constructor to allow option for Test name
+	
+##Version 1.0.3 - 03/xx/2015
+* **com.jenkins API*
+	* Created methods to interact with a Jenkins build to get various information about a jobs latest build

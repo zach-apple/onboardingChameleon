@@ -675,10 +675,10 @@ public abstract class SoapService{
 	}
 
 	/**
-	 * @summary Validate XML Repsonse and reports findings
+	 * @summary Validate XML Response and reports findings
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
-	 * @param doc Document: XML Document to evalute
+	 * @param doc Document: XML Document to evaluate
 	 * @param xpath String: xpath to evaluate
 	 * @param value String: Depending on value given, will validate the xpath node or attribute value,
 	 *  		  	<br><br><b>Value syntax expressions:</b>
@@ -706,42 +706,24 @@ public abstract class SoapService{
 		return status;
 	}
 
+	/**
+	 * @summary Validate XML Response and reports findings
+	 * @author Justin Phlegar
+	 * @version Created: 08/28/2014
+	 * @param resourcePath: path of file to read
+	 * @param scenario String: scenario to validate 
+	 */
 	public boolean validateResponse(String resourcePath, String scenario) {
 		return validateNodeValueByXPath(getResponseDocument(),
 				getTestScenario(resourcePath, scenario));
 	}
 
-	protected String sendGetRequest(String strUrl) throws Exception {
-
-		StringBuilder rawResponse = new StringBuilder();
-
-		URL urlRequest = null;
-
-		try {
-			urlRequest = new URL(strUrl);
-		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		HttpURLConnection conn = (HttpURLConnection) urlRequest
-				.openConnection();
-		conn.setDoOutput(true);
-		conn.setDoInput(true);
-		conn.setRequestMethod("GET");
-
-		InputStream stream = conn.getInputStream();
-		BufferedReader bufferReader = new BufferedReader(new InputStreamReader(
-				stream));
-
-		String buffer = "";
-		while ((buffer = bufferReader.readLine()) != null) {
-			rawResponse.append(buffer);
-		}
-
-		return rawResponse.toString();
-	}
-
+	/**
+	 * @summary Set the WSDL Endpoint for the class to use
+	 * @author Justin Phlegar
+	 * @version Created: 08/28/2014
+	 * @param endpoint String: Endpoint location of WSDL file. This can be a web location or local. 
+	 */	
 	protected void setEnvironmentServiceURL(String endpoint) {
 		if (endpoint.contains("http")){
 			setServiceURL(endpoint + "?wsdl");
@@ -750,36 +732,34 @@ public abstract class SoapService{
 		}
 	}
 
-	protected String buildRequestFromWSDL(String service) {
-		Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-		logger.setUseParentHandlers(false);
-		logger.setLevel(Level.OFF);
-
+	/**
+	 * @summary Opens the WSDL file that was loaded with the {@link setEnvironmentServiceURL} and load a XML Template for selected operation
+	 * @author Justin Phlegar
+	 * @version Created: 08/28/2014
+	 * @param operation String: operation to load
+	 */
+	protected String buildRequestFromWSDL(String operation) {
 		WsdlProject project = null;
-
+		WsdlInterface[] wsdls = null;
 		try {
 			project = new WsdlProject();
-		} catch (XmlException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			wsdls = WsdlImporter.importWsdl(project, getServiceURL());
+		} catch (XmlException xmle) {
+			throw new RuntimeException("Error loading XML: " + xmle.getCause());
+		} catch (IOException ioe) {
+			throw new RuntimeException("Error reading WSDL file: " + ioe.getCause());		
 		} catch (SoapUIException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
-		WsdlInterface[] wsdls = null;
-		try {
-			wsdls = WsdlImporter.importWsdl(project, getServiceURL());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
 		}
+		
 		WsdlInterface wsdl = wsdls[0];
-		WsdlOperation op = wsdl.getOperationByName(service);
-		setResponseTemplate(op.createResponse(true));
-		return op.createRequest(true);
+		WsdlOperation wsdlOperation = wsdl.getOperationByName(operation);
+		setResponseTemplate(wsdlOperation.createResponse(true));
+		return wsdlOperation.createRequest(true);
 	}
 
 	protected void removeComments() {
@@ -789,11 +769,6 @@ public abstract class SoapService{
 
 	protected void removeWhiteSpace() {
 		setRequestDocument(XMLTools.removeWhiteSpace(getRequestDocument()));
-	}
-
-	private String getFirstNodeValueByTagName(Document doc, String tag) {
-		NodeList nList = doc.getElementsByTagName(tag);
-		return nList.item(0).getTextContent();
 	}
 
 	public boolean validateRepsonseXML() {
