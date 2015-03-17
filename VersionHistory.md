@@ -27,5 +27,9 @@
 	* Added additional constructor to allow option for Test name
 	
 ##Version 1.0.3 - 03/xx/2015
-* **com.jenkins API*
-	* Created methods to interact with a Jenkins build to get various information about a jobs latest build
+* **com.jenkins API**
+	* Created methods to interact with a Jenkins server to get various information about a jobs latest build
+	
+* Rollback to Selenium Version 2.43.1 due to Webdriver Platform discrepancies
+	* https://code.google.com/p/selenium/issues/detail?id=8333
+	* https://code.google.com/p/selenium/issues/detail?id=8083

@@ -9,6 +9,7 @@ public class JenkinsClient {
     private String host = "localhost";
     private String port  = "80";
     private String jobPath = "job/";
+    private String apiJson = "/api/json";
     
     public String getBaseUrl() {return "http://" + getHost() + ":" + getPort() + "/";}
     //private void setBaseUrl(String url) {this.baseUrl = url;}
@@ -41,7 +42,7 @@ public class JenkinsClient {
 	LastBuild lastBuild = null;
 	
 	try {
-	    restService.sendGetRequest(getJobsURL() +  job + "/lastBuild");
+	    restService.sendGetRequest(getJobsURL() +  job + "/lastBuild" + apiJson);
 	    lastBuild = restService.mapJSONToObject(LastBuild.class);
 		
 	} catch (IOException e) {
@@ -56,7 +57,7 @@ public class JenkinsClient {
 	LastCompletedBuild lastCompletedBuild = null;
 	
 	try {
-	    restService.sendGetRequest(getJobsURL() +  job + "/lastCompletedBuild");
+	    restService.sendGetRequest(getJobsURL() +  job + "/lastCompletedBuild" + apiJson);
 	    lastCompletedBuild = restService.mapJSONToObject(LastCompletedBuild.class);
 		
 	} catch (IOException e) {
@@ -71,7 +72,7 @@ public class JenkinsClient {
 	LastFailedBuild lastFailedBuild = null;
 	
 	try {
-	    restService.sendGetRequest(getJobsURL() +  job + "/lastFailedBuild");
+	    restService.sendGetRequest(getJobsURL() +  job + "/lastFailedBuild" + apiJson);
 	    lastFailedBuild = restService.mapJSONToObject(LastFailedBuild.class);
 		
 	} catch (IOException e) {
@@ -85,7 +86,7 @@ public class JenkinsClient {
 	LastStableBuild lastStableBuild = null;
 	
 	try {
-	    restService.sendGetRequest(getJobsURL() +  job + "/lastStableBuild");
+	    restService.sendGetRequest(getJobsURL() +  job + "/lastStableBuild" + apiJson);
 	    lastStableBuild = restService.mapJSONToObject(LastStableBuild.class);
 		
 	} catch (IOException e) {
@@ -99,7 +100,7 @@ public class JenkinsClient {
 	LastSuccessfulBuild lastSuccessfulBuild = null;
 	
 	try {
-	    restService.sendGetRequest(getJobsURL() +  job + "/lastSuccessfulBuild");
+	    restService.sendGetRequest(getJobsURL() +  job + "/lastSuccessfulBuild" + apiJson);
 	    lastSuccessfulBuild = restService.mapJSONToObject(LastSuccessfulBuild.class);
 		
 	} catch (IOException e) {
@@ -113,7 +114,7 @@ public class JenkinsClient {
 	LastUnstableBuild lastUnstableBuild = null;
 	
 	try {
-	    restService.sendGetRequest(getJobsURL() +  job + "/lastUnstableBuild");
+	    restService.sendGetRequest(getJobsURL() +  job + "/lastUnstableBuild" + apiJson);
 	    lastUnstableBuild = restService.mapJSONToObject(LastUnstableBuild.class);
 		
 	} catch (IOException e) {
@@ -127,7 +128,7 @@ public class JenkinsClient {
 	LastUnsuccessfulBuild lastUnsuccessfulBuild = null;
 	
 	try {
-	    restService.sendGetRequest(getJobsURL() +  job + "/lastUnstableBuild");
+	    restService.sendGetRequest(getJobsURL() +  job + "/lastUnstableBuild" + apiJson);
 	    lastUnsuccessfulBuild = restService.mapJSONToObject(LastUnsuccessfulBuild.class);
 		
 	} catch (IOException e) {
