@@ -35,3 +35,11 @@
 	* https://code.google.com/p/selenium/issues/detail?id=8083
 	
 * Adding JUnit 4.12 dependency to the pom.xml to address issues where JUnit may not be associated with client project
+
+* Adding Sauce Lab dependencies to pom.xml to allow interaction to Sauce Labs
+	* sauce_java_common
+	* sauce_junit
+	* sauce_testng
+	* saucerest
+	* selenium-client-factory
+	* sauce-ondemand-driver
