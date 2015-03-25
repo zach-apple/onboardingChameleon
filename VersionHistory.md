@@ -26,10 +26,12 @@
 	* Added gets/sets for remote Selenium Hub URL and Test name
 	* Added additional constructor to allow option for Test name
 	
-##Version 1.0.3 - 03/xx/2015
+##Version 1.0.3 - 03/25/2015
 * **com.jenkins API**
-	* Created methods to interact with a Jenkins server to get various information about a jobs latest build
+	* Created methods to interact with a Jenkins server to get various information about a jobs latest build. Additional expansions for Jenkins are planned.
 	
 * Rollback to Selenium Version 2.43.1 due to Webdriver Platform discrepancies
 	* https://code.google.com/p/selenium/issues/detail?id=8333
 	* https://code.google.com/p/selenium/issues/detail?id=8083
+	
+* Adding JUnit 4.12 dependency to the pom.xml to address issues where JUnit may not be associated with client project
