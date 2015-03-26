@@ -26,9 +26,12 @@
 	* Added gets/sets for remote Selenium Hub URL and Test name
 	* Added additional constructor to allow option for Test name
 	
-##Version 1.0.3 - 03/25/2015
+##Version 1.0.3 - 03/26/2015
 * **com.jenkins API**
 	* Created methods to interact with a Jenkins server to get various information about a jobs latest build. Additional expansions for Jenkins are planned.
+
+* **com.orasi.utils.WebDriverSetup**
+	* Uncommented lines of code that was not intended to be commented, preventing the Chrome Driver from being recognized
 	
 * Rollback to Selenium Version 2.43.1 due to Webdriver Platform discrepancies
 	* https://code.google.com/p/selenium/issues/detail?id=8333
