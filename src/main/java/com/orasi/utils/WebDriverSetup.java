@@ -171,11 +171,11 @@ public class WebDriverSetup {
 		}
 		// Chrome
 		else if (getBrowserUnderTest().equalsIgnoreCase("Chrome")) {
-		    // file = new
-		    // File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL
-		    // + "ChromeDriver.exe").getPath());
-		    // System.setProperty("webdriver.chrome.driver",
-		    // file.getAbsolutePath());
+		     file = new
+		     File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL
+		     + "ChromeDriver.exe").getPath());
+		     System.setProperty("webdriver.chrome.driver",
+		     file.getAbsolutePath());
 		    driver = new ChromeDriver();
 		}
 		// Headless - HTML unit driver
