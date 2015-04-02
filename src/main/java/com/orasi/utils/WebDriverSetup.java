@@ -22,8 +22,6 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 import org.testng.Assert;
 
-import com.jenkins.*;
-
 public class WebDriverSetup {
 
     public WebDriver driver;
