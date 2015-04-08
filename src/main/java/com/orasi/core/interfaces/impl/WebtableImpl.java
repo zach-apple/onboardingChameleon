@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 import javax.naming.directory.NoSuchAttributeException;
 
 import com.orasi.core.interfaces.Webtable;
-import com.orasi.utils.WebDriverSetup;
+import com.orasi.utils.TestEnvironment;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -40,7 +40,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 		if (rowCollection.size() == 0) {
 			rowCollection = this.element.findElements(By.xpath("tbody/tr"));
 		}
-    	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+    	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 		return rowCollection.size();
 	}
     
@@ -63,7 +63,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 		if (rowCollection.size() == 0) {
 			rowCollection = this.element.findElements(By.xpath("tbody/tr"));
 		}
-    	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+    	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 		
 		int currentRow = 1;
 		int columnCount = 0;
@@ -81,7 +81,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	        	}else{
 	        		throw new NoSuchAttributeException("No child element with the HTML tag \"th\" or \"td\" were found for the parent webtable [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
 	        	}
-	        	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+	        	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 	        	
 				List<WebElement> columnCollection = rowElement.findElements(By.xpath(xpath));
 				columnCount =columnCollection.size();	 
@@ -116,7 +116,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 		if (rowCollection.size() == 0) {
 			rowCollection = this.element.findElements(By.xpath("tbody/tr"));
 		}
-    	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+    	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 		WebElement elementCell = null;
 
         int currentRow = 1,currentColumn = 1;
@@ -139,7 +139,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	        		throw new NoSuchAttributeException("No child element with the HTML tag \"th\" or \"td\" were found for the parent webtable [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
 	        	}
 	        	
-	        	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+	        	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 	        	
 	            columnCollection = rowElement.findElements(By.xpath(xpath));          
 	            for(WebElement cell : columnCollection)
@@ -181,7 +181,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 		if (rowCollection.size() == 0) {
 			rowCollection = this.element.findElements(By.xpath("tbody/tr"));
 		}
-    	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+    	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 
         int currentRow = 1,currentColumn = 1;
         String xpath = null;        
@@ -203,7 +203,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	        		throw new NoSuchAttributeException("No child element with the HTML tag \"th\" or \"td\" were found for the parent webtable [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
 	        	}
 	        	
-	        	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+	        	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 	        	
 	            columnCollection = rowElement.findElements(By.xpath(xpath));          
 	            for(WebElement cell : columnCollection)
@@ -243,7 +243,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 		if (rowCollection.size() == 0) {
 			rowCollection = this.element.findElements(By.xpath("tbody/tr"));
 		}
-    	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+    	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 
         int currentRow = 1,currentColumn = 1;
         String xpath = null, cellData = "";        
@@ -265,7 +265,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	        		throw new NoSuchAttributeException("No child element with the HTML tag \"th\" or \"td\" were found for the parent webtable [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
 	        	}
 	        	
-	        	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+	        	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 	        	
 	            columnCollection = rowElement.findElements(By.xpath(xpath));          
 	            for(WebElement cell : columnCollection)
@@ -303,7 +303,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 		if (rowCollection.size() == 0) {
 			rowCollection = this.element.findElements(By.xpath("tbody/tr"));
 		}
-    	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+    	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 
         int currentRow = 1,currentColumn = 1, rowFound = 0;
         String xpath = null;
@@ -321,7 +321,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	        		xpath = "td";
 	        	}
 	        	
-	        	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+	        	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 	        	
 	            List<WebElement> columnCollection = rowElement.findElements(By.xpath(xpath));          
 	            for(WebElement cell : columnCollection)
@@ -363,7 +363,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 		if (rowCollection.size() == 0) {
 			rowCollection = this.element.findElements(By.xpath("tbody/tr"));
 		}
-    	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+    	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 
         int currentRow = 1,currentColumn = 1, rowFound = 0;
         String xpath = null;
@@ -381,7 +381,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	        		xpath = "td";
 	        	}
 	        	
-	        	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+	        	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 	        	
 	            List<WebElement> columnCollection = rowElement.findElements(By.xpath(xpath));          
 	            for(WebElement cell : columnCollection)
@@ -425,7 +425,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 		if (rowCollection.size() == 0) {
 			rowCollection = this.element.findElements(By.xpath("tbody/tr"));
 		}
-    	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+    	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 
         int currentRow = 1,currentColumn = 1, rowFound = 0;
         String xpath = null;
@@ -446,7 +446,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 		        		xpath = "td";
 		        	}
 		        	
-		        	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+		        	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 		        			    
 		            List<WebElement> columnCollection = rowElement.findElements(By.xpath(xpath));          
 		            for(WebElement cell : columnCollection)
@@ -489,7 +489,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 		if (rowCollection.size() == 0) {
 			rowCollection = this.element.findElements(By.xpath("tbody/tr"));
 		}
-    	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+    	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 
         int currentRow = 1,currentColumn = 1, columnFound = 0;
         String xpath = null;
@@ -507,7 +507,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	        		xpath = "td";
 	        	}
 	        	
-	        	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+	        	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 	        	
 	            List<WebElement> columnCollection = rowElement.findElements(By.xpath(xpath));          
 	            for(WebElement cell : columnCollection)
@@ -548,7 +548,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 		if (rowCollection.size() == 0) {
 			rowCollection = this.element.findElements(By.xpath("tbody/tr"));
 		}
-    	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+    	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 
         int currentRow = 1,currentColumn = 1, columnFound = 0;
         String xpath = null;
@@ -569,7 +569,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 		        		xpath = "td";
 		        	}
 		        	
-		        	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+		        	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 		        	
 		            List<WebElement> columnCollection = rowElement.findElements(By.xpath(xpath));          
 		            for(WebElement cell : columnCollection)
@@ -612,7 +612,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 		if (rowCollection.size() == 0) {
 			rowCollection = this.element.findElements(By.xpath("tbody/tr"));
 		}
-    	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+    	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 
         int currentRow = 1,currentColumn = 1, rowFound = 0;
         String xpath = null;
@@ -630,7 +630,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	        		xpath = "td";
 	        	}
 	        	
-	        	driver.manage().timeouts().implicitlyWait(WebDriverSetup.getDefaultTestTimeout(), TimeUnit.SECONDS);
+	        	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 	        	
 	            List<WebElement> columnCollection = rowElement.findElements(By.xpath(xpath));          
 	            for(WebElement cell : columnCollection)

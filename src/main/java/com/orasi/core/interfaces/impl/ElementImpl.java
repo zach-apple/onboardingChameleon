@@ -22,7 +22,7 @@ import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import com.orasi.core.interfaces.Element;
 import com.orasi.utils.TestReporter;
-import com.orasi.utils.WebDriverSetup;
+import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.date.SimpleDate;
 
 /**
@@ -233,11 +233,11 @@ public class ElementImpl implements Element {
 		boolean found = false;
 		double loopTimeout = 0;
 		By locator = getElementLocator();
-		loopTimeout = WebDriverSetup.getDefaultTestTimeout() * 10;
+		loopTimeout = TestEnvironment.getDefaultTestTimeout() * 10;
 		TestReporter.interfaceLog("<i> Syncing to element [ <b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>PRESENT</b> in DOM within [ "
-				+ WebDriverSetup.getDefaultTestTimeout() + " ] seconds.</i>");
+				+ TestEnvironment.getDefaultTestTimeout() + " ] seconds.</i>");
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 			if (webElementPresent(driver, locator)) {
 				found = true;
@@ -374,11 +374,11 @@ public class ElementImpl implements Element {
 		boolean found = false;
 		double loopTimeout = 0;
 
-		loopTimeout = WebDriverSetup.getDefaultTestTimeout() * 10;
+		loopTimeout = TestEnvironment.getDefaultTestTimeout() * 10;
 		TestReporter.interfaceLog("<i> Syncing to element [ <b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>VISISBLE</b> within [ "
-				+ WebDriverSetup.getDefaultTestTimeout() + " ] seconds.</i>");
+				+ TestEnvironment.getDefaultTestTimeout() + " ] seconds.</i>");
 
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 			if (webElementVisible(driver, element)) {
@@ -517,11 +517,11 @@ public class ElementImpl implements Element {
 		long loopTimeout = 0;
 		double seconds;
 
-		loopTimeout = WebDriverSetup.getDefaultTestTimeout() * 10;
+		loopTimeout = TestEnvironment.getDefaultTestTimeout() * 10;
 		TestReporter.interfaceLog("<i>Syncing to element [ <b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>HIDDEN</b> within [ "
-				+ WebDriverSetup.getDefaultTestTimeout() + " ] seconds.</i>");
+				+ TestEnvironment.getDefaultTestTimeout() + " ] seconds.</i>");
 		driver.manage().timeouts().implicitlyWait(0, TimeUnit.MILLISECONDS);
 		for (seconds = 0; seconds < loopTimeout; seconds += 1) {
 
@@ -536,7 +536,7 @@ public class ElementImpl implements Element {
 		}
 		driver.manage()
 				.timeouts()
-				.implicitlyWait(WebDriverSetup.getDefaultTestTimeout(),
+				.implicitlyWait(TestEnvironment.getDefaultTestTimeout(),
 						TimeUnit.SECONDS);
 		if (!found) {
 			dateAfter = new java.util.Date();
@@ -665,11 +665,11 @@ public class ElementImpl implements Element {
 		boolean found = false;
 		double loopTimeout = 0;
 
-		loopTimeout = WebDriverSetup.getDefaultTestTimeout() * 10;
+		loopTimeout = TestEnvironment.getDefaultTestTimeout() * 10;
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>ENABLED</b> within [ <b>"
-				+ WebDriverSetup.getDefaultTestTimeout()
+				+ TestEnvironment.getDefaultTestTimeout()
 				+ "</b> ] seconds.</i>");
 
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
@@ -816,11 +816,11 @@ public class ElementImpl implements Element {
 		boolean found = false;
 		double loopTimeout = 0;
 
-		loopTimeout = WebDriverSetup.getDefaultTestTimeout() * 10;
+		loopTimeout = TestEnvironment.getDefaultTestTimeout() * 10;
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>DISABLED</b> within [ <b>"
-				+ WebDriverSetup.getDefaultTestTimeout()
+				+ TestEnvironment.getDefaultTestTimeout()
 				+ "</b> ] seconds.</i>");
 
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
@@ -968,11 +968,11 @@ public class ElementImpl implements Element {
 		boolean found = false;
 		double loopTimeout = 0;
 
-		loopTimeout = WebDriverSetup.getDefaultTestTimeout() * 10;
+		loopTimeout = TestEnvironment.getDefaultTestTimeout() * 10;
 		TestReporter.interfaceLog("<i>Syncing to text in element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be displayed within [ <b>"
-				+ WebDriverSetup.getDefaultTestTimeout()
+				+ TestEnvironment.getDefaultTestTimeout()
 				+ "</b> ] seconds.</i>");
 
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {

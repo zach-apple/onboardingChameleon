@@ -29,7 +29,7 @@ public class WindowHandler {
 			}		
 			time++;
 			
-			if (time == WebDriverSetup.getDefaultTestTimeout()) found = true;
+			if (time == TestEnvironment.getDefaultTestTimeout()) found = true;
 		
 	}
 	
