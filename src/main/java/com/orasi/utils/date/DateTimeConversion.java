@@ -7,7 +7,7 @@ import java.util.Calendar;
 public class DateTimeConversion {
 
 	public DateTimeConversion() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public static String ConvertToDate(String daysOut){
@@ -32,8 +32,6 @@ public class DateTimeConversion {
 		return new SimpleDateFormat(format).format(date);
 	}
 
-
-	
 	public String ConvertToDateYYYYMMDD(String daysOut){
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar cal = Calendar.getInstance();
