@@ -30,12 +30,6 @@ public class TestReporter {
 	if(getPrintToConsole()) System.out.println(step);
     }
 
-    /*
-     * public static void logScenario(){
-     * Reporter.log("<br/><b><font size = 4>Data Scenario: " +
-     * Datatable.getCurrentScenario()+ "</font></b><br/>"); }
-     */
-
     public static void logScenario(String scenario) {
 	Reporter.log("<br/><b><font size = 4>Data Scenario: " + scenario
 		+ "</font></b><br/>");
