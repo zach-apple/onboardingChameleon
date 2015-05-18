@@ -344,66 +344,6 @@ public class WebDriverSetup {
     }
 
     /**
-     * Verifies that the OS passed by the TestNG XML is the same as the actual
-     * OS
-     * 
-     * @version 01/16/2015
-     * @author Waightstill W Avery
-     */
-    private void verifyExpectedAndActualOS() {
-	// Verify that the current OS is actually that which was indicated as
-	// expected by the TestNG XML
-	String platform = Platform.getCurrent().toString().toLowerCase();
-	switch (getOperatingSystem()) {
-	/*
-	 * Mac OS, Linux, Unix and Android are OS enumerations that have only
-	 * one value. Windows is treated as the default case, but a validation
-	 * is made that the current Windows OS is one that can be handled by the
-	 * framework.
-	 */
-	case "mac":
-	case "linux":
-	case "unix":
-	case "android":
-	    TestReporter
-		    .assertTrue(
-			    platform.trim()
-				    .replace(" ", "")
-				    .equalsIgnoreCase(
-					    getOperatingSystem().toString()
-						    .toLowerCase().trim()
-						    .replace(" ", "")),
-			    "The System OS ["
-				    + platform.trim().replace(" ", "")
-				    + "] did not match that which was passed in the TestNG XML ["
-				    + getOperatingSystem().toString()
-					    .toLowerCase().trim()
-					    .replace(" ", "") + "].");
-	    break;
-	default:
-	    String[] knownPlatformValues = { "windows", "xp", "vista", "win8",
-		    "win8_1" };
-	    Boolean osFound = false;
-	    for (int winCount = 0; winCount < knownPlatformValues.length; winCount++) {
-		osFound = platform
-			.equalsIgnoreCase(knownPlatformValues[winCount]);
-		if (osFound) {
-		    break;
-		}
-	    }
-	    TestReporter.assertTrue(osFound,
-		    "Validating expected vs. actual operating systems");
-	    Assert.assertTrue(
-		    osFound,
-		    "The System OS ["
-			    + platform
-			    + "] did not match that which was passed in the TestNG XML ["
-			    + getOperatingSystem() + "].");
-	    break;
-	}
-    }
-
-    /**
      * Verifies that a suitable version of Firefox is installed on the Linux box
      * and that a soft/symbolc link is available for Selenium to access
      * 

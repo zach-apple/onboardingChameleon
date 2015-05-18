@@ -32,6 +32,7 @@
 
 * **com.orasi.utils.WebDriverSetup**
 	* Uncommented lines of code that was not intended to be commented, preventing the Chrome Driver from being recognized
+	* Removed static modifier from the driver in WebDriverSetup which was causing errors in parallel testing.
 	
 * Rollback to Selenium Version 2.43.1 due to Webdriver Platform discrepancies
 	* https://code.google.com/p/selenium/issues/detail?id=8333

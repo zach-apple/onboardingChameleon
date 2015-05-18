@@ -31,7 +31,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 public class RestService {
-
 	int statusCode = 0;
 	String responseFormat;
 	String responseAsString = null;
@@ -210,8 +209,6 @@ public class RestService {
 		setResponseFormat(httpResponse);
 		
 		return headers;
-		
-
 	}
 	
 
