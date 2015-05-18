@@ -218,6 +218,6 @@ public class PageLoaded {
 	 */
 	public boolean isDomComplete(WebDriver driver, int timeout){
 		this.timeout = timeout;
-		return isDomInteractive(driver);
+		return isDomComplete(driver);
 	}
 }
