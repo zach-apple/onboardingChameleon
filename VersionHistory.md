@@ -48,7 +48,7 @@
 	* selenium-client-factory
 	* sauce-ondemand-driver
 	
-##Version 1.0.3 - 03/26/2015
+##Version 1.0.4 - 05/29/2015
 * **com.orasi.utils.TestEnvironment**
 	* Created class to facilitate full parallel remote testing that will only be limited by the number of nodes on the Selenium grid
 		* Absorb WebDriverSetup and all associated fields required to create a WebDriver, both local and remote
@@ -61,10 +61,4 @@
 			* protected String runLocation
 			* protected String environment
 			* protected String testName
-* **com.orasi.utils.TestNgTestClassMethods**
-	* Created class to reduce the clutter in the test classes, making for cleaner code
-		* Enclosed methods contain the code required by individual TestNG annotated methods
-			* testStart(String testName, TestEnvironment te) - initializes and return the test WebDriver
-			* after(ITestResult test, WebDriver driver) - takes screenshot on failure and tears down the WebDriver
-			* after_sauceLabs(ITestResult test, WebDriver driver) - extends the after() to update SauceLab tests
 			
