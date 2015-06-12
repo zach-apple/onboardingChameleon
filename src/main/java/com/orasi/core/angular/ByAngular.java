@@ -1,11 +1,11 @@
 package com.orasi.core.angular;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-
-import java.util.List;
 
 public class ByAngular {
 
@@ -29,6 +29,10 @@ public class ByAngular {
     
     public static ByAngularController controller(String controller) {
         return new ByAngularController(jse, controller);
+    }
+    
+    public static ByAngularShow show(String show) {
+        return new ByAngularShow(jse, show);
     }
     
     public static ByAngularButtonText buttonText(String text) {

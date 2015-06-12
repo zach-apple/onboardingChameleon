@@ -141,6 +141,18 @@ public abstract class ByNG {
 
     return new ByNGRepeater(ngRepeater);
   }
+ 
+ /**
+  * @param ngShow The value of the "ngShow" attribute to search for
+  * @return a By which locates elements by the value of the "ngShow" attribute.
+  */
+public static ByNG ngShow(final String ngShow) {
+   if (ngShow == null)
+     throw new IllegalArgumentException(
+         "Cannot find elements when ngRepeater text is null.");
+
+   return new ByNGShow(ngShow);
+ }
 /*
   *//**
    * @param name The element's tagName
@@ -417,6 +429,38 @@ public abstract class ByNG {
       return "By.name: " + name;
     }
   }
+  
+  public static class ByNGShow extends ByNG implements Serializable {
+
+      private static final long serialVersionUID = 376317282960469555L;
+
+      private final String name;
+
+      public ByNGShow(String name) {
+        this.name = name;
+      }
+
+      @Override
+      public List<WebElement> findElements(SearchContext context) {
+        if (context instanceof FindsByNGModel)
+          return ((FindsByNGShow) context).findElementsByNGShow(name);
+        return ((FindsByXPath) context).findElementsByXPath(".//*[@name = '"
+            + name + "']");
+      }
+
+      @Override
+      public WebElement findElement(SearchContext context) {
+        if (context instanceof FindsByNGModel)
+          return ((FindsByNGShow) context).findElementByNGShow(name);
+        return (WebElement) ((FindsByXPath) context).findElementsByXPath(".//*[@name = '"
+            + name + "']");
+      }
+
+      @Override
+      public String toString() {
+        return "By.name: " + name;
+      }
+    }
   
   public static class ByNGController extends ByNG implements Serializable {
 
