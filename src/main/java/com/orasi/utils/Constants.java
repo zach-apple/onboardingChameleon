@@ -41,6 +41,12 @@ public class Constants {
     /** The default timeout in seconds, should be a generous default time */
     final static public int DEFAULT_GLOBAL_DRIVER_TIMEOUT = 60;
 
+    /** The timeout (seconds) for finding web elements on a page, shouldn't be too long */
+    final static public int ELEMENT_TIMEOUT = 10;
+    
+    /** The timeout (seconds) for page/DOM/transitions, should also be a generous */
+    final static public int PAGE_TIMEOUT = 60;
+    
     /** System properties */
 
     public static final String APPLICATION_UNDER_TEST = "selenium.applicationUnderTest";
