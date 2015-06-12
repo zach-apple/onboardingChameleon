@@ -712,9 +712,12 @@ public class ElementImpl implements Element {
 			Dimension size = element.getSize();
 			if ((location.getX() > 0 & location.getY() > 0)
 					| (size.getHeight() > 0 & size.getWidth() > 0)) {
-				return true;
+			    if(element.getAttribute("hidden") != null) {
+				if(element.getAttribute("hidden").equals("true")) return false;
+			    }
+			    return true;
 			} else {
-				return false;
+			    return false;
 			}
 
 		} catch (WebDriverException | ClassCastException e) {
@@ -804,10 +807,7 @@ public class ElementImpl implements Element {
 		String locator = "";
 		int startPosition = 0;
 		try {
-			startPosition = element.toString().lastIndexOf("->") + 3;
-			locator = element.toString().substring(startPosition,
-					element.toString().lastIndexOf(":"));
-			locator = locator.trim();
+			locator = getElementLocatorAsString();
 			switch (locator) {
 			case "className":
 				by = new ByClassName(getElementIdentifier());
@@ -842,10 +842,15 @@ public class ElementImpl implements Element {
 	public String getElementIdentifier() {
 		String locator = "";
 		int startPosition = 0;
-		startPosition = element.toString().lastIndexOf(": ") + 2;
-		locator = element.toString().substring(startPosition,
-				element.toString().lastIndexOf("]"));
-
+		if(element.getClass().toString().contains("htmlunit")){
+		    startPosition = element.toString().indexOf("=\"") + 2;
+		    locator = element.toString().substring(startPosition,
+			    		element.toString().lastIndexOf("\" type="));
+		}else{
+		    startPosition = element.toString().lastIndexOf(": ") + 2;
+		    locator = element.toString().substring(startPosition,
+			    		element.toString().lastIndexOf("]"));
+		}
 		return locator.trim();
 	}
 
@@ -858,10 +863,14 @@ public class ElementImpl implements Element {
 	private String getElementLocatorAsString() {
 		int startPosition = 0;
 		String locator = "";
+		if(element.getClass().toString().contains("htmlunit")){
+		    startPosition = 7;
+		    locator = element.toString().substring(startPosition, element.toString().indexOf("="));
+		}else{
 		startPosition = element.toString().lastIndexOf("->") + 3;
 		locator = element.toString().substring(startPosition,
 				element.toString().lastIndexOf(":"));
-
+		}
 		locator = locator.trim();
 		return locator;
 
