@@ -544,8 +544,7 @@ public class TestEnvironment {
      */
     public void initializePage(Class<?> clazz) {
 	try {
-	    ElementFactory.initElements(driver,
-		    clazz.getConstructor(TestEnvironment.class));
+	    ElementFactory.initElements(driver, clazz.getConstructor(TestEnvironment.class));
 	} catch (NoSuchMethodException | SecurityException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
