@@ -47,3 +47,64 @@
 	* saucerest
 	* selenium-client-factory
 	* sauce-ondemand-driver
+	
+##Version 1.0.4 - 06/11/2015
+* [**com.orasi.utils.TestEnvironment**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)
+	* Created class to facilitate full parallel remote testing that will only be limited by the number of nodes on the Selenium grid
+		* Absorb WebDriverSetup and all associated fields required to create a WebDriver, both local and remote
+		* Absorb the page class methods pageLoaded(), pageLoaded(Class<?> clazz, Element element) and initializePage(Class<?> clazz)
+		* Absorb the fields required for WebDriver setup
+			* protected String applicationUnderTest
+			* protected String browserUnderTest
+			* protected String browserVersion
+			* protected String operatingSystem
+			* protected String runLocation
+			* protected String environment
+			* protected String testName
+			
+* **POM.xml**
+	* Updated Selenium to 2.46.0
+	* Updated other jars to their latest stable release
+	* Adding Allure Reports Dependency
+
+* **Angular Support**
+	* Added new angular element By locater for Show directive. Usage in Page classes with PageFactory:
+			
+			@FindByNG(ngShow = "descriptor")
+			private Label labTitle;
+		
+* **General Class Updates**
+	* [SoapService](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/api/soapServices/core/SoapService.java)  
+		* Removed refactored StringBufferInputStream in place of ByteArrayInputStream
+		* Removed unused imports
+	* [Base64Encoder](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/Base64Coder.java) 
+		- Added main method to allow user generate an encoded string quickly	
+	* [Constants](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/Base64Coder.java) 
+		- Added two new constants, Element_Timeout and Page_Timeout
+	* [Element](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/core/interfaces/Element.java) /
+	[ElementImpl](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/core/interfaces/impl/ElementImpl.java) 
+		- Removed redundant code from overridden methods
+	* [PageLoaded](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/PageLoaded.java) 
+		- Added overloaded constructor to pass in the TestEnvironment, giving the option for methods not to use a parameter
+	* [Screenshot](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/Screenshot.java) 
+		- Refactored. Now screenshots will be taken automatically upon test failure. Will also create screenshot and attach 
+						to Allure Report if Allure is being used.
+	* [TestReporter](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/TestReporter.java) 
+		- Added method logFailure to remove redundancy
+		
+* **Refactored Classes or Methods**
+	* [DateTimeConversion](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/date/DateTimeConversion.java) - Deprecated existing methods due to redundancy and scalability with other formats
+		* **These methods are scheduled to be removed in 1.0.5**
+			* convertToDate(String daysOut)
+			* convertToDateYYYYMMDD(String daysOut)
+			* convertToDateMMDDYY(String daysOut)
+			* format(String date, String format)
+		* New DateTimeConversion methods
+			* convert(String date, String fromFormat, String toFormat
+			* convert(Date date, String toFormat)
+			* getDaysOut(String daysOut, String format)
+	* [Webtable](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/core/interfaces/Webtable.java) 
+		* **All deprecated methods are scheduled to be removed in 1.0.5**
+		* All original methods deprecated. Refactored with better handling, improving speed of some methods up to 300%. 
+		* Removed redundant code from overridden methods. 
+		* All methods now accept the TestEnvironment class instead of WebDriver class

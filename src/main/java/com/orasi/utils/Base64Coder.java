@@ -33,6 +33,11 @@ public class Base64Coder {
 // The line separator string of the operating system.
     private static final String systemLineSeparator = System.getProperty("line.separator");
 
+    public static void main(String[] args) {
+	byte[] toEncode = "OrasiBluesource".getBytes();
+        System.out.println(encode(toEncode)); // Display the string.
+    }
+    
 // Mapping table from 6-bit nibbles to Base64 characters.
     private static final char[] map1 = new char[64];
 

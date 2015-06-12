@@ -1,18 +1,12 @@
 package com.orasi.api.soapServices.core;
 
-import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringBufferInputStream;
 import java.io.StringWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.nio.charset.Charset;
 
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
@@ -30,11 +24,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
 import jxl.Cell;
 import jxl.Sheet;
@@ -42,7 +31,6 @@ import jxl.Workbook;
 import jxl.read.biff.BiffException;
 
 import org.apache.xmlbeans.XmlException;
-import org.jaxen.SimpleNamespaceContext;
 import org.testng.Reporter;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -54,7 +42,6 @@ import com.eviware.soapui.impl.wsdl.support.wsdl.WsdlImporter;
 import com.eviware.soapui.support.SoapUIException;
 import com.orasi.utils.XMLTools;
 
-@SuppressWarnings("deprecation")
 public abstract class SoapService{
 
 	private String strEnvironment = null;
@@ -482,10 +469,10 @@ public abstract class SoapService{
 		try {
 			messageFactory = MessageFactory
 					.newInstance(SOAPConstants.SOAP_1_1_PROTOCOL);
-
 			// Convert XML Request to SoapMessage
-			request = messageFactory.createMessage(new MimeHeaders(),
-					new StringBufferInputStream(getRequest()));
+			InputStream in = new ByteArrayInputStream(getRequest().getBytes(Charset.defaultCharset()));
+			request = messageFactory.createMessage(new MimeHeaders(),in);	
+
 			request.writeTo(System.out);
 			System.out.println();
 
@@ -538,94 +525,6 @@ public abstract class SoapService{
 		return response;
 	}	
 	
-	/**
-	 * @summary Takes the pre-built Request XML in memory and sends to the
-	 *          service
-	 * @author Justin Phlegar
-	 * @version Created: 08/28/2014
-	 * @throws UnsupportedOperationException
-	 *             Operation given did not match any of the existing operations
-	 * @throws SOAPException
-	 * @throws IOException
-	 *             Failed to read the Request properly
-	 */
-	public SOAPMessage sendRequest(String[] headerName, String[] headerValue) {
-		SOAPMessage request = null;
-		SOAPMessage response = null;
-		SOAPConnectionFactory connectionFactory = null;
-		SOAPConnection connection = null;
-		SOAPBody responseBody = null;
-		MessageFactory messageFactory = null;
-
-		// Get the service endpoint from previously stored URL
-		String url = getServiceURL();
-
-		try {
-			messageFactory = MessageFactory
-					.newInstance(SOAPConstants.SOAP_1_1_PROTOCOL);
-
-			// Convert XML Request to SoapMessage
-			
-			MimeHeaders headers = new MimeHeaders();
-			headers.setHeader(headerName[0], headerValue[0]);
-			if(headerName.length > 1){
-				for(int headerCounter = 0; headerCounter < headerName.length; headerCounter++){
-					headers.addHeader(headerName[headerCounter], headerValue[headerCounter]);
-				}
-			}
-			request = messageFactory.createMessage(headers,
-					new StringBufferInputStream(getRequest()));
-			request.writeTo(System.out);
-			System.out.println();
-
-			// Send out Soap Request to the endopoint
-			connectionFactory = SOAPConnectionFactory.newInstance();
-
-			connection = connectionFactory.createConnection();
-			response = connection.call(request, url);
-
-			// Normalize Response and get the soap body
-			response.getSOAPBody().normalize();
-			responseBody = response.getSOAPBody();
-		} catch (UnsupportedOperationException uoe) {
-			throw new RuntimeException(
-					"Operation given did not match any operations in the service"
-							+ uoe.getCause());
-		} catch (SOAPException soape) {
-			throw new RuntimeException(soape.getCause());
-		} catch (IOException ioe) {
-			throw new RuntimeException("Failed to read the request properly"
-					+ ioe.getCause());
-		}
-
-		// Check for faults and report
-		if (responseBody.hasFault()) {
-			SOAPFault newFault = responseBody.getFault();
-			setRepsonseStatusCode(newFault.getFaultCode());
-			System.out
-					.println("sendSoapReq FAULT:  " + newFault.getFaultCode());
-		} else {
-			setRepsonseStatusCode("200");
-		}
-
-		try {
-			connection.close();
-
-		} catch (SOAPException soape) {
-			throw new RuntimeException(soape.getCause());
-		}
-
-		// Covert Soap Response to XML and set it as Response in memory
-		Document doc = XMLTools.makeXMLDocument(response);
-		doc.normalize();
-		setResponseDocument(doc);
-		setResponseBaseURI(responseBody.getNamespaceURI());
-		System.out.println();
-		System.out.println();
-		System.out.println("Response");
-		System.out.println(getResponse());
-		return response;
-	}
 
 	/**
 	 * @summary Update multiple XPath nodes or attributes based on the value. The value
