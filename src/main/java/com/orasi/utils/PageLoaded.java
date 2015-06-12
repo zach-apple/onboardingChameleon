@@ -6,10 +6,10 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
-import com.orasi.utils.Sleeper;
 
 /**
  * Several different methods of waiting for a page to finish loading.  
@@ -19,8 +19,6 @@ import com.orasi.utils.Sleeper;
  * @author 	Justin Phlegar
  * 
  */
-@SuppressWarnings({"rawtypes","unchecked"})
-
 public class PageLoaded {
 	
 	private WebDriver driver = null;
@@ -31,7 +29,12 @@ public class PageLoaded {
 		this.timeout = TestEnvironment.getDefaultTestTimeout();
 	}
 	
+	public PageLoaded(TestEnvironment te){
+	    	this.driver = te.getDriver();
+		this.timeout = te.getDefaultTestTimeout();
+	}
 	
+	@SuppressWarnings("unchecked")
 	private void initialize() {
 	    ElementFactory.initElements(driver, clazz);	        
 	}
@@ -47,9 +50,7 @@ public class PageLoaded {
 	 * @author 	Justin Phlegar
 	 * @return 	False if the element is not found after the timeout, true if is found
 	 */
-	
-	public boolean isElementLoaded(Class clazz, WebDriver driver, Element obj){
-		this.driver = driver;
+	public boolean isElementLoaded(Class clazz, Element obj){
 		this.clazz = clazz;		
 		int count = 0;
 		
@@ -71,7 +72,7 @@ public class PageLoaded {
 		}
 		
 		//set the timeout for looking for an element back to the default timeout
-		driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
 		
 		if (count < this.timeout){
 			return true;
@@ -79,6 +80,23 @@ public class PageLoaded {
 			return false;
 		}
 		
+	}
+	
+	/**
+	 * This waits for a specified element on the page to be found on the page by the driver
+	 * Uses the default test time out set by WebDriverSetup
+	 * 
+	 * @param	class	the class calling this method - used so can initialize the page class repeatedly
+	 * @param 	driver	The webDriver
+	 * @param	obj		The element you are waiting to display on the page
+	 * @version	10/16/2014
+	 * @author 	Justin Phlegar
+	 * @return 	False if the element is not found after the timeout, true if is found
+	 */
+	public boolean isElementLoaded(Class clazz, WebDriver driver, Element obj){
+		this.driver = driver;
+		this.clazz = clazz;		
+		return isElementLoaded(clazz, obj);	
 	}
 	
 	/**
@@ -109,8 +127,7 @@ public class PageLoaded {
 	 * @author 	Jessica Marshall
 	 * @return 	False if the element is not found after the timeout, true if is found
 	 */
-	public boolean isDomInteractive(WebDriver driver){
-		this.driver = driver;
+	public boolean isDomInteractive(){
 		int count = 0;
 		Object obj = null;
 
@@ -136,6 +153,22 @@ public class PageLoaded {
 	}
 	
 	/**
+	 * This uses the HTML DOM readyState property to wait until a page is finished loading.  It will wait for
+	 * the ready state to be either 'interactive' or 'complete'.  
+	 * 
+	 * @param	class	the class calling this method - used so can initialize the page class repeatedly
+	 * @param 	driver	The webDriver
+	 * @param	obj		The element you are waiting to display on the page
+	 * @version	12/16/2014
+	 * @author 	Jessica Marshall
+	 * @return 	False if the element is not found after the timeout, true if is found
+	 */
+	public boolean isDomInteractive(WebDriver driver){
+		this.driver = driver;
+		return isDomInteractive();
+	}
+	
+	/**
 	 * Overloaded method - gives option of specifying a timeout.
 	 * This uses the HTML DOM readyState property to wait until a page is finished loading.  It will wait for
 	 * the ready state to be either 'interactive' or 'complete'.  
@@ -157,14 +190,20 @@ public class PageLoaded {
 	 * @param 	driver	The webDriver
 	 * @version	10/16/2014
 	 * @author 	Justin Phlegar
+	 * 
 	 */
-	public void isAngularComplete(JavascriptExecutor driver) {
-		    	
-		driver.executeAsyncScript("var callback = arguments[arguments.length - 1];" +
+	public void isAngularComplete() {
+	    try{
+		((JavascriptExecutor) driver).executeAsyncScript("var callback = arguments[arguments.length - 1];" +
     				"angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
+	    }catch (WebDriverException wde){
+		TestReporter.logFailure("Unable to perform Angular sync. This is most likely because the $browser service is not injected within the Angular Controller. Performing a IsDomComplete instead");
+		isDomComplete();
+	    }
 
     }
 	
+
 	/**
 	 * A more strict version of isDomInteractive.  
 	 * This uses the HTML DOM readyState property to wait until a page is finished loading.  It will wait for
@@ -177,8 +216,7 @@ public class PageLoaded {
 	 * @author 	Jessica Marshall
 	 * @return 	False if the element is not found after the timeout, true if is found
 	 */
-	public boolean isDomComplete(WebDriver driver){
-		this.driver = driver;
+	public boolean isDomComplete(){
 		int count = 0;
 		Object obj = null;
 
@@ -202,6 +240,22 @@ public class PageLoaded {
 			return false;
 		}
 	}
+	/**
+	 * A more strict version of isDomInteractive.  
+	 * This uses the HTML DOM readyState property to wait until a page is finished loading.  It will wait for
+	 * the ready state to be 'complete'.  
+	 * 
+	 * @param	class	the class calling this method - used so can initialize the page class repeatedly
+	 * @param 	driver	The webDriver
+	 * @param	obj		The element you are waiting to display on the page
+	 * @version	12/16/2014
+	 * @author 	Jessica Marshall
+	 * @return 	False if the element is not found after the timeout, true if is found
+	 */
+	public boolean isDomComplete(WebDriver driver){
+		this.driver = driver;
+		return isDomComplete();
+	}
 	
 	/**
 	 * Overloaded method - gives option of specifying a timeout.
@@ -217,6 +271,6 @@ public class PageLoaded {
 	 */
 	public boolean isDomComplete(WebDriver driver, int timeout){
 		this.timeout = timeout;
-		return isDomInteractive(driver);
+		return isDomComplete(driver);
 	}
 }
