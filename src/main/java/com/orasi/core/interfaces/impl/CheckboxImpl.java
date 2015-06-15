@@ -77,7 +77,7 @@ public class CheckboxImpl extends ElementImpl implements Checkbox {
             TestReporter.log("VALIDATED the Checkbox was <b> CHECKED </b> successfully."); 
         }
         return true;
-    }   
+    }    
 
     @Override
     public boolean uncheckValidate(WebDriver driver){

@@ -30,7 +30,7 @@ public interface Checkbox extends Element {
     /**
      * @summary - Un-checks checkbox if checked.
      */
-    void uncheck();
+    void uncheck(); 
 
     /**
      * @summary - Check if an element is selected, and return boolean.
