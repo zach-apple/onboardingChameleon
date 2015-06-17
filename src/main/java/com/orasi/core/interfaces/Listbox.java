@@ -48,9 +48,17 @@ public interface Listbox extends Element {
     
     /**
      * @author Justin
+     * @return WebElement list of all selected options in a given listbox 
+     * @see org.openqa.selenium.WebElement#isSelected()
+     */
+    List<WebElement> getAllSelectedOptions();
+    
+    /**
+     * @author Justin
      * @return {@link boolean} TRUE if element is currently select 
      * @see org.openqa.selenium.WebElement#isSelected()
      */
-    @Override
-    boolean isSelected();
+    boolean isSelected(String option);
+    
+    boolean isMultiple();
 }

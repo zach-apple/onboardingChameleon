@@ -91,15 +91,30 @@ public class ListboxImpl extends ElementImpl implements Listbox {
      */
     @Override
     public WebElement getFirstSelectedOption() {
-        return innerSelect.getFirstSelectedOption();
+	try{
+	    return innerSelect.getFirstSelectedOption();
+	}catch(NoSuchElementException nse){
+	    return null;
+	}
     }
     
     /**
      * @see org.openqa.selenium.WebElement#isSelected()
      */
     @Override
-    public boolean isSelected() {
-        return ((WebElement) innerSelect).isSelected();
+    public boolean isSelected(String option) {
+	List<WebElement> selectedOptions = innerSelect.getAllSelectedOptions();
+	for( WebElement selectOption : selectedOptions){
+	    if (selectOption.getText().equals(option)) return true;
+	}
+	return false;
+    }
+  
+    public List<WebElement> getAllSelectedOptions() {
+   	return innerSelect.getAllSelectedOptions();
     }
 
+    public boolean isMultiple() {
+   	return innerSelect.isMultiple();
+    }
 }
