@@ -56,6 +56,7 @@
 						<jenkinsBrowserVersion></jenkinsBrowserVersion>
 					</systemPropertyVariables>
 					<suiteXmlFiles>
+					<includes>**/**</includes>
 						<suiteXmlFile>${testNGSourceDirectory}/regression.xml</suiteXmlFile>
 					</suiteXmlFiles>
 				</configuration>
