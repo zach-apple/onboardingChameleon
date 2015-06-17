@@ -68,6 +68,13 @@
 						<suiteXmlFile>${testNGSourceDirectory}/regression.xml</suiteXmlFile>
 					</suiteXmlFiles>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.aspectj</groupId>
+						<artifactId>aspectjweaver</artifactId>
+						<version>1.8.5</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			
 			<plugin>
