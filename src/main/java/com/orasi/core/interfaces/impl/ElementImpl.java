@@ -1,5 +1,6 @@
 package com.orasi.core.interfaces.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -66,7 +67,7 @@ public class ElementImpl implements Element {
 
 	@Override
 	public void focus(WebDriver driver) {
-		new Actions(driver).moveToElement(element).perform();
+		new Actions(driver).moveToElement(element).click().perform();
 	}
 
 	@Override
@@ -844,8 +845,7 @@ public class ElementImpl implements Element {
 		int startPosition = 0;
 		if(element.getClass().toString().contains("htmlunit")){
 		    startPosition = element.toString().indexOf("=\"") + 2;
-		    locator = element.toString().substring(startPosition,
-			    		element.toString().lastIndexOf("\" type="));
+		    locator = element.toString().substring(startPosition, element.toString().indexOf("\"",element.toString().indexOf("=\"") + 3));
 		}else{
 		    startPosition = element.toString().lastIndexOf(": ") + 2;
 		    locator = element.toString().substring(startPosition,
@@ -864,7 +864,7 @@ public class ElementImpl implements Element {
 		int startPosition = 0;
 		String locator = "";
 		if(element.getClass().toString().contains("htmlunit")){
-		    startPosition = 7;
+		    startPosition =element.toString().indexOf(" ");		    
 		    locator = element.toString().substring(startPosition, element.toString().indexOf("="));
 		}else{
 		startPosition = element.toString().lastIndexOf("->") + 3;
@@ -891,5 +891,9 @@ public class ElementImpl implements Element {
 	public void scrollIntoView(WebDriver driver) {
 		((JavascriptExecutor) driver).executeScript(
 				"arguments[0].scrollIntoView(true);", element);
+	}
+	
+	public ArrayList getAllAttributes(WebDriver driver){
+	    return (ArrayList)((JavascriptExecutor) driver).executeScript("var s = []; var attrs = arguments[0].attributes; for (var l = 0; l < attrs.length; ++l) { var a = attrs[l]; s.push(a.name + ':' + a.value); } ; return s;",getWrappedElement());
 	}
 }
