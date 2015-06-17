@@ -34,7 +34,7 @@ public class Base64Coder {
     private static final String systemLineSeparator = System.getProperty("line.separator");
 
     public static void main(String[] args) {
-	byte[] toEncode = "OrasiBluesource".getBytes();
+	byte[] toEncode = "setSecure".getBytes();
         System.out.println(encode(toEncode)); // Display the string.
     }
     
