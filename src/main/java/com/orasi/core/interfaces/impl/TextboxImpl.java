@@ -73,7 +73,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
         if (!text.isEmpty()){
             try{
         	JavascriptExecutor executor = (JavascriptExecutor)driver; 
-                executor.executeScript("arguments[0].scrollIntoView(true);arguments[0].click();", element);
+                executor.executeScript("arguments[0].scrollIntoView(true);arguments[0].click();", getWrappedElement());
             	getWrappedElement().clear();
             	getWrappedElement().sendKeys(text); 
             	TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
