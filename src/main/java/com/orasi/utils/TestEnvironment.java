@@ -47,6 +47,7 @@ public class TestEnvironment {
     protected String runLocation = "";
     protected String environment = "";
     protected String testName = "";
+    protected String pageUrl = "";
     /*
      * WebDriver Fields
      */
@@ -138,6 +139,17 @@ public class TestEnvironment {
 
     public String getApplicationUnderTest() {
 	return applicationUnderTest;
+    }
+    
+    /*
+     * Getter and setter for application under test
+     */
+    protected void setPageURL(String url) {
+	pageUrl = url;
+    }
+
+    public String getPageURL() {
+	return pageUrl;
     }
 
     /*
@@ -285,7 +297,7 @@ public class TestEnvironment {
      * @return Nothing
      */
    // @Step("Launch \"{0}\"")
-    protected void launchApplication(String URL) {
+    private void launchApplication(String URL) {
 	driver.get(URL);
     }
 
@@ -303,7 +315,7 @@ public class TestEnvironment {
     /**
      * @return the {@link WebDriver} for the current thread
      */
-    public WebDriver getWebDriver() {
+    private WebDriver getWebDriver() {
 	// System.out.println("WebDriver" + webDriver.get());
 	return webDriver.get();
     }
@@ -320,7 +332,8 @@ public class TestEnvironment {
 	// the console
 	TestReporter.setPrintToConsole(true);
 	driverSetup();
-	launchApplication();
+	if (getPageURL().isEmpty()) launchApplication();
+	else launchApplication(getPageURL());
 	drivers.put(testName, driver);
 	setDriver(drivers.get(testName));
     }
