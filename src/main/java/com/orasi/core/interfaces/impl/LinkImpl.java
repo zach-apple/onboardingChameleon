@@ -43,6 +43,9 @@ public class LinkImpl extends ElementImpl implements Link {
             throw rte;
         }
     	TestReporter.interfaceLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
-    	
+    }
+    
+    public String getURL(){
+	return getWrappedElement().getAttribute("href");
     }
 }
