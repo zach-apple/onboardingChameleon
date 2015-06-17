@@ -1,0 +1,27 @@
+table
+{
+
+	background-color: #eee;
+}
+th
+{
+	background-color: #CCCCCC;
+	font-size:14px;
+	border: 0px;
+}
+
+#gender table
+{
+	background-color: #f9f9f9;
+}
+
+#VIPs 
+{
+	border: 2px solid;
+	background-color: #f9f9f9;
+}
+
+#heading
+{
+	background-color: #EEEEEE;
+}

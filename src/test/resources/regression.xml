@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Core-Regression" parallel="methods">
+	<parameter name="browserUnderTest" value="html" />
+	<parameter name="environment" value="staging" />
+	<parameter name="runLocation" value="local" />
+	<parameter name="browserVersion" value="" />
+	<parameter name="operatingSystem" value="windows" />
+ <!--  <test name="Element">
+    <classes>
+      <class name="com.orasi.core.TestElement"/>
+    </classes>
+  </test> Test
+  
+   <test name="Base64Encoder">
+    <classes>
+      <class name="com.orasi.utils.TestBase64Encoder"/>
+    </classes>
+  </test> Test
+  
+   <test name="ExcelDocumentReader">
+    <classes>
+      <class name="com.orasi.utils.TestExcelDocumentReader"/>
+    </classes>
+  </test> Test
+   -->
+	<test name="Test">
+		<groups>
+			<run>
+				<include name="regression" />
+			</run>
+		</groups>
+		<packages>
+			<package name="com.orasi.*">
+			</package>
+		</packages>
+		
+	</test> <!-- Test -->
+</suite> <!-- Suite -->

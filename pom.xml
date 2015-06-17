@@ -5,7 +5,9 @@
 	<artifactId>Selenium-Java-Core</artifactId>
 	<version>1.0.4</version>
 	<packaging>jar</packaging>
-
+	<properties>
+		<testNGSourceDirectory>src/test/resources</testNGSourceDirectory>
+	</properties>
 	<repositories>
 		<repository>
 			<id>eviware</id>
@@ -39,6 +41,36 @@
 		</pluginManagement>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.12.4</version>
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<skip>true</skip>
+							<includes>
+								<!-- <include>**/Suite_Room_Only_E2E.java</include> -->
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<systemPropertyVariables>
+						<jenkinsOperatingSystem></jenkinsOperatingSystem>
+						<jenkinsBrowser></jenkinsBrowser>
+						<jenkinsBrowserVersion></jenkinsBrowserVersion>
+					</systemPropertyVariables>
+					<suiteXmlFiles>
+						<suiteXmlFile>${testNGSourceDirectory}/regression.xml</suiteXmlFile>
+					</suiteXmlFiles>
+				</configuration>
+			</plugin>
+			
+			<plugin>
 				<artifactId>maven-deploy-plugin</artifactId>
 				<version>2.8.1</version>
 				<configuration>
@@ -65,19 +97,14 @@
 		</plugins>
 	</build>
 	<dependencies>
-		<!-- Start Selenium requirements: Up-to-date as of 6-11-2015-->
+		<!-- Start Selenium requirements: Up-to-date as of 6-11-2015 -->
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>2.46.0</version> 
-			<!--  Selenium Versions not to use
-			2.44.0 - Issues with OS Platform Capabilities 
-				https://code.google.com/p/selenium/issues/detail?id=8083  
-				https://code.google.com/p/selenium/issues/detail?id=8333
-			
-			2.45.0 - Issues with Test Execution speed
-				https://code.google.com/p/selenium/issues/detail?id=8551 
-			 -->
+			<version>2.46.0</version>
+			<!-- Selenium Versions not to use 2.44.0 - Issues with OS Platform Capabilities 
+				https://code.google.com/p/selenium/issues/detail?id=8083 https://code.google.com/p/selenium/issues/detail?id=8333 
+				2.45.0 - Issues with Test Execution speed https://code.google.com/p/selenium/issues/detail?id=8551 -->
 		</dependency>
 		<dependency>
 			<groupId>org.testng</groupId>
@@ -102,7 +129,7 @@
 					<artifactId>junit</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency> 
+		</dependency>
 
 		<!-- End Allure Reports requirements -->
 		<!-- Start Sauce Labs requirements: Up-to-date as of 6-11-2015 -->
@@ -163,8 +190,8 @@
 			<groupId>xml-apis</groupId>
 			<artifactId>xml-apis</artifactId>
 			<version>1.4.01</version>
-			<!--  IMPORTANT!: Please verify release date. Versions are not in order
-								Version 2.x are outdated being release in 2002 -->
+			<!-- IMPORTANT!: Please verify release date. Versions are not in order 
+				Version 2.x are outdated being release in 2002 -->
 		</dependency>
 
 		<!-- End General requirements -->

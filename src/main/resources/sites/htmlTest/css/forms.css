@@ -1,0 +1,97 @@
+form 
+{
+  /*margin: 0;
+  padding: 0;
+  max-width: 590px;
+  width: 590px;*/
+}
+
+form fieldset 
+{
+  clear: both;
+  font-size: 100%;
+  border-color: #000000;
+  border-width: 0;
+  border-style: solid none none none;
+  padding: 0 ;
+  margin: 5px 25px;
+  border-bottom: 1px solid #eee;
+}
+
+form fieldset legend 
+{
+  font-size:	10pt;
+  color: #555;
+  font-weight: bold;
+  margin: 0 0 0 -7px;
+  padding: 10px 0 0 0;
+}
+
+fieldset ol 
+{  
+  padding: 1em 1em 0 1em;  
+  list-style: none;
+}
+
+fieldset li 
+{  
+  padding-bottom: 1em;
+} 
+
+label 
+{  
+  float: left; 
+  text-align: right; 
+  width: 13em;  
+  margin-right: 1em;
+  padding: 2px 0;
+}
+
+form .required
+{
+  
+}
+
+form .error
+{
+  color:red;
+}
+
+form .rating b
+{
+  display: block;
+  float: left;
+  width: 110px;
+}
+
+form .rating label
+{
+  float: none; 
+  width: 60px;
+  padding: 0; 
+  margin: 0;
+}
+form .rating input 
+{
+  margin-right: 7px;
+}
+
+.download-form
+{
+	border: 1px solid #eee;
+	padding: 0px 20px 0 20px;
+	margin: 13px 0;
+
+}
+.download-form form { margin:0; padding:0; }
+.download-form form fieldset
+{
+	border:0;
+	margin: 5px 10px;
+	background: url("../images/download-premium.png") -10px 20px no-repeat;
+}
+.download-form .error
+{
+	margin-left: 130px;
+}
+

@@ -1,0 +1,447 @@
+  /* C O N T E N T    E L E M E N T S */
+  
+  body, html, div, p, i, strong, table {color:#606060; }
+  img{border:0px;}
+  div#Content img { margin: 7px 0;}
+  
+  p,i
+  {
+  	margin: 0;
+  	padding: 3px 0px;
+  }
+  
+  del
+  {
+    color: #c11111;
+  }
+  
+  div#Content table
+  {
+  	font-size: 1em;
+  	margin: 2px;
+  }
+  
+  table td 
+  {
+    padding: 3px 4px;
+    margin: 0;
+  }
+  
+  #simpletable td
+  {
+  	padding: 5px;
+  }
+  
+  .comparison {/*border: 1px solid #d0d0d0; */ margin: 10px 0pt 40px 10px;}
+
+  .comparison td
+  {
+   	padding: 5px 9px;
+  	text-align: center;
+  	border-right: 1px solid #eee;
+  }
+  
+  .comparison .cat {	border-bottom: 1px solid #dfdfdf;}
+  
+  .comparison td p {text-align: right; color: #333;}
+  
+  .comparison .odd{ background-color: #f4f4f4;}
+  .comparison .even{}
+  
+  
+  h1, h2, h3, h4, h5, h6
+  {
+    font-family: Verdana, Arial;
+    font-weight: normal;
+    padding:0;
+    letter-spacing: -1px;
+  }
+  
+   h1 
+  {
+    font-size: 19pt;
+  	font-weight: 100;
+  	color: #d00000;
+  	margin: 0 0 15px 0;
+  }
+   h1 em
+  {
+    display: none;
+  }
+  
+   h2 
+  {
+    font-size:	14pt;
+  	color: #444;
+  	margin: 20px 0 6px 0;
+  }
+   h3 
+  {
+    font-size:	10pt;
+    color: #555;
+    margin: 18px 0 6px 0;
+    font-weight: bold;
+  }
+   h4
+  {
+    font-size:	10pt;
+    color: #888;
+    margin: 15px 0 4px 0;
+    font-weight: bold;
+  }
+  
+  abbr, acronym
+  {
+    border-bottom: 1px dotted #888;
+    cursor:help;
+  }
+  
+  #Content #Top
+  {
+  	  margin-bottom: 10px;
+  	  width: 590px;
+  	  height: 150px;
+  }
+  #Content #Top h1
+  {
+  	  text-align: right;
+  	  border: 0;
+  	  color: #c00;
+  	  margin:0;
+  	  padding: 5px;
+  }
+  #Content #Top img
+  {
+  	  position: absolute;
+  	  z-index: 1;
+  }
+  
+  div#Content ul 
+  {
+  	  	list-style: url(../images/list-img.png);
+  }
+  
+  div#Content ul li
+  {
+  	  	padding: 2px 0;
+  }
+  
+  .CodeBoxTitel
+  {
+  	font-size: 1.2em;
+  	font-weight: bold;
+  	color: #255a95;
+  	margin: 12px 0 0 0;
+  	padding: 0 0 4px 8px;
+  	width: 550px;
+  	background-color: #fbfbff;
+  
+  }
+  .CodeBox
+  {
+  	border: 0;
+  	margin: 0 0 12px 0;
+  	padding: 8px 0 8px 8px;
+  	background-color: #f7f7ff;
+  	font-size: 9pt;
+  	width: 550px;
+  	border: 1px dashed gray;
+  }
+  pre
+  {
+    font-family:"Consolas","Courier New",Courier,mono,serif;
+    font-size:12px;
+    margin: 0px;
+  }
+  
+  
+  .filelinks 
+  {
+  	margin-left: 30px;
+  }
+  .filelinks  div
+  {
+  	font-size: 1.2em;
+  	margin: 10px;
+  }
+  
+  .center
+  {
+  	text-align: center;
+  }
+   .contenttable .center p
+  {
+  	padding:0;
+  	margin:0;
+  }
+  
+    /* PAGE TEASER*/
+  .tx-jppageteaser-pi1
+  {
+      margin: 0 20px 0 20px;
+      padding: 5px;
+  }
+    .tx-jppageteaser-pi1-list-entry-image img
+    {
+        border:0px;
+    }
+  .tx-jppageteaser-pi1 h4
+  {
+      	font-size: 1.2em;
+      	margin:0;
+      	padding:0;
+  }
+  .tx-jppageteaser-pi1 h4 a:link, .tx-jppageteaser-pi1 h4 a:visited
+  {
+      	text-decoration: none;
+      	color: black;
+  }
+    /* END PAGE TEASER*/
+  
+  
+  
+  
+  #Content #Bottom
+  {
+  	clear:both;
+  	background-color: #eee;
+  	height: 15px;
+  }
+  
+  
+  
+  #mailform 
+  {
+      border:0;
+      margin: 15px;
+  }
+  
+  #mailform .csc-mailform-field
+  {
+      margin: 15px;
+  }
+  
+  #mailform label
+  {
+      clear:left;
+      float: left;
+      display:block;
+      width: 100px;
+  }
+  
+  
+  .widget-container
+  {
+  	padding: 0 0 0 10px;
+  	margin: 20px 0 5px 0;
+  	width: 575px;
+  }
+  .widget-container .bottom
+  {
+  	clear: both;
+  }
+  .widget-left,  .widget-middle, .widget-right
+  {
+  	padding: 0 2px 0 10px;
+  	margin: 0;
+  	width: 180px;
+  	float: left;
+  	background-color: white;
+  }
+  .two-columns
+  {
+    width: 565px;
+    margin: 20px 0;
+    padding: 0px;
+  }
+  
+  .two-columns .widget-left , .two-columns .widget-right
+  {
+    width: 250px;
+    padding-right: 20px;
+  }
+  .two-columns .widget-left {/*border-right: 1px solid #eee;*/}
+  .two-columns h2 {margin-top: 0;}
+  
+  .widget-left {padding: 0 2px 0 0 ;}
+  .widget-middle {border-width: 0 1px; border-color:#ccc; border-style:dotted; }
+  .widget-footer {clear:both;}
+  
+  .widget ul
+  {
+    list-style: none;
+  	margin: 0 10px;
+  	padding: 5px;
+  }
+  .widget ul li
+  {
+  	padding: 7px;
+  }
+   .widget-container h3
+  {
+  	font-size: 10pt;
+  	padding: 2px 0;
+  	margin: 0px;
+  	color: gray;
+  }
+  
+  
+  a.download-link { display: block; padding: 19px 0px 19px 87px; font-size:13pt; margin: 20px 130px;  border: 1px solid #eee; text-decoration: none; background: url("/fileadmin/_temp_/RanorexPacketsmall.png") 6px 3px no-repeat;	}
+  * html a.download-link { padding: 23px 0px 23px 85px; }
+  a.download-link span { display: block;  min-height: 43px; } 	
+  a.download-link em  {  font-size: 8pt; color: gray; display: block;  padding-top: 2px; font-style:normal }
+  a.download-link:hover { border: 1px solid #aaa;}
+  
+  a.download-link.premium{background: url(../images/download-premium.png) 6px 1px no-repeat;	}
+  
+  
+  
+  .buy-now
+  {
+    float:right;
+    margin: 0px 0 30px 0; 
+  }
+  .buy-now p {font-weight: bold}
+  
+  .buy-now-box
+  {
+    margin: 10px 13px 10px 13px;
+    border-bottom:1px solid #eee; 
+    padding: 10px 6px;
+  }
+  .buy-now-box h3{width: 130px}
+  .price {}
+  .buy-now-box form
+  {
+    text-align:right; 
+    margin: -30px 0  0px 0px
+  }
+  
+  /* Styles for customer list */
+  #customer-list
+  {
+    margin:0pt 35px;
+  }
+  
+  #customer-list .csc-textpic-imagerow{clear: none;}
+  
+  #customer-list .csc-textpic-image
+  {
+    border: 1px solid #f2f2f2;
+    float:left;
+    margin: 15px 10px;
+    /*margin: auto 0;*/
+    width: 140px;
+    height: 90px;
+   
+  }  
+  
+  #customer-list .csc-textpic-image dt
+  {
+    display:table-cell;
+    height:90px;
+    width: 140px;
+    vertical-align:middle;
+    text-align: center;
+  }
+  
+  #customer-list dd
+  {
+    margin:0; padding:0;
+  }
+  
+   #customer-list .csc-textpic-image
+  {
+    padding: 15px 0;
+  }
+  
+  .csc-textpic-intext-left-nowrap .csc-textpic-imagewrap .csc-textpic-image
+  {
+    padding: 0 0 15px 0;
+    margin:0;
+  }
+  
+  div.csc-textpic-border div.csc-textpic-imagewrap .csc-textpic-image img
+  {
+    border: 1px solid #ddd;
+  }
+  
+  .csc-textpic-caption
+  {
+    font-style: italic;
+  }
+  
+  .blog-posts
+  {
+    padding: 25px 15px 10px 0px;
+    background: url(../../../pictures/layer-top.png) 0px 0px no-repeat;
+  }
+  
+  .blog-posts .logo
+  {
+    float:left;
+    padding: 5px 0;
+    margin: 10px 20px 10px 0px;
+  }
+  .blog-posts .logo img {vertical-align: middle}
+  
+  
+  .blog-posts .right 
+  {
+    float: left; 
+    width: 380px;
+    margin-bottom: 10px;
+  }
+  
+  .blog-posts li
+  {
+      margin: 8px;
+  }
+  .blog-posts .footer
+  {
+    clear:both;
+    background: url(../../../pictures/layer-bottom.png) bottom  no-repeat;
+  }
+  
+  
+  
+  .simpletable
+  {
+    padding: 8px 0;  
+  }
+  .simpletable thead
+  {
+  	background-color: #aaa;
+  	color: #fff;
+  }
+  .simpletable tbody tr td 
+  {
+    background-color: #f6f6f6;
+  }
+  .simpletable tbody tr.odd  td 
+  {
+    background-color: #fff;
+  }
+
+  
+  .note {padding: 10px;margin: 10px 5px; border: 1px solid #ddd; background-color: #FDFFD7;font-weight: bold;}
+  
+  .aticon 
+  { 
+    background:transparent url(../../images/EmailAt.gif) no-repeat scroll center bottom;
+    padding: 0pt 4px;
+    width:14px;   
+  }
+  
+  .homelist li
+  {
+    margin: 8px 0;
+  }
+  
+  
+  
+  #products-content { padding: 0px 0px; margin:0; background-image: url(../../../pictures/Products-bg.png); background-repeat: repeat-y;}
+  #products-content h2 {margin-top: 0;}
+  #product-win, #product-web { margin: 0px 14px 0px 7px; padding: 8px 10px; background:#f9f9f9; border-top: 2px solid #ebebeb; height: 20px; overflow: hidden;}
+  #products-footer { background-image: url(../../../pictures/Products-Footer.png); background-repeat: repeat-y; height: 23px;}
+  /* E N D   C O N T E N T    E L E M E N T S */
