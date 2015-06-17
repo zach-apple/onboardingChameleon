@@ -442,7 +442,7 @@ public static ByNG ngShow(final String ngShow) {
 
       @Override
       public List<WebElement> findElements(SearchContext context) {
-        if (context instanceof FindsByNGModel)
+        if (context instanceof FindsByNGShow)
           return ((FindsByNGShow) context).findElementsByNGShow(name);
         return ((FindsByXPath) context).findElementsByXPath(".//*[@name = '"
             + name + "']");
@@ -450,7 +450,7 @@ public static ByNG ngShow(final String ngShow) {
 
       @Override
       public WebElement findElement(SearchContext context) {
-        if (context instanceof FindsByNGModel)
+        if (context instanceof FindsByNGShow)
           return ((FindsByNGShow) context).findElementByNGShow(name);
         return (WebElement) ((FindsByXPath) context).findElementsByXPath(".//*[@name = '"
             + name + "']");
