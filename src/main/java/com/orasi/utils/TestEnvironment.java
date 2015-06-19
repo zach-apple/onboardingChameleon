@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -68,16 +69,13 @@ public class TestEnvironment {
     /*
      * Selenium Hub Field
      */
-    protected String seleniumHubURL = "http://"
-	    + Base64Coder.decodeString(appURLRepository
-		    .getString("SAUCELABS_USERNAME"))
-	    + ":"
-	    + Base64Coder.decodeString(appURLRepository
-		    .getString("SAUCELABS_KEY"))
-	    + "@ondemand.saucelabs.com:80/wd/hub";
+    protected String seleniumHubURL = "http://10.238.242.50:4444/wd/hub";
+    
+   
     /*
      * Sauce Labs Fields
      */
+
     /**
      * Constructs a {@link com.saucelabs.common.SauceOnDemandAuthentication}
      * instance using the supplied user name/access key. To use the
@@ -90,6 +88,10 @@ public class TestEnvironment {
 		    .getString("SAUCELABS_USERNAME")),
 	    Base64Coder.decodeString(appURLRepository
 		    .getString("SAUCELABS_KEY")));
+    
+    
+    protected String sauceLabsURL = "http://" + authentication.getUsername() + ":" + authentication.getAccessKey() + "@ondemand.saucelabs.com:80/wd/hub";
+	    
     /**
      * ThreadLocal variable which contains the {@link WebDriver} instance which
      * is used to perform browser interactions with.
@@ -253,9 +255,11 @@ public class TestEnvironment {
     /*
      * Getter and setter for the Selenium Hub URL
      */
-    public String getSeleniumHubURL() {
-	return System.getProperty(Constants.SELENIUM_HUB_URL);
-    }
+    public String getRemoteURL() {
+  	if(getRunLocation().equalsIgnoreCase("sauce") | getRunLocation().equalsIgnoreCase("remote")) return sauceLabsURL;
+  	else if (getRunLocation().equalsIgnoreCase("grid")) return seleniumHubURL;
+  	else return "";
+      }
 
     protected void setSeleniumHubURL(String url) {
 	System.setProperty(Constants.SELENIUM_HUB_URL, url);
@@ -467,7 +471,30 @@ public class TestEnvironment {
 	    }
 
 	    // Code for running on the selenium grid
-	} else if (getRunLocation().equalsIgnoreCase("remote")) {
+	} else if ( getRunLocation().equalsIgnoreCase("grid")) {
+	    DesiredCapabilities capabilities = new DesiredCapabilities();
+	    capabilities.setCapability(CapabilityType.BROWSER_NAME,
+		    getBrowserUnderTest());
+	    if (getBrowserVersion() != null) {
+		capabilities.setCapability(CapabilityType.VERSION,
+			getBrowserVersion());
+	    }
+	    
+	    capabilities.setCapability(CapabilityType.PLATFORM,
+		    getGridPlatformByOS(getOperatingSystem()));
+	    if (getBrowserUnderTest().toLowerCase().contains("ie")
+		    || getBrowserUnderTest().toLowerCase().contains("iexplore")) {
+		capabilities.setCapability("ignoreZoomSetting", true);
+	    }
+	    
+	    try {
+		driver = new RemoteWebDriver(new URL(getRemoteURL()), capabilities);
+	    } catch (MalformedURLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	    
+	} else if (getRunLocation().equalsIgnoreCase("remote") | getRunLocation().equalsIgnoreCase("sauce")) {
 	    DesiredCapabilities capabilities = new DesiredCapabilities();
 	    capabilities.setCapability(CapabilityType.BROWSER_NAME,
 		    getBrowserUnderTest());
@@ -483,10 +510,7 @@ public class TestEnvironment {
 	    }
 	    capabilities.setCapability("name", getTestName());
 	    try {
-		webDriver.set(new RemoteWebDriver(new URL("http://"
-		    + authentication.getUsername() + ":"
-		    + authentication.getAccessKey()
-		    + "@ondemand.saucelabs.com:80/wd/hub"), capabilities));
+		webDriver.set(new RemoteWebDriver(new URL("http://" + authentication.getUsername() + ":" + authentication.getAccessKey() + "@ondemand.saucelabs.com:80/wd/hub"), capabilities));
 	    } catch (MalformedURLException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -494,9 +518,9 @@ public class TestEnvironment {
 	    sessionId.set(((RemoteWebDriver) getWebDriver()).getSessionId()
 		    .toString());
 	    driver = webDriver.get();
-	} else {
+	}else {
 	    throw new RuntimeException(
-		    "Parameter for run [Location] was not set to 'Local' or 'Remote'");
+		    "Parameter for run [Location] was not set to 'Local', 'Grid', 'Sauce', or 'Remote'");
 	}
 
 	driver.manage()
@@ -561,6 +585,23 @@ public class TestEnvironment {
 	} catch (NoSuchMethodException | SecurityException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
+	}
+    }
+    
+    private Platform getGridPlatformByOS(String os){
+	switch(os.toLowerCase()){
+	    case "android": return Platform.ANDROID;
+	    case "windows": return Platform.WINDOWS;
+	    case "win8": return Platform.WIN8;
+	    case "win8.1": return Platform.WIN8_1;
+	    case "xp": return Platform.XP;
+	    case "linux": return Platform.LINUX;
+	    case "mac": return Platform.MAC;
+	    case "mavericks": return Platform.MAVERICKS;
+	    case "mountain_lion": return Platform.MOUNTAIN_LION;
+	    case "snow_leopard": return Platform.SNOW_LEOPARD;
+	    case "yosemite": return Platform.YOSEMITE;
+	    default: return Platform.ANY;
 	}
     }
 }
