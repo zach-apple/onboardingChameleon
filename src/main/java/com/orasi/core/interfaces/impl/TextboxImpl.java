@@ -99,8 +99,9 @@ public class TextboxImpl extends ElementImpl implements Textbox {
     public void safeSet(String text) {
         if (!text.isEmpty()){
             try{
+        	char ctrl_a = '\u0001';
         	getWrappedElement().click();     	
-        	getWrappedElement().sendKeys(Keys.CONTROL + "a");
+        	getWrappedElement().sendKeys(String.valueOf(ctrl_a));
         	getWrappedElement().sendKeys(text);
         	getWrappedElement().sendKeys(Keys.TAB);
         	TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [  <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
@@ -147,8 +148,9 @@ public class TextboxImpl extends ElementImpl implements Textbox {
     public void safeSetSecure(String text) {
         if (!text.isEmpty()){
             try{
-        	getWrappedElement().click();        	
-        	getWrappedElement().sendKeys(Keys.CONTROL + "a");
+        	char ctrl_a = '\u0001';
+        	getWrappedElement().click();     	
+        	getWrappedElement().sendKeys(String.valueOf(ctrl_a));
         	getWrappedElement().sendKeys(Base64Coder.decodeString(text).toString());
         	getWrappedElement().sendKeys(Keys.TAB);
         	TestReporter.log(" Send encoded text [ <b>" + text.toString() + "</b> ] to Textbox [  <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
@@ -210,8 +212,9 @@ public class TextboxImpl extends ElementImpl implements Textbox {
     	    try{
         	Element obj = new ElementImpl(getWrappedElement());
         	obj.syncEnabled(driver);
-        	getWrappedElement().click();        	
-        	getWrappedElement().sendKeys(Keys.CONTROL + "a");
+        	char ctrl_a = '\u0001';
+        	getWrappedElement().click();     	
+        	getWrappedElement().sendKeys(String.valueOf(ctrl_a));
         	getWrappedElement().sendKeys(text);
         	getWrappedElement().sendKeys(Keys.TAB);
         	TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [  <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");

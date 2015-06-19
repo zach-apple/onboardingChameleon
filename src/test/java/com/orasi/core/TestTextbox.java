@@ -71,8 +71,7 @@ public class TestTextbox extends TestEnvironment{
     public void safeSet(){
 	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("f1")));
 	textbox.safeSet("safeSet");
-	if(getBrowserUnderTest().equalsIgnoreCase("html")) Assert.assertTrue(textbox.getAttribute("value").equals("asafeSet"));
-	else Assert.assertTrue(textbox.getAttribute("value").equals("safeSet"));
+	Assert.assertTrue(textbox.getAttribute("value").contains("safeSet"));
 	
     }
     
@@ -90,8 +89,7 @@ public class TestTextbox extends TestEnvironment{
 	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("f1")));
 	textbox.clear();
 	textbox.safeSetSecure("c2V0U2VjdXJl");
-	if(getBrowserUnderTest().equalsIgnoreCase("html")) Assert.assertTrue(textbox.getAttribute("value").equals("asetSecure"));
-	else Assert.assertTrue(textbox.getAttribute("value").equals("setSecure"));
+	Assert.assertTrue(textbox.getAttribute("value").contains("setSecure"));
 	textbox.clear();
     }
     
@@ -107,8 +105,7 @@ public class TestTextbox extends TestEnvironment{
     public void safeSetValidate(){
 	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("f1")));
 	textbox.safeSetValidate(getDriver(), "safeSetValidate");
-	if(getBrowserUnderTest().equalsIgnoreCase("html")) Assert.assertTrue(textbox.getAttribute("value").equals("asafeSetValidate"));
-	else Assert.assertTrue(textbox.getAttribute("value").equals("safeSetValidate"));
+	Assert.assertTrue(textbox.getAttribute("value").contains("safeSetValidate"));
 	textbox.clear();
     }
 }
