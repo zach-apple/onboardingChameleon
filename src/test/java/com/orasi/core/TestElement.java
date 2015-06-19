@@ -81,7 +81,7 @@ public class TestElement extends TestEnvironment{
     public void getCssValue(){
 	Element element= new ElementImpl(getDriver().findElement(By.name("reset")));
 	if(getBrowserUnderTest().equalsIgnoreCase("html")) Assert.assertTrue(element.getCssValue("width").equals("auto"));  
-	else Assert.assertTrue(element.getCssValue("font-family").equals("MS Shell Dlg")); 
+	else Assert.assertTrue(element.getCssValue("font-family").equalsIgnoreCase("MS Shell Dlg")); 
     }
      
     @Test(groups ={"regression", "interfaces", "element"})
