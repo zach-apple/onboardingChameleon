@@ -11,7 +11,7 @@ public class TestBase64Encoder {
     byte[] testByteBytes = null;
     byte[] testByteArraytoTest = new byte[]{43,23,64,78,24,14,124,12,23,47,43,21,23,14,45,68,84,93,2,23,114,45,35,35,23,3,32,34};
     
-    @Test(groups="regression")
+    @Test(groups={"regression", "smoke"})
     public void encodeByte(){
 	testByteChars = Base64Coder.encode(testByteArraytoTest);
 	Assert.assertTrue(testByteChars.length > 0);

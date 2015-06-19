@@ -33,7 +33,7 @@ public class TestLink extends TestEnvironment {
 	setOperatingSystem(operatingSystem);
 	setRunLocation(runLocation);
 	setTestEnvironment(environment);
-	setPageURL("file:" +getClass().getClassLoader().getResource("sites/htmlTest/testApp.html").getPath());
+	setPageURL("http://www.cs.tut.fi/~jkorpela/www/testel.html");
 	testStart("TestLink");
     }
     
@@ -42,21 +42,25 @@ public class TestLink extends TestEnvironment {
 	endTest("TestLink");
     }
 
-    @Test(groups ={"regression", "interfaces", "link"})
+    @Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="getURL")
     public void click(){
-	Link link= new LinkImpl(getDriver().findElement(By.id("Link")));
+	Link link= new LinkImpl(getDriver().findElement(By.xpath("//a[@href='../index.html']")));
 	link.click();
+	Assert.assertTrue(new ElementImpl(getDriver().findElement(By.id("k"))).syncVisible(getDriver()));
+	getDriver().navigate().back();
     }
     
     @Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="click")
     public void jsClick(){
-	Link link= new LinkImpl(getDriver().findElement(By.id("Link")));
+	Link link= new LinkImpl(getDriver().findElement(By.xpath("//a[@href='../index.html']")));
 	link.jsClick(getDriver());
+	Assert.assertTrue(new ElementImpl(getDriver().findElement(By.id("k"))).syncVisible(getDriver()));
+	getDriver().navigate().back();
     }
     
     @Test(groups ={"regression", "interfaces", "link"})
     public void getURL(){
-	Link link= new LinkImpl(getDriver().findElement(By.id("Link")));
-	Assert.assertTrue(link.getURL().contains("testApp.html"));
+	Link link= new LinkImpl(getDriver().findElement(By.xpath("//a[@href='../index.html']")));
+	Assert.assertTrue(link.getURL().contains("index.html"));
     }
 }

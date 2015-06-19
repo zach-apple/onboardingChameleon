@@ -29,7 +29,7 @@ public class TestLabel extends TestEnvironment{
 	setOperatingSystem(operatingSystem);
 	setRunLocation(runLocation);
 	setTestEnvironment(environment);
-	setPageURL("file:" +getClass().getClassLoader().getResource("sites/htmlTest/testApp.html").getPath());
+	setPageURL("http://www.cs.tut.fi/~jkorpela/www/testel.html");
 	testStart("TestLabel");
     }
     
@@ -41,8 +41,8 @@ public class TestLabel extends TestEnvironment{
       
     @Test(groups ={"regression", "interfaces", "label"})
     public void getFor(){
-	Label label= new LabelImpl(getDriver().findElement(By.id("Content")));
-	Assert.assertTrue(label.getFor().equals("title"));
+	Label label= new LabelImpl(getDriver().findElement(By.xpath("//form/div[4]/label")));
+	Assert.assertTrue(label.getFor().equals("f1"));
     }
 
 }

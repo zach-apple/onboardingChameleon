@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.impl.ButtonImpl;
 import com.orasi.core.interfaces.impl.ElementImpl;
+import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestEnvironment;
 
 
@@ -23,15 +24,15 @@ public class TestButton extends TestEnvironment{
 	    "operatingSystem", "environment" })
     public void setup(@Optional String runLocation, String browserUnderTest,
 	    String browserVersion, String operatingSystem, String environment) {
-	setApplicationUnderTest("Test Site");
+	setApplicationUnderTest("Test App");
 	setBrowserUnderTest(browserUnderTest);
 	setBrowserVersion(browserVersion);
 	setOperatingSystem(operatingSystem);
 	setRunLocation(runLocation);
+	setPageURL("http://www.cs.tut.fi/~jkorpela/www/testel.html");	
 	setTestEnvironment(environment);
-	setPageURL("file:" +getClass().getClassLoader().getResource("sites/htmlTest/testApp.html").getPath());
 	testStart("TestButton");
-    }
+	}
     
     @AfterTest(groups ={"regression", "interfaces", "button", "dev"})
     public void close(){
@@ -40,19 +41,17 @@ public class TestButton extends TestEnvironment{
 
     @Test(groups ={"regression", "interfaces", "button"})
     public void click(){
-	Button button= new ButtonImpl(getDriver().findElement(By.id("Load")));
+	getDriver().findElement(By.id("f1")).sendKeys("blah");
+	Button button= new ButtonImpl(getDriver().findElement(By.name("reset")));
 	button.click();
-	Assert.assertTrue(new ElementImpl(getDriver().findElement(By.id("count"))).getText().equals("VIP count: 6"));
-	new ButtonImpl(driver.findElement(By.id("Clear"))).click();
-	Assert.assertTrue(new ElementImpl(getDriver().findElement(By.id("count"))).getText().equals("VIP count: 0"));
+	Assert.assertTrue(getDriver().findElement(By.id("f1")).getAttribute("value").equals("Default text."));
     }
     
-    @Test(groups ={"regression", "interfaces", "button"})
+    @Test(groups ={"regression", "interfaces", "button"}, dependsOnMethods="click")
     public void jsClick(){
-	Button button= new ButtonImpl(getDriver().findElement(By.id("Load")));
+	getDriver().findElement(By.id("f1")).sendKeys("blah");
+	Button button= new ButtonImpl(getDriver().findElement(By.name("reset")));
 	button.jsClick(getDriver());
-	Assert.assertTrue(new ElementImpl(getDriver().findElement(By.id("count"))).getText().equals("VIP count: 6"));
-	new ButtonImpl(driver.findElement(By.id("Clear"))).jsClick(getDriver());
-	Assert.assertTrue(new ElementImpl(getDriver().findElement(By.id("count"))).getText().equals("VIP count: 0"));
+	Assert.assertTrue(getDriver().findElement(By.id("f1")).getAttribute("value").equals("Default text."));
     }
 }

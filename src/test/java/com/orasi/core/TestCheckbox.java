@@ -31,7 +31,7 @@ public class TestCheckbox extends TestEnvironment{
 	setOperatingSystem(operatingSystem);
 	setRunLocation(runLocation);
 	setTestEnvironment(environment);
-	setPageURL("file:" +getClass().getClassLoader().getResource("sites/htmlTest/testApp.html").getPath());
+	setPageURL("http://www.cs.tut.fi/~jkorpela/www/testel.html");
 	testStart("TestCheckbox");
     }
     
@@ -43,48 +43,48 @@ public class TestCheckbox extends TestEnvironment{
       
     @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="jsToggle")
     public void check(){
-	Checkbox checkbox= new CheckboxImpl(getDriver().findElement(By.name("Checkbox")));
+	Checkbox checkbox= new CheckboxImpl(getDriver().findElement(By.name("checkbox")));
 	checkbox.check();
 	Assert.assertTrue(checkbox.isChecked());
     }
     
     @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="uncheck")
     public void checkValidate(){
-	Checkbox checkbox= new CheckboxImpl(getDriver().findElement(By.name("Checkbox")));
+	Checkbox checkbox= new CheckboxImpl(getDriver().findElement(By.name("checkbox")));
 	checkbox.check();
 	Assert.assertTrue(checkbox.checkValidate(getDriver()));
     }
       
     @Test(groups ={"regression", "interfaces", "checkbox"})
     public void isChecked(){
-	Checkbox checkbox= new CheckboxImpl(getDriver().findElement(By.name("Checkbox")));
+	Checkbox checkbox= new CheckboxImpl(getDriver().findElement(By.name("checkbox")));
 	Assert.assertFalse(checkbox.isChecked());
     }
     
     @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="toggle")
     public void jsToggle(){
-	Checkbox checkbox= new CheckboxImpl(getDriver().findElement(By.name("Checkbox")));
+	Checkbox checkbox= new CheckboxImpl(getDriver().findElement(By.name("checkbox")));
 	checkbox.jsToggle(getDriver());
 	Assert.assertFalse(checkbox.isChecked());
     }
     
     @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="isChecked")
     public void toggle(){
-	Checkbox checkbox= new CheckboxImpl(getDriver().findElement(By.name("Checkbox")));
+	Checkbox checkbox= new CheckboxImpl(getDriver().findElement(By.name("checkbox")));
 	checkbox.toggle();
 	Assert.assertTrue(checkbox.isChecked());
     }
     
     @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="check")
     public void uncheck(){
-	Checkbox checkbox= new CheckboxImpl(getDriver().findElement(By.name("Checkbox")));
+	Checkbox checkbox= new CheckboxImpl(getDriver().findElement(By.name("checkbox")));
 	checkbox.uncheck();
 	Assert.assertFalse(checkbox.isChecked());
     }
     
     @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="checkValidate")
     public void uncheckValidate(){
-	Checkbox checkbox= new CheckboxImpl(getDriver().findElement(By.name("Checkbox")));
+	Checkbox checkbox= new CheckboxImpl(getDriver().findElement(By.name("checkbox")));
 	checkbox.uncheck();
 	Assert.assertTrue(checkbox.uncheckValidate(getDriver()));
     }

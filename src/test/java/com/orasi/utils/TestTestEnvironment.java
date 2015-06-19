@@ -76,13 +76,6 @@ public class TestTestEnvironment {
    	te.setRunLocation(runLocation);
    	Assert.assertTrue(te.getRunLocation().equals(runLocation));
    }
-    
-    @Test(groups="regression")
-    public void seleniumHubURL(){
-   	TestEnvironment te = new TestEnvironment();
-   	te.setSeleniumHubURL("seleniumURL");
-   	Assert.assertTrue(te.getSeleniumHubURL().equals("seleniumURL"));
-   }
 
     @Test(groups="regression")
     public void testEnvironment(){
