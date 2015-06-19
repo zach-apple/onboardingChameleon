@@ -83,7 +83,7 @@ public class TestElement extends TestEnvironment{
 	if(getBrowserUnderTest().equalsIgnoreCase("html")) Assert.assertTrue(element.getCssValue("width").equals("auto"));  
 	else Assert.assertTrue(!element.getCssValue("font-family").isEmpty()); 
     }
-     
+   
     @Test(groups ={"regression", "interfaces", "element"})
     public void getElementIdentifier(){
 	Element element= new ElementImpl(getDriver().findElement(By.id("f1")));
@@ -132,7 +132,8 @@ public class TestElement extends TestEnvironment{
     public void highlight(){
 	Element element= new ElementImpl(getDriver().findElement(By.id("f2")));
 	element.highlight(getDriver());
-	Assert.assertTrue(!element.getCssValue("border").isEmpty());
+	if(getBrowserUnderTest().toLowerCase().contains("explorer")) Assert.assertTrue(element.getAttribute("style").toLowerCase().contains("red"));
+	else Assert.assertTrue(element.getCssValue("border").toLowerCase().contains("red"));
     }
     
     @Test(groups ={"regression", "interfaces", "element"})
