@@ -2,6 +2,7 @@ package com.orasi.core.interfaces.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.By.ByClassName;
@@ -226,7 +227,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public boolean syncPresent(WebDriver driver) {
-		return syncPresent(driver, Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+		return syncPresent(driver, Constants.ELEMENT_TIMEOUT);
 	}
 
 	/**
@@ -254,13 +255,14 @@ public class ElementImpl implements Element {
 			boolean returnError) {
 		boolean found = false;
 		double loopTimeout = 0;
+		
 		By locator = getElementLocator();
-		loopTimeout = timeout * 10;
+		loopTimeout = timeout ;
 		TestReporter.interfaceLog("<i> Syncing to element [ <b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>PRESENT</b> in DOM within [ " + timeout
 				+ " ] seconds.</i>");
-
+		driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 
 			if (webElementPresent(driver, locator)) {
@@ -268,12 +270,12 @@ public class ElementImpl implements Element {
 				break;
 			}
 			try {
-				Thread.sleep(100);
+				Thread.sleep(250);
 
 			} catch (Exception e) {
 			}
 		}
-
+		driver.manage().timeouts().implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
 		if (!found && returnError) {
 			dateAfter = new java.util.Date();
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
@@ -301,7 +303,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public boolean syncVisible(WebDriver driver) {
-	    return syncVisible(driver, Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+	    return syncVisible(driver, Constants.ELEMENT_TIMEOUT);
 	}
 
 	/**
@@ -330,12 +332,12 @@ public class ElementImpl implements Element {
 		boolean found = false;
 		double loopTimeout = 0;
 
-		loopTimeout = Integer.valueOf(timeout) * 10;
+		loopTimeout = timeout *4;
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>VISIBLE<b> within [ " + timeout
 				+ " ] seconds.</i>");
-
+		driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 
 			if (webElementVisible(driver, element)) {
@@ -343,11 +345,11 @@ public class ElementImpl implements Element {
 				break;
 			}
 			try {
-				Thread.sleep(100);
+				Thread.sleep(250);
 			} catch (Exception e) {
 			}
 		}
-
+		driver.manage().timeouts().implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
 		if (!found && returnError) {
 			dateAfter = new java.util.Date();
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
@@ -374,7 +376,7 @@ public class ElementImpl implements Element {
 	 * */
 	@Override
 	public boolean syncHidden(WebDriver driver) {
-	    return syncHidden(driver, Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+	    return syncHidden(driver, Constants.ELEMENT_TIMEOUT);
 	}
 
 	/**
@@ -402,12 +404,12 @@ public class ElementImpl implements Element {
 		boolean found = false;
 		long loopTimeout = 0;
 
-		loopTimeout = Long.valueOf(timeout) * 10;
+		loopTimeout = timeout *4;
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>HIDDEN</b> within [ <b>" + timeout
 				+ "</b> ] seconds.</i>");
-
+		driver.manage().timeouts().implicitlyWait(0, TimeUnit.MILLISECONDS);
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 
 			if (!webElementVisible(driver, element)) {
@@ -415,12 +417,12 @@ public class ElementImpl implements Element {
 				break;
 			}
 			try {
-				Thread.sleep(100);
+				Thread.sleep(250);
 			} catch (Exception e) {
 			}
 
 		}
-
+		driver.manage().timeouts().implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
 		if (!found && returnError) {
 			dateAfter = new java.util.Date();
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
@@ -448,7 +450,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public boolean syncEnabled(WebDriver driver) {
-	    return syncEnabled(driver, Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+	    return syncEnabled(driver, Constants.ELEMENT_TIMEOUT);
 	}
 
 	/**
@@ -479,12 +481,12 @@ public class ElementImpl implements Element {
 		boolean found = false;
 		double loopTimeout = 0;
 
-		loopTimeout = Integer.valueOf(timeout) * 10;
+		loopTimeout = timeout *4 ;
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>ENABLED</b> within [ <b>" + timeout
 				+ "</b> ] seconds.</i>");
-
+		driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 
 			if (webElementEnabled(driver, element)) {
@@ -492,12 +494,12 @@ public class ElementImpl implements Element {
 				break;
 			}
 			try {
-				Thread.sleep(100);
+				Thread.sleep(250);
 			} catch (Exception e) {
 			}
 
 		}
-
+		driver.manage().timeouts().implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
 		if (!found && returnError) {
 			dateAfter = new java.util.Date();
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
@@ -525,7 +527,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public boolean syncDisabled(WebDriver driver) {
-	    return syncDisabled(driver, Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+	    return syncDisabled(driver, Constants.ELEMENT_TIMEOUT);
 	}
 
 	/**
@@ -557,12 +559,12 @@ public class ElementImpl implements Element {
 		boolean found = false;
 		double loopTimeout = 0;
 
-		loopTimeout = Integer.valueOf(timeout) * 10;
+		loopTimeout = timeout*4 ;
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>DISABLED</b> within [ <b>" + timeout
 				+ "</b> ] seconds.</i>");
-
+		driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 
 			if (!webElementEnabled(driver, element)) {
@@ -570,12 +572,12 @@ public class ElementImpl implements Element {
 				break;
 			}
 			try {
-				Thread.sleep(100);
+				Thread.sleep(250);
 			} catch (Exception e) {
 			}
 
 		}
-
+		driver.manage().timeouts().implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
 		if (!found && returnError) {
 			dateAfter = new java.util.Date();
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
@@ -603,7 +605,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public boolean syncTextInElement(WebDriver driver, String text) {
-	    return syncTextInElement(driver, text, Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+	    return syncTextInElement(driver, text, Constants.ELEMENT_TIMEOUT);
 	}
 
 	/**
@@ -617,7 +619,7 @@ public class ElementImpl implements Element {
 	 * 
 	 */
 	public boolean syncTextInElement(WebDriver driver, String text, int timeout) {		
-	    return syncTextInElement(driver, text, Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT, true);
+	    return syncTextInElement(driver, text, Constants.ELEMENT_TIMEOUT, true);
 	}
 
 	/**
@@ -635,12 +637,12 @@ public class ElementImpl implements Element {
 		boolean found = false;
 		double loopTimeout = 0;
 
-		loopTimeout = Integer.valueOf(timeout) * 10;
+		loopTimeout = timeout*4 ;
 		TestReporter.interfaceLog("<i>Syncing to text [<b>" + text  + "</b> ] in element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be displayed within [ <b>" + timeout
 				+ "</b> ] seconds.</i>");
-
+		driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 
 			if (webElementTextPresent(driver, element, text)) {
@@ -648,12 +650,12 @@ public class ElementImpl implements Element {
 				break;
 			}
 			try {
-				Thread.sleep(100);
+				Thread.sleep(250);
 			} catch (Exception e) {
 			}
 
 		}
-
+		driver.manage().timeouts().implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
 		if (!found && returnError) {
 			dateAfter = new java.util.Date();
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
