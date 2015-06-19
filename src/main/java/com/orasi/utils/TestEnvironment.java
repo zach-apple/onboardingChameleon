@@ -159,7 +159,7 @@ public class TestEnvironment {
      */
     protected void setBrowserUnderTest(String but) {
 	if (but.equalsIgnoreCase("jenkinsParameter")) {
-	    browserUnderTest = System.getProperty("jenkinsBrowser").trim();
+	    browserUnderTest = System.getProperty("browser").trim();
 	} else {
 	    browserUnderTest = but;
 	}
@@ -175,7 +175,7 @@ public class TestEnvironment {
     protected void setBrowserVersion(String bv) {
 	if (bv.equalsIgnoreCase("jenkinsParameter")) {
 	    if (System.getProperty("jenkinsBrowserVersion") == null
-		    || System.getProperty("jenkinsBrowserVersion") == "null") {
+		    || System.getProperty("browserVersion") == "null") {
 		this.browserVersion = "";
 	    } else {
 		this.browserVersion = System.getProperty(
@@ -195,7 +195,7 @@ public class TestEnvironment {
      */
     protected void setOperatingSystem(String os) {
 	if (os.equalsIgnoreCase("jenkinsParameter")) {
-	    this.operatingSystem = System.getProperty("jenkinsOperatingSystem")
+	    this.operatingSystem = System.getProperty("operatingSystem")
 		    .trim();
 	} else {
 	    this.operatingSystem = os;
@@ -211,7 +211,7 @@ public class TestEnvironment {
      */
     protected void setRunLocation(String rl) {
 	if (rl.equalsIgnoreCase("jenkinsParameter")) {
-	    this.runLocation = System.getProperty("jenkinsRunLocation".trim());
+	    this.runLocation = System.getProperty("runLocation".trim());
 	} else {
 	    this.runLocation = rl;
 	}

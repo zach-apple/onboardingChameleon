@@ -58,6 +58,12 @@
 					<suiteXmlFiles>
 						<suiteXmlFile>${testNGSourceDirectory}/regression.xml</suiteXmlFile>
 					</suiteXmlFiles>
+					<systemPropertyVariables>
+						<jenkinsOperatingSystem>${operatingSystem}</jenkinsOperatingSystem>
+						<jenkinsBrowser>${browser}</jenkinsBrowser>
+						<jenkinsBrowserVersion>${browserVersion}</jenkinsBrowserVersion>
+						<jenkinsBrowserVersion>${runLocation}</jenkinsBrowserVersion>
+					</systemPropertyVariables>
 				</configuration>
 				<dependencies>
 					<dependency>
