@@ -128,12 +128,11 @@ public class TestElement extends TestEnvironment{
 	Assert.assertTrue(element.getText().equals("main page"));
     }    
     
-    @Test(groups ={"regression", "interfaces", "element"}, dependsOnMethods="getCssValue")
+    @Test(groups ={"regression", "interfaces", "element"}, dependsOnMethods="getAttribute")
     public void highlight(){
 	Element element= new ElementImpl(getDriver().findElement(By.id("f2")));
 	element.highlight(getDriver());
-	if(getBrowserUnderTest().toLowerCase().contains("explorer")) Assert.assertTrue(element.getAttribute("style").toLowerCase().contains("red"));
-	else Assert.assertTrue(element.getCssValue("border").toLowerCase().contains("red"));
+	Assert.assertTrue(element.getAttribute("style").toLowerCase().contains("red"));
     }
     
     @Test(groups ={"regression", "interfaces", "element"})
