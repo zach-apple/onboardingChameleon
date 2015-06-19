@@ -47,7 +47,7 @@ public class TestLink extends TestEnvironment {
 	Link link= new LinkImpl(getDriver().findElement(By.xpath("//a[@href='../index.html']")));
 	link.click();
 	Assert.assertTrue(new ElementImpl(getDriver().findElement(By.id("k"))).syncVisible(getDriver()));
-	getDriver().navigate().back();
+	getDriver().navigate().to("http://www.cs.tut.fi/~jkorpela/www/testel.html");
     }
     
     @Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="click")
@@ -55,7 +55,6 @@ public class TestLink extends TestEnvironment {
 	Link link= new LinkImpl(getDriver().findElement(By.xpath("//a[@href='../index.html']")));
 	link.jsClick(getDriver());
 	Assert.assertTrue(new ElementImpl(getDriver().findElement(By.id("k"))).syncVisible(getDriver()));
-	getDriver().navigate().back();
     }
     
     @Test(groups ={"regression", "interfaces", "link"})
