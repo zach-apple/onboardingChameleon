@@ -17,9 +17,9 @@ public class TestTestEnvironment {
     private String runLocation = "local";
     private String testingEnvironment = "stage";
     private String testingName = "TestEnvironment";
-    private String pageURL = "file:" + getClass().getClassLoader().getResource("sites/htmlTest/testApp.html").getPath();
+    private String pageURL = "http://www.cs.tut.fi/~jkorpela/www/testel.html";
     
-    @FindBy(id="FirstName")
+    @FindBy(id="f1")
     private Element firstname;
     
     @Test(groups="regression")
@@ -103,7 +103,7 @@ public class TestTestEnvironment {
    	TestEnvironment te = new TestEnvironment(application, browserUnderTest, browserVersion, operatingSystem, runLocation, testingEnvironment);
    	te.setPageURL(pageURL);
    	te.testStart(testingName);
-   	Assert.assertTrue(te.getDriver().getTitle().equals("Selenium Test Web Application"));
+   	Assert.assertTrue(te.getDriver().getTitle().equals("Test display of HTML elements"));
    }
     
     @Test(groups="regression", dependsOnMethods="testStart")
