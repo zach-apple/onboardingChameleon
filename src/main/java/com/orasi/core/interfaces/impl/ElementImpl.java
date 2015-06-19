@@ -711,10 +711,9 @@ public class ElementImpl implements Element {
 			Point location = element.getLocation();
 
 			Dimension size = element.getSize();
-			if ((location.getX() > 0 & location.getY() > 0)
-					| (size.getHeight() > 0 & size.getWidth() > 0)) {
-			    if(element.getAttribute("hidden") != null) {
-				if(element.getAttribute("hidden").equals("true")) return false;
+			if ((location.getX() > 0 & location.getY() > 0)	| (size.getHeight() > 0 & size.getWidth() > 0)) {
+			    if(element.getAttribute("type") != null ) {
+				if(element.getAttribute("type").equals("hidden")) return false;
 			    }
 			    return true;
 			} else {
@@ -843,9 +842,12 @@ public class ElementImpl implements Element {
 	public String getElementIdentifier() {
 		String locator = "";
 		int startPosition = 0;
+		int endPosition = 0;
 		if(element.getClass().toString().contains("htmlunit")){
 		    startPosition = element.toString().indexOf("=\"") + 2;
-		    locator = element.toString().substring(startPosition, element.toString().indexOf("\"",element.toString().indexOf("=\"") + 3));
+		    endPosition = element.toString().indexOf("\"",element.toString().indexOf("=\"") + 3);
+		    if (startPosition == -1 | endPosition == -1) locator = element.toString();
+		    else locator = element.toString().substring(startPosition, endPosition);
 		}else{
 		    startPosition = element.toString().lastIndexOf(": ") + 2;
 		    locator = element.toString().substring(startPosition,
@@ -864,8 +866,9 @@ public class ElementImpl implements Element {
 		int startPosition = 0;
 		String locator = "";
 		if(element.getClass().toString().contains("htmlunit")){
-		    startPosition =element.toString().indexOf(" ");		    
-		    locator = element.toString().substring(startPosition, element.toString().indexOf("="));
+		    startPosition =element.toString().indexOf(" ");	
+		    if (startPosition == -1) locator = element.toString();
+		    else locator = element.toString().substring(startPosition, element.toString().indexOf("="));
 		}else{
 		startPosition = element.toString().lastIndexOf("->") + 3;
 		locator = element.toString().substring(startPosition,
