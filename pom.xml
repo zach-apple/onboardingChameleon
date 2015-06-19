@@ -50,11 +50,6 @@
 					<argLine>
 						-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
 					</argLine>
-					<systemPropertyVariables>
-						<jenkinsOperatingSystem></jenkinsOperatingSystem>
-						<jenkinsBrowser></jenkinsBrowser>
-						<jenkinsBrowserVersion></jenkinsBrowserVersion>
-					</systemPropertyVariables>
 					<suiteXmlFiles>
 						<suiteXmlFile>${testNGSourceDirectory}/regression.xml</suiteXmlFile>
 					</suiteXmlFiles>
@@ -62,7 +57,7 @@
 						<jenkinsOperatingSystem>${operatingSystem}</jenkinsOperatingSystem>
 						<jenkinsBrowser>${browser}</jenkinsBrowser>
 						<jenkinsBrowserVersion>${browserVersion}</jenkinsBrowserVersion>
-						<jenkinsBrowserVersion>${runLocation}</jenkinsBrowserVersion>
+						<jenkinsRunLocation>${runLocation}</jenkinsRunLocation>
 					</systemPropertyVariables>
 				</configuration>
 				<dependencies>
