@@ -1,42 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Core-Regression" parallel="methods">
-	<listeners>
-		<listener class-name="com.orasi.utils.Screenshot" />
-	</listeners>
-	<parameter name="browserUnderTest" value="html" />
+<suite name="Core-Regression" parallel="tests" thread-count="2">
+	<parameter name="browserUnderTest" value="firefox" />
 	<parameter name="environment" value="staging" />
-	<parameter name="runLocation" value="local" />
+	<parameter name="runLocation" value="sauce" />
 	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="windows" />
- <!--  <test name="Element">
+  <test name="Element">
     <classes>
       <class name="com.orasi.core.TestElement"/>
     </classes>
-  </test> Test
+  </test> 
+  
+   <test name="Button">
+    <classes>
+      <class name="com.orasi.core.TestButton"/>
+    </classes>
+  </test> 
+  
+   <test name="Checkbox">
+    <classes>
+      <class name="com.orasi.core.TestCheckbox"/>
+    </classes>
+  </test> 
+  
+   <test name="Label">
+    <classes>
+      <class name="com.orasi.core.TestLabel"/>
+    </classes>
+  </test> 
+  
+   <test name="Link">
+    <classes>
+      <class name="com.orasi.core.TestLink"/>
+    </classes>
+  </test> 
+  
+   <test name="Listbox">
+    <classes>
+      <class name="com.orasi.core.TestListbox"/>
+    </classes>
+  </test> 
+  
+   <test name="RadioButton">
+    <classes>
+      <class name="com.orasi.core.TestRadioButton"/>
+    </classes>
+  </test> 
+  
+   <test name="Textbox">
+    <classes>
+      <class name="com.orasi.core.TestTextbox"/>
+    </classes>
+  </test> 
+  
+   <test name="Webtable">
+    <classes>
+      <class name="com.orasi.core.TestWebtable"/>
+    </classes>
+  </test> 
   
    <test name="Base64Encoder">
     <classes>
       <class name="com.orasi.utils.TestBase64Encoder"/>
     </classes>
-  </test> Test
+  </test> 
   
    <test name="ExcelDocumentReader">
     <classes>
       <class name="com.orasi.utils.TestExcelDocumentReader"/>
     </classes>
-  </test> Test
-   -->
-	<test name="Test">
-		<groups>
-			<run>
-				<include name="regression" />
-			</run>
-		</groups>
-		<packages>
-			<package name="com.orasi.*">
-			</package>
-		</packages>
-		
-	</test> <!-- Test -->
+  </test> 
+  
+  <test name="TestEnvironment">
+    <classes>
+      <class name="com.orasi.utils.TestTestEnvironment"/>
+    </classes>
+  </test> 
+
 </suite> <!-- Suite -->
