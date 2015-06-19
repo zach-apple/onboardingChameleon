@@ -210,7 +210,11 @@ public class TestEnvironment {
      * Getter and setter for run location
      */
     protected void setRunLocation(String rl) {
-	this.runLocation = rl;
+	if (rl.equalsIgnoreCase("jenkinsParameter")) {
+	    this.runLocation = System.getProperty("jenkinsRunLocation".trim());
+	} else {
+	    this.runLocation = rl;
+	}
     }
 
     public String getRunLocation() {
