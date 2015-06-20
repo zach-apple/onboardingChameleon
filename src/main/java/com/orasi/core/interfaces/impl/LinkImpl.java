@@ -25,7 +25,8 @@ public class LinkImpl extends ElementImpl implements Link {
     public void jsClick(WebDriver driver) {
     	JavascriptExecutor executor = (JavascriptExecutor)driver;
     	try{
-    	    executor.executeScript("arguments[0].click();", element);
+    	    if( driver.toString().contains("htmlunit")) executor.executeScript("arguments[0].click();", element);
+    	    else executor.executeScript("var click_ev = document.createEvent('MouseEvents'); click_ev.initEvent('click', true , true );arguments[0].dispatchEvent(click_ev);", element);
     	}catch(RuntimeException rte){
     	    TestReporter.interfaceLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]", true);
     	    throw rte;
