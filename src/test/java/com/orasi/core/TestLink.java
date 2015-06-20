@@ -17,6 +17,7 @@ import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.impl.ButtonImpl;
 import com.orasi.core.interfaces.impl.ElementImpl;
 import com.orasi.core.interfaces.impl.LinkImpl;
+import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestEnvironment;
 
 
@@ -46,15 +47,16 @@ public class TestLink extends TestEnvironment {
     public void click(){
 	Link link= new LinkImpl(getDriver().findElement(By.xpath("//a[@href='../index.html']")));
 	link.click();
-	Assert.assertTrue(new ElementImpl(getDriver().findElement(By.id("k"))).syncVisible(getDriver()));
-	getDriver().navigate().to("http://www.cs.tut.fi/~jkorpela/www/testel.html");
-    }
+	Assert.assertTrue(new ElementImpl(getDriver().findElement(By.xpath("//a[@href='internet/index.html']"))).syncVisible(getDriver()));
+	}
     
     @Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="click")
     public void jsClick(){
-	Link link= new LinkImpl(getDriver().findElement(By.xpath("//a[@href='../index.html']")));
+	//getDriver().get("http://www.cs.tut.fi/~jkorpela/www/testel.html");
+	//Sleeper.sleep(3000);
+	Link link= new LinkImpl(getDriver().findElement(By.xpath("//a[@href='internet/index.html']")));
 	link.jsClick(getDriver());
-	Assert.assertTrue(new ElementImpl(getDriver().findElement(By.id("k"))).syncVisible(getDriver()));
+	Assert.assertTrue(new ElementImpl(getDriver().findElement(By.xpath("//a[@href='../usenet/dont.html']"))).syncVisible(getDriver()));
     }
     
     @Test(groups ={"regression", "interfaces", "link"})
