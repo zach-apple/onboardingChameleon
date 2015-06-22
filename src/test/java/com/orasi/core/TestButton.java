@@ -29,7 +29,7 @@ public class TestButton extends TestEnvironment{
 	setBrowserVersion(browserVersion);
 	setOperatingSystem(operatingSystem);
 	setRunLocation(runLocation);
-	setPageURL("http://www.cs.tut.fi/~jkorpela/www/testel.html");	
+	setPageURL("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/testsite.html");	
 	setTestEnvironment(environment);
 	testStart("TestButton");
 	}
@@ -41,17 +41,15 @@ public class TestButton extends TestEnvironment{
 
     @Test(groups ={"regression", "interfaces", "button"})
     public void click(){
-	getDriver().findElement(By.id("f1")).sendKeys("blah");
-	Button button= new ButtonImpl(getDriver().findElement(By.name("reset")));
+	Button button= new ButtonImpl(getDriver().findElement(By.id("Load")));
 	button.click();
-	Assert.assertTrue(getDriver().findElement(By.id("f1")).getAttribute("value").equals("Default text."));
+	Assert.assertTrue(getDriver().findElement(By.id("count")).getText().equals("VIP count: 6"));
     }
     
     @Test(groups ={"regression", "interfaces", "button"}, dependsOnMethods="click")
     public void jsClick(){
-	getDriver().findElement(By.id("f1")).sendKeys("blah");
-	Button button= new ButtonImpl(getDriver().findElement(By.name("reset")));
+	Button button= new ButtonImpl(getDriver().findElement(By.id("Clear")));
 	button.jsClick(getDriver());
-	Assert.assertTrue(getDriver().findElement(By.id("f1")).getAttribute("value").equals("Default text."));
+	Assert.assertTrue(getDriver().findElement(By.id("count")).getText().equals("VIP count: 0"));
     }
 }
