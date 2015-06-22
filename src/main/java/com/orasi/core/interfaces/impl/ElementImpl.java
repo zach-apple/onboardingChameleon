@@ -714,6 +714,7 @@ public class ElementImpl implements Element {
 
 			Dimension size = element.getSize();
 			if ((location.getX() > 0 & location.getY() > 0)	| (size.getHeight() > 0 & size.getWidth() > 0)) {
+			    if(element.getAttribute("hidden") != null) return false;
 			    if(element.getAttribute("type") != null ) {
 				if(element.getAttribute("type").equals("hidden")) return false;
 			    }
