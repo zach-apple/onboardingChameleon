@@ -83,7 +83,20 @@
 		- Added two new constants, Element_Timeout and Page_Timeout
 	* [Element](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/core/interfaces/Element.java) /
 	[ElementImpl](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/core/interfaces/impl/ElementImpl.java) 
+		- getElementIdentifier and getElementLocator now supports HTMLUnit driver
 		- Removed redundant code from overridden methods
+	* [Link](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/core/interfaces/Link.java) /
+	[LinkImpl](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/core/interfaces/impl/LinkImpl.java) 
+		- Adding getURL() method
+	* [Listbox](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/core/interfaces/Listbox.java) /
+	[ListboxImpl](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/core/interfaces/impl/ListboxImpl.java) 
+		- Refactored isSelected method. Added methods getAllSelectedOptions and isMultiple to help support multi-listboxes
+	* [Radiogroup](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/core/interfaces/Radiogroup.java) /
+	[RadiogroupImpl](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/core/interfaces/impl/RadiogroupImpl.java) 
+		- Marked some methods as private
+	* [Textbox](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/core/interfaces/Textbox.java) /
+	[TextboxImpl](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/core/interfaces/impl/TextboxImpl.java) 
+		- Corrected places where element field was used instead of getWrappedElement()
 	* [PageLoaded](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/PageLoaded.java) 
 		- Added overloaded constructor to pass in the TestEnvironment, giving the option for methods not to use a parameter
 	* [Screenshot](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/Screenshot.java) 
@@ -108,3 +121,4 @@
 		* All original methods deprecated. Refactored with better handling, improving speed of some methods up to 300%. 
 		* Removed redundant code from overridden methods. 
 		* All methods now accept the TestEnvironment class instead of WebDriver class
+* **Creation of unit tests**
