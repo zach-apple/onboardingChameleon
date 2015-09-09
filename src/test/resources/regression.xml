@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Core-Regression" parallel="methods" thread-count="20">
-	<parameter name="browserUnderTest" value="chrome" />
+	<parameter name="browserUnderTest" value="firefox" />
 	<parameter name="environment" value="staging" />
 	<parameter name="runLocation" value="sauce" />
-	<parameter name="browserVersion" value="43" />
+	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="windows" />
  	<test name="Element">
 		<classes>

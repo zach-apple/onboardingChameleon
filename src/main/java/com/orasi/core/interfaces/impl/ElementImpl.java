@@ -9,6 +9,7 @@ import org.openqa.selenium.By.ByClassName;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
@@ -18,6 +19,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.internal.Locatable;
+import org.openqa.selenium.remote.DriverCommand;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -901,5 +903,15 @@ public class ElementImpl implements Element {
 	
 	public ArrayList getAllAttributes(WebDriver driver){
 	    return (ArrayList)((JavascriptExecutor) driver).executeScript("var s = []; var attrs = arguments[0].attributes; for (var l = 0; l < attrs.length; ++l) { var a = attrs[l]; s.push(a.name + ':' + a.value); } ; return s;",getWrappedElement());
+	}
+
+
+	//@Override
+	public <X> X getScreenshotAs(OutputType<X> target)
+		throws WebDriverException {
+	  //  String base64 = execute(DriverCommand.SCREENSHOT).getValue().toString();
+	    // ... and convert it.
+	    System.out.println("getScreenShotAs is unimplemented");
+	    return null; //target.convertFromBase64Png(base64);
 	}
 }
