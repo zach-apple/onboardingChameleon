@@ -550,8 +550,10 @@ public class TestEnvironment {
 		.implicitlyWait(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT,
 			TimeUnit.SECONDS);
 	setDefaultTestTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
-	//driver.manage().deleteAllCookies();
-	//driver.manage().window().maximize();
+	if (!(driver instanceof EdgeDriver)){
+	    driver.manage().deleteAllCookies();
+	    driver.manage().window().maximize();
+	}
     }
 
     // ************************************
