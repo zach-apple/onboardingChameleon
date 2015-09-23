@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -398,22 +399,31 @@ public class TestEnvironment {
 		}
 		// Chrome
 		else if (getBrowserUnderTest().equalsIgnoreCase("Chrome")) {
-		    file = new File(this
-			    .getClass()
-			    .getResource(
-				    Constants.DRIVERS_PATH_LOCAL
-					    + "ChromeDriver.exe").getPath());
-		    System.setProperty("webdriver.chrome.driver",
-			    file.getAbsolutePath());
+		    file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL+"ChromeDriver.exe").getPath());
+		    System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
 		    driver = new ChromeDriver();
 		}
 		// Headless - HTML unit driver
 		else if (getBrowserUnderTest().equalsIgnoreCase("html")) {
 		    driver = new HtmlUnitDriver(true);
 		}
+		/*else if (getBrowserUnderTest().equalsIgnoreCase("phantom")) {
+			    caps = DesiredCapabilities.phantomjs();
+			    caps.setCapability("ignoreZoomSetting", true);
+			    caps.setCapability("enablePersistentHover", false);
+			    file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL+ "phantomjs.exe").getPath());
+			    caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY , file.getAbsolutePath());
+			    driver = new PhantomJSDriver(caps);
+			
+		}*/
 		// Safari
 		else if (getBrowserUnderTest().equalsIgnoreCase("safari")) {
 		    driver = new SafariDriver();
+		}else if(getBrowserUnderTest().equalsIgnoreCase("edge")){
+		    file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL+"MicrosoftWebDriver.exe").getPath());
+		    System.setProperty("webdriver.edge.driver", file.getAbsolutePath());
+		    caps = DesiredCapabilities.edge();
+		    driver = new EdgeDriver(caps);
 		} else {
 		    throw new RuntimeException(
 			    "Parameter not set for browser type");
@@ -540,8 +550,8 @@ public class TestEnvironment {
 		.implicitlyWait(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT,
 			TimeUnit.SECONDS);
 	setDefaultTestTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
-	driver.manage().deleteAllCookies();
-	driver.manage().window().maximize();
+	//driver.manage().deleteAllCookies();
+	//driver.manage().window().maximize();
     }
 
     // ************************************
