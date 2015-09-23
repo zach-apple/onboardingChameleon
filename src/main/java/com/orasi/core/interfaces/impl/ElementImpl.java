@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.bouncycastle.asn1.microsoft.MicrosoftObjectIdentifiers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.By.ByClassName;
 import org.openqa.selenium.Dimension;
@@ -16,6 +17,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.internal.Locatable;
@@ -26,6 +28,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.orasi.core.interfaces.Element;
 import com.orasi.utils.Constants;
+import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestReporter;
 
 /**
@@ -117,7 +120,14 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public Dimension getSize() {
+	    try{
 		return element.getSize();
+	    } catch (WebDriverException wde){
+		if(wde.getMessage().toLowerCase().contains("not implemented")) {
+		    TestReporter.logFailure("getSize has not been implemented by EdgeDriver");
+		}
+	    }
+	    return null;
 	}
 
 	/**
@@ -173,7 +183,15 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public boolean isSelected() {
+	    try{
 		return element.isSelected();
+	    } catch (WebDriverException wde){
+		if(wde.getMessage().toLowerCase().contains("not implemented")) {
+		    TestReporter.logFailure("isSelected has not been implemented by EdgeDriver");
+		}
+	    }
+		return false;
+
 	}
 
 	/**
@@ -264,7 +282,7 @@ public class ElementImpl implements Element {
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>PRESENT</b> in DOM within [ " + timeout
 				+ " ] seconds.</i>");
-		driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 
 			if (webElementPresent(driver, locator)) {
@@ -339,7 +357,7 @@ public class ElementImpl implements Element {
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>VISIBLE<b> within [ " + timeout
 				+ " ] seconds.</i>");
-		driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 
 			if (webElementVisible(driver, element)) {
@@ -411,7 +429,7 @@ public class ElementImpl implements Element {
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>HIDDEN</b> within [ <b>" + timeout
 				+ "</b> ] seconds.</i>");
-		driver.manage().timeouts().implicitlyWait(0, TimeUnit.MILLISECONDS);
+		driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 
 			if (!webElementVisible(driver, element)) {
@@ -488,7 +506,7 @@ public class ElementImpl implements Element {
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>ENABLED</b> within [ <b>" + timeout
 				+ "</b> ] seconds.</i>");
-		driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 
 			if (webElementEnabled(driver, element)) {
@@ -566,7 +584,7 @@ public class ElementImpl implements Element {
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>DISABLED</b> within [ <b>" + timeout
 				+ "</b> ] seconds.</i>");
-		driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 
 			if (!webElementEnabled(driver, element)) {
@@ -644,17 +662,16 @@ public class ElementImpl implements Element {
 				+ getElementLocatorInfo()
 				+ "</b> ] to be displayed within [ <b>" + timeout
 				+ "</b> ] seconds.</i>");
-		driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 
 			if (webElementTextPresent(driver, element, text)) {
 				found = true;
 				break;
 			}
-			try {
-				Thread.sleep(250);
-			} catch (Exception e) {
-			}
+			
+			Sleeper.sleep(250);
+			
 
 		}
 		driver.manage().timeouts().implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
@@ -796,7 +813,13 @@ public class ElementImpl implements Element {
 			} catch (NoSuchElementException | ClassCastException
 					| StaleElementReferenceException | TimeoutException e2) {
 				return false;
+			} catch ( WebDriverException wde) {
+			    /*if(driver instanceof EdgeDriver){
+				TestReporter.logFailure("ExpectedConditions.textToBePresentInElementValue has not been implemented by Edge Driver");
+			    }*/
+			    return false;
 			}
+				
 		}
 	}
 

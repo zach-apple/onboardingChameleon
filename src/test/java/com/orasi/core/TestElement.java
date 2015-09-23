@@ -5,6 +5,8 @@ import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.interactions.internal.Coordinates;
@@ -72,8 +74,12 @@ public class TestElement extends TestEnvironment{
     @Test(groups ={"regression", "interfaces", "element"})
     public void getCoordinates(){
 	Element element= new ElementImpl(getDriver().findElement(By.id("text1")));
-	Assert.assertTrue(element.getCoordinates().onPage().getX() > 0);
-	Assert.assertTrue(element.getCoordinates().onPage().getY() > 0);
+	try{
+	    Assert.assertTrue(element.getCoordinates().onPage().getX() > 0);
+	    Assert.assertTrue(element.getCoordinates().onPage().getY() > 0);
+	} catch (WebDriverException wde){
+	    if(getDriver() instanceof EdgeDriver) throw new AssertionError("getCoordinates not supported by EdgeDriver");
+	}
     }
     
     @Test(groups ={"regression", "interfaces", "element"})
@@ -104,8 +110,12 @@ public class TestElement extends TestEnvironment{
     @Test(groups ={"regression", "interfaces", "element"})
     public void getLocation(){
 	Element element= new ElementImpl(getDriver().findElement(By.id("text1")));
-	Assert.assertTrue(element.getLocation().getX() > 0);
-	Assert.assertTrue(element.getLocation().getY() > 0);
+	try{
+	    Assert.assertTrue(element.getLocation().getX() > 0);
+	    Assert.assertTrue(element.getLocation().getY() > 0);
+	} catch (WebDriverException wde){
+	    if(getDriver() instanceof EdgeDriver) throw new AssertionError("getLocation not supported by EdgeDriver");
+	}
     }
     
     @Test(groups ={"regression", "interfaces", "element"})

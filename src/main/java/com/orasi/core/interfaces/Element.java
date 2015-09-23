@@ -161,7 +161,8 @@ String getTagName();
     */
    @Override
 boolean isEnabled();
-   
+   @Override
+   boolean isSelected();   
    /**
     * @author Justin
     * @return {@link Boolean} Return TRUE if element is Displayed, FALSE if it is not  
