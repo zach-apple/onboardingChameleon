@@ -17,7 +17,7 @@ public class TestTestEnvironment {
     private String runLocation = "local";
     private String testingEnvironment = "stage";
     private String testingName = "TestEnvironment";
-    private String pageURL = "http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/element.html";
+    private String pageURL = "http://www.cs.tut.fi/~jkorpela/www/testel.html";
     
     @FindBy(id="f1")
     private Element firstname;
@@ -103,7 +103,7 @@ public class TestTestEnvironment {
    	TestEnvironment te = new TestEnvironment(application, browserUnderTest, browserVersion, operatingSystem, runLocation, testingEnvironment);
    	te.setPageURL(pageURL);
    	te.testStart(testingName);
-   	Assert.assertTrue(te.getDriver().getTitle().equals("Unit test site"));
+   	Assert.assertTrue(te.getDriver().getTitle().equals("Test display of HTML elements"));
    }
     
     @Test(groups="regression", dependsOnMethods="testStart")

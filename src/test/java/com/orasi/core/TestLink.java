@@ -34,7 +34,7 @@ public class TestLink extends TestEnvironment {
 	setOperatingSystem(operatingSystem);
 	setRunLocation(runLocation);
 	setTestEnvironment(environment);
-	setPageURL("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/link.html");
+	setPageURL("http://www.cs.tut.fi/~jkorpela/www/testel.html");
 	testStart("TestLink");
     }
     
@@ -45,21 +45,23 @@ public class TestLink extends TestEnvironment {
 
     @Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="getURL")
     public void click(){
-	Link link= new LinkImpl(getDriver().findElement(By.xpath("//a[@href='testLinks.html']")));
+	Link link= new LinkImpl(getDriver().findElement(By.xpath("//a[@href='../index.html']")));
 	link.click();
-	Assert.assertTrue(new ElementImpl(getDriver().findElement(By.xpath("//a[@href='link.html']"))).syncVisible(getDriver()));
+	Assert.assertTrue(new ElementImpl(getDriver().findElement(By.xpath("//a[@href='internet/index.html']"))).syncVisible(getDriver()));
 	}
     
     @Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="click")
     public void jsClick(){
-	Link link= new LinkImpl(getDriver().findElement(By.xpath("//a[@href='link.html']")));
+	//getDriver().get("http://www.cs.tut.fi/~jkorpela/www/testel.html");
+	//Sleeper.sleep(3000);
+	Link link= new LinkImpl(getDriver().findElement(By.xpath("//a[@href='internet/index.html']")));
 	link.jsClick(getDriver());
-	Assert.assertTrue(new ElementImpl(getDriver().findElement(By.xpath("//a[@href='testLinks.html']"))).syncVisible(getDriver()));
+	Assert.assertTrue(new ElementImpl(getDriver().findElement(By.xpath("//a[@href='../usenet/dont.html']"))).syncVisible(getDriver()));
     }
     
     @Test(groups ={"regression", "interfaces", "link"})
     public void getURL(){
-	Link link= new LinkImpl(getDriver().findElement(By.xpath("//a[@href='testLinks.html']")));
-	Assert.assertTrue(link.getURL().contains("testLinks.html"));
+	Link link= new LinkImpl(getDriver().findElement(By.xpath("//a[@href='../index.html']")));
+	Assert.assertTrue(link.getURL().contains("index.html"));
     }
 }

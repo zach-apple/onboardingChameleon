@@ -31,7 +31,7 @@ public class TestTextbox extends TestEnvironment{
 	setOperatingSystem(operatingSystem);
 	setRunLocation(runLocation);
 	setTestEnvironment(environment);
-	setPageURL("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/textbox.html");
+	setPageURL("http://www.cs.tut.fi/~jkorpela/www/testel.html");
 	testStart("TestTextbox");
     }
     
@@ -42,34 +42,34 @@ public class TestTextbox extends TestEnvironment{
 
     @Test(groups ={"regression", "interfaces", "textbox"})
     public void getText(){
-	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("text1")));
-	Assert.assertTrue(textbox.getText().equals("Testing methods"));
+	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("f1")));
+	Assert.assertTrue(textbox.getText().equals("Default text."));
     }
     
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="getText")
     public void set(){
-	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("text1")));
+	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("f1")));
 	textbox.set("set");
 	Assert.assertTrue(textbox.getAttribute("value").equals("set"));
     }
     
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="set")
     public void setScrollIntoView(){
-	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("text1")));
+	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("f1")));
 	textbox.set(getDriver(), "setScrollIntoView");
 	Assert.assertTrue(textbox.getAttribute("value").equals("setScrollIntoView"));
     }
     
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="setScrollIntoView")
     public void clear(){
-	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("text1")));
+	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("f1")));
 	textbox.clear();
 	Assert.assertTrue(textbox.getAttribute("value").equals(""));
     }
     
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="clear")
     public void safeSet(){
-	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("text1")));
+	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("f1")));
 	textbox.safeSet("safeSet");
 	Assert.assertTrue(textbox.getAttribute("value").contains("safeSet"));
 	
@@ -77,33 +77,33 @@ public class TestTextbox extends TestEnvironment{
     
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="safeSet")
     public void setSecure(){
-	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("text1")));
-	//textbox.clear();
+	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("f1")));
+	textbox.clear();
 	textbox.setSecure("c2V0U2VjdXJl");
 	Assert.assertTrue(textbox.getAttribute("value").equals("setSecure"));
-	//textbox.clear();
+	textbox.clear();
     }
     
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="setSecure")
     public void safeSetSecure(){
-	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("text1")));
-//	textbox.clear();
+	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("f1")));
+	textbox.clear();
 	textbox.safeSetSecure("c2V0U2VjdXJl");
 	Assert.assertTrue(textbox.getAttribute("value").contains("setSecure"));
-	//textbox.clear();
+	textbox.clear();
     }
     
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="safeSetSecure")
     public void setValidate(){
-	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("text1")));
+	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("f1")));
 	textbox.setValidate(getDriver(), "setValidate");
 	Assert.assertTrue(textbox.getAttribute("value").equals("setValidate"));
-//	textbox.clear();
+	textbox.clear();
     }
     
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="setValidate")
     public void safeSetValidate(){
-	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("text1")));
+	Textbox textbox= new TextboxImpl(getDriver().findElement(By.id("f1")));
 	textbox.safeSetValidate(getDriver(), "safeSetValidate");
 	Assert.assertTrue(textbox.getAttribute("value").contains("safeSetValidate"));
 	textbox.clear();

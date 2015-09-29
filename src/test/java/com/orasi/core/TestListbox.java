@@ -18,6 +18,9 @@ import com.orasi.core.interfaces.impl.ListboxImpl;
 import com.orasi.utils.TestEnvironment;
 
 public class TestListbox extends TestEnvironment{
+    WebDriver driver = null;
+    private String multiSelectXpath = "//*[@id='page']/div[2]/div/select";
+    private String listboxXpath = "//*[@id='para1']/select";
     @BeforeTest(groups ={"regression", "interfaces", "listbox", "dev"})
     @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
 	    "operatingSystem", "environment" })
@@ -29,7 +32,7 @@ public class TestListbox extends TestEnvironment{
 	setOperatingSystem(operatingSystem);
 	setRunLocation(runLocation);
 	setTestEnvironment(environment);
-	setPageURL("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/listbox.html");
+	setPageURL("http://www.allthingsdiscussed.com/More/How-to-create-a-list-box-in-HTML");
 	testStart("TestListbox");
     }
     
@@ -41,43 +44,42 @@ public class TestListbox extends TestEnvironment{
       
     @Test(groups ={"regression", "interfaces", "listbox"})
     public void isMultiple(){
-	Listbox listbox= new ListboxImpl(getDriver().findElement(By.id("multiSelect")));
+	Listbox listbox= new ListboxImpl(getDriver().findElement(By.xpath(multiSelectXpath)));
 	Assert.assertTrue(listbox.isMultiple());
     }
     
     @Test(groups ={"regression", "interfaces", "listbox"})
     public void select(){
-	Listbox listbox= new ListboxImpl(getDriver().findElement(By.id("singleSelect")));
-	listbox.select("Sports");
-	Assert.assertTrue(listbox.getFirstSelectedOption().getText().equals("Sports"));
+	Listbox listbox= new ListboxImpl(getDriver().findElement(By.xpath(listboxXpath)));
+	listbox.select("Mastercard");
+	Assert.assertTrue(listbox.getFirstSelectedOption().getText().equals("Mastercard"));
     }
     
     @Test(groups ={"regression", "interfaces", "listbox"}, dependsOnMethods="select")
     public void getAllSelectedOptions(){
-	Listbox listbox= new ListboxImpl(getDriver().findElement(By.id("singleSelect")));
-	Assert.assertTrue(listbox.getAllSelectedOptions().get(0).getText().equals("Sports"));
+	Listbox listbox= new ListboxImpl(getDriver().findElement(By.xpath(listboxXpath)));
+	Assert.assertTrue(listbox.getAllSelectedOptions().get(0).getText().equals("Mastercard"));
     }
     
     @Test(groups ={"regression", "interfaces", "listbox"}, dependsOnMethods="getAllSelectedOptions")
     public void isSelected(){
-	Listbox listbox= new ListboxImpl(getDriver().findElement(By.id("singleSelect")));
-	Assert.assertTrue(listbox.isSelected("Sports"));
+	Listbox listbox= new ListboxImpl(getDriver().findElement(By.xpath(listboxXpath)));
+	Assert.assertTrue(listbox.isSelected("Mastercard"));
     }
     
     @Test(groups ={"regression", "interfaces", "listbox"}, dependsOnMethods="isSelected")
     public void deselectByVisibleText(){
-	Listbox listbox= new ListboxImpl(getDriver().findElement(By.id("multiSelect")));
-	listbox.select("Baseball");
-	Assert.assertTrue(listbox.isSelected("Baseball"));
-	listbox.deselectByVisibleText("Baseball");
-	Assert.assertFalse(listbox.isSelected("Baseball"));
+	Listbox listbox= new ListboxImpl(getDriver().findElement(By.xpath(multiSelectXpath)));
+	listbox.select("American Express");
+	Assert.assertTrue(listbox.isSelected("American Express"));
+	listbox.deselectByVisibleText("American Express");
+	Assert.assertFalse(listbox.isSelected("American Express"));
     }
     
     @Test(groups ={"regression", "interfaces", "listbox"}, dependsOnMethods="deselectByVisibleText")
     public void deselectAll(){
-	Listbox listbox= new ListboxImpl(getDriver().findElement(By.id("multiSelect")));
-	listbox.select("Basketball");
-	listbox.select("Soccer");
+	Listbox listbox= new ListboxImpl(getDriver().findElement(By.xpath(multiSelectXpath)));
+	listbox.select("Mastercard");
 	listbox.deselectAll();
 	Assert.assertNull(listbox.getFirstSelectedOption());
     }

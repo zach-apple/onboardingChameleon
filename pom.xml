@@ -123,16 +123,6 @@
 			<!-- Selenium Versions not to use 2.44.0 - Issues with OS Platform Capabilities 
 				https://code.google.com/p/selenium/issues/detail?id=8083 https://code.google.com/p/selenium/issues/detail?id=8333 
 				2.45.0 - Issues with Test Execution speed https://code.google.com/p/selenium/issues/detail?id=8551 -->
-			<exclusions>
-				<exclusion>
-					<groupId>net.sourceforge.htmlunit</groupId>
-					<artifactId>htmlunit</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.httpcomponents</groupId>
-					<artifactId>httpcore</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.testng</groupId>
@@ -203,6 +193,21 @@
 			<groupId>net.sourceforge.htmlunit</groupId>
 			<artifactId>webdriver</artifactId>
 			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>2.46.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>net.sourceforge.htmlunit</groupId>
+					<artifactId>htmlunit</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.httpcomponents</groupId>
+					<artifactId>httpcore</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>net.sourceforge.htmlunit</groupId>

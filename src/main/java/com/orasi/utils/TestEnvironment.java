@@ -15,8 +15,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.interactions.Keyboard;
-import org.openqa.selenium.interactions.SendKeysAction;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -501,19 +499,15 @@ public class TestEnvironment {
 	    }
 	    
 	} else if (getRunLocation().equalsIgnoreCase("remote") | getRunLocation().equalsIgnoreCase("sauce")) {
-	    DesiredCapabilities capabilities = null;
-	
-		capabilities = new DesiredCapabilities();
-		capabilities.setCapability(CapabilityType.BROWSER_NAME,
-			    getBrowserUnderTest());
-		    if (getBrowserVersion() != null) {
-			capabilities.setCapability(CapabilityType.VERSION,
-				getBrowserVersion());
-		    }
-		    capabilities.setCapability(CapabilityType.PLATFORM,
-			    getOperatingSystem());
-	    
-	    
+	    DesiredCapabilities capabilities = new DesiredCapabilities();
+	    capabilities.setCapability(CapabilityType.BROWSER_NAME,
+		    getBrowserUnderTest());
+	    if (getBrowserVersion() != null) {
+		capabilities.setCapability(CapabilityType.VERSION,
+			getBrowserVersion());
+	    }
+	    capabilities.setCapability(CapabilityType.PLATFORM,
+		    getOperatingSystem());
 	    if (getBrowserUnderTest().toLowerCase().contains("ie")
 		    || getBrowserUnderTest().toLowerCase().contains("iexplore")) {
 		capabilities.setCapability("ignoreZoomSetting", true);
