@@ -1,10 +1,9 @@
 package com.orasi.core.interfaces.impl;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import com.orasi.core.interfaces.Button;
+import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.TestReporter;
 
 /**
@@ -36,11 +35,11 @@ public class ButtonImpl extends ElementImpl implements Button {
     }
     
     @Override
-    public void jsClick(WebDriver driver){    	
-    	JavascriptExecutor jse = (JavascriptExecutor)driver;
+    public void jsClick(OrasiDriver driver){    	
+    	
     	
     	try{
-    	    jse.executeScript("arguments[0].click();", element );
+    	    driver.executeJavaScript("arguments[0].click();", element );
      	}catch(RuntimeException rte){
      	    TestReporter.interfaceLog("Clicked [ <b>@FindBy: " + getElementLocatorInfo() +"</b>]", true);
      	    throw rte;

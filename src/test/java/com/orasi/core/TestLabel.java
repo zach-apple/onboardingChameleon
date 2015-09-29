@@ -1,10 +1,6 @@
 package com.orasi.core;
 
-import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -13,7 +9,6 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.orasi.core.interfaces.Label;
-import com.orasi.core.interfaces.impl.LabelImpl;
 import com.orasi.utils.TestEnvironment;
 
 public class TestLabel extends TestEnvironment{
@@ -41,7 +36,7 @@ public class TestLabel extends TestEnvironment{
       
     @Test(groups ={"regression", "interfaces", "label"})
     public void getFor(){
-	Label label= new LabelImpl(getDriver().findElement(By.xpath("//*[@id='radioForm']/label[1]")));
+	Label label= getDriver().findLabel(By.xpath("//*[@id='radioForm']/label[1]"));
 	Assert.assertTrue(label.getFor().equals("genderm"));
     }
 
