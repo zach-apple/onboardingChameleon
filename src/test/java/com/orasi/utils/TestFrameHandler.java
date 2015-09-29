@@ -8,9 +8,6 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.orasi.core.interfaces.Element;
-import com.orasi.core.interfaces.impl.ElementImpl;
-
 public class TestFrameHandler extends TestEnvironment{
     @BeforeTest(groups ={"regression", "utils", "dev"})
     @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
