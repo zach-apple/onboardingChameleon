@@ -31,7 +31,7 @@ public class PageLoaded {
 	
 	public PageLoaded(TestEnvironment te){
 	    	this.driver = te.getDriver();
-		this.timeout = te.getDefaultTestTimeout();
+		this.timeout = TestEnvironment.getDefaultTestTimeout();
 	}
 	
 	@SuppressWarnings("unchecked")
