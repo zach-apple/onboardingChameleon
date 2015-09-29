@@ -22,6 +22,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import org.apache.commons.lang.time.StopWatch;
 import com.orasi.core.interfaces.Element;
 import com.orasi.utils.Constants;
 import com.orasi.utils.TestReporter;
@@ -35,6 +36,9 @@ public class ElementImpl implements Element {
 	protected WebElement element;
 	private java.util.Date date = new java.util.Date();
 	private java.util.Date dateAfter = new java.util.Date();
+	private StopWatch stopwatch = new StopWatch();
+	private long syncLoopTime = 250;	//Milliseconds
+	private long syncLoopTimeout = 5000;	//Milliseconds
 
 	public ElementImpl(final WebElement element) {
 		this.element = element;
@@ -264,14 +268,25 @@ public class ElementImpl implements Element {
 				+ " ] seconds.</i>");
 		driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
-
+			
 			if (webElementPresent(driver, locator)) {
 				found = true;
 				break;
 			}
 			try {
-				Thread.sleep(250);
-
+				//Start the stopwatch
+				stopwatch.start();
+//				Thread.sleep(250);
+				//Loop until a specific amount of time has passed
+				do{
+					//Define a failsafe to avoid an infinite loop
+					if(stopwatch.getTime() > syncLoopTimeout){
+						TestReporter.assertTrue(stopwatch.getTime() < syncLoopTimeout, "Sync Present stopwatch loop took ["+String.valueOf(syncLoopTimeout/1000)+"] seconds.");
+					}
+				}while(stopwatch.getTime() < (long) syncLoopTime);
+				//Stop and reset the stopwatch
+				stopwatch.stop();
+				stopwatch.reset();
 			} catch (Exception e) {
 			}
 		}
@@ -345,7 +360,19 @@ public class ElementImpl implements Element {
 				break;
 			}
 			try {
-				Thread.sleep(250);
+				//Start the stopwatch
+				stopwatch.start();
+//				Thread.sleep(250);
+				//Loop until a specific amount of time has passed
+				do{
+					//Define a failsafe to avoid an infinite loop
+					if(stopwatch.getTime() > syncLoopTimeout){
+						TestReporter.assertTrue(stopwatch.getTime() < syncLoopTimeout, "Sync Visible stopwatch loop took ["+String.valueOf(syncLoopTimeout/1000)+"] seconds.");
+					}
+				}while(stopwatch.getTime() < (long) syncLoopTime);
+				//Stop and reset the stopwatch
+				stopwatch.stop();
+				stopwatch.reset();
 			} catch (Exception e) {
 			}
 		}
@@ -417,7 +444,19 @@ public class ElementImpl implements Element {
 				break;
 			}
 			try {
-				Thread.sleep(250);
+				//Start the stopwatch
+				stopwatch.start();
+//				Thread.sleep(250);
+				//Loop until a specific amount of time has passed
+				do{
+					//Define a failsafe to avoid an infinite loop
+					if(stopwatch.getTime() > syncLoopTimeout){
+						TestReporter.assertTrue(stopwatch.getTime() < syncLoopTimeout, "Sync Hidden stopwatch loop took ["+String.valueOf(syncLoopTimeout/1000)+"] seconds.");
+					}
+				}while(stopwatch.getTime() < (long) syncLoopTime);
+				//Stop and reset the stopwatch
+				stopwatch.stop();
+				stopwatch.reset();
 			} catch (Exception e) {
 			}
 
@@ -494,7 +533,19 @@ public class ElementImpl implements Element {
 				break;
 			}
 			try {
-				Thread.sleep(250);
+				//Start the stopwatch
+				stopwatch.start();
+//				Thread.sleep(250);
+				//Loop until a specific amount of time has passed
+				do{
+					//Define a failsafe to avoid an infinite loop
+					if(stopwatch.getTime() > syncLoopTimeout){
+						TestReporter.assertTrue(stopwatch.getTime() < syncLoopTimeout, "Sync Enabled stopwatch loop took ["+String.valueOf(syncLoopTimeout/1000)+"] seconds.");
+					}
+				}while(stopwatch.getTime() < (long) syncLoopTime);
+				//Stop and reset the stopwatch
+				stopwatch.stop();
+				stopwatch.reset();
 			} catch (Exception e) {
 			}
 
@@ -572,7 +623,19 @@ public class ElementImpl implements Element {
 				break;
 			}
 			try {
-				Thread.sleep(250);
+				//Start the stopwatch
+				stopwatch.start();
+//				Thread.sleep(250);
+				//Loop until a specific amount of time has passed
+				do{
+					//Define a failsafe to avoid an infinite loop
+					if(stopwatch.getTime() > syncLoopTimeout){
+						TestReporter.assertTrue(stopwatch.getTime() < syncLoopTimeout, "Sync Disabled stopwatch loop took ["+String.valueOf(syncLoopTimeout/1000)+"] seconds.");
+					}
+				}while(stopwatch.getTime() < (long) syncLoopTime);
+				//Stop and reset the stopwatch
+				stopwatch.stop();
+				stopwatch.reset();
 			} catch (Exception e) {
 			}
 
@@ -650,7 +713,19 @@ public class ElementImpl implements Element {
 				break;
 			}
 			try {
-				Thread.sleep(250);
+				//Start the stopwatch
+				stopwatch.start();
+//				Thread.sleep(250);
+				//Loop until a specific amount of time has passed
+				do{
+					//Define a failsafe to avoid an infinite loop
+					if(stopwatch.getTime() > syncLoopTimeout){
+						TestReporter.assertTrue(stopwatch.getTime() < syncLoopTimeout, "Sync Text In Element stopwatch loop took ["+String.valueOf(syncLoopTimeout/1000)+"] seconds.");
+					}
+				}while(stopwatch.getTime() < (long) syncLoopTime);
+				//Stop and reset the stopwatch
+				stopwatch.stop();
+				stopwatch.reset();
 			} catch (Exception e) {
 			}
 
