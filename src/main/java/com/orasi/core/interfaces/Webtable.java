@@ -1,6 +1,5 @@
 package com.orasi.core.interfaces;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import com.orasi.core.interfaces.impl.WebtableImpl;

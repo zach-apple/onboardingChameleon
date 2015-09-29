@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.bouncycastle.asn1.microsoft.MicrosoftObjectIdentifiers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.By.ByClassName;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
@@ -17,17 +15,17 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitWebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.internal.Locatable;
-import org.openqa.selenium.remote.DriverCommand;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.orasi.core.interfaces.Element;
 import com.orasi.utils.Constants;
+import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestReporter;
 
@@ -62,9 +60,8 @@ public class ElementImpl implements Element {
 	}
 
 	@Override
-	public void jsClick(WebDriver driver) {
-		JavascriptExecutor executor = (JavascriptExecutor) driver;
-		executor.executeScript(
+	public void jsClick(OrasiDriver driver) {
+		driver.executeJavaScript(
 				"arguments[0].scrollIntoView(true);arguments[0].click();",
 				element);
 		TestReporter.interfaceLog("Clicked [ <b>@FindBy: " + getElementLocatorInfo()
@@ -893,11 +890,14 @@ public class ElementImpl implements Element {
 	private String getElementLocatorAsString() {
 		int startPosition = 0;
 		String locator = "";
-		if(element.getClass().toString().contains("htmlunit")){
+		
+		//if(element.getClass().toString().contains("htmlunit")){
+		if(element instanceof HtmlUnitWebElement){
 		    startPosition =element.toString().indexOf(" ");	
 		    if (startPosition == -1) locator = element.toString();
 		    else locator = element.toString().substring(startPosition, element.toString().indexOf("="));
 		}else{
+		    //if (element instanceof HtmlUnitWebElement)
 		startPosition = element.toString().lastIndexOf("->") + 3;
 		locator = element.toString().substring(startPosition,
 				element.toString().lastIndexOf(":"));
@@ -913,27 +913,28 @@ public class ElementImpl implements Element {
 	}
 
 	@Override
-	public void highlight(WebDriver driver) {
-		((JavascriptExecutor) driver).executeScript(
-				"arguments[0].style.border='3px solid red'", this);
+	public void highlight(OrasiDriver driver) {
+	  //  OrasiDriver wDriver = driver;
+		 driver.executeJavaScript("arguments[0].style.border='3px solid red'", this);
 	}
 
 	@Override
-	public void scrollIntoView(WebDriver driver) {
-		((JavascriptExecutor) driver).executeScript(
-				"arguments[0].scrollIntoView(true);", element);
+	public void scrollIntoView(OrasiDriver driver) {
+		driver.executeJavaScript("arguments[0].scrollIntoView(true);", element);
 	}
 	
-	public ArrayList getAllAttributes(WebDriver driver){
-	    return (ArrayList)((JavascriptExecutor) driver).executeScript("var s = []; var attrs = arguments[0].attributes; for (var l = 0; l < attrs.length; ++l) { var a = attrs[l]; s.push(a.name + ':' + a.value); } ; return s;",getWrappedElement());
+	@Override
+	public ArrayList getAllAttributes(OrasiDriver driver){
+	    return (ArrayList)driver.executeJavaScript("var s = []; var attrs = arguments[0].attributes; for (var l = 0; l < attrs.length; ++l) { var a = attrs[l]; s.push(a.name + ':' + a.value); } ; return s;",getWrappedElement());
 	}
 
 
-	//@Override
+	@Override
 	public <X> X getScreenshotAs(OutputType<X> target)
 		throws WebDriverException {
 	  //  String base64 = execute(DriverCommand.SCREENSHOT).getValue().toString();
 	    // ... and convert it.
+	    
 	    System.out.println("getScreenShotAs is unimplemented");
 	    return null; //target.convertFromBase64Png(base64);
 	}

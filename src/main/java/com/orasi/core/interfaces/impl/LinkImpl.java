@@ -1,10 +1,9 @@
 package com.orasi.core.interfaces.impl;
 
 import com.orasi.core.interfaces.Link;
+import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.TestReporter;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 /**
@@ -22,10 +21,10 @@ public class LinkImpl extends ElementImpl implements Link {
     }
     
     @Override
-    public void jsClick(WebDriver driver) {
-    	JavascriptExecutor executor = (JavascriptExecutor)driver;
+    public void jsClick(OrasiDriver driver) {
+    	
     	try{
-    	    executor.executeScript("if( document.createEvent ) {var click_ev = document.createEvent('MouseEvents'); click_ev.initEvent('click', true , true )"
+    	    driver.executeJavaScript("if( document.createEvent ) {var click_ev = document.createEvent('MouseEvents'); click_ev.initEvent('click', true , true )"
     	    	+ ";arguments[0].dispatchEvent(click_ev);} else { arguments[0].click();}", element);
     	}catch(RuntimeException rte){
     	    TestReporter.interfaceLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]", true);
@@ -46,6 +45,7 @@ public class LinkImpl extends ElementImpl implements Link {
     	TestReporter.interfaceLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
     }
     
+    @Override
     public String getURL(){
 	return getWrappedElement().getAttribute("href");
     }

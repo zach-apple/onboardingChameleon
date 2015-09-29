@@ -6,7 +6,6 @@ import java.util.concurrent.TimeUnit;
 import javax.naming.directory.NoSuchAttributeException;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
@@ -35,7 +34,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	if (rowCollection.size() == 0) {
 	    rowCollection = this.element.findElements(By.xpath("tbody/tr"));
 	}
-	te.getDriver().manage().timeouts().implicitlyWait(te.getDefaultTestTimeout(),TimeUnit.SECONDS);
+	te.getDriver().manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(),TimeUnit.SECONDS);
 	return rowCollection;
 	
     }
@@ -54,7 +53,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 			    + getElementLocatorInfo() + " </b>]");
 	}
 	
-	te.getDriver().manage().timeouts().implicitlyWait(te.getDefaultTestTimeout(),TimeUnit.SECONDS);
+	te.getDriver().manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(),TimeUnit.SECONDS);
 
 	return row.findElements(By.xpath(xpath));
     }
@@ -108,7 +107,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
     public Element getCell(TestEnvironment te, int row, int column) {
 	te.getDriver().manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 	Element cell = new ElementImpl(getWrappedElement().findElement(By.xpath("tbody/tr[" + row + "]/td[" + column + "]|tbody/tr["+ row + "]/th[" + column + "]|tr[" + row + "]/td["+ column + "]|tr[" + row + "]/th[" + column + "]")));
-	te.getDriver().manage().timeouts().implicitlyWait(te.getDefaultTestTimeout(), TimeUnit.SECONDS);
+	te.getDriver().manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 	return cell;
     }
 
@@ -248,7 +247,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 			xpath = "td";
 		    }
 
-		    te.getDriver().manage().timeouts().implicitlyWait(te.getDefaultTestTimeout(),TimeUnit.SECONDS);
+		    te.getDriver().manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(),TimeUnit.SECONDS);
 
 		    if (columnPosition == -1) {			
 			for (WebElement cell : getColumnCollection(te, rowElement)) {
