@@ -27,7 +27,7 @@ public class TestRadioButton extends TestEnvironment{
 	setOperatingSystem(operatingSystem);
 	setRunLocation(runLocation);
 	setTestEnvironment(environment);
-	setPageURL("http://www.cs.tut.fi/~jkorpela/www/testel.html");
+	setPageURL("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/radioGroup.html");
 	testStart("TestRadiogroup");
     }
 
@@ -40,47 +40,47 @@ public class TestRadioButton extends TestEnvironment{
       
     @Test(groups ={"regression", "interfaces", "radiogroup"})
     public void getNumberOfOptions(){
-	RadioGroup radiogroup = new RadioGroupImpl(getDriver().findElement(By.xpath(xpath)));
+	RadioGroup radiogroup = new RadioGroupImpl(getDriver().findElement(By.id("radioForm")));
 	Assert.assertTrue(radiogroup.getNumberOfOptions() == 2 );
     }
     
     @Test(groups ={"regression", "interfaces", "radiogroup"})
     public void getNumberOfRadioButtons(){
-	RadioGroup radiogroup = new RadioGroupImpl(getDriver().findElement(By.xpath(xpath)));
+	RadioGroup radiogroup = new RadioGroupImpl(getDriver().findElement(By.id("radioForm")));
 	Assert.assertTrue(radiogroup.getNumberOfRadioButtons() == 2 );
     }
 
     @Test(groups ={"regression", "interfaces", "radiogroup"})
     public void getSelectedIndex(){
-	RadioGroup radiogroup = new RadioGroupImpl(getDriver().findElement(By.xpath(xpath)));
+	RadioGroup radiogroup = new RadioGroupImpl(getDriver().findElement(By.id("radioForm")));
 	Assert.assertTrue(radiogroup.getSelectedIndex() == 1 );
     }
     
     @Test(groups ={"regression", "interfaces", "radiogroup"})
     public void getSelectedOption(){
-	RadioGroup radiogroup = new RadioGroupImpl(getDriver().findElement(By.xpath(xpath)));
-	Assert.assertTrue(radiogroup.getSelectedOption().equals("2") );
+	RadioGroup radiogroup = new RadioGroupImpl(getDriver().findElement(By.id("radioForm")));
+	Assert.assertTrue(radiogroup.getSelectedOption().equals("female") );
     }
     
     @Test(groups ={"regression", "interfaces", "radiogroup"}, dependsOnMethods="getSelectedIndex")
     public void selectByIndex(){
-	RadioGroup radiogroup = new RadioGroupImpl(getDriver().findElement(By.xpath(xpath)));
-	radiogroup.selectByIndex(0);
-	Assert.assertTrue(radiogroup.getSelectedIndex() == 0 );
+	RadioGroup radiogroup = new RadioGroupImpl(getDriver().findElement(By.id("radioForm")));
+	radiogroup.selectByIndex(1);
+	Assert.assertTrue(radiogroup.getSelectedIndex() == 1 );
     }
     
     @Test(groups ={"regression", "interfaces", "radiogroup"}, dependsOnMethods="selectByIndex")
     public void selectByOption(){
-	RadioGroup radiogroup = new RadioGroupImpl(getDriver().findElement(By.xpath(xpath)));
-	radiogroup.selectByOption("2");
-	Assert.assertTrue(radiogroup.getSelectedIndex() == 1 );
+	RadioGroup radiogroup = new RadioGroupImpl(getDriver().findElement(By.id("radioForm")));
+	radiogroup.selectByOption("male");
+	Assert.assertTrue(radiogroup.getSelectedIndex() == 0 );
     }
     
     @Test(groups ={"regression", "interfaces", "radiogroup"})
     public void getAllOptions(){
-	RadioGroup radiogroup = new RadioGroupImpl(getDriver().findElement(By.xpath(xpath)));
+	RadioGroup radiogroup = new RadioGroupImpl(getDriver().findElement(By.id("radioForm")));
 	List<String> group = radiogroup.getAllOptions();
-	Assert.assertTrue(group.get(0).equals("1"));
-	Assert.assertTrue(group.get(1).equals("2"));
+	Assert.assertTrue(group.get(0).equals("male"));
+	Assert.assertTrue(group.get(1).equals("female"));
     }
 }

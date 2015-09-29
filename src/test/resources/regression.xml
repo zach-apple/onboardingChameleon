@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Core-Regression" parallel="tests" thread-count="2">
-	<parameter name="browserUnderTest" value="jenkinsParameter" />
+<suite name="Core-Regression" parallel="methods" thread-count="20">
+	<parameter name="browserUnderTest" value="firefox" />
 	<parameter name="environment" value="staging" />
-	<parameter name="runLocation" value="jenkinsParameter" />
-	<parameter name="browserVersion" value="jenkinsParameter" />
-	<parameter name="operatingSystem" value="jenkinsParameter" />
-	<test name="Element">
+	<parameter name="runLocation" value="sauce" />
+	<parameter name="browserVersion" value="" />
+	<parameter name="operatingSystem" value="windows" />
+ 	<test name="Element">
 		<classes>
 			<class name="com.orasi.core.TestElement" />
 		</classes>
 	</test>
-
+	
 	<test name="Button">
 		<classes>
 			<class name="com.orasi.core.TestButton" />
 		</classes>
 	</test>
-
 	<test name="Checkbox">
 		<classes>
 			<class name="com.orasi.core.TestCheckbox" />
 		</classes>
 	</test>
-
+	
 	<test name="Label">
 		<classes>
 			<class name="com.orasi.core.TestLabel" />
@@ -41,7 +40,6 @@
 			<class name="com.orasi.core.TestListbox" />
 		</classes>
 	</test>
-
 	<test name="RadioButton">
 		<classes>
 			<class name="com.orasi.core.TestRadioButton" />
@@ -58,8 +56,26 @@
 		<classes>
 			<class name="com.orasi.core.TestWebtable" />
 		</classes>
+	</test> 
+	<!--
+	<test name="CustomElementLocatorFactory">
+		<classes>
+			<class name="com.orasi.core.impl.TestCustomElementLocatorFactory" />
+		</classes>
 	</test>
-
+	
+	<test name="AlertHandler">
+		<classes>
+			<class name="com.orasi.utils.TestAlertHandler" />
+		</classes>
+	</test>
+	
+	<test name="FrameHandler">
+		<classes>
+			<class name="com.orasi.utils.TestFrameHandler" />
+		</classes>
+	</test>
+	-->
 	<test name="Base64Encoder">
 		<classes>
 			<class name="com.orasi.utils.TestBase64Encoder" />
@@ -72,10 +88,11 @@
 		</classes>
 	</test>
 
+<!--  
 	<test name="TestEnvironment">
 		<classes>
 			<class name="com.orasi.utils.TestTestEnvironment" />
 		</classes>
-	</test>
-
+	</test> 
+	-->
 </suite> <!-- Suite -->

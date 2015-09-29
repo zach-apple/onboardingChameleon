@@ -36,7 +36,7 @@ public class TestWebtable extends TestEnvironment{
 	setOperatingSystem(operatingSystem);
 	setRunLocation(runLocation);
 	setTestEnvironment(environment);
-	setPageURL("http://www.iupui.edu/~webtrain/tutorials/tables.html");
+	setPageURL("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/webtable.html");
 	testStart("TestWebtable");
     }
     
@@ -47,70 +47,70 @@ public class TestWebtable extends TestEnvironment{
     
     @Test(groups ={"regression", "interfaces", "webtable"})
     public void clickCell(){
-    	Webtable webtable= new WebtableImpl(getDriver().findElement(By.xpath(xpath)));
+    	Webtable webtable= new WebtableImpl(getDriver().findElement(By.id("VIPs")));
     	webtable.clickCell(this, 1, 1);
-    	//Assert.assertTrue(getDriver().findElement(By.id("LastName")).getAttribute("value").equals("clicked"));
+    	Assert.assertTrue(getDriver().findElement(By.id("clickableCell")).getText().equals("Clicked"));
       } 
     
     @Test(groups ={"regression", "interfaces", "webtable"})
     public void getCell(){
-	Webtable webtable= new WebtableImpl(getDriver().findElement(By.xpath(xpath)));
-	Assert.assertTrue(webtable.getCell(this, 2, 2).getText().equals("Office Supplies"));
+	Webtable webtable= new WebtableImpl(getDriver().findElement(By.id("VIPs")));
+	Assert.assertTrue(webtable.getCell(this, 2, 2).getText().equals("Sylvester"));
 	
     }
     
     @Test(groups ={"regression", "interfaces", "webtable"})
     public void getCellData(){
-	Webtable webtable= new WebtableImpl(getDriver().findElement(By.xpath(xpath)));
-	Assert.assertTrue(webtable.getCellData(this, 2, 2).equals("Office Supplies"));
+	Webtable webtable= new WebtableImpl(getDriver().findElement(By.id("VIPs")));
+	Assert.assertTrue(webtable.getCellData(this, 3, 3).equals("Presley"));
     }
     
     @Test(groups ={"regression", "interfaces", "webtable"})
     public void getColumnCount(){
-	Webtable webtable= new WebtableImpl(getDriver().findElement(By.xpath(xpath)));
-	Assert.assertTrue(webtable.getColumnCount(this, 1) == 3);
+	Webtable webtable= new WebtableImpl(getDriver().findElement(By.id("VIPs")));
+	Assert.assertTrue(webtable.getColumnCount(this, 1) == 5);
     }
     
     @Test(groups ={"regression", "interfaces", "webtable"})
     public void getColumnWithCellText(){
-	Webtable webtable= new WebtableImpl(getDriver().findElement(By.xpath(xpath)));
-	Assert.assertTrue(webtable.getColumnWithCellText(this, "Supplies and Expenses") == 1);
+	Webtable webtable= new WebtableImpl(getDriver().findElement(By.id("VIPs")));
+	Assert.assertTrue(webtable.getColumnWithCellText(this, "Gender") == 4);
     }
     
     @Test(groups ={"regression", "interfaces", "webtable"})
     public void getColumnWithCellTextUsingRow(){
-	Webtable webtable= new WebtableImpl(getDriver().findElement(By.xpath(xpath)));
-	Assert.assertTrue(webtable.getColumnWithCellText(this, "$xx,xxx", 7) == 3);
+	Webtable webtable= new WebtableImpl(getDriver().findElement(By.id("VIPs")));
+	Assert.assertTrue(webtable.getColumnWithCellText(this, "Politics", 6) == 5);
     }
     
     @Test(groups ={"regression", "interfaces", "webtable"})
     public void getRowCount(){
-	Webtable webtable= new WebtableImpl(getDriver().findElement(By.xpath(xpath)));
+	Webtable webtable= new WebtableImpl(getDriver().findElement(By.id("VIPs")));
 	Assert.assertTrue(webtable.getRowCount(this) == 7);
     }
     
     @Test(groups ={"regression", "interfaces", "webtable"})
     public void getRowWithCellText(){
-	Webtable webtable= new WebtableImpl(getDriver().findElement(By.xpath(xpath)));
-	Assert.assertTrue(webtable.getRowWithCellText(this, "Mailing") == 5);
+	Webtable webtable= new WebtableImpl(getDriver().findElement(By.id("VIPs")));
+	Assert.assertTrue(webtable.getRowWithCellText(this, "Agassi") == 5);
     }
     
     @Test(groups ={"regression", "interfaces", "webtable"})
     public void getRowWithCellTextSpecifedColumn(){
-	Webtable webtable= new WebtableImpl(getDriver().findElement(By.xpath(xpath)));
-	Assert.assertTrue(webtable.getRowWithCellText(this, "13.", 1) == 5);
+	Webtable webtable= new WebtableImpl(getDriver().findElement(By.id("VIPs")));
+	Assert.assertTrue(webtable.getRowWithCellText(this, "Marilyn", 2) == 7);
     }
     
     @Test(groups ={"regression", "interfaces", "webtable"})
     public void getRowWithCellTextSpecifedRowAndColumn(){
-	Webtable webtable= new WebtableImpl(getDriver().findElement(By.xpath(xpath)));
-	Assert.assertTrue(webtable.getRowWithCellText(this, "14.", 1, 2) == 6);
+	Webtable webtable= new WebtableImpl(getDriver().findElement(By.id("VIPs")));
+	Assert.assertTrue(webtable.getRowWithCellText(this, "Female", 4, 4) == 4);
     }
     
     @Test(groups ={"regression", "interfaces", "webtable"})
     public void getRowWithCellTextNotExact(){
-	Webtable webtable= new WebtableImpl(getDriver().findElement(By.xpath(xpath)));
-	Assert.assertTrue(webtable.getRowWithCellText(this, "duplicating", 2, 2, false) == 4);
+	Webtable webtable= new WebtableImpl(getDriver().findElement(By.id("VIPs")));
+	Assert.assertTrue(webtable.getRowWithCellText(this, "schWarzenegGer", 3, 6, false) == 6);
     }
     
 
