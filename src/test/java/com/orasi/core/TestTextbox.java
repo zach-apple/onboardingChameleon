@@ -24,7 +24,7 @@ public class TestTextbox extends TestEnvironment{
 	setOperatingSystem(operatingSystem);
 	setRunLocation(runLocation);
 	setTestEnvironment(environment);
-	setPageURL("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/textbox.html");
+	setPageURL("http://www.cs.tut.fi/~jkorpela/www/testel.html");
 	testStart("TestTextbox");
     }
     
@@ -74,7 +74,7 @@ public class TestTextbox extends TestEnvironment{
 	//textbox.clear();
 	textbox.setSecure("c2V0U2VjdXJl");
 	Assert.assertTrue(textbox.getAttribute("value").equals("setSecure"));
-	//textbox.clear();
+	textbox.clear();
     }
     
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="setSecure")
@@ -83,7 +83,7 @@ public class TestTextbox extends TestEnvironment{
 //	textbox.clear();
 	textbox.safeSetSecure("c2V0U2VjdXJl");
 	Assert.assertTrue(textbox.getAttribute("value").contains("setSecure"));
-	//textbox.clear();
+	textbox.clear();
     }
   
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="safeSetSecure")
@@ -91,7 +91,7 @@ public class TestTextbox extends TestEnvironment{
 	Textbox textbox= getDriver().findTextbox(By.id("text1"));
 	textbox.setValidate(getDriver(), "setValidate");
 	Assert.assertTrue(textbox.getAttribute("value").equals("setValidate"));
-//	textbox.clear();
+	textbox.clear();
     }
     
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="setValidate")

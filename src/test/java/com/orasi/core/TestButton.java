@@ -24,7 +24,7 @@ public class TestButton extends TestEnvironment{
 	setBrowserVersion(browserVersion);
 	setOperatingSystem(operatingSystem);
 	setRunLocation(runLocation);
-	setPageURL("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/button.html");
+	setPageURL("http://www.cs.tut.fi/~jkorpela/www/testel.html");	
 	setTestEnvironment(environment);
 	testStart("TestButton");
 	}
@@ -38,7 +38,7 @@ public class TestButton extends TestEnvironment{
     public void click(){
 	Button button= getDriver().findButton(By.id("click"));
 	button.click();
-	Assert.assertTrue(getDriver().findElement(By.id("testClick")).getText().equals("Successful"));
+	Assert.assertTrue(getDriver().findElement(By.id("f1")).getAttribute("value").equals("Default text."));
     }
     
     @Test(groups ={"regression", "interfaces", "button"}, dependsOnMethods="click")
