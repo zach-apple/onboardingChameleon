@@ -27,7 +27,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.orasi.core.interfaces.Element;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
-import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestReporter;
 
 /**
@@ -190,7 +189,7 @@ public class ElementImpl implements Element {
 	} catch (WebDriverException wde) {
 	    if (wde.getMessage().toLowerCase().contains("not implemented")) {
 		TestReporter
-			.logFailure("isSelected has not been implemented by EdgeDriver");
+			.logFailure(" isSelected has not been implemented by EdgeDriver");
 	    }
 	}
 	return false;
@@ -203,6 +202,7 @@ public class ElementImpl implements Element {
     @Override
     public void clear() {
 	element.clear();
+	TestReporter.interfaceLog(" Clear text from Element [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
     }
 
     /**
@@ -212,7 +212,7 @@ public class ElementImpl implements Element {
     public void sendKeys(CharSequence... keysToSend) {
 	if (keysToSend.toString() != "") {
 	    element.sendKeys(keysToSend);
-	    TestReporter.interfaceLog(" :: Send Keys [ <b>"
+	    TestReporter.interfaceLog(" Send Keys [ <b>"
 		    + keysToSend.toString()
 		    + "</b> ] to Textbox [ <b>@FindBy: "
 		    + getElementLocatorInfo() + " </b> ]");
@@ -274,46 +274,27 @@ public class ElementImpl implements Element {
      * @author Justin
      */
     @Override
-    public boolean syncPresent(WebDriver driver, int timeout,
-	    boolean returnError) {
+    public boolean syncPresent(WebDriver driver, int timeout, boolean returnError) {
 	boolean found = false;
-	double loopTimeout = 0;
-
+	
 	By locator = getElementLocator();
-	loopTimeout = timeout;
 	TestReporter.interfaceLog("<i> Syncing to element [ <b>@FindBy: "
 		+ getElementLocatorInfo()
 		+ "</b> ] to be <b>PRESENT</b> in DOM within [ " + timeout
 		+ " ] seconds.</i>");
 	driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
-	for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
-
+	
+	stopwatch.start();
+	do {
 	    if (webElementPresent(driver, locator)) {
 		found = true;
 		break;
 	    }
-	    try {
-		// Start the stopwatch
-		stopwatch.start();
-		// Thread.sleep(250);
-		// Loop until a specific amount of time has passed
-		do {
-		    // Define a failsafe to avoid an infinite loop
-		    if (stopwatch.getTime() > syncLoopTimeout) {
-			TestReporter
-				.assertTrue(
-					stopwatch.getTime() < syncLoopTimeout,
-					"Sync Present stopwatch loop took ["
-						+ String.valueOf(syncLoopTimeout / 1000)
-						+ "] seconds.");
-		    }
-		} while (stopwatch.getTime() < (long) syncLoopTime);
-		// Stop and reset the stopwatch
-		stopwatch.stop();
-		stopwatch.reset();
-	    } catch (Exception e) {
-	    }
-	}
+	   
+	} while (stopwatch.getTime() / 1000.0 < (long) timeout);
+	stopwatch.stop();
+	stopwatch.reset();
+	
 	driver.manage().timeouts()
 		.implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
 	if (!found && returnError) {
@@ -371,42 +352,24 @@ public class ElementImpl implements Element {
     public boolean syncVisible(WebDriver driver, int timeout,
 	    boolean returnError) {
 	boolean found = false;
-	double loopTimeout = 0;
-
-	loopTimeout = timeout * 4;
+	
 	TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 		+ getElementLocatorInfo()
 		+ "</b> ] to be <b>VISIBLE<b> within [ " + timeout
 		+ " ] seconds.</i>");
 	driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
-	for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
-
+	
+	stopwatch.start();
+	do {
 	    if (webElementVisible(driver, element)) {
 		found = true;
 		break;
 	    }
-	    try {
-		// Start the stopwatch
-		stopwatch.start();
-		// Thread.sleep(250);
-		// Loop until a specific amount of time has passed
-		do {
-		    // Define a failsafe to avoid an infinite loop
-		    if (stopwatch.getTime() > syncLoopTimeout) {
-			TestReporter
-				.assertTrue(
-					stopwatch.getTime() < syncLoopTimeout,
-					"Sync Visible stopwatch loop took ["
-						+ String.valueOf(syncLoopTimeout / 1000)
-						+ "] seconds.");
-		    }
-		} while (stopwatch.getTime() < (long) syncLoopTime);
-		// Stop and reset the stopwatch
-		stopwatch.stop();
-		stopwatch.reset();
-	    } catch (Exception e) {
-	    }
-	}
+	   
+	} while (stopwatch.getTime() / 1000.0 < (long) timeout);
+	stopwatch.stop();
+	stopwatch.reset();
+	
 	driver.manage().timeouts()
 		.implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
 	if (!found && returnError) {
@@ -461,43 +424,23 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncHidden(WebDriver driver, int timeout, boolean returnError) {
 	boolean found = false;
-	long loopTimeout = 0;
-
-	loopTimeout = timeout * 4;
 	TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 		+ getElementLocatorInfo()
 		+ "</b> ] to be <b>HIDDEN</b> within [ <b>" + timeout
 		+ "</b> ] seconds.</i>");
 	driver.manage().timeouts().implicitlyWait(0, TimeUnit.MILLISECONDS);
-	for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
-
+	
+	stopwatch.start();
+	do {
 	    if (!webElementVisible(driver, element)) {
 		found = true;
 		break;
 	    }
-	    try {
-		// Start the stopwatch
-		stopwatch.start();
-		// Thread.sleep(250);
-		// Loop until a specific amount of time has passed
-		do {
-		    // Define a failsafe to avoid an infinite loop
-		    if (stopwatch.getTime() > syncLoopTimeout) {
-			TestReporter
-				.assertTrue(
-					stopwatch.getTime() < syncLoopTimeout,
-					"Sync Hidden stopwatch loop took ["
-						+ String.valueOf(syncLoopTimeout / 1000)
-						+ "] seconds.");
-		    }
-		} while (stopwatch.getTime() < (long) syncLoopTime);
-		// Stop and reset the stopwatch
-		stopwatch.stop();
-		stopwatch.reset();
-	    } catch (Exception e) {
-	    }
-
-	}
+	   
+	} while (stopwatch.getTime() / 1000.0 < (long) timeout);
+	stopwatch.stop();
+	stopwatch.reset();
+	
 	driver.manage().timeouts()
 		.implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
 	if (!found && returnError) {
@@ -556,43 +499,23 @@ public class ElementImpl implements Element {
     public boolean syncEnabled(WebDriver driver, int timeout,
 	    boolean returnError) {
 	boolean found = false;
-	double loopTimeout = 0;
-
-	loopTimeout = timeout * 4;
 	TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 		+ getElementLocatorInfo()
 		+ "</b> ] to be <b>ENABLED</b> within [ <b>" + timeout
 		+ "</b> ] seconds.</i>");
 	driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
-	for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 
+	stopwatch.start();
+	do {
 	    if (webElementEnabled(driver, element)) {
 		found = true;
 		break;
 	    }
-	    try {
-		// Start the stopwatch
-		stopwatch.start();
-		// Thread.sleep(250);
-		// Loop until a specific amount of time has passed
-		do {
-		    // Define a failsafe to avoid an infinite loop
-		    if (stopwatch.getTime() > syncLoopTimeout) {
-			TestReporter
-				.assertTrue(
-					stopwatch.getTime() < syncLoopTimeout,
-					"Sync Enabled stopwatch loop took ["
-						+ String.valueOf(syncLoopTimeout / 1000)
-						+ "] seconds.");
-		    }
-		} while (stopwatch.getTime() < (long) syncLoopTime);
-		// Stop and reset the stopwatch
-		stopwatch.stop();
-		stopwatch.reset();
-	    } catch (Exception e) {
-	    }
-
-	}
+	   
+	} while (stopwatch.getTime() / 1000.0 < (long) timeout);
+	stopwatch.stop();
+	stopwatch.reset();
+	
 	driver.manage().timeouts()
 		.implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
 	if (!found && returnError) {
@@ -649,46 +572,25 @@ public class ElementImpl implements Element {
      *
      */
     @Override
-    public boolean syncDisabled(WebDriver driver, int timeout,
-	    boolean returnError) {
+    public boolean syncDisabled(WebDriver driver, int timeout, boolean returnError) {
 	boolean found = false;
-	double loopTimeout = 0;
-
-	loopTimeout = timeout * 4;
 	TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 		+ getElementLocatorInfo()
 		+ "</b> ] to be <b>DISABLED</b> within [ <b>" + timeout
 		+ "</b> ] seconds.</i>");
 	driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
-	for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
-
+	
+	stopwatch.start();
+	do {
 	    if (!webElementEnabled(driver, element)) {
 		found = true;
 		break;
 	    }
-	    try {
-		// Start the stopwatch
-		stopwatch.start();
-		// Thread.sleep(250);
-		// Loop until a specific amount of time has passed
-		do {
-		    // Define a failsafe to avoid an infinite loop
-		    if (stopwatch.getTime() > syncLoopTimeout) {
-			TestReporter
-				.assertTrue(
-					stopwatch.getTime() < syncLoopTimeout,
-					"Sync Disabled stopwatch loop took ["
-						+ String.valueOf(syncLoopTimeout / 1000)
-						+ "] seconds.");
-		    }
-		} while (stopwatch.getTime() < (long) syncLoopTime);
-		// Stop and reset the stopwatch
-		stopwatch.stop();
-		stopwatch.reset();
-	    } catch (Exception e) {
-	    }
-
-	}
+	   
+	} while (stopwatch.getTime() / 1000.0 < (long) timeout);
+	stopwatch.stop();
+	stopwatch.reset();
+	
 	driver.manage().timeouts()
 		.implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
 	if (!found && returnError) {
@@ -748,43 +650,24 @@ public class ElementImpl implements Element {
     public boolean syncTextInElement(WebDriver driver, String text,
 	    int timeout, boolean returnError) {
 	boolean found = false;
-	double loopTimeout = 0;
-
-	loopTimeout = timeout * 4;
+	
 	TestReporter.interfaceLog("<i>Syncing to text [<b>" + text
 		+ "</b> ] in element [<b>@FindBy: " + getElementLocatorInfo()
 		+ "</b> ] to be displayed within [ <b>" + timeout
 		+ "</b> ] seconds.</i>");
 	driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
-	for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
-
+		
+	stopwatch.start();
+	do {
 	    if (webElementTextPresent(driver, element, text)) {
 		found = true;
 		break;
 	    }
-	    try {
-		// Start the stopwatch
-		stopwatch.start();
-		// Thread.sleep(250);
-		// Loop until a specific amount of time has passed
-		do {
-		    // Define a failsafe to avoid an infinite loop
-		    if (stopwatch.getTime() > syncLoopTimeout) {
-			TestReporter
-				.assertTrue(
-					stopwatch.getTime() < syncLoopTimeout,
-					"Sync Text In Element stopwatch loop took ["
-						+ String.valueOf(syncLoopTimeout / 1000)
-						+ "] seconds.");
-		    }
-		} while (stopwatch.getTime() < (long) syncLoopTime);
-		// Stop and reset the stopwatch
-		stopwatch.stop();
-		stopwatch.reset();
-	    } catch (Exception e) {
-	    }
-
-	}
+	   
+	} while (stopwatch.getTime() / 1000.0 < (long) timeout);
+	stopwatch.stop();
+	stopwatch.reset();
+	
 	driver.manage().timeouts()
 		.implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
 	if (!found && returnError) {
