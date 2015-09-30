@@ -1,13 +1,10 @@
 package com.orasi.utils;
 
-import org.junit.rules.TestName;
-import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.orasi.core.interfaces.Element;
-import com.orasi.core.interfaces.impl.ElementImpl;
 
 public class TestTestEnvironment {
     private String application = "application";
@@ -19,7 +16,7 @@ public class TestTestEnvironment {
     private String testingName = "TestEnvironment";
     private String pageURL = "http://www.cs.tut.fi/~jkorpela/www/testel.html";
     
-    @FindBy(id="f1")
+    @FindBy(id="text1")
     private Element firstname;
     
     @Test(groups="regression")

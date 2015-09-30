@@ -372,7 +372,6 @@ public class TestEnvironment {
 		if (getBrowserUnderTest().equalsIgnoreCase("Firefox")
 			|| getBrowserUnderTest().equalsIgnoreCase("FF")) {
 		    caps =DesiredCapabilities.firefox();
-		   // initDriver = new FirefoxDriver();
 		}
 		// Internet explorer
 		else if (getBrowserUnderTest().equalsIgnoreCase("IE")
@@ -390,7 +389,6 @@ public class TestEnvironment {
 			    file.getAbsolutePath());
 		    caps =DesiredCapabilities.internetExplorer();
 			   
-		//    initDriver = new InternetExplorerDriver(caps);
 		}
 		// Chrome
 		else if (getBrowserUnderTest().equalsIgnoreCase("Chrome")) {
@@ -398,12 +396,10 @@ public class TestEnvironment {
 		    System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
 		    caps =DesiredCapabilities.chrome();
 			   
-		  //  initDriver = new ChromeDriver();
 		}
 		// Headless - HTML unit driver
 		else if (getBrowserUnderTest().equalsIgnoreCase("html")) {
 		    caps = DesiredCapabilities.htmlUnitWithJs();
-		  //  initDriver = new HtmlUnitDriver(true);
 		}
 		/*else if (getBrowserUnderTest().equalsIgnoreCase("phantom")) {
 			    caps = DesiredCapabilities.phantomjs();
@@ -418,12 +414,10 @@ public class TestEnvironment {
 		else if (getBrowserUnderTest().equalsIgnoreCase("safari")) {
 		    caps =DesiredCapabilities.safari();
 			   
-		  //  initDriver = new SafariDriver();
 		}else if(getBrowserUnderTest().equalsIgnoreCase("microsoftedge")){
 		    file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL+"MicrosoftWebDriver.exe").getPath());
 		    System.setProperty("webdriver.edge.driver", file.getAbsolutePath());
 		    caps = DesiredCapabilities.edge();
-		  //  initDriver = new EdgeDriver(caps);
 		} else {
 		    throw new RuntimeException(
 			    "Parameter not set for browser type");
@@ -435,7 +429,6 @@ public class TestEnvironment {
 			|| getBrowserUnderTest().equalsIgnoreCase("FF")) {
 		    caps =DesiredCapabilities.firefox();
 			   
-		//    initDriver = new FirefoxDriver();
 		}
 		// Internet explorer
 		else if (getBrowserUnderTest().equalsIgnoreCase("IE")
@@ -463,7 +456,6 @@ public class TestEnvironment {
 			proc.waitFor();
 			 caps =DesiredCapabilities.chrome();
 			   
-		//	initDriver = new ChromeDriver();
 		    } catch (IllegalStateException ise) {
 			ise.printStackTrace();
 			throw new IllegalStateException(
@@ -478,12 +470,10 @@ public class TestEnvironment {
 		else if (getBrowserUnderTest().equalsIgnoreCase("html")) {
 		    caps =DesiredCapabilities.htmlUnitWithJs();
 			   
-		//    initDriver = new HtmlUnitDriver(true);
 		}
 		// Safari
 		else if (getBrowserUnderTest().equalsIgnoreCase("safari")) {
-		    caps =DesiredCapabilities.safari();			  
-		//    initDriver = new SafariDriver();
+		    caps =DesiredCapabilities.safari();		
 		} else {
 		    throw new RuntimeException(
 			    "Parameter not set for browser type");
@@ -496,7 +486,6 @@ public class TestEnvironment {
 	    driver = new OrasiDriver(caps);
 	    // Code for running on the selenium grid
 	} else if ( getRunLocation().equalsIgnoreCase("grid")) {
-	    //DesiredCapabilities capabilities = new DesiredCapabilities();
 	    caps.setCapability(CapabilityType.BROWSER_NAME,
 		    getBrowserUnderTest());
 	    if (getBrowserVersion() != null) {
@@ -511,12 +500,6 @@ public class TestEnvironment {
 		caps.setCapability("ignoreZoomSetting", true);
 	    }
 	    
-	//    try {
-	//	initDriver = new RemoteWebDriver(new URL(getRemoteURL()), caps);
-	//    } catch (MalformedURLException e) {
-	//	// TODO Auto-generated catch block
-	//	e.printStackTrace();
-	//   }
 	    try {
 		driver = new OrasiDriver(caps, new URL(getRemoteURL()));
 	    } catch (MalformedURLException e) {
@@ -548,25 +531,15 @@ public class TestEnvironment {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
-	//    try {
-	//	webDriver.set(new RemoteWebDriver(new URL("http://" + authentication.getUsername() + ":" + authentication.getAccessKey() + "@ondemand.saucelabs.com:80/wd/hub"), caps));
-	//    } catch (MalformedURLException e) {
-	//	// TODO Auto-generated catch block
-	//	e.printStackTrace();
-	//   }
-	    driver = new OrasiDriver(caps, sauceURL);
 
-	   // sessionId.set(((RemoteWebDriver) getWebDriver()).getSessionId().toString());
-	//    initDriver = webDriver.get();
+	    driver = new OrasiDriver(caps, sauceURL);
 
 		
 	}else {
 	    throw new RuntimeException(
 		    "Parameter for run [Location] was not set to 'Local', 'Grid', 'Sauce', or 'Remote'");
 	}
-
-//	driver = new OrasiDriver(caps);
-	    
+ 
 	driver.manage()
 		.timeouts()
 		.setScriptTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT,

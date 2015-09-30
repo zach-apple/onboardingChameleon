@@ -35,7 +35,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 			getWrappedElement().clear();
 			TestReporter.interfaceLog(" Clear text from Textbox [<b>@FindBy: " + getElementLocatorInfo() + " </b>]");
 		} catch (RuntimeException rte) {
-			TestReporter.interfaceLog("Clear text from Textbox [<b>@FindBy: " + getElementLocatorInfo() + " </b>]", true);
+			TestReporter.interfaceLog(" Clear text from Textbox [<b>@FindBy: " + getElementLocatorInfo() + " </b>]", true);
 			throw rte;
 		}
     }

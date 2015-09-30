@@ -73,7 +73,7 @@ public class TestTextbox extends TestEnvironment{
 	Textbox textbox= getDriver().findTextbox(By.id("text1"));
 	//textbox.clear();
 	textbox.setSecure("c2V0U2VjdXJl");
-	Assert.assertTrue(textbox.getAttribute("value").equals("setSecure"));
+	Assert.assertTrue(textbox.getAttribute("value").contains("safeSetsetSecure"));
 	textbox.clear();
     }
     

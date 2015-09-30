@@ -1,25 +1,18 @@
 package com.orasi.utils;
-import java.lang.ref.WeakReference;
 import java.net.URL;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.interactions.HasInputDevices;
-import org.openqa.selenium.interactions.Keyboard;
-import org.openqa.selenium.interactions.Mouse;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
@@ -27,7 +20,6 @@ import org.openqa.selenium.safari.SafariDriver;
 import com.gargoylesoftware.htmlunit.WebWindow;
 import com.gargoylesoftware.htmlunit.javascript.background.DefaultJavaScriptExecutor;
 import com.gargoylesoftware.htmlunit.javascript.background.JavaScriptExecutor;
-import com.gargoylesoftware.htmlunit.javascript.background.JavaScriptJobManager;
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Checkbox;
 import com.orasi.core.interfaces.Element;
@@ -93,51 +85,110 @@ public class OrasiDriver implements WebDriver,   JavaScriptExecutor {
 
     @Override
     public List<WebElement> findElements(By by) {
-	return findWebElements(by);
+	try{
+	    return findWebElements(by);
+	}catch(NoSuchElementException nse){	  
+	    TestReporter.logFailure("No such Element with context " + by.toString());
+	    throw new NoSuchElementException(nse.getMessage());
+	}
     }
     
     public List<WebElement> findWebElements(By by){
-	return driver.findElements(by);
+	try{
+	    return driver.findElements(by);
+	}catch(NoSuchElementException nse){	  
+	    TestReporter.logFailure("No such WebElement with context: " + by.toString());
+	    throw new NoSuchElementException(nse.getMessage());
+	}
     }
     
     @Override
     public Element findElement(By by) {
-	return new ElementImpl(driver.findElement(by));
+	try{
+	    return new ElementImpl(driver.findElement(by));
+	}catch(NoSuchElementException nse){	  
+	    TestReporter.logFailure("No such Element with context: " + by.toString());
+	    throw new NoSuchElementException(nse.getMessage());
+	}
     }
 
     public Textbox findTextbox(By by) {
-	return new TextboxImpl(driver.findElement(by));
+	try{
+	    return new TextboxImpl(driver.findElement(by));
+	}catch(NoSuchElementException nse){	  
+	    TestReporter.logFailure("No such Textbox with context: " + by.toString());
+	    throw new NoSuchElementException(nse.getMessage());
+	}
     }
     
     public Button findButton(By by) {
-	return new ButtonImpl(driver.findElement(by));
+	try{
+	    return new ButtonImpl(driver.findElement(by));
+	}catch(NoSuchElementException nse){	  
+	    TestReporter.logFailure("No such Button with context: " + by.toString());
+	    throw new NoSuchElementException(nse.getMessage());
+	}
     }
     
     public Checkbox findCheckbox(By by) {
-	return new CheckboxImpl(driver.findElement(by));
+	try{
+	    return new CheckboxImpl(driver.findElement(by));
+	}catch(NoSuchElementException nse){	  
+	    TestReporter.logFailure("No such Checkbox with context: " + by.toString());
+	    throw new NoSuchElementException(nse.getMessage());
+	}
     }
     
     public Label findLabel(By by) {
-	return new LabelImpl(driver.findElement(by));
+	try{
+	    return new LabelImpl(driver.findElement(by));
+	}catch(NoSuchElementException nse){	  
+	    TestReporter.logFailure("No such Label with context: " + by.toString());
+	    throw new NoSuchElementException(nse.getMessage());
+	}
     }
     
     public Link findLink(By by) {
-	return new LinkImpl(driver.findElement(by));
+	try{
+	    return new LinkImpl(driver.findElement(by));
+	}catch(NoSuchElementException nse){	  
+	    TestReporter.logFailure("No such Link with context: " + by.toString());
+	    throw new NoSuchElementException(nse.getMessage());
+	}
     }
     
     public Listbox findListbox(By by) {
-	return new ListboxImpl(driver.findElement(by));
+	try{	
+	    return new ListboxImpl(driver.findElement(by));
+	}catch(NoSuchElementException nse){	  
+	    TestReporter.logFailure("No such Listbox with context: " + by.toString());
+	    throw new NoSuchElementException(nse.getMessage());
+	}
     }
     
     public RadioGroup findRadioGroup(By by) {
-	return new RadioGroupImpl(driver.findElement(by));
+	try{
+	    return new RadioGroupImpl(driver.findElement(by));
+	}catch(NoSuchElementException nse){	  
+	    TestReporter.logFailure("No such RadioGroup with context: " + by.toString());
+	    throw new NoSuchElementException(nse.getMessage());
+	}
     }
     
     public Webtable findWebtable(By by) {
-	return new WebtableImpl(driver.findElement(by));
+	try{
+	    return new WebtableImpl(driver.findElement(by));
+	}catch(NoSuchElementException nse){	  
+	    TestReporter.logFailure("No such Webtable with context: " + by.toString());
+	    throw new NoSuchElementException(nse.getMessage());
+	}
     }
     public WebElement findWebElement(By by) {
-	return driver.findElement(by);
+	try{return driver.findElement(by);
+	}catch(NoSuchElementException nse){	  
+	    TestReporter.logFailure("No such WebElement with context: " + by.toString());
+	    throw new NoSuchElementException(nse.getMessage());
+	}
     }
     
     @Override
@@ -215,20 +266,24 @@ public class OrasiDriver implements WebDriver,   JavaScriptExecutor {
     }
 
     
+    @Override
     public void run() {
 	((DefaultJavaScriptExecutor) driver).run();
     }
 
+    @Override
     public void addWindow(WebWindow newWindow) {
 	((DefaultJavaScriptExecutor) driver).addWindow(newWindow);
     }
 
     
+    @Override
     public void shutdown() {
 	((DefaultJavaScriptExecutor) driver).shutdown();
     }
 
     
+    @Override
     public int pumpEventLoop(long timeoutMillis) {
 	return ((DefaultJavaScriptExecutor) driver).pumpEventLoop(timeoutMillis);
     }
