@@ -1,6 +1,7 @@
 package com.orasi.core;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -12,6 +13,9 @@ import com.orasi.core.interfaces.Listbox;
 import com.orasi.utils.TestEnvironment;
 
 public class TestListbox extends TestEnvironment{
+    WebDriver driver = null;
+    private String multiSelectXpath = "//*[@id='page']/div[2]/div/select";
+    private String listboxXpath = "//*[@id='para1']/select";
     @BeforeTest(groups ={"regression", "interfaces", "listbox", "dev"})
     @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
 	    "operatingSystem", "environment" })

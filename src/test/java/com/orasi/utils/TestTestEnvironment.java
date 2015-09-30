@@ -16,7 +16,7 @@ public class TestTestEnvironment {
     private String testingName = "TestEnvironment";
     private String pageURL = "http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/element.html";
     
-    @FindBy(id="f1")
+    @FindBy(id="text1")
     private Element firstname;
     
     @Test(groups="regression")

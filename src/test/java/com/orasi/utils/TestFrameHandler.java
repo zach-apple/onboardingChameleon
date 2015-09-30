@@ -32,13 +32,13 @@ public class TestFrameHandler extends TestEnvironment{
     
     @Test(groups ={"regression", "utils", "dev"})
     public void findAndSwitchToFrameFromOutsideFrame(){
-	FrameHandler.findAndSwitchToFrame(this, "menu_page" );
+	FrameHandler.findAndSwitchToFrame(getDriver(), "menu_page" );
 	Assert.assertTrue(getDriver().findElement(By.id("googleLink")).isDisplayed());
     }
     
     @Test(groups ={"regression", "utils", "dev"}, dependsOnMethods="findAndSwitchToFrameFromOutsideFrame")
     public void findAndSwitchToFrameFromInsideDiffFrame(){
-	FrameHandler.findAndSwitchToFrame(this, "main_page" );
+	FrameHandler.findAndSwitchToFrame(getDriver(), "main_page" );
 	Assert.assertTrue(getDriver().findElement(By.id("button")).isDisplayed());
     }
     
