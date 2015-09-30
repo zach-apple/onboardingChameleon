@@ -45,7 +45,6 @@ public class RestService {
 	/*
 	 * Encapsulation area 
 	 */ 
-	
 	public String getUserAgent(){ return this.userAgent;}
 	
 	public void setUserAgent(String userAgent){ this.userAgent = userAgent;	}	

@@ -25,7 +25,7 @@ public class TestElement extends TestEnvironment{
 	setOperatingSystem(operatingSystem);
 	setRunLocation(runLocation);
 	setTestEnvironment(environment);
-	setPageURL("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/element.html");
+	setPageURL("http://www.cs.tut.fi/~jkorpela/www/testel.html");
 	testStart("TestElement");
     }
     
@@ -157,19 +157,19 @@ public class TestElement extends TestEnvironment{
 	Assert.assertFalse(element.isSelected());
     }    
     
-    @Test(groups ={"regression", "interfaces", "element"}, dependsOnMethods="sendKeys") 
+    @Test(groups ={"regression", "interfaces", "element"}, dependsOnMethods="click") 
     public void jsClick(){
 	getDriver().findElement(By.id("text1")).sendKeys("blah");
 	Element element= getDriver().findElement(By.id("buttonForText1"));
 	element.jsClick(getDriver());
-	Assert.assertTrue(getDriver().findElement(By.id("text1")).getAttribute("value").equals("Clicked button"));
+	Assert.assertTrue(getDriver().findElement(By.id("f1")).getAttribute("value").equals("Default text."));
     }
 
     @Test(groups ={"regression", "interfaces", "element"}, dependsOnMethods="click")
     public void sendKeys(){
 	Element element= getDriver().findElement(By.id("text1"));
 	element.sendKeys("testing");
-	Assert.assertTrue(element.getAttribute("value").equals("Clicked buttontesting"));
+	Assert.assertTrue(element.getAttribute("value").equals("Default text.testing"));
     }
     
     @Test(groups ={"regression", "interfaces", "element"})
@@ -197,13 +197,13 @@ public class TestElement extends TestEnvironment{
 	Assert.assertTrue(element.syncPresent(getDriver(), 5, false));
     }
 
-    @Test(groups ={"regression", "interfaces", "element"})
+    @Test(groups ={"regression", "interfaces", "element"} , dependsOnMethods={"jsClick","syncPresentAdvanced", "syncPresentNegative","syncPresentBasic","syncHiddenBasic","syncHiddenBasicNegative","syncHiddenAdvanced"})
     public void syncDisabledBasic(){
 	Element element= getDriver().findElement(By.id("disable"));
 	Assert.assertTrue(element.syncDisabled(getDriver()));
     }
     
-    @Test(groups ={"regression", "element"})
+    @Test(groups ={"regression", "element"}, dependsOnMethods={"syncDisabledBasic"})
     public void syncDisabledBasicNegative(){
 	boolean pass = false;
 	try{
@@ -216,13 +216,13 @@ public class TestElement extends TestEnvironment{
 	Assert.assertTrue(pass);
     }
     
-    @Test(groups ={"regression", "element"})
+    @Test(groups ={"regression", "element"}, dependsOnMethods={"syncDisabledBasic"})
     public void syncDisabledAdvanced(){
 	Element element= getDriver().findElement(By.id("disable"));
 	Assert.assertTrue(element.syncDisabled(getDriver(), 5, false));
     }
     
-    @Test(groups ={"regression", "element"})
+    @Test(groups ={"regression", "element"}, dependsOnMethods={"syncDisabledBasic"})
     public void syncDisabledAdvancedNegative(){
 	Element element= getDriver().findElement(By.id("text1"));
 	Assert.assertFalse(element.syncDisabled(getDriver(),1, false));
@@ -296,7 +296,7 @@ public class TestElement extends TestEnvironment{
 	Assert.assertTrue(element.syncEnabled(getDriver()));
     }
     
-    @Test(groups ={"regression", "element"})
+    @Test(groups ={"regression", "element"}, dependsOnMethods={"syncDisabledAdvancedNegative"})
     public void syncEnabledBasicNegative(){
 	boolean pass = false;
 	try{
@@ -315,7 +315,7 @@ public class TestElement extends TestEnvironment{
 	Assert.assertTrue(element.syncEnabled(getDriver(), 5, false));
     }
     
-    @Test(groups ={"regression", "element"})
+    @Test(groups ={"regression", "element"}, dependsOnMethods={"syncDisabledAdvancedNegative"})
     public void syncEnabledAdvancedNegative(){
 	Element element = getDriver().findElement(By.id("disable"));
 	Assert.assertFalse(element.syncEnabled(getDriver(),1, false));

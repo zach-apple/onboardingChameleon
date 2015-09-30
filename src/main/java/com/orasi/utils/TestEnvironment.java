@@ -525,7 +525,6 @@ public class TestEnvironment {
 	    }
 
 	} else if (getRunLocation().equalsIgnoreCase("remote") | getRunLocation().equalsIgnoreCase("sauce")) {
-	  //  DesiredCapabilities capabilities = null;
 	
 	    caps = new DesiredCapabilities();
 	    caps.setCapability(CapabilityType.BROWSER_NAME,
@@ -536,7 +535,6 @@ public class TestEnvironment {
 		    }
 		    caps.setCapability(CapabilityType.PLATFORM,
 			    getOperatingSystem());
-	    
 	    
 	    if (getBrowserUnderTest().toLowerCase().contains("ie")
 		    || getBrowserUnderTest().toLowerCase().contains("iexplore")) {

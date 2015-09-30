@@ -26,7 +26,7 @@ public class TestRadioButton extends TestEnvironment{
 	setOperatingSystem(operatingSystem);
 	setRunLocation(runLocation);
 	setTestEnvironment(environment);
-	setPageURL("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/radioGroup.html");
+	setPageURL("http://www.cs.tut.fi/~jkorpela/www/testel.html");
 	testStart("TestRadiogroup");
     }
 
@@ -39,6 +39,7 @@ public class TestRadioButton extends TestEnvironment{
       
     @Test(groups ={"regression", "interfaces", "radiogroup"})
     public void getNumberOfOptions(){
+
 	RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
 	Assert.assertTrue(radiogroup.getNumberOfOptions() == 2 );
     }
@@ -79,7 +80,7 @@ public class TestRadioButton extends TestEnvironment{
     public void getAllOptions(){
 	RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
 	List<String> group = radiogroup.getAllOptions();
-	Assert.assertTrue(group.get(0).equals("male"));
-	Assert.assertTrue(group.get(1).equals("female"));
+	Assert.assertTrue(group.get(0).equals("1"));
+	Assert.assertTrue(group.get(1).equals("2"));
     }
 }
