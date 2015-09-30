@@ -38,7 +38,7 @@ public class TestButton extends TestEnvironment{
     public void click(){
 	Button button= getDriver().findButton(By.id("click"));
 	button.click();
-	Assert.assertTrue(getDriver().findElement(By.id("f1")).getAttribute("value").equals("Default text."));
+	Assert.assertTrue(getDriver().findElement(By.id("testClick")).getText().equals("Successful"));
     }
     
     @Test(groups ={"regression", "interfaces", "button"}, dependsOnMethods="click")

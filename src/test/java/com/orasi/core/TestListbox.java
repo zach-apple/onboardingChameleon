@@ -27,7 +27,7 @@ public class TestListbox extends TestEnvironment{
 	setOperatingSystem(operatingSystem);
 	setRunLocation(runLocation);
 	setTestEnvironment(environment);
-	setPageURL("http://www.allthingsdiscussed.com/More/How-to-create-a-list-box-in-HTML");
+	setPageURL("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/listbox.html");
 	testStart("TestListbox");
     }
     

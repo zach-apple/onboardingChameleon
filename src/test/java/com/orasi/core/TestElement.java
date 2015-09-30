@@ -26,7 +26,7 @@ public class TestElement extends TestEnvironment{
 	setOperatingSystem(operatingSystem);
 	setRunLocation(runLocation);
 	setTestEnvironment(environment);
-	setPageURL("http://www.cs.tut.fi/~jkorpela/www/testel.html");
+	setPageURL("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/element.html");
 	testStart("TestElement");
 	getDriver().findWebElement(By.id("text1")).sendKeys("blah");
     }
@@ -164,14 +164,14 @@ public class TestElement extends TestEnvironment{
 	getDriver().findElement(By.id("text1")).sendKeys("blah");
 	Element element= getDriver().findElement(By.id("buttonForText1"));
 	element.jsClick(getDriver());
-	Assert.assertTrue(getDriver().findElement(By.id("f1")).getAttribute("value").equals("Default text."));
+	Assert.assertTrue(getDriver().findElement(By.id("text1")).getAttribute("value").equals("Clicked button"));
     }
 
     @Test(groups ={"regression", "interfaces", "element"}, dependsOnMethods="jsClick")
     public void sendKeys(){
 	Element element= getDriver().findElement(By.id("text1"));
 	element.sendKeys("testing");
-	Assert.assertTrue(element.getAttribute("value").equals("Default text.testing"));
+	Assert.assertTrue(element.getAttribute("value").equals("Clicked buttontesting"));
     }
     
     @Test(groups ={"regression", "interfaces", "element"}, dependsOnMethods="elementWired")

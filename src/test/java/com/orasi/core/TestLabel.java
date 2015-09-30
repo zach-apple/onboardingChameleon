@@ -24,7 +24,7 @@ public class TestLabel extends TestEnvironment{
 	setOperatingSystem(operatingSystem);
 	setRunLocation(runLocation);
 	setTestEnvironment(environment);
-	setPageURL("http://www.cs.tut.fi/~jkorpela/www/testel.html");
+	setPageURL("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/label.html");
 	testStart("TestLabel");
     }
     
