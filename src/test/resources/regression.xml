@@ -2,11 +2,11 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
 <suite name="Core-Regression" parallel="methods" thread-count="20">
-	<parameter name="browserUnderTest" value="firefox" />
+	<parameter name="browserUnderTest" value="jenkinParameter" />
 	<parameter name="environment" value="stage" />
-	<parameter name="runLocation" value="sauce" />
-	<parameter name="browserVersion" value="" />
-	<parameter name="operatingSystem" value="windows" />
+	<parameter name="runLocation" value="jenkinParameter" />
+	<parameter name="browserVersion" value="jenkinParameter" />
+	<parameter name="operatingSystem" value="jenkinParameter" />
  	  <test name="Element">
 		<classes>
 			<class name="com.orasi.core.TestElement" />
