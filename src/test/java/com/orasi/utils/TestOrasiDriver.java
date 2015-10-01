@@ -1,5 +1,7 @@
 package com.orasi.utils;
 
+import java.io.File;
+
 import org.hamcrest.core.IsNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Platform;
@@ -26,7 +28,7 @@ import com.orasi.core.interfaces.Webtable;
 public class TestOrasiDriver{
     DesiredCapabilities caps = null;
     OrasiDriver driver = null;
-
+    File file = null;	
     String runLocation = "";
     String browserUnderTest = "";
     String browserVersion = "";
@@ -60,12 +62,16 @@ public class TestOrasiDriver{
 	    runLocation = System.getProperty("jenkinsRunLocation").trim();
 	} else{
 	    this.runLocation = runLocation;
-	}
+	}    
 	
-	
-	
+	System.setProperty("webdriver.chrome.driver", new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL+"ChromeDriver.exe").getPath()).getAbsolutePath());
+	System.setProperty("webdriver.ie.driver", new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL+"IEDriverServer.exe").getPath()).getAbsolutePath());
+	System.setProperty("webdriver.edge.driver", new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL+"MicrosoftWebDriver.exe").getPath()).getAbsolutePath());
+		
 	this.environment = environment;
 	caps = new DesiredCapabilities(browserUnderTest, browserVersion, Platform.valueOf(operatingSystem.toUpperCase()));
+	caps.setCapability("ignoreZoomSetting", true);
+	caps.setCapability("enablePersistentHover", false);
 	driver = new OrasiDriver(caps);
 	driver.get("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/testsite.html");
 	
