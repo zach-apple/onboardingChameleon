@@ -1,0 +1,133 @@
+package com.orasi.utils;
+
+import org.hamcrest.core.IsNull;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Platform;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.Assert;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Optional;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
+import com.orasi.core.interfaces.Button;
+import com.orasi.core.interfaces.Checkbox;
+import com.orasi.core.interfaces.Element;
+import com.orasi.core.interfaces.Label;
+import com.orasi.core.interfaces.Link;
+import com.orasi.core.interfaces.Listbox;
+import com.orasi.core.interfaces.RadioGroup;
+import com.orasi.core.interfaces.Textbox;
+import com.orasi.core.interfaces.Webtable;
+
+public class TestOrasiDriver{
+    DesiredCapabilities caps = null;
+    OrasiDriver driver = null;
+
+    String runLocation = "";
+    String browserUnderTest = "";
+    String browserVersion = "";
+    String operatingSystem = "";
+    String environment = "";
+    
+    @BeforeTest(groups ={"regression", "utils", "orasidriver"})
+    @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
+	    "operatingSystem", "environment" })
+    public void setup(@Optional String runLocation, String browserUnderTest,
+	    String browserVersion, String operatingSystem, String environment) {
+	this.browserUnderTest = browserUnderTest;
+    	this.browserVersion = browserVersion;
+	this.operatingSystem = operatingSystem;
+	this.runLocation = runLocation;
+	this.environment = environment;
+	caps = new DesiredCapabilities(browserUnderTest, browserVersion, Platform.valueOf(operatingSystem.toUpperCase()));
+	driver = new OrasiDriver(caps);
+	driver.get("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/testsite.html");
+	
+	//testStart("TestOrasiDriver");
+    }
+    
+    @AfterTest(groups ={"regression", "utils", "orasidriver"})
+    public void close(){
+	driver.close();
+    }
+
+    @Test(groups={"regression", "utils", "orasidriver"})
+    public void getDriver(){
+	Assert.assertNotNull(driver.getDriver());
+    }
+
+    @Test(groups={"regression", "utils", "orasidriver"})
+    public void executeJavaScript(){
+	WebElement element = (WebElement) driver.executeJavaScript("return document.getElementById('FirstName')");
+	Assert.assertNotNull(element);
+    }
+    
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="getDriver")
+    public void findButton(){
+	Button button = driver.findButton(By.id("Add"));
+	Assert.assertNotNull(button);
+    }
+
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findButton")
+    public void findElement(){
+	Element element= driver.findElement(By.id("FirstName"));
+	Assert.assertNotNull(element);
+    }    
+
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findElement")
+    public void findListbox(){
+	Listbox listbox= driver.findListbox(By.id("Category"));
+	Assert.assertNotNull(listbox);
+    }
+
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findListbox")
+    public void findTextbox(){
+	Textbox textbox = driver.findTextbox(By.id("FirstName"));
+	Assert.assertNotNull(textbox);
+    }
+    
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findTextbox")
+    public void findWebtable(){
+	Webtable webtable = driver.findWebtable(By.id("VIPs"));
+	Assert.assertNotNull(webtable);
+    }
+
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findWebtable")
+    public void findRadioGroup(){
+	driver.get("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/radioGroup.html");
+	RadioGroup radioGroup= driver.findRadioGroup(By.id("Content"));
+	Assert.assertNotNull(radioGroup);
+    }
+    
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findRadioGroup")
+    public void findCheckbox(){
+	driver.get("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/checkbox.html");
+	Checkbox checkbox= driver.findCheckbox(By.name("checkbox"));
+	Assert.assertNotNull(checkbox);
+    }
+
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findCheckbox")
+    public void findLabel(){
+	driver.get("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/label.html");
+	Label label= driver.findLabel(By.xpath("//*[@id='radioForm']/label[1]"));
+	Assert.assertNotNull(label);
+    }
+    
+
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findLabel")
+    public void findLink(){
+	driver.get("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/link.html");
+	Link link= driver.findLink(By.xpath("//a[@href='testLinks.html']"));
+	Assert.assertNotNull(link);
+    }    
+
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findLink")
+    public void executeAsyncJavaScript(){
+	driver.get("https://builtwith.angularjs.org/");
+	driver.executeAsyncJavaScript("var callback = arguments[arguments.length - 1];angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
+    }
+    
+}
