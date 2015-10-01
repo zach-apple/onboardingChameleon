@@ -38,10 +38,32 @@ public class TestOrasiDriver{
 	    "operatingSystem", "environment" })
     public void setup(@Optional String runLocation, String browserUnderTest,
 	    String browserVersion, String operatingSystem, String environment) {
-	this.browserUnderTest = browserUnderTest;
-    	this.browserVersion = browserVersion;
-	this.operatingSystem = operatingSystem;
-	this.runLocation = runLocation;
+	if (browserUnderTest.equalsIgnoreCase("jenkinsParameter")) {
+	    browserUnderTest = System.getProperty("jenkinsBrowser").trim();
+	} else{
+	    this.browserUnderTest = browserUnderTest;
+	}
+	
+	if (browserUnderTest.equalsIgnoreCase("jenkinsParameter")) {
+	    browserVersion = System.getProperty("jenkinsBrowserVersion").trim();
+	} else{
+	    this.browserVersion = browserVersion;
+	}
+	
+	if (operatingSystem.equalsIgnoreCase("jenkinsParameter")) {
+	    operatingSystem = System.getProperty("jenkinsOperatingSystem").trim();
+	} else{
+	    this.operatingSystem = operatingSystem;
+	}
+	
+	if (runLocation.equalsIgnoreCase("jenkinsParameter")) {
+	    runLocation = System.getProperty("jenkinsRunLocation").trim();
+	} else{
+	    this.runLocation = runLocation;
+	}
+	
+	
+	
 	this.environment = environment;
 	caps = new DesiredCapabilities(browserUnderTest, browserVersion, Platform.valueOf(operatingSystem.toUpperCase()));
 	driver = new OrasiDriver(caps);
