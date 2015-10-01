@@ -48,7 +48,7 @@ public class TestOrasiDriver{
 	    this.browserUnderTest = browserUnderTest;
 	}
 	
-	if (browserUnderTest.equalsIgnoreCase("jenkinsParameter")) {
+	if (browserVersion.equalsIgnoreCase("jenkinsParameter")) {
 	    browserVersion = System.getProperty("jenkinsBrowserVersion").trim();
 	} else{
 	    this.browserVersion = browserVersion;
