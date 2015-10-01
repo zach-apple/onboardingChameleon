@@ -79,4 +79,9 @@
 		</classes>
 	</test>
 
+	<test name="TestOrasiDriver">
+		<classes>
+			<class name="com.orasi.utils.TestOrasiDriver" />
+		</classes>
+	</test>
 </suite> <!-- Suite -->
