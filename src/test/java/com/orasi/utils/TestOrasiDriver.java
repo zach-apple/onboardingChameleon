@@ -1,6 +1,8 @@
 package com.orasi.utils;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import org.hamcrest.core.IsNull;
 import org.openqa.selenium.By;
@@ -72,7 +74,18 @@ public class TestOrasiDriver{
 	caps = new DesiredCapabilities(browserUnderTest, browserVersion, Platform.valueOf(operatingSystem.toUpperCase()));
 	caps.setCapability("ignoreZoomSetting", true);
 	caps.setCapability("enablePersistentHover", false);
-	driver = new OrasiDriver(caps);
+	if(runLocation.toLowerCase().equals("local")){
+	    driver = new OrasiDriver(caps);
+	    
+	}else{
+	    TestEnvironment te = new TestEnvironment("",browserUnderTest,browserVersion, operatingSystem,runLocation,environment);
+	    try {
+		driver = new OrasiDriver(caps, new URL(te.getRemoteURL()));
+	    } catch (MalformedURLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	}
 	driver.get("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/testsite.html");
 	
 	//testStart("TestOrasiDriver");
