@@ -66,10 +66,6 @@ public class TestOrasiDriver{
 	    this.runLocation = runLocation;
 	}    
 	
-	System.setProperty("webdriver.chrome.driver", new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL+"ChromeDriver.exe").getPath()).getAbsolutePath());
-	System.setProperty("webdriver.ie.driver", new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL+"IEDriverServer.exe").getPath()).getAbsolutePath());
-	System.setProperty("webdriver.edge.driver", new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL+"MicrosoftWebDriver.exe").getPath()).getAbsolutePath());
-		
 	this.environment = environment;
 	caps = new DesiredCapabilities(browserUnderTest, browserVersion, Platform.valueOf(operatingSystem.toUpperCase()));
 	caps.setCapability("ignoreZoomSetting", true);
