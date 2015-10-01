@@ -42,64 +42,7 @@ public class DateTimeConversion {
 		return convertedDate;
 	}
 	
-	/**
-	 * Marked for Deprecation 6/1/2015 <br>
-	 * New method {@link #getDaysOut(String, String) getDaysOut} <br>
-	 * Sample: {@code getDaysOut(5,"MM/dd/yyyy")} 
-	 */
-	@Deprecated
-	public static String ConvertToDate(String daysOut){
-		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DATE, Integer.parseInt(daysOut));
-		String convertedDate=dateFormat.format(cal.getTime());    
-		
-		return convertedDate;
-	}
-	
-	/**
-	 * Marked for Deprecation 6/1/2015 <br>
-	 * New method {@link #getDaysOut(String, String) getDaysOut} <br>
-	 * Sample: {@code getDaysOut(5,"MM/dd/yyyy")} 
-	 */
-	@Deprecated
-	public String ConvertToDateMMDDYY(String daysOut){
-		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DATE, Integer.parseInt(daysOut));
-		String convertedDate=dateFormat.format(cal.getTime());    
-		
-		return convertedDate;
-	}
-	
-	/**
-	 * Marked for Deprecation 6/1/2015 <br>
-	 * New methods: <br>
-	 * {@link #convert(String date, String fromFormat, String toFormat)   } <br>
-	 * {@link #convert(Date date, String toFormat) }<br>
-	 * Sample: {@code convert("06/01/2015", "MM/dd/yyyy", "MMMM dd, yyyy)} 
-	 */
-	@Deprecated
-	public static String format(String date, String format){
-		return new SimpleDateFormat(format).format(date);
-	}
-
-	/**
-	 * Marked for Deprecation 6/1/2015 <br>
-	 * New method {@link #getDaysOut(String, String) getDaysOut} <br>
-	 * Sample: {@code getDaysOut(5,"yyyy-MM-dd")} 
-	 */
-	@Deprecated
-	public String ConvertToDateYYYYMMDD(String daysOut){
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DATE, Integer.parseInt(daysOut));
-		String convertedDate=dateFormat.format(cal.getTime());    
-
-		return convertedDate;
-	}
-	
-	/**
+		/**
 	 * 
 	 * @param format ex: 'MM/dd/yyyy', 'yyyy-MM-dd'
 	 * @return Formatted date as String
