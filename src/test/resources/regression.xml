@@ -2,12 +2,12 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
 <suite name="Core-Regression" parallel="methods" thread-count="20">
-	<parameter name="browserUnderTest" value="jenkinsParameter" />
+	<parameter name="browserUnderTest" value="chrome" />
 	<parameter name="environment" value="stage" />
-	<parameter name="runLocation" value="jenkinsParameter" />
-	<parameter name="browserVersion" value="jenkinsParameter" />
-	<parameter name="operatingSystem" value="jenkinsParameter" />
- 	  <test name="Element">
+	<parameter name="runLocation" value="local" />
+	<parameter name="browserVersion" value="" />
+	<parameter name="operatingSystem" value="windows" />
+ 	<test name="Element">
 		<classes>
 			<class name="com.orasi.core.TestElement" />
 		</classes>
