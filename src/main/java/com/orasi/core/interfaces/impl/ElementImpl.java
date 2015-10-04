@@ -1,5 +1,6 @@
 package com.orasi.core.interfaces.impl;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -868,7 +869,7 @@ public class ElementImpl implements Element {
 	String locator = "";
 	int startPosition = 0;
 	int endPosition = 0;
-	if (element.getClass().toString().contains("htmlunit")) {
+	if (element instanceof HtmlUnitWebElement) {
 	    startPosition = element.toString().indexOf("=\"") + 2;
 	    endPosition = element.toString().indexOf("\"",
 		    element.toString().indexOf("=\"") + 3);
@@ -877,6 +878,19 @@ public class ElementImpl implements Element {
 	    else
 		locator = element.toString().substring(startPosition,
 			endPosition);
+	} else if (element instanceof ElementImpl){
+	    Field elementField = null;
+	    try {
+		elementField = element.getClass().getDeclaredField("element");
+		elementField.setAccessible(true);
+		
+		startPosition = elementField.get(element).toString().lastIndexOf(": ") + 2;
+		locator = elementField.get(element).toString().substring(startPosition,
+			elementField.get(element).toString().lastIndexOf("]"));
+	    }catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e){
+		e.printStackTrace();	    
+	    }
+	    
 	} else {
 	    startPosition = element.toString().lastIndexOf(": ") + 2;
 	    locator = element.toString().substring(startPosition,
@@ -895,7 +909,6 @@ public class ElementImpl implements Element {
 	int startPosition = 0;
 	String locator = "";
 
-	// if(element.getClass().toString().contains("htmlunit")){
 	if (element instanceof HtmlUnitWebElement) {
 	    startPosition = element.toString().indexOf(" ");
 	    if (startPosition == -1)
@@ -903,7 +916,21 @@ public class ElementImpl implements Element {
 	    else
 		locator = element.toString().substring(startPosition,
 			element.toString().indexOf("="));
-	} else {
+	} else if (element instanceof ElementImpl){
+	    Field elementField = null;
+	    try {
+		elementField = element.getClass().getDeclaredField("element");
+		elementField.setAccessible(true);
+		
+		  startPosition = elementField.get(element).toString().lastIndexOf("->") + 3;
+		  locator = elementField.get(element).toString().substring(startPosition,
+			  elementField.get(element).toString().lastIndexOf(":"));
+	    }catch (IllegalAccessException | NoSuchFieldException | SecurityException e){
+		e.printStackTrace();	    
+	    }
+
+	}else {
+	
 	    // if (element instanceof HtmlUnitWebElement)
 	    startPosition = element.toString().lastIndexOf("->") + 3;
 	    locator = element.toString().substring(startPosition,
