@@ -6,7 +6,10 @@ import java.util.Set;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -39,7 +42,7 @@ import com.orasi.core.interfaces.impl.RadioGroupImpl;
 import com.orasi.core.interfaces.impl.TextboxImpl;
 import com.orasi.core.interfaces.impl.WebtableImpl;
 
-public class OrasiDriver implements WebDriver,   JavaScriptExecutor {
+public class OrasiDriver implements WebDriver,   JavaScriptExecutor, TakesScreenshot {
     /**
      * 
      */
@@ -287,7 +290,11 @@ public class OrasiDriver implements WebDriver,   JavaScriptExecutor {
     public int pumpEventLoop(long timeoutMillis) {
 	return ((DefaultJavaScriptExecutor) driver).pumpEventLoop(timeoutMillis);
     }
-
+    
+    public String getSessionId(){
+	return ((RemoteWebDriver) driver).getSessionId().toString();
+    }
+    
     private void setDriverWithCapabilties(DesiredCapabilities caps){
 	switch (caps.getBrowserName().toLowerCase()) {
 	case "firefox":
@@ -316,6 +323,13 @@ public class OrasiDriver implements WebDriver,   JavaScriptExecutor {
 	default:
 	    break;
 	}
+    }
+
+
+    @Override
+    public <X> X getScreenshotAs(OutputType<X> target)
+	    throws WebDriverException {
+	return ((TakesScreenshot) driver).getScreenshotAs(target);
     }
 
 }
