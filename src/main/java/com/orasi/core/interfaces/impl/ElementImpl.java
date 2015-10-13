@@ -283,7 +283,7 @@ public class ElementImpl implements Element {
 		+ getElementLocatorInfo()
 		+ "</b> ] to be <b>PRESENT</b> in DOM within [ " + timeout
 		+ " ] seconds.</i>");
-	driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+	driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
 	
 	stopwatch.start();
 	do {
@@ -360,7 +360,7 @@ public class ElementImpl implements Element {
 		+ getElementLocatorInfo()
 		+ "</b> ] to be <b>VISIBLE<b> within [ " + timeout
 		+ " ] seconds.</i>");
-	driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+	driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
 	
 	stopwatch.start();
 	do {
@@ -431,7 +431,7 @@ public class ElementImpl implements Element {
 		+ getElementLocatorInfo()
 		+ "</b> ] to be <b>HIDDEN</b> within [ <b>" + timeout
 		+ "</b> ] seconds.</i>");
-	driver.manage().timeouts().implicitlyWait(0, TimeUnit.MILLISECONDS);
+	driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
 	stopwatch.start();
 	do {
 	    if (!webElementVisible(driver, element)) {
@@ -504,7 +504,7 @@ public class ElementImpl implements Element {
 		+ getElementLocatorInfo()
 		+ "</b> ] to be <b>ENABLED</b> within [ <b>" + timeout
 		+ "</b> ] seconds.</i>");
-	driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+	driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
 
 	stopwatch.start();
 	do {
@@ -579,7 +579,7 @@ public class ElementImpl implements Element {
 		+ getElementLocatorInfo()
 		+ "</b> ] to be <b>DISABLED</b> within [ <b>" + timeout
 		+ "</b> ] seconds.</i>");
-	driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+	driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
 	
 	stopwatch.start();
 	do {
@@ -654,7 +654,7 @@ public class ElementImpl implements Element {
 		+ "</b> ] in element [<b>@FindBy: " + getElementLocatorInfo()
 		+ "</b> ] to be displayed within [ <b>" + timeout
 		+ "</b> ] seconds.</i>");
-	driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+	driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
 	stopwatch.start();
 	do {
 	    if (webElementTextPresent(driver, element, text)) {
