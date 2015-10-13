@@ -37,14 +37,14 @@ public class TestCheckbox extends TestEnvironment{
     }
 
       
-    @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="jsToggle")
+    @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="isChecked")
     public void check(){
 	Checkbox checkbox= getDriver().findCheckbox(By.name("checkbox"));
 	checkbox.check();
 	Assert.assertTrue(checkbox.isChecked());
     }
     
-    @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="uncheck")
+    @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="toggle")
     public void checkValidate(){
 	Checkbox checkbox= getDriver().findCheckbox(By.name("checkbox"));
 	checkbox.check();
@@ -57,14 +57,7 @@ public class TestCheckbox extends TestEnvironment{
 	Assert.assertFalse(checkbox.isChecked());
     }
     
-    @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="toggle")
-    public void jsToggle(){
-	Checkbox checkbox= getDriver().findCheckbox(By.name("checkbox"));
-	checkbox.jsToggle(getDriver());
-	Assert.assertFalse(checkbox.isChecked());
-    }
-    
-    @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="isChecked")
+    @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="uncheck")
     public void toggle(){
 	Checkbox checkbox= getDriver().findCheckbox(By.name("checkbox"));
 	checkbox.toggle();
@@ -85,5 +78,10 @@ public class TestCheckbox extends TestEnvironment{
 	Assert.assertTrue(checkbox.uncheckValidate(getDriver()));
     }
 
-
+    @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="uncheckValidate")
+    public void jsToggle(){
+	Checkbox checkbox= getDriver().findCheckbox(By.name("checkbox"));
+	checkbox.jsToggle(getDriver());
+	Assert.assertTrue(checkbox.isChecked());
+    }
 }

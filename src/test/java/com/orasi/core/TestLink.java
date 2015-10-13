@@ -34,7 +34,7 @@ public class TestLink extends TestEnvironment {
 	endTest("TestLink");
     }
 
-    @Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="getURL")
+    @Test(groups ={"regression", "interfaces", "link"})
     public void click(){
 	Link link= getDriver().findLink(By.xpath("//a[@href='testLinks.html']"));
 	link.click();
@@ -48,7 +48,7 @@ public class TestLink extends TestEnvironment {
 	Assert.assertTrue(getDriver().findLink(By.xpath("//a[@href='testLinks.html']")).syncVisible(getDriver()));
     }
     
-    @Test(groups ={"regression", "interfaces", "link"})
+    @Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="jsClick")
     public void getURL(){
 	Link link= getDriver().findLink(By.xpath("//a[@href='testLinks.html']"));
 	Assert.assertTrue(link.getURL().contains("testLinks.html"));

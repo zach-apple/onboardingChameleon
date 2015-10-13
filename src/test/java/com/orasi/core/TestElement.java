@@ -45,6 +45,7 @@ public class TestElement extends TestEnvironment{
     
     @Test(groups ={"regression", "interfaces", "element"}, dependsOnMethods="clear") 
     public void click(){
+
 	Element element = getDriver().findElement(By.id("buttonForText1"));
 	element.click();
 	Assert.assertTrue(getDriver().findElement(By.id("text1")).getAttribute("value").equals("Clicked button"));
@@ -199,7 +200,7 @@ public class TestElement extends TestEnvironment{
 	Assert.assertTrue(element.syncPresent(getDriver(), 5, false));
     }
 
-    @Test(groups ={"regression", "interfaces", "element"} , dependsOnMethods={"jsClick","syncPresentAdvanced", "syncPresentNegative","syncPresentBasic","syncHiddenBasic","syncHiddenBasicNegative","syncHiddenAdvanced"})
+    @Test(groups ={"regression", "interfaces", "element"} )
     public void syncDisabledBasic(){
 	Element element= getDriver().findElement(By.id("disable"));
 	Assert.assertTrue(element.syncDisabled(getDriver()));
