@@ -4,4 +4,4 @@ script: mvn test -DsuiteXmlFile=src/test/resources/travisTestNG.xml
 jdk:
   - openjdk7
 after_script:
-  - cat target/surefire-reports/*.txt
+  - cat target/surefire-reports/TestSuite.txt
