@@ -3,5 +3,5 @@ install: mvn install -DskipTests=true
 script: mvn test -DsuiteXmlFile=src/test/resources/travisTestNG.xml
 jdk:
   - openjdk7
-after_failure:
+after_script:
   - cat target/surefire-reports/*.txt
