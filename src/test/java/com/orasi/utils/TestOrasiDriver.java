@@ -7,7 +7,9 @@ import java.net.URL;
 import org.hamcrest.core.IsNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 import org.testng.SkipException;
@@ -164,8 +166,7 @@ public class TestOrasiDriver{
 
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findLink")
     public void executeAsyncJavaScript(){
-	System.out.println(browserUnderTest);
-	if(browserUnderTest.toLowerCase().equals("html")) throw new SkipException("Test not valid for HTMLUnitDriver");
+	if(browserUnderTest.toLowerCase().equals("html") || browserUnderTest.isEmpty() || ((WebDriver)driver) instanceof HtmlUnitDriver) throw new SkipException("Test not valid for HTMLUnitDriver");
 	driver.get("https://builtwith.angularjs.org/");
 	driver.executeAsyncJavaScript("var callback = arguments[arguments.length - 1];angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
     }
