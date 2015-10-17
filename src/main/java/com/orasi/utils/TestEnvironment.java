@@ -13,6 +13,7 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
+
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.saucelabs.common.SauceOnDemandAuthentication;
@@ -101,6 +102,11 @@ public class TestEnvironment {
      * Constructors for TestEnvironment class
      */
     public TestEnvironment() {
+	StackTraceElement[] stElements = Thread.currentThread().getStackTrace();
+	String rawFQN = stElements[2].toString().split("\\(")[0];
+        String className = rawFQN.substring(0, rawFQN.lastIndexOf('.'));
+	className = className.substring(className.lastIndexOf('.') + 1,className.length() );
+	
     };
 
     public TestEnvironment(String application, String browserUnderTest,
@@ -479,6 +485,13 @@ public class TestEnvironment {
 			    "Parameter not set for browser type");
 		}
 		break;
+	    case "linux":
+		if (getBrowserUnderTest().equalsIgnoreCase("html")) {
+			    caps =DesiredCapabilities.htmlUnitWithJs();		   
+		}else if (getBrowserUnderTest().equalsIgnoreCase("Firefox")
+			|| getBrowserUnderTest().equalsIgnoreCase("FF")) {
+		    caps =DesiredCapabilities.firefox();
+		}
 	    default:
 		break;
 	    }
