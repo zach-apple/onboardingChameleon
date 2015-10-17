@@ -6,7 +6,7 @@
 	<parameter name="environment" value="blah" />
 	<parameter name="runLocation" value="sauce" />
 	<parameter name="browserVersion" value="" />
-	<parameter name="operatingSystem" value="windows" />
+	<parameter name="operatingSystem" value="linux" />
  	<test name="Element">
 		<classes>
 			<class name="com.orasi.core.TestElement" />
