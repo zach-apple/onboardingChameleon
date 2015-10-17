@@ -164,6 +164,7 @@ public class TestOrasiDriver{
 
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findLink")
     public void executeAsyncJavaScript(){
+	System.out.println(browserUnderTest);
 	if(browserUnderTest.toLowerCase().equals("html")) throw new SkipException("Test not valid for HTMLUnitDriver");
 	driver.get("https://builtwith.angularjs.org/");
 	driver.executeAsyncJavaScript("var callback = arguments[arguments.length - 1];angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
