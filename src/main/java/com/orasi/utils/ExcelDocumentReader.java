@@ -9,9 +9,9 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelDocumentReader {
-    private XSSFSheet ExcelWSheet;
-    private XSSFWorkbook ExcelWBook;
-    private XSSFCell Cell;
+    private XSSFSheet excelWSheet;
+    private XSSFWorkbook excelWBook;
+    private XSSFCell cell;
     private String filepath;
     
     public ExcelDocumentReader(String filepath){
@@ -54,13 +54,13 @@ public class ExcelDocumentReader {
 
 	try {
 
-		FileInputStream ExcelFile = new FileInputStream(this.filepath);
+		FileInputStream excelFile = new FileInputStream(this.filepath);
 
 		// Access the required test data sheet
 
-		ExcelWBook = new XSSFWorkbook(ExcelFile);
+		excelWBook = new XSSFWorkbook(excelFile);
 
-		ExcelWSheet = ExcelWBook.getSheet(sheetName);
+		excelWSheet = excelWBook.getSheet(sheetName);
 
 		int startRow = 1;
 
@@ -69,11 +69,11 @@ public class ExcelDocumentReader {
 		int ci, cj;
 
 		
-		if (rowToRead == -1) totalRows = ExcelWSheet.getLastRowNum();
+		if (rowToRead == -1) totalRows = excelWSheet.getLastRowNum();
 
 		// you can write a function as well to get Column count
 
-		int totalCols = ExcelWSheet.getRow(startRow).getLastCellNum();
+		int totalCols = excelWSheet.getRow(startRow).getLastCellNum();
 
 		tabArray = new String[totalRows][totalCols];
 
@@ -101,11 +101,11 @@ public class ExcelDocumentReader {
 
 	// This method is to read the test data from the Excel cell, in this we are
 	// passing parameters as Row num and Col num
-	private String getCellData(int RowNum, int ColNum) {
+	private String getCellData(int rowNum, int colNum) {
 		try {
-			Cell = ExcelWSheet.getRow(RowNum).getCell(ColNum);
-			String CellData = Cell.getStringCellValue();
-			return CellData;
+			cell = excelWSheet.getRow(rowNum).getCell(colNum);
+			String cellData = cell.getStringCellValue();
+			return cellData;
 		} catch (Exception e) {
 			return "";
 		}
