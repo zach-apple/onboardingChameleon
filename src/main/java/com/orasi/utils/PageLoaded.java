@@ -26,12 +26,12 @@ public class PageLoaded {
 	private int timeout = 0;
 	
 	public PageLoaded(){
-		this.timeout = TestEnvironment.getDefaultTestTimeout();
+		this.timeout = Constants.ELEMENT_TIMEOUT;
 	}
 	
 	public PageLoaded(TestEnvironment te){
 	    	this.driver = te.getDriver();
-		this.timeout = TestEnvironment.getDefaultTestTimeout();
+		this.timeout = driver.getElementTimeout();
 	}
 	
 	@SuppressWarnings("unchecked")

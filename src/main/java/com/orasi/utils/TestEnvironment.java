@@ -553,13 +553,10 @@ public class TestEnvironment {
 		    "Parameter for run [Location] was not set to 'Local', 'Grid', 'Sauce', or 'Remote'");
 	}
  
-	driver.manage()
-		.timeouts()
-		.setScriptTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT,
-			TimeUnit.SECONDS)
-		.implicitlyWait(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT,
-			TimeUnit.SECONDS);
-	setDefaultTestTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+	driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+	driver.setPageTimeout(Constants.PAGE_TIMEOUT);
+	driver.setScriptTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+	//setDefaultTestTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
 	if (!getBrowserUnderTest().toLowerCase().contains("edge")){
 	    driver.manage().deleteAllCookies();
 	    driver.manage().window().maximize();

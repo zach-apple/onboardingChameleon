@@ -28,13 +28,13 @@ public class WebtableImpl extends ElementImpl implements Webtable {
     }
 
     private List<WebElement> getRowCollection(TestEnvironment te){
-	te.getDriver().manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+	te.getDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
 	List<WebElement> rowCollection = this.element.findElements(By.xpath("tr"));
 
 	if (rowCollection.size() == 0) {
 	    rowCollection = this.element.findElements(By.xpath("tbody/tr"));
 	}
-	te.getDriver().manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(),TimeUnit.SECONDS);
+	te.getDriver().manage().timeouts().implicitlyWait(te.getDriver().getElementTimeout(),TimeUnit.SECONDS);
 	return rowCollection;
 	
     }
@@ -53,7 +53,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 			    + getElementLocatorInfo() + " </b>]");
 	}
 	
-	te.getDriver().manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(),TimeUnit.SECONDS);
+	te.getDriver().manage().timeouts().implicitlyWait(te.getDriver().getElementTimeout(),TimeUnit.SECONDS);
 
 	return row.findElements(By.xpath(xpath));
     }
@@ -105,9 +105,9 @@ public class WebtableImpl extends ElementImpl implements Webtable {
      */
     @Override
     public Element getCell(TestEnvironment te, int row, int column) {
-	te.getDriver().manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+	te.getDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
 	Element cell = new ElementImpl(getWrappedElement().findElement(By.xpath("tbody/tr[" + row + "]/td[" + column + "]|tbody/tr["+ row + "]/th[" + column + "]|tr[" + row + "]/td["+ column + "]|tr[" + row + "]/th[" + column + "]")));
-	te.getDriver().manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
+	te.getDriver().manage().timeouts().implicitlyWait(te.getDriver().getElementTimeout(), TimeUnit.SECONDS);
 	return cell;
     }
 
@@ -240,14 +240,14 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 		currentRow++;
 	    } else {
 		if (currentRow <= rowCollection.size()) {
-		    te.getDriver().manage().timeouts().implicitlyWait(0, TimeUnit.MILLISECONDS);
+		    te.getDriver().manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
 		    if (rowElement.findElements(By.xpath("th")).size() != 0) {
 			xpath = "th";
 		    } else if (rowElement.findElements(By.xpath("td")).size() != 0) {
 			xpath = "td";
 		    }
 
-		    te.getDriver().manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(),TimeUnit.SECONDS);
+		    te.getDriver().manage().timeouts().implicitlyWait(te.getDriver().getElementTimeout(),TimeUnit.SECONDS);
 
 		    if (columnPosition == -1) {			
 			for (WebElement cell : getColumnCollection(te, rowElement)) {
