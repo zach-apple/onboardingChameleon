@@ -73,8 +73,7 @@ public class TestOrasiDriver{
 	caps.setCapability("ignoreZoomSetting", true);
 	caps.setCapability("enablePersistentHover", false);
 	if(runLocation.toLowerCase().equals("local")){
-	    driver = new OrasiDriver(caps);
-	    
+	    driver = new OrasiDriver(caps);		    
 	}else{
 	    TestEnvironment te = new TestEnvironment("",browserUnderTest,browserVersion, operatingSystem,runLocation,environment);
 	    try {
@@ -94,6 +93,38 @@ public class TestOrasiDriver{
 	driver.close();
     }
 
+    @Test(groups={"regression", "utils", "orasidriver"})
+    public void getPageTimeout(){
+	Assert.assertTrue( driver.getPageTimeout() == Constants.PAGE_TIMEOUT);
+    }
+    
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="getPageTimeout")
+    public void setPageTimeout(){
+	driver.setPageTimeout(15);
+	Assert.assertTrue( driver.getPageTimeout() == 15);
+    }
+    
+    @Test(groups={"regression", "utils", "orasidriver"})
+    public void getElementTimeout(){
+	Assert.assertTrue( driver.getElementTimeout() == Constants.ELEMENT_TIMEOUT);
+    }
+    
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="getElementTimeout")
+    public void setElementTimeout(){
+	driver.setElementTimeout(15);
+	Assert.assertTrue( driver.getElementTimeout() == 15);
+    }
+    
+    @Test(groups={"regression", "utils", "orasidriver"})
+    public void getScriptTimeout(){
+	Assert.assertTrue( driver.getScriptTimeout() == Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+    }
+    
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="getScriptTimeout")
+    public void setScriptTimeout(){
+	driver.setScriptTimeout(15);
+	Assert.assertTrue( driver.getScriptTimeout() == 15);
+    }
     @Test(groups={"regression", "utils", "orasidriver"})
     public void getDriver(){
 	Assert.assertNotNull(driver.getDriver());

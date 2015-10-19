@@ -2,6 +2,7 @@ package com.orasi.utils;
 import java.net.URL;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -48,7 +49,9 @@ public class OrasiDriver implements WebDriver,   JavaScriptExecutor, TakesScreen
      */
     private static final long serialVersionUID = -657563735440878909L;
     private WebDriver driver;
-    
+    private int currentPageTimeout = Constants.PAGE_TIMEOUT;
+    private int currentElementTimeout = Constants.ELEMENT_TIMEOUT;
+    private int currentScriptTimeout = Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT;
     public OrasiDriver(DesiredCapabilities caps){
 	setDriverWithCapabilties(caps);	
      }
@@ -79,6 +82,34 @@ public class OrasiDriver implements WebDriver,   JavaScriptExecutor, TakesScreen
 	return driver.getTitle();
     }
 
+    public void setScriptTimeout(int timeout){
+	this.currentScriptTimeout = timeout;
+	driver.manage().timeouts().setScriptTimeout(timeout, TimeUnit.SECONDS);
+    }
+    
+    public int getScriptTimeout(){
+	return currentScriptTimeout;
+    }
+    
+    public void setPageTimeout(int timeout){
+	this.currentPageTimeout = timeout;
+	driver.manage().timeouts().pageLoadTimeout(timeout, TimeUnit.SECONDS);
+    }
+    
+    public int getPageTimeout(){
+	return currentPageTimeout;
+    }
+    
+
+    public void setElementTimeout(int timeout){
+	this.currentElementTimeout = timeout;
+	driver.manage().timeouts().implicitlyWait(timeout, TimeUnit.SECONDS);
+    }
+    
+    public int getElementTimeout(){
+	return currentElementTimeout;
+    }
+    
    /* public List<Element> findElements(By by) {
 	List<WebElement> webElements = driver.findElements(by);
 	List test = webElements;
