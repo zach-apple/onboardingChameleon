@@ -5,3 +5,14 @@ jdk:
   - openjdk7
 after_script:
   - cat target/surefire-reports/TestSuite.txt
+  # blacklist
+branches:
+  except:
+    - legacy
+    - experimental
+
+# whitelist
+branches:
+  only:
+    - master
+    - stage
