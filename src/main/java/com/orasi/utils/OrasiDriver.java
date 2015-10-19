@@ -83,17 +83,25 @@ public class OrasiDriver implements WebDriver,   JavaScriptExecutor, TakesScreen
     }
 
     public void setScriptTimeout(int timeout){
-	this.currentScriptTimeout = timeout;
-	driver.manage().timeouts().setScriptTimeout(timeout, TimeUnit.SECONDS);
+	setScriptTimeout(timeout, TimeUnit.SECONDS);
     }
+    
+    public void setScriptTimeout(int timeout, TimeUnit timeUnit){
+   	this.currentScriptTimeout = timeout;
+   	driver.manage().timeouts().setScriptTimeout(timeout, timeUnit);
+       }
     
     public int getScriptTimeout(){
 	return currentScriptTimeout;
     }
     
     public void setPageTimeout(int timeout){
+	setPageTimeout(timeout, TimeUnit.SECONDS);
+    }
+    
+    public void setPageTimeout(int timeout, TimeUnit timeUnit){
 	this.currentPageTimeout = timeout;
-	driver.manage().timeouts().pageLoadTimeout(timeout, TimeUnit.SECONDS);
+	driver.manage().timeouts().pageLoadTimeout(timeout, timeUnit);
     }
     
     public int getPageTimeout(){
@@ -102,8 +110,12 @@ public class OrasiDriver implements WebDriver,   JavaScriptExecutor, TakesScreen
     
 
     public void setElementTimeout(int timeout){
+	setElementTimeout(timeout, TimeUnit.SECONDS);
+    }
+    
+    public void setElementTimeout(int timeout, TimeUnit timeUnit){
 	this.currentElementTimeout = timeout;
-	driver.manage().timeouts().implicitlyWait(timeout, TimeUnit.SECONDS);
+	driver.manage().timeouts().implicitlyWait(timeout, timeUnit);
     }
     
     public int getElementTimeout(){
