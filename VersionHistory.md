@@ -170,6 +170,7 @@ driver.setElementTimeout(0);
 //do stuff
 driver.setElementTimeout(currentTimeout);
 ```
+
 	* New Javascript call methods
 		* public Object executeJavaScript(String script, Object... parameters)
 			* Above method can replace: ((JavascriptExecutor) driver).executeScript(String script, Object... parameters)
