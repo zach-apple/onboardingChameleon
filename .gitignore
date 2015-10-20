@@ -2,3 +2,4 @@
 /test-output/
 /bin/
 /lib/
+/src/test/resources/localRegression.xml
