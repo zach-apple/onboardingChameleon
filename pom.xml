@@ -183,7 +183,7 @@
 		</dependency>
 		<!-- End Sauce Labs requirements -->
 
-		<!-- Start HTML Unit Driver requirements: Up-to-date as of 6-11-2015 -->
+		<!-- Start HTML Unit Driver requirements: Up-to-date as of 10-20-2015 -->
 		<dependency>
 			<groupId>net.sourceforge.htmlunit</groupId>
 			<artifactId>htmlunit-core-js</artifactId>
