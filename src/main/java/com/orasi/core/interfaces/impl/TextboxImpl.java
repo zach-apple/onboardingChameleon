@@ -4,9 +4,11 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.utils.Base64Coder;
+import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.TestReporter;
 
 /**
@@ -33,7 +35,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 			getWrappedElement().clear();
 			TestReporter.interfaceLog(" Clear text from Textbox [<b>@FindBy: " + getElementLocatorInfo() + " </b>]");
 		} catch (RuntimeException rte) {
-			TestReporter.interfaceLog("Clear text from Textbox [<b>@FindBy: " + getElementLocatorInfo() + " </b>]", true);
+			TestReporter.interfaceLog(" Clear text from Textbox [<b>@FindBy: " + getElementLocatorInfo() + " </b>]", true);
 			throw rte;
 		}
     }
@@ -69,11 +71,10 @@ public class TextboxImpl extends ElementImpl implements Textbox {
      * @param text - text to enter into the field
      */
     @Override
-    public void set(WebDriver driver, String text) {
+    public void set(OrasiDriver driver, String text) {
         if (!text.isEmpty()){
             try{
-        	JavascriptExecutor executor = (JavascriptExecutor)driver; 
-                executor.executeScript("arguments[0].scrollIntoView(true);arguments[0].click();", getWrappedElement());
+        	driver.executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();", getWrappedElement());
             	getWrappedElement().clear();
             	getWrappedElement().sendKeys(text); 
             	TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
@@ -175,7 +176,8 @@ public class TextboxImpl extends ElementImpl implements Textbox {
      * @param text - text to enter into the field
      */
     @Override
-    public void setValidate( WebDriver driver, String text){
+    @Deprecated
+    public void setValidate( OrasiDriver driver, String text){
     	if(!text.isEmpty()){
         	try{
         	    Element obj = new ElementImpl(getWrappedElement());
@@ -207,7 +209,8 @@ public class TextboxImpl extends ElementImpl implements Textbox {
      * @param text - text to enter into the field
      */
     @Override
-    public void safeSetValidate(WebDriver driver, String text){
+    @Deprecated
+    public void safeSetValidate(OrasiDriver driver, String text){
     	if(!text.isEmpty()){
     	    try{
         	Element obj = new ElementImpl(getWrappedElement());

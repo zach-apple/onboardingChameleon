@@ -110,10 +110,12 @@ public class ListboxImpl extends ElementImpl implements Listbox {
 	return false;
     }
   
+    @Override
     public List<WebElement> getAllSelectedOptions() {
    	return innerSelect.getAllSelectedOptions();
     }
 
+    @Override
     public boolean isMultiple() {
    	return innerSelect.isMultiple();
     }

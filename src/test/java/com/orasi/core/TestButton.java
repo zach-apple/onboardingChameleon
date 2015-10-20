@@ -1,8 +1,6 @@
 package com.orasi.core;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -11,9 +9,6 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.orasi.core.interfaces.Button;
-import com.orasi.core.interfaces.impl.ButtonImpl;
-import com.orasi.core.interfaces.impl.ElementImpl;
-import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestEnvironment;
 
 
@@ -29,7 +24,7 @@ public class TestButton extends TestEnvironment{
 	setBrowserVersion(browserVersion);
 	setOperatingSystem(operatingSystem);
 	setRunLocation(runLocation);
-	setPageURL("http://www.cs.tut.fi/~jkorpela/www/testel.html");	
+	setPageURL("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/button.html");	
 	setTestEnvironment(environment);
 	testStart("TestButton");
 	}
@@ -41,17 +36,15 @@ public class TestButton extends TestEnvironment{
 
     @Test(groups ={"regression", "interfaces", "button"})
     public void click(){
-	getDriver().findElement(By.id("f1")).sendKeys("blah");
-	Button button= new ButtonImpl(getDriver().findElement(By.name("reset")));
+	Button button= getDriver().findButton(By.id("click"));
 	button.click();
-	Assert.assertTrue(getDriver().findElement(By.id("f1")).getAttribute("value").equals("Default text."));
+	Assert.assertTrue(getDriver().findElement(By.id("testClick")).getText().equals("Successful"));
     }
     
     @Test(groups ={"regression", "interfaces", "button"}, dependsOnMethods="click")
     public void jsClick(){
-	getDriver().findElement(By.id("f1")).sendKeys("blah");
-	Button button= new ButtonImpl(getDriver().findElement(By.name("reset")));
+	Button button= getDriver().findButton(By.id("jsClick"));
 	button.jsClick(getDriver());
-	Assert.assertTrue(getDriver().findElement(By.id("f1")).getAttribute("value").equals("Default text."));
+	Assert.assertTrue(getDriver().findButton(By.id("testJsClick")).getText().equals("Successful"));
     }
 }

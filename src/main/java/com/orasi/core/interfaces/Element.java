@@ -15,6 +15,7 @@ import org.openqa.selenium.support.FindBy;
 
 import com.orasi.core.interfaces.impl.ElementImpl;
 import com.orasi.core.interfaces.impl.internal.ImplementedBy;
+import com.orasi.utils.OrasiDriver;
 
 
 /**
@@ -49,7 +50,7 @@ public interface Element extends WebElement, WrapsElement, Locatable {
      * @summary - click an element using a JavascriptExecutor
      * @param driver - Current active WebDriver object
      */
-    void jsClick(WebDriver driver);
+    void jsClick(OrasiDriver driver);
     
     /**
      * @author Justin
@@ -104,7 +105,7 @@ public interface Element extends WebElement, WrapsElement, Locatable {
     @Override
     String getAttribute(String name);
 
-    ArrayList getAllAttributes(WebDriver driver);
+    ArrayList getAllAttributes(OrasiDriver driver);
     /**
      * @author Justin
      * @param propertyName - Search for specified property and return it's value
@@ -161,7 +162,8 @@ String getTagName();
     */
    @Override
 boolean isEnabled();
-   
+   @Override
+   boolean isSelected();   
    /**
     * @author Justin
     * @return {@link Boolean} Return TRUE if element is Displayed, FALSE if it is not  
@@ -393,12 +395,12 @@ boolean isDisplayed();
      * @param driver 
      * @return NA
      */
-	public void highlight(WebDriver driver);
+	public void highlight(OrasiDriver driver);
     
     /**
      * @summary - Used to highlight and element on a page
      * @author Waits
      * @param driver - Current active WebDriver object
      */
-	public void scrollIntoView(WebDriver driver);
+	public void scrollIntoView(OrasiDriver driver);
 }

@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 
 import com.orasi.core.interfaces.impl.CheckboxImpl;
 import com.orasi.core.interfaces.impl.internal.ImplementedBy;
+import com.orasi.utils.OrasiDriver;
 
 /**
  * Interface that wraps a WebElement in CheckBox functionality.
@@ -20,7 +21,7 @@ public interface Checkbox extends Element {
      * @summary - Toggle the state of the checkbox using JavascriptExecutor
      * @param driver - Current active WebDriver object
      */
-    void jsToggle(WebDriver driver);
+    void jsToggle(OrasiDriver driver);
 
     /**
      * @summary - Checks checkbox if unchecked.

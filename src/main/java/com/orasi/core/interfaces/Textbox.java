@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 
 import com.orasi.core.interfaces.impl.TextboxImpl;
 import com.orasi.core.interfaces.impl.internal.ImplementedBy;
+import com.orasi.utils.OrasiDriver;
 
 
 /**
@@ -26,7 +27,7 @@ public interface Textbox extends Element {
      * @param driver - Current active WebDriver object
      * @param text - The text to type into the field.
      */
-    void set(WebDriver driver, String text);
+    void set(OrasiDriver driver, String text);
     
     /**
      * @param text - The text to type into the field.
@@ -46,7 +47,8 @@ public interface Textbox extends Element {
     /**
      * @param text - The text to type into the field.
      */
-	void safeSetValidate(WebDriver driver, String text);	
+	@Deprecated
+	void safeSetValidate(OrasiDriver driver, String text);	
 	
     /** 
      * @see org.openqa.selenium.WebElement#getText()
@@ -58,5 +60,6 @@ public interface Textbox extends Element {
      * @param text - The text to type into the field.
      * @param driver - Current active WebDriver object
      */
-    void setValidate(WebDriver driver, String text);
+    @Deprecated
+    void setValidate(OrasiDriver driver, String text);
 }

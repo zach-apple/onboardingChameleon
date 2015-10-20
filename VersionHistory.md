@@ -122,3 +122,99 @@
 		* Removed redundant code from overridden methods. 
 		* All methods now accept the TestEnvironment class instead of WebDriver class
 * **Creation of unit tests**
+	
+##Version 1.0.5 - 10/20/2015
+* [**com.orasi.utils.OrasiDriver**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)
+	* Instantiation requirements
+		* public OrasiDriver(DesiredCapabilities caps)
+			* Launches locally 
+			* Driver type is accessed from DesiredCapabilities (ie. DesiredCapabilities.firefox() or DesiredCapabilities.chrome())
+			* Expects at least the driver type to be defined
+		*  public OrasiDriver(DesiredCapabilities caps, URL url)
+			* Launches RemoteWebDriver
+			
+	* New methods for accessing Element Interfaces
+		*  public Element findElement(By by)
+    	*  public Textbox findTextbox(By by)
+    	*  public Button findButton(By by)
+    	*  public Checkbox findCheckbox(By by)
+    	*  public Label findLabel(By by)
+    	*  public Link findLink(By by)
+    	*  public Listbox findListbox(By by)
+    	*  public RadioGroup findRadioGroup(By by)     
+    	*  public Webtable findWebtable(By by)
+    	*  public WebElement findWebElement(By by)   // Original driver.findElement
+	* New timeout methods
+	 	* Javascript timeouts
+ 			* public void setScriptTimeout(int timeout) 
+ 			* public void setScriptTimeout(int timeout, TimeUnit unit) 
+ 				* Above methods can replace: driver.manage().timeouts().setScriptTimeout(timeout, TimeUnit.SECONDS)
+ 			* public int getScriptTimeout();
+ 			
+	 	* Page timeouts 
+ 			* public void setPageTimeout(int timeout)
+ 			* public void setPageTimeout(int timeout, TimeUnit unit)
+ 				* Above methods can replace: driver.manage().timeouts().pageLoadTimeout(timeout, TimeUnit.SECONDS)
+ 			* public int getPageTimeout()
+ 			 
+	 	* Element timeouts
+ 			* public void setElementTimeout(int timeout)
+ 			* public void setElementTimeout(int timeout, TimeUnit unit)
+ 				* Above methods can replace: driver.manage().timeouts().implicitlyWait(timeout, TimeUnit.SECONDS)
+ 			* public int getElementTimeout()
+
+		* Resetting what the original timeout was
+```java
+int currentTimeout = driver.getElementTimeout();	
+driver.setElementTimeout(0);
+//do stuff
+driver.setElementTimeout(currentTimeout);
+```
+	* New Javascript call methods
+		* public Object executeJavaScript(String script, Object... parameters)
+			* Above method can replace: ((JavascriptExecutor) driver).executeScript(String script, Object... parameters)
+		* public Object executeAsyncJavaScript(String script, Object... parameters)
+			* Above method can replace: ((JavascriptExecutor) driver).executeAsyncScript(String script, Object... parameters)
+	
+	* Get Session ID
+		* public String getSessionId()
+			* Above method can replace: ((RemoteWebDriver) driver).getSessionId().toString() 
+* [**com.orasi.utils.TestEnvironment**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)
+	* Updated to use OrasiDriver as main launching driver	
+	* Updated to allow ability to launch the Microsoft EdgeDriver
+* **POM.xml**
+	* Updated Selenium from 2.46.0 to 2.47.2
+	* Update httpcore and httpclient from 4.4 to 4.4.1
+	* Removed redundant dependencies
+	
+* **EdgeDriver**
+	* EdgeDriver can now be executed locally, on the grid, or in SauceLabs using the follow parameters in the TestNG XML
+		* browserUnderTest = "MicrosoftEdge"
+		* browserVersion = "20.10240"
+		* operatingSystem = "Windows 10"
+	* There are many unsupported methods in EdgeDriver that are commonly used amongst the other drivers. Some of the issues can be tracked in [our Edge tracker](https://github.com/Orasi/Selenium-Java-Core/milestones/Non%20Release%20-%20Edge%20Driver%20Issue%20Tracker)
+* **General Class Updates**
+	* Removed all unused imports
+	* Updated to have default line endings
+
+* **Refactored Classes or Methods**
+	* [DateTimeConversion](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/date/DateTimeConversion.java) - Deprecated existing methods due to redundancy and scalability with other formats
+		* **These methods are removed**
+			* convertToDate(String daysOut)
+			* convertToDateYYYYMMDD(String daysOut)
+			* convertToDateMMDDYY(String daysOut)
+			* format(String date, String format)
+		* New DateTimeConversion methods 
+			* convert(String date, String fromFormat, String toFormat
+			* convert(Date date, String toFormat)
+			* getDaysOut(String daysOut, String format)
+	* [Webtable](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/core/interfaces/Webtable.java) 
+		* **These methods are removed**
+		* All original methods deprecated. Refactored with better handling, improving speed of some methods up to 300%. 
+		* Removed redundant code from overridden methods. 
+		* All methods now accept the TestEnvironment class instead of WebDriver class
+* **Travis CI**
+	* Commits and pull request merges to the master and stage branch will now trigger a sanity check on [Travis-CI](https://travis-ci.org/Orasi/Selenium-Java-Core).
+
+* **Issues fixed**
+	* [Issue #16- XMLTools.validateNodeContainsValueByXPath - Node loop exiting before last node can be retrieved](https://github.com/Orasi/Selenium-Java-Core/issues/16) 

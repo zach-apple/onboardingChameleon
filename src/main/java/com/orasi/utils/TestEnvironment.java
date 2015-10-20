@@ -11,14 +11,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.safari.SafariDriver;
 
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
@@ -52,7 +46,9 @@ public class TestEnvironment {
     /*
      * WebDriver Fields
      */
-    protected WebDriver driver; /*
+    protected OrasiDriver driver;
+    //private WebDriver initDriver; 
+    /*
 				 * Define a collection of webdrivers and test
 				 * names inside a Map. This allows for more than
 				 * one driver to be used within a test class.
@@ -60,7 +56,7 @@ public class TestEnvironment {
 				 * be tied to a specific test based on test
 				 * name.
 				 */
-    protected Map<String, WebDriver> drivers = new HashMap<String, WebDriver>();
+    protected Map<String, OrasiDriver> drivers = new HashMap<String, OrasiDriver>();
     /*
      * URL and Credential Repository Field
      */
@@ -106,6 +102,11 @@ public class TestEnvironment {
      * Constructors for TestEnvironment class
      */
     public TestEnvironment() {
+	StackTraceElement[] stElements = Thread.currentThread().getStackTrace();
+	String rawFQN = stElements[2].toString().split("\\(")[0];
+        String className = rawFQN.substring(0, rawFQN.lastIndexOf('.'));
+	className = className.substring(className.lastIndexOf('.') + 1,className.length() );
+	
     };
 
     public TestEnvironment(String application, String browserUnderTest,
@@ -280,11 +281,11 @@ public class TestEnvironment {
     /*
      * Getter and setter for the actual WebDriver
      */
-    private void setDriver(WebDriver driverSession) {
+    private void setDriver(OrasiDriver driverSession) {
 	driver = driverSession;
     }
 
-    public WebDriver getDriver() {
+    public OrasiDriver getDriver() {
 	return driver;
     }
 
@@ -365,18 +366,18 @@ public class TestEnvironment {
      */
     private void driverSetup()  {
 	driver = null;
-
+	DesiredCapabilities caps = null;
 	// If the location is local, grab the drivers for each browser type from
 	// within the project
 	if (getRunLocation().equalsIgnoreCase("local")) {
-	    DesiredCapabilities caps = null;
+	    
 	    File file = null;
 
 	    switch (getOperatingSystem().toLowerCase().trim().replace(" ", "")) {
 	    case "windows":
 		if (getBrowserUnderTest().equalsIgnoreCase("Firefox")
 			|| getBrowserUnderTest().equalsIgnoreCase("FF")) {
-		    driver = new FirefoxDriver();
+		    caps =DesiredCapabilities.firefox();
 		}
 		// Internet explorer
 		else if (getBrowserUnderTest().equalsIgnoreCase("IE")
@@ -392,26 +393,37 @@ public class TestEnvironment {
 					    + "IEDriverServer.exe").getPath());
 		    System.setProperty("webdriver.ie.driver",
 			    file.getAbsolutePath());
-		    driver = new InternetExplorerDriver(caps);
+		    caps =DesiredCapabilities.internetExplorer();
+			   
 		}
 		// Chrome
 		else if (getBrowserUnderTest().equalsIgnoreCase("Chrome")) {
-		    file = new File(this
-			    .getClass()
-			    .getResource(
-				    Constants.DRIVERS_PATH_LOCAL
-					    + "ChromeDriver.exe").getPath());
-		    System.setProperty("webdriver.chrome.driver",
-			    file.getAbsolutePath());
-		    driver = new ChromeDriver();
+		    file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL+"ChromeDriver.exe").getPath());
+		    System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
+		    caps =DesiredCapabilities.chrome();
+			   
 		}
 		// Headless - HTML unit driver
 		else if (getBrowserUnderTest().equalsIgnoreCase("html")) {
-		    driver = new HtmlUnitDriver(true);
+		    caps = DesiredCapabilities.htmlUnitWithJs();
 		}
+		/*else if (getBrowserUnderTest().equalsIgnoreCase("phantom")) {
+			    caps = DesiredCapabilities.phantomjs();
+			    caps.setCapability("ignoreZoomSetting", true);
+			    caps.setCapability("enablePersistentHover", false);
+			    file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL+ "phantomjs.exe").getPath());
+			    caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY , file.getAbsolutePath());
+			    driver = new PhantomJSDriver(caps);
+			
+		}*/
 		// Safari
 		else if (getBrowserUnderTest().equalsIgnoreCase("safari")) {
-		    driver = new SafariDriver();
+		    caps =DesiredCapabilities.safari();
+			   
+		}else if(getBrowserUnderTest().equalsIgnoreCase("microsoftedge")){
+		    file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL+"MicrosoftWebDriver.exe").getPath());
+		    System.setProperty("webdriver.edge.driver", file.getAbsolutePath());
+		    caps = DesiredCapabilities.edge();
 		} else {
 		    throw new RuntimeException(
 			    "Parameter not set for browser type");
@@ -421,7 +433,8 @@ public class TestEnvironment {
 	    case "macos":
 		if (getBrowserUnderTest().equalsIgnoreCase("Firefox")
 			|| getBrowserUnderTest().equalsIgnoreCase("FF")) {
-		    driver = new FirefoxDriver();
+		    caps =DesiredCapabilities.firefox();
+			   
 		}
 		// Internet explorer
 		else if (getBrowserUnderTest().equalsIgnoreCase("IE")
@@ -447,7 +460,8 @@ public class TestEnvironment {
 				.exec(new String[] { "/bin/bash", "-c",
 					"chmod 777 " + file.getAbsolutePath() });
 			proc.waitFor();
-			driver = new ChromeDriver();
+			 caps =DesiredCapabilities.chrome();
+			   
 		    } catch (IllegalStateException ise) {
 			ise.printStackTrace();
 			throw new IllegalStateException(
@@ -460,83 +474,94 @@ public class TestEnvironment {
 		}
 		// Headless - HTML unit driver
 		else if (getBrowserUnderTest().equalsIgnoreCase("html")) {
-		    driver = new HtmlUnitDriver(true);
+		    caps =DesiredCapabilities.htmlUnitWithJs();
+			   
 		}
 		// Safari
 		else if (getBrowserUnderTest().equalsIgnoreCase("safari")) {
-		    driver = new SafariDriver();
+		    caps =DesiredCapabilities.safari();		
 		} else {
 		    throw new RuntimeException(
 			    "Parameter not set for browser type");
 		}
 		break;
+	    case "linux":
+		if (getBrowserUnderTest().equalsIgnoreCase("html")) {
+			    caps =DesiredCapabilities.htmlUnitWithJs();		   
+		}else if (getBrowserUnderTest().equalsIgnoreCase("Firefox")
+			|| getBrowserUnderTest().equalsIgnoreCase("FF")) {
+		    caps =DesiredCapabilities.firefox();
+		}
 	    default:
 		break;
 	    }
 
+	    driver = new OrasiDriver(caps);
 	    // Code for running on the selenium grid
 	} else if ( getRunLocation().equalsIgnoreCase("grid")) {
-	    DesiredCapabilities capabilities = new DesiredCapabilities();
-	    capabilities.setCapability(CapabilityType.BROWSER_NAME,
+	    caps.setCapability(CapabilityType.BROWSER_NAME,
 		    getBrowserUnderTest());
 	    if (getBrowserVersion() != null) {
-		capabilities.setCapability(CapabilityType.VERSION,
+		caps.setCapability(CapabilityType.VERSION,
 			getBrowserVersion());
 	    }
 	    
-	    capabilities.setCapability(CapabilityType.PLATFORM,
+	    caps.setCapability(CapabilityType.PLATFORM,
 		    getGridPlatformByOS(getOperatingSystem()));
 	    if (getBrowserUnderTest().toLowerCase().contains("ie")
 		    || getBrowserUnderTest().toLowerCase().contains("iexplore")) {
-		capabilities.setCapability("ignoreZoomSetting", true);
+		caps.setCapability("ignoreZoomSetting", true);
 	    }
 	    
 	    try {
-		driver = new RemoteWebDriver(new URL(getRemoteURL()), capabilities);
+		driver = new OrasiDriver(caps, new URL(getRemoteURL()));
 	    } catch (MalformedURLException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
-	    
+
 	} else if (getRunLocation().equalsIgnoreCase("remote") | getRunLocation().equalsIgnoreCase("sauce")) {
-	    DesiredCapabilities capabilities = new DesiredCapabilities();
-	    capabilities.setCapability(CapabilityType.BROWSER_NAME,
-		    getBrowserUnderTest());
-	    if (getBrowserVersion() != null) {
-		capabilities.setCapability(CapabilityType.VERSION,
-			getBrowserVersion());
-	    }
-	    capabilities.setCapability(CapabilityType.PLATFORM,
-		    getOperatingSystem());
+	
+	    caps = new DesiredCapabilities();
+	    caps.setCapability(CapabilityType.BROWSER_NAME,
+			    getBrowserUnderTest());
+		    if (getBrowserVersion() != null) {
+			caps.setCapability(CapabilityType.VERSION,
+				getBrowserVersion());
+		    }
+		    caps.setCapability(CapabilityType.PLATFORM,
+			    getOperatingSystem());
+	    
 	    if (getBrowserUnderTest().toLowerCase().contains("ie")
 		    || getBrowserUnderTest().toLowerCase().contains("iexplore")) {
-		capabilities.setCapability("ignoreZoomSetting", true);
+		caps.setCapability("ignoreZoomSetting", true);
 	    }
-	    capabilities.setCapability("name", getTestName());
+	    caps.setCapability("name", getTestName());
+	    URL sauceURL = null;
 	    try {
-		webDriver.set(new RemoteWebDriver(new URL("http://" + authentication.getUsername() + ":" + authentication.getAccessKey() + "@ondemand.saucelabs.com:80/wd/hub"), capabilities));
+		sauceURL = new URL("http://" + authentication.getUsername() + ":" + authentication.getAccessKey() + "@ondemand.saucelabs.com:80/wd/hub");
 	    } catch (MalformedURLException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
-	    sessionId.set(((RemoteWebDriver) getWebDriver()).getSessionId()
-		    .toString());
-	    driver = webDriver.get();
+
+	    driver = new OrasiDriver(caps, sauceURL);
+
+		
 	}else {
 	    throw new RuntimeException(
 		    "Parameter for run [Location] was not set to 'Local', 'Grid', 'Sauce', or 'Remote'");
 	}
-
-	driver.manage()
-		.timeouts()
-		.setScriptTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT,
-			TimeUnit.SECONDS)
-		.implicitlyWait(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT,
-			TimeUnit.SECONDS);
-	setDefaultTestTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
-	driver.manage().deleteAllCookies();
-	driver.manage().window().maximize();
-    }
+ 
+	driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+	driver.setPageTimeout(Constants.PAGE_TIMEOUT);
+	driver.setScriptTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+	//setDefaultTestTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+	if (!getBrowserUnderTest().toLowerCase().contains("edge")){
+	    driver.manage().deleteAllCookies();
+	    driver.manage().window().maximize();
+	}
+	}
 
     // ************************************
     // ************************************

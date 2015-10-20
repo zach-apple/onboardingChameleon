@@ -803,7 +803,7 @@ public class XMLTools extends SoapService {
 		isContained = true;
 	    }
 	    element++;
-	    if (element == nList.getLength() - 1 && !isContained) {
+	    if (element == nList.getLength() && !isContained) {
 		Reporter.log("The test value [" + testValue
 			+ "] was not contained in any nodes", true);
 		throw new RuntimeException("The test value [" + testValue
