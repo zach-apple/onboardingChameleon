@@ -24,7 +24,6 @@ public class AlertHandler {
             try{
             	WebDriverWait wait = new WebDriverWait(driver, timeout);
     	        wait.until(ExpectedConditions.alertIsPresent());
-    	        driver.switchTo().alert();
     	        return true;
             }
             catch(Exception e){
