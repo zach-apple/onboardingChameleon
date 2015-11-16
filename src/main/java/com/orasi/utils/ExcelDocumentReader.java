@@ -50,7 +50,7 @@ public class ExcelDocumentReader {
 
 	try {
 
-		FileInputStream excelFile = new FileInputStream(this.filepath);
+		FileInputStream excelFile = new FileInputStream(filepath);
 
 		// Access the required test data sheet
 
