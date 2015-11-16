@@ -18,9 +18,7 @@ public class ExcelDocumentReader {
 	this.filepath = filepath;
     }
     
-    public ExcelDocumentReader(){
-	
-    }
+    public ExcelDocumentReader(){}
 
     /**
      * This gets the test data from excel workbook by the sheet specified.  It returns all the data 
@@ -38,23 +36,21 @@ public class ExcelDocumentReader {
     }
     
     public Object[][] readData(String filepath, String sheetName) {
-	this.filepath = filepath;
-    	return (readData(sheetName, -1));
+	return (readData(filepath, sheetName, -1));
     }
-    
-    public Object[][] readData(String filepath, String sheetName, int rowToRead) {
-	this.filepath = filepath;
-    	return (readData(sheetName, rowToRead));
-    }
-    
+
     public Object[][] readData(String sheetName, int rowToRead) {
+	return readData(filepath, sheetName, rowToRead);
+    }
+
+    public Object[][] readData(String filepath, String sheetName, int rowToRead) {
 
 	String[][] tabArray = null;
 	int totalRows =  1;
 
 	try {
 
-		FileInputStream excelFile = new FileInputStream(this.filepath);
+		FileInputStream excelFile = new FileInputStream(filepath);
 
 		// Access the required test data sheet
 
@@ -98,7 +94,7 @@ public class ExcelDocumentReader {
 	}
 	return (tabArray);
     }
-
+    
 	// This method is to read the test data from the Excel cell, in this we are
 	// passing parameters as Row num and Col num
 	private String getCellData(int rowNum, int colNum) {

@@ -55,6 +55,10 @@ This is a crucial class for this framework. This class is designed to be extende
 
 Also contained in this class is the determination as to whether the test should be executed locally or remotely based on a TestNG parameter. Once this is established, a webdriver is created and executed appropriately.
 
+## [OrasiDriver.java](https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/utils/OrasiDriver.java)
+This is an extention of WebDriver that grants access to the Element interfaces by giving them their own find method ( i.e. driver.findButton(By by) ), but also making some methods easier to reach such as setting timeouts, or executing Javascript. 
+
+More info on usage and availible methods [in the VersionHistory](https://github.com/Orasi/Selenium-Java-Core/blob/master/VersionHistory.md#version-105---10202015)
 ## Page Class
 
 The Page Object Model was utilized for this core. With this framework, a single GUI web application page and all of the objects and interactions contained therein, are mapped to a single Java class. Selenium web elements for a particular page are redefined using the user-defined elements such as button, link , etc. Below is an example:
@@ -114,7 +118,7 @@ The various parts are described below:
 
 ## Third Party Resources
 These resources are being used directly, or have been extended upon.
-* [Selenium 2.46.0](https://github.com/SeleniumHQ/selenium): The base library that allows for automation of web browsers.
+* [Selenium 2.47.2](https://github.com/SeleniumHQ/selenium): The base library that allows for automation of web browsers.
 * [TestNG 6.8.21](https://github.com/cbeust/testng/): Test execution framework that extends JUnit tests and allows more flexibility for testing.
 * [Smartbear SoapUI 4.5.0](https://github.com/SmartBear/soapui): Allows consumer to build requests files at runtime and sends request through HTTPClient
 * [Sauce Labs 2.1.18](https://github.com/saucelabs/sauce-java): Facilitates the use of using the Sauce Lab VM farm as a remote Selenium grid on which to execute tests.
@@ -128,7 +132,3 @@ These resources are being used directly, or have been extended upon.
 * Link Git repository as Maven Module: This method will separate the core functionality from the consumers source code. The core module
 										can then be pulled at any time for general updates, and allows consumers to control what updates
 										are allowed. This is recommended for advanced Maven and GIT users.
-
-* Add as Maven Dependency: By adding the Orasi Selenium Core Jar to the Maven POM file, the consumer will always have easy access to
-							updated code. This also allows the option for versioning in the case the consumer needs to test the core
-							updates before fully committing to them.
