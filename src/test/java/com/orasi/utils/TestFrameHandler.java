@@ -2,6 +2,7 @@ package com.orasi.utils;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.testng.SkipException;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
@@ -62,12 +63,14 @@ public class TestFrameHandler extends TestEnvironment{
     
     @Test(groups ={"regression", "utils", "dev"}, dependsOnMethods="testMoveToChildFrameWithLocator")
     public void testMoveToParentFrame(){
+	if(this.browserUnderTest.toLowerCase().contains("safari") || driver.toString().contains("safari") ) throw new SkipException("Test not valid for SafariDriver");
 	FrameHandler.moveToParentFrame(getDriver());
 	Assert.assertTrue("Button was not found in frame 'main_page'", FrameHandler.getCurrentFrameName(getDriver()).equals("main_page"));
     }
     
     @Test(groups ={"regression", "utils", "dev"}, dependsOnMethods="testMoveToParentFrame")
     public void testMoveToSiblingFrameWithName(){
+	if(this.browserUnderTest.toLowerCase().contains("safari") || driver.toString().contains("safari") ) throw new SkipException("Test not valid for SafariDriver");
 	FrameHandler.moveToChildFrame(getDriver(), "main_frame1" );
 	FrameHandler.moveToSiblingFrame(getDriver(), "main_frame2" );
 	Assert.assertTrue("Button was not found in frame 'main_page'", FrameHandler.getCurrentFrameName(getDriver()).equals("main_frame2"));
@@ -75,6 +78,7 @@ public class TestFrameHandler extends TestEnvironment{
     
     @Test(groups ={"regression", "utils", "dev"}, dependsOnMethods="testMoveToSiblingFrameWithName")
     public void testMoveToSiblingFrameWithLocator(){
+	if(this.browserUnderTest.toLowerCase().contains("safari") || driver.toString().contains("safari") ) throw new SkipException("Test not valid for SafariDriver");
 	By locator = By.name("main_frame1");
 	FrameHandler.moveToSiblingFrame(getDriver(), locator);
 	Assert.assertTrue("Button was not found in frame 'main_frame1'", FrameHandler.getCurrentFrameName(getDriver()).equals("main_frame1"));
