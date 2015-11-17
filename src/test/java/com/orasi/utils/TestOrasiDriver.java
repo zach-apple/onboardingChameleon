@@ -47,7 +47,7 @@ public class TestOrasiDriver{
     public void setup(@Optional String runLocation, String browserUnderTest,
 	    String browserVersion, String operatingSystem, String environment) {
 	if (browserUnderTest.equalsIgnoreCase("jenkinsParameter")) {
-	    browserUnderTest = System.getProperty("jenkinsBrowser").trim();
+	    this.browserUnderTest = System.getProperty("jenkinsBrowser").trim();
 	} else{
 	    this.browserUnderTest = browserUnderTest;
 	}
@@ -73,14 +73,14 @@ public class TestOrasiDriver{
 	this.environment = environment;
 	caps = new DesiredCapabilities();
 	caps.setCapability("ignoreZoomSetting", true);
-	caps.setCapability(CapabilityType.BROWSER_NAME,browserUnderTest);
+	caps.setCapability(CapabilityType.BROWSER_NAME,this.browserUnderTest);
 	caps.setCapability(CapabilityType.VERSION,browserVersion);
 	caps.setCapability(CapabilityType.PLATFORM,operatingSystem);
 	caps.setCapability("enablePersistentHover", false);
 	if(runLocation.toLowerCase().equals("local")){
 	    driver = new OrasiDriver(caps);		    
 	}else{
-	    TestEnvironment te = new TestEnvironment("",browserUnderTest,browserVersion, operatingSystem,runLocation,environment);
+	    TestEnvironment te = new TestEnvironment("",this.browserUnderTest,browserVersion, operatingSystem,runLocation,environment);
 	    try {
 		driver = new OrasiDriver(caps, new URL(te.getRemoteURL()));
 	    } catch (MalformedURLException e) {
@@ -106,7 +106,7 @@ public class TestOrasiDriver{
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="getPageTimeout")
     public void setPageTimeout(){
 	System.out.println(browserUnderTest);
-	if(browserUnderTest.toLowerCase().contains("safari") || driver.toString().contains("safari") ) throw new SkipException("Test not valid for SafariDriver");
+	if(this.browserUnderTest.toLowerCase().contains("safari") || driver.toString().contains("safari") ) throw new SkipException("Test not valid for SafariDriver");
 	driver.setPageTimeout(15);
 	Assert.assertTrue( driver.getPageTimeout() == 15);
     }
