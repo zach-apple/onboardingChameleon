@@ -105,7 +105,7 @@ public class TestOrasiDriver{
     
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="getPageTimeout")
     public void setPageTimeout(){
-	if(browserUnderTest.toLowerCase().contains("safari") ) throw new SkipException("Test not valid for SafariDriver");
+	if(browserUnderTest.toLowerCase().contains("safari") || driver.toString().contains("safari") ) throw new SkipException("Test not valid for SafariDriver");
 	driver.setPageTimeout(15);
 	Assert.assertTrue( driver.getPageTimeout() == 15);
     }
