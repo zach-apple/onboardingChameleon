@@ -10,6 +10,7 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 import org.testng.SkipException;
@@ -19,6 +20,7 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import com.gargoylesoftware.htmlunit.javascript.configuration.BrowserName;
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Checkbox;
 import com.orasi.core.interfaces.Element;
@@ -71,6 +73,9 @@ public class TestOrasiDriver{
 	this.environment = environment;
 	caps = new DesiredCapabilities(browserUnderTest, browserVersion, Platform.valueOf(operatingSystem.toUpperCase()));
 	caps.setCapability("ignoreZoomSetting", true);
+	caps.setCapability(CapabilityType.BROWSER_NAME,browserUnderTest);
+	caps.setCapability(CapabilityType.VERSION,browserVersion);
+	caps.setCapability(CapabilityType.PLATFORM,operatingSystem);
 	caps.setCapability("enablePersistentHover", false);
 	if(runLocation.toLowerCase().equals("local")){
 	    driver = new OrasiDriver(caps);		    
