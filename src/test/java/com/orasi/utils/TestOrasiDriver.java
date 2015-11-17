@@ -71,7 +71,7 @@ public class TestOrasiDriver{
 	}    
 	
 	this.environment = environment;
-	caps = new DesiredCapabilities(browserUnderTest, browserVersion, Platform.valueOf(operatingSystem.toUpperCase()));
+	caps = new DesiredCapabilities();
 	caps.setCapability("ignoreZoomSetting", true);
 	caps.setCapability(CapabilityType.BROWSER_NAME,browserUnderTest);
 	caps.setCapability(CapabilityType.VERSION,browserVersion);
