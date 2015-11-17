@@ -105,6 +105,7 @@ public class TestOrasiDriver{
     
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="getPageTimeout")
     public void setPageTimeout(){
+	if(browserUnderTest.toLowerCase().equals("safari") ) throw new SkipException("Test not valid for SafariDriver");
 	driver.setPageTimeout(15);
 	Assert.assertTrue( driver.getPageTimeout() == 15);
     }
@@ -202,7 +203,7 @@ public class TestOrasiDriver{
 
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findLink")
     public void executeAsyncJavaScript(){
-	if(browserUnderTest.toLowerCase().equals("html") || browserUnderTest.isEmpty() || ((WebDriver)driver) instanceof HtmlUnitDriver) throw new SkipException("Test not valid for HTMLUnitDriver");
+	if(browserUnderTest.toLowerCase().equals("html") || browserUnderTest.isEmpty() ) throw new SkipException("Test not valid for HTMLUnitDriver");
 	driver.get("https://builtwith.angularjs.org/");
 	driver.executeAsyncJavaScript("var callback = arguments[arguments.length - 1];angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
     }
