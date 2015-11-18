@@ -14,6 +14,7 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 import org.testng.ITestContext;
@@ -25,6 +26,7 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import com.gargoylesoftware.htmlunit.javascript.configuration.BrowserName;
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Checkbox;
 import com.orasi.core.interfaces.Element;
@@ -60,7 +62,7 @@ public class TestOrasiDriver{
     public void setup(@Optional String runLocation, String browserUnderTest,
 	    String browserVersion, String operatingSystem, String environment) {
 	if (browserUnderTest.equalsIgnoreCase("jenkinsParameter")) {
-	    browserUnderTest = System.getProperty("jenkinsBrowser").trim();
+	    this.browserUnderTest = System.getProperty("jenkinsBrowser").trim();
 	} else{
 	    this.browserUnderTest = browserUnderTest;
 	}
@@ -84,14 +86,17 @@ public class TestOrasiDriver{
 	}    
 	
 	this.environment = environment;
-	caps = new DesiredCapabilities(browserUnderTest, browserVersion, Platform.valueOf(operatingSystem.toUpperCase()));
+	caps = new DesiredCapabilities();
 	caps.setCapability("ignoreZoomSetting", true);
+	caps.setCapability(CapabilityType.BROWSER_NAME,this.browserUnderTest);
+	caps.setCapability(CapabilityType.VERSION,browserVersion);
+	caps.setCapability(CapabilityType.PLATFORM,operatingSystem);
 	caps.setCapability("enablePersistentHover", false);
 	caps.setCapability("name", "TestOrasiDriver");
 	if(runLocation.toLowerCase().equals("local")){
 	    driver = new OrasiDriver(caps);		    
 	}else{
-	    TestEnvironment te = new TestEnvironment("",browserUnderTest,browserVersion, operatingSystem,runLocation,environment);
+	    TestEnvironment te = new TestEnvironment("",this.browserUnderTest,browserVersion, operatingSystem,runLocation,environment);
 	    try {
 		driver = new OrasiDriver(caps, new URL(te.getRemoteURL()));
 	    } catch (MalformedURLException e) {
@@ -137,6 +142,8 @@ public class TestOrasiDriver{
     
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="getPageTimeout")
     public void setPageTimeout(){
+	System.out.println(browserUnderTest);
+	if(this.browserUnderTest.toLowerCase().contains("safari") || driver.toString().contains("safari") ) throw new SkipException("Test not valid for SafariDriver");
 	driver.setPageTimeout(15);
 	Assert.assertTrue( driver.getPageTimeout() == 15);
     }
@@ -234,7 +241,7 @@ public class TestOrasiDriver{
 
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findLink")
     public void executeAsyncJavaScript(){
-	if(browserUnderTest.toLowerCase().equals("html") || browserUnderTest.isEmpty() || ((WebDriver)driver) instanceof HtmlUnitDriver) throw new SkipException("Test not valid for HTMLUnitDriver");
+	if(browserUnderTest.toLowerCase().equals("html") || browserUnderTest.isEmpty() ) throw new SkipException("Test not valid for HTMLUnitDriver");
 	driver.get("https://builtwith.angularjs.org/");
 	driver.executeAsyncJavaScript("var callback = arguments[arguments.length - 1];angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
     }
