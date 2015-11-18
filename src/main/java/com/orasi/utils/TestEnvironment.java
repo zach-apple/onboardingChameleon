@@ -352,6 +352,49 @@ public class TestEnvironment {
  	}
      }
      
+    /*
+     * Use ITestResult from @AfterMethod to determine run status before closing test if reporting to sauce labs
+     */
+    protected void endTest(String testName, ITestResult testResults){
+	if(runLocation.equalsIgnoreCase("remote") | runLocation.equalsIgnoreCase("sauce")){
+	    endSauceTest(testResults.getStatus());
+	}
+	
+ 	endTest(testName);
+    }
+    
+    /*
+     * Use ITestContext from @AfterTest or @AfterSuite to determine run status before closing test if reporting to sauce labs
+     */
+    protected void endTest(String testName, ITestContext testResults){
+ 	if(runLocation.equalsIgnoreCase("remote") | runLocation.equalsIgnoreCase("sauce")){
+ 	    if(testResults.getFailedTests().size() == 0) {
+ 		endSauceTest(ITestResult.SUCCESS);
+ 	    }else{
+ 		endSauceTest(ITestResult.FAILURE);
+ 	    }
+ 	}
+ 	endTest(testName);
+     }
+     
+    
+    /*
+     * Report end of run status to Sauce LAbs
+     */  
+    private void endSauceTest(int result)  {
+	Map<String, Object> updates = new HashMap<String, Object>();
+	updates.put("name", getTestName());	
+	
+	if (result == ITestResult.FAILURE) {
+		updates.put("passed", false);
+	} else {
+		updates.put("passed", true);
+	}
+	
+	SauceREST client = new SauceREST(authentication.getUsername() ,authentication.getAccessKey() );
+	client.updateJobInfo(driver.getSessionId().toString(), updates);			
+}
+
     
     /**
      * Sets up the driver type, location, browser under test, os
@@ -543,7 +586,8 @@ public class TestEnvironment {
 		e.printStackTrace();
 	    }
 
-	   setDriver(new OrasiDriver(caps, sauceURL));
+	    caps.setCapability("name", getTestName());
+	    setDriver(new OrasiDriver(caps, sauceURL));
 
 		
 	}else {
