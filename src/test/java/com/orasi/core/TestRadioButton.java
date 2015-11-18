@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.ITestContext;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
@@ -32,8 +34,8 @@ public class TestRadioButton extends TestEnvironment{
 
     
     @AfterTest(groups ={"regression", "interfaces", "radiogroup", "dev"})
-    public void close(){
-	endTest("TestRadiogroup");
+    public void close(ITestContext testResults){
+	endTest("TestAlert", testResults);
     }
 
       

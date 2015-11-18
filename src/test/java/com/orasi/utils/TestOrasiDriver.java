@@ -3,8 +3,12 @@ package com.orasi.utils;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 import org.hamcrest.core.IsNull;
+import org.json.simple.JSONArray;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
@@ -12,6 +16,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
+import org.testng.ITestContext;
+import org.testng.ITestResult;
 import org.testng.SkipException;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -28,8 +34,17 @@ import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.RadioGroup;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.Webtable;
+import com.saucelabs.common.SauceOnDemandAuthentication;
+import com.saucelabs.saucerest.SauceREST;
 
 public class TestOrasiDriver{
+    protected ResourceBundle appURLRepository = ResourceBundle
+	    .getBundle(Constants.ENVIRONMENT_URL_PATH);
+    protected SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(
+	    Base64Coder.decodeString(appURLRepository
+		    .getString("SAUCELABS_USERNAME")),
+	    Base64Coder.decodeString(appURLRepository
+		    .getString("SAUCELABS_KEY")));
     DesiredCapabilities caps = null;
     OrasiDriver driver = null;
     File file = null;	
@@ -72,6 +87,7 @@ public class TestOrasiDriver{
 	caps = new DesiredCapabilities(browserUnderTest, browserVersion, Platform.valueOf(operatingSystem.toUpperCase()));
 	caps.setCapability("ignoreZoomSetting", true);
 	caps.setCapability("enablePersistentHover", false);
+	caps.setCapability("name", "TestOrasiDriver");
 	if(runLocation.toLowerCase().equals("local")){
 	    driver = new OrasiDriver(caps);		    
 	}else{
@@ -87,10 +103,31 @@ public class TestOrasiDriver{
 	
 	//testStart("TestOrasiDriver");
     }
-    
+    private void endSauceTest(int result)  {
+  	Map<String, Object> updates = new HashMap<String, Object>();
+  	updates.put("name", "TestOrasiDriver");
+  	
+  	
+  	if (result == ITestResult.FAILURE) {
+  		updates.put("passed", false);
+  	} else {
+  		updates.put("passed", true);
+  	}
+
+  	SauceREST client = new SauceREST(authentication.getUsername() ,authentication.getAccessKey() );
+  	client.updateJobInfo(driver.getSessionId().toString(), updates);		
+  	
+  }
     @AfterTest(groups ={"regression", "utils", "orasidriver"})
-    public void close(){
-	driver.close();
+    public void close(ITestContext testResults){
+	if(runLocation.equalsIgnoreCase("sauce")){
+ 	    if(testResults.getFailedTests().size() == 0) {
+ 		endSauceTest(ITestResult.SUCCESS);
+ 	    }else{
+ 		endSauceTest(ITestResult.FAILURE);
+ 	    }
+ 	}
+	driver.quit();
     }
 
     @Test(groups={"regression", "utils", "orasidriver"})
