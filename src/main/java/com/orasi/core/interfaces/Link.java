@@ -1,5 +1,7 @@
 package com.orasi.core.interfaces;
 
+import org.openqa.selenium.WebDriver;
+
 import com.orasi.core.interfaces.impl.LinkImpl;
 import com.orasi.core.interfaces.impl.internal.ImplementedBy;
 import com.orasi.utils.OrasiDriver;
@@ -22,7 +24,7 @@ public interface Link extends Element {
      * @param driver - Current active WebDriver object
      */
     @Override
-    public void jsClick(OrasiDriver driver);
+    public void jsClick(WebDriver driver);
     
     public String getURL();
 }

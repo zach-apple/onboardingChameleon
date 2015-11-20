@@ -71,10 +71,15 @@ public class TextboxImpl extends ElementImpl implements Textbox {
      * @param text - text to enter into the field
      */
     @Override
-    public void set(OrasiDriver driver, String text) {
+    public void set(WebDriver driver, String text) {
+	if(driver instanceof OrasiDriver){
+		driver = ((OrasiDriver) driver).getDriver();
+	}
+	
+	
         if (!text.isEmpty()){
             try{
-        	driver.executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();", getWrappedElement());
+        	 ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);arguments[0].click();", getWrappedElement());
             	getWrappedElement().clear();
             	getWrappedElement().sendKeys(text); 
             	TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
@@ -164,73 +169,6 @@ public class TextboxImpl extends ElementImpl implements Textbox {
             TestReporter.interfaceLog(" Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
     	}
 
-    }
-    
-    /**
-     * @summary - If the text parameter is not an empty string, this method clears any 
-     * 		existing values and performs a "sendKeys(text)" to simulate typing the 
-     * 		value and loops until the text can be verified to exists within the text 
-     * 		field. An error is thrown if the text is not found within the timeout 
-     * 		window. If the text parameter is an empty string, this step is skipped.
-     * @param driver - Current active WebDriver object
-     * @param text - text to enter into the field
-     */
-    @Override
-    @Deprecated
-    public void setValidate( OrasiDriver driver, String text){
-    	if(!text.isEmpty()){
-        	try{
-        	    Element obj = new ElementImpl(getWrappedElement());
-        	    obj.syncEnabled(driver);
-        	    getWrappedElement().clear();
-        	    getWrappedElement().sendKeys(text);
-        	    TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [  <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
-        	    obj.syncTextInElement(driver, text, 3, true);
-        	    TestReporter.interfaceLog(" VALIDATED [ <b>" + text.toString() + "</b> ] was entered in the textbox."); 
-        	}catch(RuntimeException rte){
-        	    TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [  <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]", true);
-        	    throw rte;
-        	}
-    	
-    	}else{
-    		TestReporter.interfaceLog(" Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
-    	}
-    }
-
-    /**
-     * @summary - If the text parameter is not an empty string, the text field is clicked, 
-     * 		then sendKeys() is used to select any/all existing text, type the text passed 
-     * 		in the parameter and send a "TAB" key. This is useful if moving from an element 
-     * 		is required to trigger underlying JavaScript. This method then loops until the 
-     * 		text can be verified to exists within the text field. An error is thrown if 
-     * 		the text is not found within the timeout window. If the text parameter is an 
-     * 		empty string, this step is skipped. 
-     * @param driver - Current active WebDriver object
-     * @param text - text to enter into the field
-     */
-    @Override
-    @Deprecated
-    public void safeSetValidate(OrasiDriver driver, String text){
-    	if(!text.isEmpty()){
-    	    try{
-        	Element obj = new ElementImpl(getWrappedElement());
-        	obj.syncEnabled(driver);
-        	char ctrl_a = '\u0001';
-        	getWrappedElement().click();     	
-        	getWrappedElement().sendKeys(String.valueOf(ctrl_a));
-        	getWrappedElement().sendKeys(text);
-        	getWrappedElement().sendKeys(Keys.TAB);
-        	TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [  <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
-        	
-        	obj.syncTextInElement(driver, text, 3, true);        	
-        	TestReporter.interfaceLog(" VALIDATED [ <b>" + text.toString() + "</b> ] was entered in the textbox.");
-	    }catch(RuntimeException rte){
-		TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [  <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]", true);
-	        throw rte;
-	    }
-    	}else{
-    		TestReporter.interfaceLog(" Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
-    	}
     }
     
     /**

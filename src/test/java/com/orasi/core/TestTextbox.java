@@ -88,19 +88,4 @@ public class TestTextbox extends TestEnvironment{
 	textbox.clear();
     }
   
-    @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="safeSetSecure")
-    public void setValidate(){
-	Textbox textbox= getDriver().findTextbox(By.id("text1"));
-	textbox.setValidate(getDriver(), "setValidate");
-	Assert.assertTrue(textbox.getAttribute("value").equals("setValidate"));
-	textbox.clear();
-    }
-    
-    @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="setValidate")
-    public void safeSetValidate(){
-	Textbox textbox= getDriver().findTextbox(By.id("text1"));
-	textbox.safeSetValidate(getDriver(), "safeSetValidate");
-	Assert.assertTrue(textbox.getAttribute("value").contains("safeSetValidate"));
-	textbox.clear();
-    }
 }

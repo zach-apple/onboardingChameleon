@@ -21,7 +21,7 @@ public interface Checkbox extends Element {
      * @summary - Toggle the state of the checkbox using JavascriptExecutor
      * @param driver - Current active WebDriver object
      */
-    void jsToggle(OrasiDriver driver);
+    void jsToggle(WebDriver driver);
 
     /**
      * @summary - Checks checkbox if unchecked.
@@ -39,15 +39,4 @@ public interface Checkbox extends Element {
      */
     boolean isChecked();
     
-    /**
-     * @summary - Check if an element is selected, and return boolean.
-     * @param driver - Current active WebDriver object
-     */
-    boolean checkValidate(WebDriver driver);
-    
-    /**
-     * @summary - Check if an element is not selected, and return boolean.
-     * @param driver - Current active WebDriver object
-     */
-    boolean uncheckValidate(WebDriver driver);
 }

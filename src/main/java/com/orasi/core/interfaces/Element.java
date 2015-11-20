@@ -50,7 +50,7 @@ public interface Element extends WebElement, WrapsElement, Locatable {
      * @summary - click an element using a JavascriptExecutor
      * @param driver - Current active WebDriver object
      */
-    void jsClick(OrasiDriver driver);
+    void jsClick(WebDriver driver);
     
     /**
      * @author Justin
@@ -105,7 +105,7 @@ public interface Element extends WebElement, WrapsElement, Locatable {
     @Override
     String getAttribute(String name);
 
-    ArrayList getAllAttributes(OrasiDriver driver);
+    ArrayList getAllAttributes(WebDriver driver);
     /**
      * @author Justin
      * @param propertyName - Search for specified property and return it's value
@@ -395,12 +395,12 @@ boolean isDisplayed();
      * @param driver 
      * @return NA
      */
-	public void highlight(OrasiDriver driver);
+	public void highlight(WebDriver driver);
     
     /**
      * @summary - Used to highlight and element on a page
      * @author Waits
      * @param driver - Current active WebDriver object
      */
-	public void scrollIntoView(OrasiDriver driver);
+	public void scrollIntoView(WebDriver driver);
 }
