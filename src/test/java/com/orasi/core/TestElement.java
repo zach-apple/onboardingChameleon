@@ -301,7 +301,7 @@ public class TestElement extends TestEnvironment{
 	Assert.assertTrue(element.syncEnabled(getDriver()));
     }
     
-    @Test(groups ={"regression", "element"}, dependsOnMethods={"syncDisabledAdvancedNegative"})
+    @Test(groups ={"regression", "element"})
     public void syncEnabledBasicNegative(){
 	boolean pass = false;
 	try{
@@ -320,7 +320,7 @@ public class TestElement extends TestEnvironment{
 	Assert.assertTrue(element.syncEnabled(getDriver(), 5, false));
     }
     
-    @Test(groups ={"regression", "element"}, dependsOnMethods={"syncDisabledAdvancedNegative"})
+    @Test(groups ={"regression", "element"})
     public void syncEnabledAdvancedNegative(){
 	Element element = getDriver().findElement(By.id("disable"));
 	Assert.assertFalse(element.syncEnabled(getDriver(),1, false));
