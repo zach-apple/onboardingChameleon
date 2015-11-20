@@ -29,11 +29,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 
     private List<WebElement> getRowCollection(TestEnvironment te){
 	te.getDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-	List<WebElement> rowCollection = this.element.findElements(By.xpath("tr"));
-
-	if (rowCollection.size() == 0) {
-	    rowCollection = this.element.findElements(By.xpath("tbody/tr"));
-	}
+	List<WebElement> rowCollection = this.element.findElements(By.xpath("tr|tbody/tr"));
 	te.getDriver().manage().timeouts().implicitlyWait(te.getDriver().getElementTimeout(),TimeUnit.SECONDS);
 	return rowCollection;
 	
@@ -41,21 +37,12 @@ public class WebtableImpl extends ElementImpl implements Webtable {
     
     private List<WebElement> getColumnCollection(TestEnvironment te, WebElement row){
 	String xpath = null;
-	te.getDriver().manage().timeouts().implicitlyWait(0, TimeUnit.MILLISECONDS);
-
-	if (row.findElements(By.xpath("th")).size() != 0) {
-	    xpath = "th";
-	} else if (row.findElements(By.xpath("td")).size() != 0) {
-	    xpath = "td";
-	} else {
-	    throw new RuntimeException(
-		    "No child element with the HTML tag \"th\" or \"td\" were found for the parent webtable [ <b>@FindBy: "
-			    + getElementLocatorInfo() + " </b>]");
-	}
 	
+	te.getDriver().manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
+	List<WebElement> columnCollection = row.findElements(By.xpath("th|td"));
 	te.getDriver().manage().timeouts().implicitlyWait(te.getDriver().getElementTimeout(),TimeUnit.SECONDS);
 
-	return row.findElements(By.xpath(xpath));
+	return columnCollection ;
     }
     /**
      * @summary - Attempts to locate the number of child elements with the HTML
@@ -240,15 +227,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 		currentRow++;
 	    } else {
 		if (currentRow <= rowCollection.size()) {
-		    te.getDriver().manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
-		    if (rowElement.findElements(By.xpath("th")).size() != 0) {
-			xpath = "th";
-		    } else if (rowElement.findElements(By.xpath("td")).size() != 0) {
-			xpath = "td";
-		    }
-
-		    te.getDriver().manage().timeouts().implicitlyWait(te.getDriver().getElementTimeout(),TimeUnit.SECONDS);
-
+	
 		    if (columnPosition == -1) {			
 			for (WebElement cell : getColumnCollection(te, rowElement)) {
 			    if (exact){
@@ -258,7 +237,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 			    }
 			}
 		    } else {
-			WebElement cell = rowElement.findElements(By.xpath(xpath)).get(columnPosition - 1);
+			WebElement cell = rowElement.findElements(By.xpath("th|td")).get(columnPosition - 1);
 			if (exact){
 			    if (cell.getText().trim().equals(text)) return currentRow;
 			}else{
