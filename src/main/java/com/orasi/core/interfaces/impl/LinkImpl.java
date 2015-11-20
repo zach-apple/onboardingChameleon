@@ -4,6 +4,8 @@ import com.orasi.core.interfaces.Link;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.TestReporter;
 
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 /**
@@ -21,10 +23,14 @@ public class LinkImpl extends ElementImpl implements Link {
     }
     
     @Override
-    public void jsClick(OrasiDriver driver) {
-    	
+    public void jsClick(WebDriver driver) {
+	if(driver instanceof OrasiDriver){
+		driver = ((OrasiDriver) driver).getDriver();
+	}
+	
+	
     	try{
-    	    driver.executeJavaScript("if( document.createEvent ) {var click_ev = document.createEvent('MouseEvents'); click_ev.initEvent('click', true , true )"
+    	    ((JavascriptExecutor) driver).executeScript("if( document.createEvent ) {var click_ev = document.createEvent('MouseEvents'); click_ev.initEvent('click', true , true )"
     	    	+ ";arguments[0].dispatchEvent(click_ev);} else { arguments[0].click();}", element);
     	}catch(RuntimeException rte){
     	    TestReporter.interfaceLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]", true);

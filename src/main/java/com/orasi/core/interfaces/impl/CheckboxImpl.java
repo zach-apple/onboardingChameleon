@@ -1,5 +1,6 @@
 package com.orasi.core.interfaces.impl;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -28,8 +29,12 @@ public class CheckboxImpl extends ElementImpl implements Checkbox {
     }
 
     @Override
-    public void jsToggle(OrasiDriver driver) {
-    	driver.executeJavaScript("arguments[0].click();", element);
+    public void jsToggle(WebDriver driver) {
+	if(driver instanceof OrasiDriver){
+		driver = ((OrasiDriver) driver).getDriver();
+	}
+	
+	 ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
     }
 
     @Override
@@ -64,32 +69,4 @@ public class CheckboxImpl extends ElementImpl implements Checkbox {
     public boolean isChecked() {
         return getWrappedElement().isSelected();
     }
-    
-    @Override
-    public boolean checkValidate(WebDriver driver){
-    	Element obj = new ElementImpl(getWrappedElement());
-    	obj.syncEnabled(driver);
-  
-        if (!isChecked()) {        	
-            TestReporter.log(" Checkbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>] was not checked successfully.");
-            return false;
-        }else{
-            TestReporter.log("VALIDATED the Checkbox was <b> CHECKED </b> successfully."); 
-        }
-        return true;
-    }    
-
-    @Override
-    public boolean uncheckValidate(WebDriver driver){
-    	Element obj = new ElementImpl(getWrappedElement());
-    	obj.syncEnabled(driver);
-        
-        if (isChecked()) {
-            TestReporter.log(" Checkbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>] was not checked successfully.");
-            return false;
-        }else{
-            TestReporter.log("VALIDATED the Checkbox was <b> UNCHECKED </b> successfully."); 
-        }
-        return true;
-    } 
 }

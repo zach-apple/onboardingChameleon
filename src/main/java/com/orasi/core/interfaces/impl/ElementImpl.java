@@ -9,6 +9,7 @@ import org.apache.commons.lang.time.StopWatch;
 import org.openqa.selenium.By;
 import org.openqa.selenium.By.ByClassName;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
@@ -64,8 +65,12 @@ public class ElementImpl implements Element {
     }
 
     @Override
-    public void jsClick(OrasiDriver driver) {
-	driver.executeJavaScript(
+    public void jsClick(WebDriver driver) {
+	if(driver instanceof OrasiDriver){
+		driver = ((OrasiDriver) driver).getDriver();
+	}
+	
+	 ((JavascriptExecutor) driver).executeScript(
 		"arguments[0].scrollIntoView(true);arguments[0].click();",
 		element);
 	TestReporter.interfaceLog("Clicked [ <b>@FindBy: "
@@ -947,22 +952,30 @@ public class ElementImpl implements Element {
     }
 
     @Override
-    public void highlight(OrasiDriver driver) {
-	// OrasiDriver wDriver = driver;
-	driver.executeJavaScript("arguments[0].style.border='3px solid red'",
+    public void highlight(WebDriver driver) {
+	if(driver instanceof OrasiDriver){
+		driver = ((OrasiDriver) driver).getDriver();
+	}
+	((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px solid red'",
 		this);
     }
 
     @Override
-    public void scrollIntoView(OrasiDriver driver) {
-	driver.executeJavaScript("arguments[0].scrollIntoView(true);", element);
+    public void scrollIntoView(WebDriver driver) {
+	if(driver instanceof OrasiDriver){
+		driver = ((OrasiDriver) driver).getDriver();
+	}
+	((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
     }
 
     @Override
-    public ArrayList getAllAttributes(OrasiDriver driver) {
-	return (ArrayList) driver
-		.executeJavaScript(
-			"var s = []; var attrs = arguments[0].attributes; for (var l = 0; l < attrs.length; ++l) { var a = attrs[l]; s.push(a.name + ':' + a.value); } ; return s;",
+    public ArrayList getAllAttributes(WebDriver driver) {
+	if(driver instanceof OrasiDriver){
+		driver = ((OrasiDriver) driver).getDriver();
+	}
+	
+	
+	return (ArrayList)  ((JavascriptExecutor) driver).executeScript("var s = []; var attrs = arguments[0].attributes; for (var l = 0; l < attrs.length; ++l) { var a = attrs[l]; s.push(a.name + ':' + a.value); } ; return s;",
 			getWrappedElement());
     }
 
