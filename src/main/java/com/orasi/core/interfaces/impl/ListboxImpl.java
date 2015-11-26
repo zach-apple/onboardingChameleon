@@ -1,10 +1,13 @@
 package com.orasi.core.interfaces.impl;
 
 import com.orasi.core.interfaces.Listbox;
+import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.TestReporter;
 
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
 import java.util.List;
 
 /**
@@ -20,6 +23,11 @@ public class ListboxImpl extends ElementImpl implements Listbox {
      */
     public ListboxImpl(WebElement element) {
         super(element);        
+        this.innerSelect = new org.openqa.selenium.support.ui.Select(element);
+    }
+    
+    public ListboxImpl(WebElement element, OrasiDriver driver) {
+        super(element, driver);
         this.innerSelect = new org.openqa.selenium.support.ui.Select(element);
     }
   

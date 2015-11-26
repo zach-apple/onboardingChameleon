@@ -24,7 +24,7 @@ public interface Link extends Element {
      * @param driver - Current active WebDriver object
      */
     @Override
-    public void jsClick(WebDriver driver);
+    public void jsClick();
     
     public String getURL();
 }

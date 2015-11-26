@@ -1,11 +1,8 @@
 package com.orasi.core.interfaces.impl;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import com.orasi.core.interfaces.Checkbox;
-import com.orasi.core.interfaces.Element;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.TestReporter;
 
@@ -23,18 +20,18 @@ public class CheckboxImpl extends ElementImpl implements Checkbox {
         super(element);
     }
 
+    public CheckboxImpl(WebElement element, OrasiDriver driver) {
+        super(element, driver);
+    }
+    
     @Override
     public void toggle() {
         getWrappedElement().click();
     }
 
     @Override
-    public void jsToggle(WebDriver driver) {
-	if(driver instanceof OrasiDriver){
-		driver = ((OrasiDriver) driver).getDriver();
-	}
-	
-	 ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+    public void jsToggle() {
+    	driver.executeJavaScript("arguments[0].click();", element);
     }
 
     @Override

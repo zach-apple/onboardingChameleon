@@ -70,7 +70,7 @@ public class TestCheckbox extends TestEnvironment{
     @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="uncheck")
     public void jsToggle(){
 	Checkbox checkbox= getDriver().findCheckbox(By.name("checkbox"));
-	checkbox.jsToggle(getDriver());
+	checkbox.jsToggle();
 	Assert.assertTrue(checkbox.isChecked());
     }
 }
