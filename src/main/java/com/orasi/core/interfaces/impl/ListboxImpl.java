@@ -64,6 +64,37 @@ public class ListboxImpl extends ElementImpl implements Listbox {
 
     /**
      * @summary - Wraps Selenium's method.
+     * @param text - visible text to select
+     * @see org.openqa.selenium.support.ui.Select#selectByVisibleText(String)
+     */
+    @Override
+    public void selectValue(String value) {
+		if (!value.isEmpty()){
+			try{   
+			    try{
+				innerSelect.selectByValue(value);
+			    }catch(RuntimeException rte){
+			        TestReporter.interfaceLog("Select option [ <b>" + value.toString() + "</b> ] from Listbox [  <b>@FindBy: " + getElementLocatorInfo()  + " </b>]", true);
+			        throw rte;
+			    }	
+			    
+			    TestReporter.interfaceLog("Select option [ <b>" + value.toString() + "</b> ] from Listbox [  <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
+			}catch (NoSuchElementException e){
+				String optionList = "";
+				List<WebElement> optionsList= innerSelect.getOptions();
+				for(WebElement option : optionsList){
+					optionList += option.getAttribute("value") + " | ";
+				}
+				TestReporter.interfaceLog(" The value of <b>[ " + value + "</b> ] was not found in Listbox [  <b>@FindBy: " + getElementLocatorInfo()  + " </b>]. Acceptable values are " + optionList +" ]");
+				throw new NoSuchElementException("The value of [ " + value + " ] was not found in Listbox [  @FindBy: " + getElementLocatorInfo()  + " ]. Acceptable values are " + optionList );
+			}       	
+		}else{
+		    TestReporter.interfaceLog("Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
+		}
+    }
+
+    /**
+     * @summary - Wraps Selenium's method.
      * @see org.openqa.selenium.support.ui.Select#deselectAll()
      */
     @Override
