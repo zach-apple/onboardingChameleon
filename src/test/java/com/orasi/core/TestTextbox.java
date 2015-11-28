@@ -51,7 +51,7 @@ public class TestTextbox extends TestEnvironment{
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="set")
     public void jsSet(){
 	Textbox textbox= getDriver().findTextbox(By.id("text1"));
-	textbox.jsSet( "setScrollIntoView");
+	textbox.scrollAndSet( "setScrollIntoView");
 	Assert.assertTrue(textbox.getAttribute("value").equals("setScrollIntoView"));
     }
     
