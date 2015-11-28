@@ -21,7 +21,6 @@ public interface Link extends Element {
     
     /**
      * @summary - Click the link using a JavascriptExecutor click
-     * @param driver - Current active WebDriver object
      */
     @Override
     public void jsClick();
