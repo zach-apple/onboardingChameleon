@@ -64,8 +64,8 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	/**
 	 * @summary - Defines the number of radio buttons and return the integer count
 	 */
-	@Override
-	public int getNumberOfRadioButtons() {
+	//@Override
+	private int getNumberOfRadioButtons() {
 		setNumberOfRadioButtons();
 		return numberOfRadioButtons;
 	}
