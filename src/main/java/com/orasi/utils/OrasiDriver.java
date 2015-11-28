@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
@@ -372,11 +373,31 @@ public class OrasiDriver implements WebDriver,   JavaScriptExecutor, TakesScreen
 	}
     }
 
-
+    public Capabilities getDriverCapability(){
+    	return new Capabilities(); 
+    }
     @Override
     public <X> X getScreenshotAs(OutputType<X> target)
 	    throws WebDriverException {
 	return ((TakesScreenshot) driver).getScreenshotAs(target);
+    }
+    
+    class Capabilities{
+    	
+    	public String browserName(){
+    		return ((RemoteWebDriver) driver).getCapabilities().getBrowserName();
+    	}
+    	
+    	public String browserVersion(){
+    		return ((RemoteWebDriver) driver).getCapabilities().getVersion();
+    	}
+    	
+    	public String platformOS(){    		
+    		return ((RemoteWebDriver) driver).getCapabilities().getPlatform().name() + " " +
+    		       ((RemoteWebDriver) driver).getCapabilities().getPlatform().getMajorVersion() + "." +
+    		       ((RemoteWebDriver) driver).getCapabilities().getPlatform().getMinorVersion(); 
+    	}
+    	
     }
 
 }
