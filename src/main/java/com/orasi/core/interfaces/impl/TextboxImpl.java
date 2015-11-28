@@ -74,7 +74,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
      * @param text - text to enter into the field
      */
     @Override
-    public void jsSet(String text) {
+    public void scrollAndSet(String text) {
         if (!text.isEmpty()){
             try{
         	    driver.executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();", getWrappedElement());
