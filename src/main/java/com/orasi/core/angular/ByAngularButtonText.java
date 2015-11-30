@@ -8,6 +8,8 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import com.orasi.utils.OrasiDriver;
+
 /*
  * Original Code from https://github.com/paul-hammant/ngWebDriver
  */
@@ -43,7 +45,7 @@ public class ByAngularButtonText  extends ByAngular.BaseBy {
 				"	}\n" +				
 				" if(elementText !== null && elementText !== undefined){ \n" + 
 				" 	 if (elementText.trim() == \"" + text + "\") {\n" +
-				"   	 rows.push(element);\n" +
+				"   	 rows.push(element);break;\n" +
 				"  	}\n" +
 				"  }\n" +
 				"}\n" +
