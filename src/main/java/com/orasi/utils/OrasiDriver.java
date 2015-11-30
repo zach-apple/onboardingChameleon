@@ -25,6 +25,14 @@ import org.openqa.selenium.safari.SafariDriver;
 import com.gargoylesoftware.htmlunit.WebWindow;
 import com.gargoylesoftware.htmlunit.javascript.background.DefaultJavaScriptExecutor;
 import com.gargoylesoftware.htmlunit.javascript.background.JavaScriptExecutor;
+import com.orasi.core.angular.ByAngular;
+import com.orasi.core.angular.ByAngularButtonText;
+import com.orasi.core.by.angular.ByNG;
+import com.orasi.core.by.angular.ByNG.ByNGButton;
+import com.orasi.core.by.angular.ByNG.ByNGController;
+import com.orasi.core.by.angular.ByNG.ByNGModel;
+import com.orasi.core.by.angular.ByNG.ByNGRepeater;
+import com.orasi.core.by.angular.ByNG.ByNGShow;
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Checkbox;
 import com.orasi.core.interfaces.Element;
@@ -180,6 +188,26 @@ public class OrasiDriver implements WebDriver,   JavaScriptExecutor, TakesScreen
 	    throw new NoSuchElementException(nse.getMessage());
 	}
     }
+    
+    @SuppressWarnings("static-access")
+	private ByAngular.BaseBy getByNGType(ByNG by){
+    	String text = by.toString().replace("By.buttonText:", "").trim();
+    	if(by instanceof ByNGButton) return new ByAngular(getDriver()).buttonText(text);
+    	if(by instanceof ByNGController) return new ByAngular(getDriver()).controller(text);
+    	if(by instanceof ByNGModel) return new ByAngular(getDriver()).model(text);
+    	if(by instanceof ByNGRepeater) return new ByAngular(getDriver()).repeater(text);
+    	if(by instanceof ByNGShow) return new ByAngular(getDriver()).show(text);
+    	return null;
+    }
+    
+	public Button findButton(ByNG by) {
+    	try{
+    	    return new ButtonImpl(driver.findElement(getByNGType(by)), this);
+    	}catch(NoSuchElementException nse){	  
+    	    TestReporter.logFailure("No such Button with context: " + by.toString());
+    	    throw new NoSuchElementException(nse.getMessage());
+    	}
+        }
     
     public Checkbox findCheckbox(By by) {
 	try{
