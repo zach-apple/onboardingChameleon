@@ -60,7 +60,6 @@ public class ElementImpl implements Element {
     /**
      * @see org.openqa.selenium.WebElement#click()
      */
-    @Override
     public void click() {
 	try {
 	    element.click();
@@ -69,11 +68,10 @@ public class ElementImpl implements Element {
 		    .interfaceLog("Clicked [ <font size = 2 color=\"red\"><b>@FindBy: "
 			    + getElementLocatorInfo() + " </font></b>]");
 	}
-	TestReporter.interfaceLog("Clicked [ <b>@FindBy: "
-		+ getElementLocatorInfo() + " </b>]");
+//	TestReporter.interfaceLog("Clicked [ <b>@FindBy: "
+//		+ getElementLocatorInfo() + " </b>]");
     }
 
-    @Override
     public void jsClick() {
 	getWrappedDriver().executeJavaScript(
 		"arguments[0].scrollIntoView(true);arguments[0].click();",
@@ -223,10 +221,7 @@ public class ElementImpl implements Element {
     public void sendKeys(CharSequence... keysToSend) {
 	if (keysToSend.toString() != "") {
 	    element.sendKeys(keysToSend);
-	    TestReporter.interfaceLog(" Send Keys [ <b>"
-		    + keysToSend.toString()
-		    + "</b> ] to Textbox [ <b>@FindBy: "
-		    + getElementLocatorInfo() + " </b> ]");
+	    TestReporter.interfaceLog(" Send Keys [ <b>"   + keysToSend[0].toString()  + "</b> ] to Textbox [ <b>@FindBy: "   + getElementLocatorInfo() + " </b> ]");
 	}
     }
 
@@ -240,7 +235,14 @@ public class ElementImpl implements Element {
 
     @Override
     public OrasiDriver getWrappedDriver() {
-    	if (driver == null)return getWrappedDriver();
+    	if (driver == null){
+    		Field privateStringField = null;
+    		 try {
+    	        	privateStringField = element.getClass().getDeclaredField("driver");
+    	        	privateStringField.setAccessible(true);
+    	        	 return (OrasiDriver)privateStringField.get(element);
+    		 }catch(  NoSuchFieldException | IllegalArgumentException | IllegalAccessException | SecurityException e ){ e.printStackTrace();}
+    	}
     	return driver;
     }
     /**
