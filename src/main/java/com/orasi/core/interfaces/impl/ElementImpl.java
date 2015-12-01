@@ -27,6 +27,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.orasi.core.Beta;
 import com.orasi.core.interfaces.Element;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
@@ -980,7 +981,8 @@ public class ElementImpl implements Element {
 	return (ArrayList)  driver.executeJavaScript("var s = []; var attrs = arguments[0].attributes; for (var l = 0; l < attrs.length; ++l) { var a = attrs[l]; s.push(a.name + ':' + a.value); } ; return s;",
 			getWrappedElement());
     }
-
+    
+    @Beta
 	@Override
 	public <X> X getScreenshotAs(OutputType<X> target) {
 		// TODO Auto-generated method stub

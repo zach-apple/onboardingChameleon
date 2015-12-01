@@ -24,6 +24,8 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.FindsByXPath;
 
+import com.orasi.core.Beta;
+
 /**
  * Mechanism used to locate elements within a document. In order to create your own locating
  * mechanisms, it is possible to subclass this class and override the protected methods as required,
@@ -146,6 +148,7 @@ public abstract class ByNG {
   * @param show The value of the "show" attribute to search for
   * @return a By which locates elements by the value of the "show" attribute.
   */
+ @Beta
 public static ByNG show(final String show) {
    if (show == null)
      throw new IllegalArgumentException(
@@ -429,7 +432,7 @@ public static ByNG show(final String show) {
       return name;
     }
   }
-  
+  @Beta
   public static class ByNGShow extends ByNG implements Serializable {
 
       private static final long serialVersionUID = 376317282960469555L;

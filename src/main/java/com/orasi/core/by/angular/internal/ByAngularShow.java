@@ -8,10 +8,12 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import com.orasi.core.Beta;
+
 /*
  * Original Code from https://github.com/paul-hammant/ngWebDriver
  */
-
+@Beta
 public class ByAngularShow extends ByAngular.BaseBy {
 
     public ByAngularShow(JavascriptExecutor jse, String show) {

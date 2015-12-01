@@ -14,6 +14,7 @@ import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.support.FindBy;
 
+import com.orasi.core.Beta;
 import com.orasi.core.interfaces.impl.ElementImpl;
 import com.orasi.core.interfaces.impl.internal.ImplementedBy;
 import com.orasi.utils.OrasiDriver;
@@ -405,6 +406,7 @@ boolean isDisplayed();
      */
 	public void scrollIntoView();
 	
+	@Beta
 	@Override
 	 public <X> X getScreenshotAs(OutputType<X> target);
 }

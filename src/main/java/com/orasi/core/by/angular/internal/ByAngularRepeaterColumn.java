@@ -5,12 +5,14 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import com.orasi.core.Beta;
+
 import java.util.List;
 
 /*
  * Original Code from https://github.com/paul-hammant/ngWebDriver
  */
-
+@Beta
 public class ByAngularRepeaterColumn extends ByAngular.BaseBy {
 
     private final String repeater;
