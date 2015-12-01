@@ -22,15 +22,15 @@ public class LinkImpl extends ElementImpl implements Link {
         super(element);
     }
     
+    public LinkImpl(WebElement element, OrasiDriver driver) {
+        super(element, driver);
+    }
+    
     @Override
-    public void jsClick(WebDriver driver) {
-	if(driver instanceof OrasiDriver){
-		driver = ((OrasiDriver) driver).getDriver();
-	}
-	
-	
+    public void jsClick() {
+
     	try{
-    	    ((JavascriptExecutor) driver).executeScript("if( document.createEvent ) {var click_ev = document.createEvent('MouseEvents'); click_ev.initEvent('click', true , true )"
+    	    driver.executeJavaScript("if( document.createEvent ) {var click_ev = document.createEvent('MouseEvents'); click_ev.initEvent('click', true , true )"
     	    	+ ";arguments[0].dispatchEvent(click_ev);} else { arguments[0].click();}", element);
     	}catch(RuntimeException rte){
     	    TestReporter.interfaceLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]", true);

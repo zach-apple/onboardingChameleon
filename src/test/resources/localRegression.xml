@@ -2,65 +2,71 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
 <suite name="Core-Regression" parallel="tests" thread-count="20">
-	<parameter name="browserUnderTest" value="html" />
+	<parameter name="browserUnderTest" value="firefox" />
 	<parameter name="environment" value="blah" />
 	<parameter name="runLocation" value="local" />
 	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="windows" />
- 	<test name="Element">
+    <test name="Element">
 		<classes>
-			<class name="com.orasi.core.TestElement" />
+			<class name="com.orasi.core.interfaces.TestElement" />
 		</classes>
 	</test>
 
 	<test name="Button">
 		<classes>
-			<class name="com.orasi.core.TestButton" />
+			<class name="com.orasi.core.interfaces.TestButton" />
 		</classes>
 	</test>
 
 	<test name="Checkbox">
 		<classes>
-			<class name="com.orasi.core.TestCheckbox" />
+			<class name="com.orasi.core.interfaces.TestCheckbox" />
 		</classes>
 	</test>
 
 	<test name="Label">
 		<classes>
-			<class name="com.orasi.core.TestLabel" />
+			<class name="com.orasi.core.interfaces.TestLabel" />
 		</classes>
 	</test>
 
 	<test name="Link">
 		<classes>
-			<class name="com.orasi.core.TestLink" />
+			<class name="com.orasi.core.interfaces.TestLink" />
 		</classes>
 	</test>
 
   	<test name="Listbox">
 		<classes>
-			<class name="com.orasi.core.TestListbox" />
+			<class name="com.orasi.core.interfaces.TestListbox" />
 		</classes>
 	</test>
 
 	<test name="RadioButton">
 		<classes>
-			<class name="com.orasi.core.TestRadioButton" />
+			<class name="com.orasi.core.interfaces.TestRadioButton" />
 		</classes>
 	</test>
 
 	<test name="Textbox">
 		<classes>
-			<class name="com.orasi.core.TestTextbox" />
+			<class name="com.orasi.core.interfaces.TestTextbox" />
 		</classes>
 	</test>
 
 	<test name="Webtable">
 		<classes>
-			<class name="com.orasi.core.TestWebtable" />
+			<class name="com.orasi.core.interfaces.TestWebtable" />
 		</classes>
 	</test>
 
+	<test name="ByAngular">
+		<classes>
+			<class name="com.orasi.core.angular.TestByAngular" />
+		</classes>
+	</test>
+	
 	<test name="Base64Encoder">
 		<classes>
 			<class name="com.orasi.utils.TestBase64Encoder" />
@@ -84,7 +90,7 @@
 			<class name="com.orasi.utils.TestFrameHandler" />
 		</classes>
 	</test>
-	
+
 	<test name="TestOrasiDriver">
 		<classes>
 			<class name="com.orasi.utils.TestOrasiDriver" />

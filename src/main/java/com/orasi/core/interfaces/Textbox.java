@@ -24,10 +24,9 @@ public interface Textbox extends Element {
     void set(String text);
     
     /**
-     * @param driver - Current active WebDriver object
      * @param text - The text to type into the field.
      */
-    void set(WebDriver driver, String text);
+    void scrollAndSet(String text);
     
     /**
      * @param text - The text to type into the field.

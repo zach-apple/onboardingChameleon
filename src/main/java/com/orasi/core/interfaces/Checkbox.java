@@ -19,9 +19,8 @@ public interface Checkbox extends Element {
     
     /**
      * @summary - Toggle the state of the checkbox using JavascriptExecutor
-     * @param driver - Current active WebDriver object
      */
-    void jsToggle(WebDriver driver);
+    void jsToggle();
 
     /**
      * @summary - Checks checkbox if unchecked.

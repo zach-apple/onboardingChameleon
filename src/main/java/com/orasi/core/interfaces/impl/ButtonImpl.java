@@ -22,6 +22,11 @@ public class ButtonImpl extends ElementImpl implements Button {
         super(element);
     }
     
+    public ButtonImpl(WebElement element, OrasiDriver driver) {
+        super(element, driver);
+    }
+    
+    
     @Override
     public void click() {
 
@@ -37,13 +42,10 @@ public class ButtonImpl extends ElementImpl implements Button {
     }
     
     @Override
-    public void jsClick(WebDriver driver){    	
-	if(driver instanceof OrasiDriver){
-		driver = ((OrasiDriver) driver).getDriver();
-	}
+    public void jsClick(){    	
     	
     	try{
-    	    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);    	    
+    	    getWrappedDriver().executeJavaScript("arguments[0].click();", element);    	    
      	}catch(RuntimeException rte){
      	    TestReporter.interfaceLog("Clicked Button [ <b>@FindBy: " + getElementLocatorInfo() +"</b>]", true);
      	    throw rte;

@@ -27,6 +27,8 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.gargoylesoftware.htmlunit.javascript.configuration.BrowserName;
+import com.orasi.core.by.angular.ByNG;
+import com.orasi.core.by.angular.WaitForAngularRequestsToFinish;
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Checkbox;
 import com.orasi.core.interfaces.Element;
@@ -142,7 +144,6 @@ public class TestOrasiDriver{
     
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="getPageTimeout")
     public void setPageTimeout(){
-	System.out.println(browserUnderTest);
 	if(this.browserUnderTest.toLowerCase().contains("safari") || driver.toString().contains("safari") ) throw new SkipException("Test not valid for SafariDriver");
 	driver.setPageTimeout(15);
 	Assert.assertTrue( driver.getPageTimeout() == 15);
@@ -242,8 +243,33 @@ public class TestOrasiDriver{
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findLink")
     public void executeAsyncJavaScript(){
 	if(browserUnderTest.toLowerCase().equals("html") || browserUnderTest.isEmpty() ) throw new SkipException("Test not valid for HTMLUnitDriver");
-	driver.get("https://builtwith.angularjs.org/");
+	driver.get("http://cafetownsend-angular-rails.herokuapp.com/login");
 	driver.executeAsyncJavaScript("var callback = arguments[arguments.length - 1];angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
+    }
+    
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="executeAsyncJavaScript")
+    public void findNGModel(){
+    	Assert.assertNotNull(driver.findTextbox(ByNG.model("user.name")));
+    	driver.findTextbox(ByNG.model("user.name")).set("Luke");
+    	driver.findTextbox(ByNG.model("user.password")).set("Skywalker");    	
+    }
+    
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findNGModel")
+    public void findNGButtonText(){
+    	Assert.assertNotNull(driver.findButton(ByNG.buttonText("Login")));
+    	driver.findButton(ByNG.buttonText("Login")).click();    	
+    	new PageLoaded(driver).isAngularComplete();
+    }
+
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findNGButtonText")
+    public void findNGController(){
+    	Assert.assertNotNull(driver.findElement(ByNG.controller("HeaderController")));  	
+    }
+    
+    
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findNGController")
+    public void findNGRepeater(){
+    	Assert.assertNotNull(driver.findElement(ByNG.repeater("employee in employees")));  	
     }
     
 }

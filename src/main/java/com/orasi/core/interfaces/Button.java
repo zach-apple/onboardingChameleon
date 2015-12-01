@@ -23,6 +23,6 @@ public interface Button extends Element {
      * @param driver - Current active WebDriver object
      */
 	@Override
-	public void jsClick(WebDriver driver);
+	public void jsClick();
 
 }

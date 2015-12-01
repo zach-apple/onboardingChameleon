@@ -23,6 +23,10 @@ public class TextboxImpl extends ElementImpl implements Textbox {
     public TextboxImpl(WebElement element) {
     	super(element);
     }
+    
+    public TextboxImpl(WebElement element, OrasiDriver driver) {
+        super(element, driver);
+    }
 
     /**
      * @summary - Gets the value of an input field. 
@@ -52,9 +56,8 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 			try {
 				getWrappedElement().clear();
 				getWrappedElement().sendKeys(text);
-				TestReporter.log(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
-			} catch (RuntimeException rte) {
-				TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]", true);
+				} catch (RuntimeException rte) {
+				TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b>  ]", true);
 				throw rte;
 			}
 		} else {
@@ -71,15 +74,10 @@ public class TextboxImpl extends ElementImpl implements Textbox {
      * @param text - text to enter into the field
      */
     @Override
-    public void set(WebDriver driver, String text) {
-	if(driver instanceof OrasiDriver){
-		driver = ((OrasiDriver) driver).getDriver();
-	}
-	
-	
+    public void scrollAndSet(String text) {
         if (!text.isEmpty()){
             try{
-        	 ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);arguments[0].click();", getWrappedElement());
+        	    driver.executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();", getWrappedElement());
             	getWrappedElement().clear();
             	getWrappedElement().sendKeys(text); 
             	TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
