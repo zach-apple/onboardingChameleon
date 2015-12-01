@@ -7,7 +7,7 @@
 	<parameter name="runLocation" value="local" />
 	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="windows" />
- 	<test name="Element">
+    <test name="Element">
 		<classes>
 			<class name="com.orasi.core.TestElement" />
 		</classes>
@@ -84,7 +84,7 @@
 			<class name="com.orasi.utils.TestFrameHandler" />
 		</classes>
 	</test>
-	
+
 	<test name="TestOrasiDriver">
 		<classes>
 			<class name="com.orasi.utils.TestOrasiDriver" />
