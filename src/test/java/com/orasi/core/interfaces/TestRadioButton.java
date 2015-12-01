@@ -1,4 +1,4 @@
-package com.orasi.core;
+package com.orasi.core.interfaces;
 
 import java.util.List;
 
@@ -46,12 +46,12 @@ public class TestRadioButton extends TestEnvironment{
 	Assert.assertTrue(radiogroup.getNumberOfOptions() == 2 );
     }
     
-    @Test(groups ={"regression", "interfaces", "radiogroup"})
+   /* @Test(groups ={"regression", "interfaces", "radiogroup"})
     public void getNumberOfRadioButtons(){
 	RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
 	Assert.assertTrue(radiogroup.getNumberOfRadioButtons() == 2 );
     }
-
+*/
     @Test(groups ={"regression", "interfaces", "radiogroup"})
     public void getSelectedIndex(){
 	RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));

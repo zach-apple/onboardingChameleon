@@ -8,7 +8,7 @@
 	<parameter name="operatingSystem" value="windows" />
  	<test name="TestEnvironment">
 		<classes>
-			<class name="com.orasi.utils.TestOrasiDriver" />
+			<class name="com.orasi.core.angular.TestByAngularModel" />
 		</classes>
 	</test> 
 </suite> <!-- Suite -->

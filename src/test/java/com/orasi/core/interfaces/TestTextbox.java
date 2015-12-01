@@ -1,4 +1,4 @@
-package com.orasi.core;
+package com.orasi.core.interfaces;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
@@ -49,13 +49,13 @@ public class TestTextbox extends TestEnvironment{
     }
     
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="set")
-    public void setScrollIntoView(){
+    public void jsSet(){
 	Textbox textbox= getDriver().findTextbox(By.id("text1"));
-	textbox.set(getDriver(), "setScrollIntoView");
+	textbox.scrollAndSet( "setScrollIntoView");
 	Assert.assertTrue(textbox.getAttribute("value").equals("setScrollIntoView"));
     }
     
-    @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="setScrollIntoView")
+    @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="jsSet")
     public void clear(){
 	Textbox textbox= getDriver().findTextbox(By.id("text1"));
 	textbox.clear();

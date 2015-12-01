@@ -6,11 +6,13 @@ import java.util.concurrent.TimeUnit;
 import javax.naming.directory.NoSuchAttributeException;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Webtable;
+import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.TestEnvironment;
 
 /**
@@ -24,23 +26,27 @@ public class WebtableImpl extends ElementImpl implements Webtable {
      *            to wrap up
      */
     public WebtableImpl(WebElement element) {
-	super(element);
+    	super(element);
+    }
+    
+    public WebtableImpl(WebElement element, OrasiDriver driver) {
+        super(element, driver);
     }
 
-    private List<WebElement> getRowCollection(TestEnvironment te){
-	te.getDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+    private List<WebElement> getRowCollection(){
+	getWrappedDriver().setElementTimeout(1, TimeUnit.SECONDS);
 	List<WebElement> rowCollection = this.element.findElements(By.xpath("tr|tbody/tr"));
-	te.getDriver().manage().timeouts().implicitlyWait(te.getDriver().getElementTimeout(),TimeUnit.SECONDS);
+	getWrappedDriver().setElementTimeout(getWrappedDriver().getElementTimeout(),TimeUnit.SECONDS);
 	return rowCollection;
 	
     }
     
-    private List<WebElement> getColumnCollection(TestEnvironment te, WebElement row){
+    private List<WebElement> getColumnCollection( WebElement row){
 	String xpath = null;
 	
-	te.getDriver().manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
+	getWrappedDriver().setElementTimeout(1, TimeUnit.MILLISECONDS);
 	List<WebElement> columnCollection = row.findElements(By.xpath("th|td"));
-	te.getDriver().manage().timeouts().implicitlyWait(te.getDriver().getElementTimeout(),TimeUnit.SECONDS);
+	getWrappedDriver().setElementTimeout(getWrappedDriver().getElementTimeout(),TimeUnit.SECONDS);
 
 	return columnCollection ;
     }
@@ -53,8 +59,8 @@ public class WebtableImpl extends ElementImpl implements Webtable {
      * @return int - number of rows found for a given table
      */
     @Override
-    public int getRowCount(TestEnvironment te) {	
-	return getRowCollection(te).size();
+    public int getRowCount() {	
+	return getRowCollection().size();
     }
 
     /**
@@ -70,8 +76,8 @@ public class WebtableImpl extends ElementImpl implements Webtable {
      * @throws NoSuchAttributeException
      */
     @Override
-    public int getColumnCount(TestEnvironment te, int row) {	
-	return getColumnCollection(te, getRowCollection(te).get(row)).size();	
+    public int getColumnCount( int row) {	
+	return getColumnCollection(getRowCollection().get(row)).size();	
     }
 
     /**
@@ -91,10 +97,10 @@ public class WebtableImpl extends ElementImpl implements Webtable {
      * @throws NoSuchAttributeException
      */
     @Override
-    public Element getCell(TestEnvironment te, int row, int column) {
-	te.getDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+    public Element getCell( int row, int column) {
+	getWrappedDriver().setElementTimeout(1, TimeUnit.SECONDS);
 	Element cell = new ElementImpl(getWrappedElement().findElement(By.xpath("tbody/tr[" + row + "]/td[" + column + "]|tbody/tr["+ row + "]/th[" + column + "]|tr[" + row + "]/td["+ column + "]|tr[" + row + "]/th[" + column + "]")));
-	te.getDriver().manage().timeouts().implicitlyWait(te.getDriver().getElementTimeout(), TimeUnit.SECONDS);
+	getWrappedDriver().setElementTimeout(getWrappedDriver().getElementTimeout(), TimeUnit.SECONDS);
 	return cell;
     }
 
@@ -115,8 +121,8 @@ public class WebtableImpl extends ElementImpl implements Webtable {
      * @throws NoSuchAttributeException
      */
     @Override
-    public void clickCell(TestEnvironment te, int row, int column) {
-	getCell(te, row, column).click();	
+    public void clickCell( int row, int column) {
+	getCell(row, column).click();	
     }
 
     /**
@@ -136,8 +142,8 @@ public class WebtableImpl extends ElementImpl implements Webtable {
      * @throws NoSuchAttributeException
      */
     @Override
-    public String getCellData(TestEnvironment te, int row, int column) {
-	return getCell(te, row, column).getText();
+    public String getCellData( int row, int column) {
+	return getCell(row, column).getText();
     }
 
     /**
@@ -153,8 +159,8 @@ public class WebtableImpl extends ElementImpl implements Webtable {
      * @return int - row number containing the desired text
      */
     @Override
-    public int getRowWithCellText(TestEnvironment te, String text) {
-	return getRowWithCellText(te, text, -1);
+    public int getRowWithCellText( String text) {
+	return getRowWithCellText(text, -1);
     }
 
     /**
@@ -172,8 +178,8 @@ public class WebtableImpl extends ElementImpl implements Webtable {
      * @return int - row number containing the desired text
      */
     @Override
-    public int getRowWithCellText(TestEnvironment te, String text, int columnPosition) {
-	return getRowWithCellText(te, text, columnPosition, 1);
+    public int getRowWithCellText( String text, int columnPosition) {
+	return getRowWithCellText(text, columnPosition, 1);
     }
 
     /**
@@ -193,8 +199,8 @@ public class WebtableImpl extends ElementImpl implements Webtable {
      * @return int - row number containing the desired text
      */
     @Override
-    public int getRowWithCellText(TestEnvironment te, String text, int columnPosition, int startRow) {
-	return getRowWithCellText(te, text, columnPosition, startRow, true);
+    public int getRowWithCellText( String text, int columnPosition, int startRow) {
+	return getRowWithCellText(text, columnPosition, startRow, true);
     }
     /**
      * @summary - Attempts to locate the number of child elements with the HTML
@@ -215,13 +221,13 @@ public class WebtableImpl extends ElementImpl implements Webtable {
      * @return int - row number containing the desired text
      */
     @Override
-    public int getRowWithCellText(TestEnvironment te, String text, int columnPosition, int startRow, boolean exact) {   
+    public int getRowWithCellText( String text, int columnPosition, int startRow, boolean exact) {   
 
 	int currentRow = 1,rowFound = 0;
 	String xpath = null;
 	Boolean found = false;
 
-	List<WebElement> rowCollection = getRowCollection(te);
+	List<WebElement> rowCollection = getRowCollection();
 	for (WebElement rowElement : rowCollection) {
 	    if (startRow > currentRow) {
 		currentRow++;
@@ -229,7 +235,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 		if (currentRow <= rowCollection.size()) {
 	
 		    if (columnPosition == -1) {			
-			for (WebElement cell : getColumnCollection(te, rowElement)) {
+			for (WebElement cell : getColumnCollection(rowElement)) {
 			    if (exact){
 				if (cell.getText().trim().equals(text)) return currentRow;
 			    }else{
@@ -267,8 +273,8 @@ public class WebtableImpl extends ElementImpl implements Webtable {
      * @return int - column number containing the desired text
      */
     @Override
-    public int getColumnWithCellText(TestEnvironment te, String text) {
-	return getColumnWithCellText(te, text, 1);
+    public int getColumnWithCellText( String text) {
+	return getColumnWithCellText(text, 1);
     }
 
     /**
@@ -286,9 +292,9 @@ public class WebtableImpl extends ElementImpl implements Webtable {
      * @return int - column number containing the desired text
      */
     @Override
-    public int getColumnWithCellText(TestEnvironment te, String text, int rowPosition) {
+    public int getColumnWithCellText( String text, int rowPosition) {
 	int currentColumn = 1;
-	List<WebElement> columns = getColumnCollection(te, getRowCollection(te).get(rowPosition-1));
+	List<WebElement> columns = getColumnCollection(getRowCollection().get(rowPosition-1));
 	for (WebElement cell : columns) {	  
 	    if (currentColumn <= columns.size()) {
 		if (cell.getText().trim().equals(text)) return currentColumn;
