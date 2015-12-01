@@ -27,8 +27,8 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.gargoylesoftware.htmlunit.javascript.configuration.BrowserName;
-import com.orasi.core.angular.WaitForAngularRequestsToFinish;
 import com.orasi.core.by.angular.ByNG;
+import com.orasi.core.by.angular.WaitForAngularRequestsToFinish;
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Checkbox;
 import com.orasi.core.interfaces.Element;
@@ -258,20 +258,16 @@ public class TestOrasiDriver{
     public void findNGButtonText(){
     	Assert.assertNotNull(driver.findButton(ByNG.buttonText("Login")));
     	driver.findButton(ByNG.buttonText("Login")).click();    	
+    	new PageLoaded(driver).isAngularComplete();
     }
-    
-    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findNGModel")
-    public void waitForAngularRequestsToFinish(){
-    	WaitForAngularRequestsToFinish.waitForAngularRequestsToFinish(driver);
-    }
-    
-    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="waitForAngularRequestsToFinish")
+
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findNGButtonText")
     public void findNGController(){
     	Assert.assertNotNull(driver.findElement(ByNG.controller("HeaderController")));  	
     }
     
     
-    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="waitForAngularRequestsToFinish")
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findNGController")
     public void findNGRepeater(){
     	Assert.assertNotNull(driver.findElement(ByNG.repeater("employee in employees")));  	
     }
