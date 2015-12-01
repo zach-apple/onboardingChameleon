@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
-import com.orasi.core.angular.ByAngular;
+import com.orasi.core.by.angular.internal.ByAngular;
 @SuppressWarnings("unused")
 public class AngularElementLocator implements ElementLocator {
 	  private final WebDriver driver;

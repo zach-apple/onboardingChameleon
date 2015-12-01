@@ -1,4 +1,4 @@
-package com.orasi.core.angular;
+package com.orasi.core.by.angular;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
