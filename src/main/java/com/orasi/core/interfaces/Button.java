@@ -1,5 +1,7 @@
 package com.orasi.core.interfaces;
 
+import org.openqa.selenium.WebDriver;
+
 import com.orasi.core.interfaces.impl.ButtonImpl;
 import com.orasi.core.interfaces.impl.internal.ImplementedBy;
 import com.orasi.utils.OrasiDriver;
@@ -21,6 +23,6 @@ public interface Button extends Element {
      * @param driver - Current active WebDriver object
      */
 	@Override
-	public void jsClick(OrasiDriver driver);
+	public void jsClick();
 
 }

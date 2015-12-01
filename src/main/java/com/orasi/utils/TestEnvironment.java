@@ -7,16 +7,18 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
 
+import org.json.simple.JSONArray;
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.ITestContext;
+import org.testng.ITestResult;
 
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.saucelabs.common.SauceOnDemandAuthentication;
+import com.saucelabs.saucerest.SauceREST;
 
 /**
  * 
@@ -47,6 +49,9 @@ public class TestEnvironment {
      * WebDriver Fields
      */
     protected OrasiDriver driver;
+    protected ThreadLocal<OrasiDriver> threadedDriver = new ThreadLocal<OrasiDriver>();
+    private boolean setThreadDriver = false;
+    protected ThreadLocal<String> sessionId = new ThreadLocal<String>();
     //private WebDriver initDriver; 
     /*
 				 * Define a collection of webdrivers and test
@@ -56,7 +61,7 @@ public class TestEnvironment {
 				 * be tied to a specific test based on test
 				 * name.
 				 */
-    protected Map<String, OrasiDriver> drivers = new HashMap<String, OrasiDriver>();
+    //protected Map<String, OrasiDriver> drivers = new HashMap<String, OrasiDriver>();
     /*
      * URL and Credential Repository Field
      */
@@ -79,6 +84,7 @@ public class TestEnvironment {
      * file, use the no-arg
      * {@link com.saucelabs.common.SauceOnDemandAuthentication} constructor.
      */
+    
     protected SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(
 	    Base64Coder.decodeString(appURLRepository
 		    .getString("SAUCELABS_USERNAME")),
@@ -87,28 +93,12 @@ public class TestEnvironment {
     
     
     protected String sauceLabsURL = "http://" + authentication.getUsername() + ":" + authentication.getAccessKey() + "@ondemand.saucelabs.com:80/wd/hub";
-	    
-    /**
-     * ThreadLocal variable which contains the {@link WebDriver} instance which
-     * is used to perform browser interactions with.
-     */
-    protected ThreadLocal<WebDriver> webDriver = new ThreadLocal<WebDriver>();
-    /**
-     * ThreadLocal variable which contains the Sauce Job Id.
-     */
-    protected ThreadLocal<String> sessionId = new ThreadLocal<String>();
-
+	
     /*
      * Constructors for TestEnvironment class
      */
-    public TestEnvironment() {
-	StackTraceElement[] stElements = Thread.currentThread().getStackTrace();
-	String rawFQN = stElements[2].toString().split("\\(")[0];
-        String className = rawFQN.substring(0, rawFQN.lastIndexOf('.'));
-	className = className.substring(className.lastIndexOf('.') + 1,className.length() );
-	
-    };
 
+    public TestEnvironment(){};
     public TestEnvironment(String application, String browserUnderTest,
 	    String browserVersion, String operatingSystem,
 	    String setRunLocation, String environment) {
@@ -282,13 +272,26 @@ public class TestEnvironment {
      * Getter and setter for the actual WebDriver
      */
     private void setDriver(OrasiDriver driverSession) {
-	driver = driverSession;
+	if(isThreadedDriver()) threadedDriver.set(driverSession);
+	else this.driver = driverSession;
     }
 
     public OrasiDriver getDriver() {
-	return driver;
+	if(isThreadedDriver()) return threadedDriver.get();
+	else return this.driver;
     }
 
+    /**
+     * User controls to see the driver to be threaded or not. Only use when using data provider threading
+     */
+    private boolean isThreadedDriver(){
+	return setThreadDriver;
+    }
+    
+    public void setThreadDriver(boolean setThreadDriver) {
+	this.setThreadDriver = setThreadDriver;
+    }
+    
     /*
      * Method to retrive the URL and Credential Repository
      */
@@ -307,7 +310,7 @@ public class TestEnvironment {
      */
    // @Step("Launch \"{0}\"")
     private void launchApplication(String URL) {
-	driver.get(URL);
+	getDriver().get(URL);
     }
 
     private void launchApplication() {
@@ -324,10 +327,7 @@ public class TestEnvironment {
     /**
      * @return the {@link WebDriver} for the current thread
      */
-    private WebDriver getWebDriver() {
-	// System.out.println("WebDriver" + webDriver.get());
-	return webDriver.get();
-    }
+
 
     /**
      * Initializes the webdriver, sets up the run location, driver type,
@@ -340,19 +340,61 @@ public class TestEnvironment {
 	// Uncomment the following line to have TestReporter outputs output to
 	// the console
 	TestReporter.setPrintToConsole(true);
+	setTestName(testName);
 	driverSetup();
 	if (getPageURL().isEmpty()) launchApplication();
 	else launchApplication(getPageURL());
-	drivers.put(testName, driver);
-	setDriver(drivers.get(testName));
     }
 
-    protected void endTest(String testName){
-	WebDriver driver = drivers.get(testName);
-	if (driver != null && driver.getWindowHandles().size() > 0) {
-		driver.quit();
+    protected void endTest(String testName){ 	
+ 	if (getDriver() != null && getDriver().getWindowHandles().size() > 0) {
+ 	    getDriver().quit();
+ 	}
+     }
+     
+    /*
+     * Use ITestResult from @AfterMethod to determine run status before closing test if reporting to sauce labs
+     */
+    protected void endTest(String testName, ITestResult testResults){
+	if(runLocation.equalsIgnoreCase("remote") | runLocation.equalsIgnoreCase("sauce")){
+	    endSauceTest(testResults.getStatus());
 	}
+	
+ 	endTest(testName);
     }
+    
+    /*
+     * Use ITestContext from @AfterTest or @AfterSuite to determine run status before closing test if reporting to sauce labs
+     */
+    protected void endTest(String testName, ITestContext testResults){
+ 	if(runLocation.equalsIgnoreCase("remote") | runLocation.equalsIgnoreCase("sauce")){
+ 	    if(testResults.getFailedTests().size() == 0) {
+ 		endSauceTest(ITestResult.SUCCESS);
+ 	    }else{
+ 		endSauceTest(ITestResult.FAILURE);
+ 	    }
+ 	}
+ 	endTest(testName);
+     }
+     
+    
+    /*
+     * Report end of run status to Sauce LAbs
+     */  
+    private void endSauceTest(int result)  {
+	Map<String, Object> updates = new HashMap<String, Object>();
+	updates.put("name", getTestName());	
+	
+	if (result == ITestResult.FAILURE) {
+		updates.put("passed", false);
+	} else {
+		updates.put("passed", true);
+	}
+	
+	SauceREST client = new SauceREST(authentication.getUsername() ,authentication.getAccessKey() );
+	client.updateJobInfo(driver.getSessionId().toString(), updates);			
+}
+
     
     /**
      * Sets up the driver type, location, browser under test, os
@@ -364,8 +406,7 @@ public class TestEnvironment {
      * @throws IOException
      * @throws InterruptedException
      */
-    private void driverSetup()  {
-	driver = null;
+    private void driverSetup()  {	
 	DesiredCapabilities caps = null;
 	// If the location is local, grab the drivers for each browser type from
 	// within the project
@@ -496,7 +537,7 @@ public class TestEnvironment {
 		break;
 	    }
 
-	    driver = new OrasiDriver(caps);
+	    setDriver(new OrasiDriver(caps));
 	    // Code for running on the selenium grid
 	} else if ( getRunLocation().equalsIgnoreCase("grid")) {
 	    caps.setCapability(CapabilityType.BROWSER_NAME,
@@ -514,7 +555,7 @@ public class TestEnvironment {
 	    }
 	    
 	    try {
-		driver = new OrasiDriver(caps, new URL(getRemoteURL()));
+		setDriver(new OrasiDriver(caps, new URL(getRemoteURL())));
 	    } catch (MalformedURLException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -545,7 +586,8 @@ public class TestEnvironment {
 		e.printStackTrace();
 	    }
 
-	    driver = new OrasiDriver(caps, sauceURL);
+	    caps.setCapability("name", getTestName());
+	    setDriver(new OrasiDriver(caps, sauceURL));
 
 		
 	}else {
@@ -553,15 +595,15 @@ public class TestEnvironment {
 		    "Parameter for run [Location] was not set to 'Local', 'Grid', 'Sauce', or 'Remote'");
 	}
  
-	driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
-	driver.setPageTimeout(Constants.PAGE_TIMEOUT);
-	driver.setScriptTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+	getDriver().setElementTimeout(Constants.ELEMENT_TIMEOUT);
+	getDriver().setPageTimeout(Constants.PAGE_TIMEOUT);
+	getDriver().setScriptTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
 	//setDefaultTestTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
 	if (!getBrowserUnderTest().toLowerCase().contains("edge")){
-	    driver.manage().deleteAllCookies();
-	    driver.manage().window().maximize();
+	    getDriver().manage().deleteAllCookies();
+	    getDriver().manage().window().maximize();
 	}
-	}
+    }
 
     // ************************************
     // ************************************
@@ -580,7 +622,7 @@ public class TestEnvironment {
      *            /A
      */
     public boolean pageLoaded() {
-	return new PageLoaded().isDomComplete(driver);
+	return new PageLoaded().isDomComplete(getDriver());
     }
 
     /**
@@ -595,7 +637,7 @@ public class TestEnvironment {
      */
     public boolean pageLoaded(Class<?> clazz, Element element) {
 
-	return new PageLoaded().isElementLoaded(clazz, driver, element);
+	return new PageLoaded().isElementLoaded(clazz, getDriver(), element);
     }
 
     /**
@@ -610,7 +652,7 @@ public class TestEnvironment {
      */
     public void initializePage(Class<?> clazz) {
 	try {
-	    ElementFactory.initElements(driver, clazz.getConstructor(TestEnvironment.class));
+	    ElementFactory.initElements(getDriver(), clazz.getConstructor(TestEnvironment.class));
 	} catch (NoSuchMethodException | SecurityException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
@@ -633,4 +675,6 @@ public class TestEnvironment {
 	    default: return Platform.ANY;
 	}
     }
+    
+
 }

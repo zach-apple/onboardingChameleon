@@ -1,9 +1,11 @@
-package com.orasi.core;
+package com.orasi.core.interfaces;
 
 import java.util.List;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.ITestContext;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
@@ -32,8 +34,8 @@ public class TestRadioButton extends TestEnvironment{
 
     
     @AfterTest(groups ={"regression", "interfaces", "radiogroup", "dev"})
-    public void close(){
-	endTest("TestRadiogroup");
+    public void close(ITestContext testResults){
+	endTest("TestAlert", testResults);
     }
 
       
@@ -44,12 +46,12 @@ public class TestRadioButton extends TestEnvironment{
 	Assert.assertTrue(radiogroup.getNumberOfOptions() == 2 );
     }
     
-    @Test(groups ={"regression", "interfaces", "radiogroup"})
+   /* @Test(groups ={"regression", "interfaces", "radiogroup"})
     public void getNumberOfRadioButtons(){
 	RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
 	Assert.assertTrue(radiogroup.getNumberOfRadioButtons() == 2 );
     }
-
+*/
     @Test(groups ={"regression", "interfaces", "radiogroup"})
     public void getSelectedIndex(){
 	RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));

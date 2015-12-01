@@ -24,10 +24,9 @@ public interface Textbox extends Element {
     void set(String text);
     
     /**
-     * @param driver - Current active WebDriver object
      * @param text - The text to type into the field.
      */
-    void set(OrasiDriver driver, String text);
+    void scrollAndSet(String text);
     
     /**
      * @param text - The text to type into the field.
@@ -44,22 +43,11 @@ public interface Textbox extends Element {
      */
 	void safeSetSecure(String text);
 	
-    /**
-     * @param text - The text to type into the field.
-     */
-	@Deprecated
-	void safeSetValidate(OrasiDriver driver, String text);	
-	
+ 
     /** 
      * @see org.openqa.selenium.WebElement#getText()
      */
     @Override
     public String getText();
-    
-    /**
-     * @param text - The text to type into the field.
-     * @param driver - Current active WebDriver object
-     */
-    @Deprecated
-    void setValidate(OrasiDriver driver, String text);
+ 
 }

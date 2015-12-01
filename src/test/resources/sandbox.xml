@@ -8,7 +8,11 @@
 	<parameter name="operatingSystem" value="windows" />
  	<test name="TestEnvironment">
 		<classes>
+<<<<<<< HEAD
 			<class name="com.orasi.utils.TestFrameHandler" />
+=======
+			<class name="com.orasi.core.angular.TestByAngularModel" />
+>>>>>>> stage
 		</classes>
 	</test> 
 </suite> <!-- Suite -->

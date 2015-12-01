@@ -24,23 +24,22 @@ public class FrameHandler {
 	    return frameName;
 	}
 	
-	/*public static String getCurrentFrameName(OrasiDriver driver){
-	    String frameName =  driver.executeJavaScript("return self.name").toString();
-	    if (frameName.isEmpty()) frameName = null;
-	    return frameName;
-	}
-	*/
+
 	public static void moveToDefaultContext(WebDriver driver){
 	    driver.switchTo().defaultContent();
 	}
+
+	public static void moveToParentFrame(WebDriver driver){
+	    driver.switchTo().parentFrame();
+	}
 	
 	public static void moveToSiblingFrame(WebDriver driver, String frameName){
-	    driver.switchTo().parentFrame();
+	    moveToParentFrame(driver);
 	    switchToFrame(driver, frameName);
 	}
 	
 	public static void moveToSiblingFrame(WebDriver driver, By byFrameLocator){
-	    driver.switchTo().parentFrame();
+	    moveToParentFrame(driver);
 	    switchToFrame(driver, byFrameLocator);
 	}
 	
@@ -51,7 +50,19 @@ public class FrameHandler {
 	public static void moveToChildFrame(WebDriver driver, By byFrameLocator){
 	    switchToFrame(driver, byFrameLocator);
 	}
-	
+
+	public static void moveToChildFrame(WebDriver driver, String[] frameName){
+	    for (int x = 0 ; x < frameName.length ; x++) {
+		moveToChildFrame(driver, frameName[x]);
+	    }
+	}
+
+	public static void moveToChildFrame(WebDriver driver, By[] frameName){
+	    for (int x = 0 ; x < frameName.length ; x++) {
+		moveToChildFrame(driver, frameName[x]);
+	    }
+	}
+
 	private static void switchToFrame(WebDriver driver, String frameName){
 	    WebDriverWait wait = new WebDriverWait(driver, TestEnvironment.getDefaultTestTimeout());
 	    wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameName));	

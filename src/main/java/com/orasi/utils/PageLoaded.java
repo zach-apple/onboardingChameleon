@@ -29,8 +29,8 @@ public class PageLoaded {
 		this.timeout = Constants.ELEMENT_TIMEOUT;
 	}
 	
-	public PageLoaded(TestEnvironment te){
-	    	this.driver = te.getDriver();
+	public PageLoaded(OrasiDriver driver){
+	    	this.driver = driver;
 		this.timeout = driver.getElementTimeout();
 	}
 	

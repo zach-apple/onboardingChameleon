@@ -24,6 +24,13 @@ import org.openqa.selenium.safari.SafariDriver;
 import com.gargoylesoftware.htmlunit.WebWindow;
 import com.gargoylesoftware.htmlunit.javascript.background.DefaultJavaScriptExecutor;
 import com.gargoylesoftware.htmlunit.javascript.background.JavaScriptExecutor;
+import com.orasi.core.by.angular.ByNG;
+import com.orasi.core.by.angular.ByNG.ByNGButton;
+import com.orasi.core.by.angular.ByNG.ByNGController;
+import com.orasi.core.by.angular.ByNG.ByNGModel;
+import com.orasi.core.by.angular.ByNG.ByNGRepeater;
+import com.orasi.core.by.angular.ByNG.ByNGShow;
+import com.orasi.core.by.angular.internal.ByAngular;
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Checkbox;
 import com.orasi.core.interfaces.Element;
@@ -100,8 +107,12 @@ public class OrasiDriver implements WebDriver,   JavaScriptExecutor, TakesScreen
     }
     
     public void setPageTimeout(int timeout, TimeUnit timeUnit){
-	this.currentPageTimeout = timeout;
-	driver.manage().timeouts().pageLoadTimeout(timeout, timeUnit);
+	if (driver instanceof SafariDriver || driver.toString().contains("safari")){
+	    System.out.println("SafariDriver does not support pageLoadTimeout");
+	}else{
+	    this.currentPageTimeout = timeout;
+	    driver.manage().timeouts().pageLoadTimeout(timeout, timeUnit);
+	}
     }
     
     public int getPageTimeout(){
@@ -131,112 +142,201 @@ public class OrasiDriver implements WebDriver,   JavaScriptExecutor, TakesScreen
 
     @Override
     public List<WebElement> findElements(By by) {
-	try{
-	    return findWebElements(by);
-	}catch(NoSuchElementException nse){	  
-	    TestReporter.logFailure("No such Element with context " + by.toString());
-	    throw new NoSuchElementException(nse.getMessage());
-	}
+		try{
+		    return findWebElements(by);
+		}catch(NoSuchElementException nse){	  
+		    TestReporter.logFailure("No such Element with context " + by.toString());
+		    throw new NoSuchElementException(nse.getMessage());
+		}
     }
     
     public List<WebElement> findWebElements(By by){
-	try{
-	    return driver.findElements(by);
-	}catch(NoSuchElementException nse){	  
-	    TestReporter.logFailure("No such WebElement with context: " + by.toString());
-	    throw new NoSuchElementException(nse.getMessage());
-	}
+		try{
+		    return driver.findElements(by);
+		}catch(NoSuchElementException nse){	  
+		    TestReporter.logFailure("No such WebElement with context: " + by.toString());
+		    throw new NoSuchElementException(nse.getMessage());
+		}
     }
     
     @Override
     public Element findElement(By by) {
-	try{
-	    return new ElementImpl(driver.findElement(by));
-	}catch(NoSuchElementException nse){	  
-	    TestReporter.logFailure("No such Element with context: " + by.toString());
-	    throw new NoSuchElementException(nse.getMessage());
-	}
+		try{
+		    return new ElementImpl(driver.findElement(by), this);
+		}catch(NoSuchElementException nse){	  
+		    TestReporter.logFailure("No such Element with context: " + by.toString());
+		    throw new NoSuchElementException(nse.getMessage());
+		}
+    }
+    
+	public Element findElement(ByNG by) {
+    	try{
+    	    return new ElementImpl(driver.findElement(getByNGType(by)), this);
+    	}catch(NoSuchElementException nse){	  
+    	    TestReporter.logFailure("No such Element with context: " + by.toString());
+    	    throw new NoSuchElementException(nse.getMessage());
+    	}
     }
 
     public Textbox findTextbox(By by) {
-	try{
-	    return new TextboxImpl(driver.findElement(by));
-	}catch(NoSuchElementException nse){	  
-	    TestReporter.logFailure("No such Textbox with context: " + by.toString());
-	    throw new NoSuchElementException(nse.getMessage());
-	}
+		try{
+		    return new TextboxImpl(driver.findElement(by), this);
+		}catch(NoSuchElementException nse){	  
+		    TestReporter.logFailure("No such Textbox with context: " + by.toString());
+		    throw new NoSuchElementException(nse.getMessage());
+		}
+    }
+
+    public Textbox findTextbox(ByNG by) {
+		try{
+		    return new TextboxImpl(driver.findElement(getByNGType(by)), this);
+		}catch(NoSuchElementException nse){	  
+		    TestReporter.logFailure("No such Textbox with context: " + by.toString());
+		    throw new NoSuchElementException(nse.getMessage());
+		}
     }
     
     public Button findButton(By by) {
-	try{
-	    return new ButtonImpl(driver.findElement(by));
-	}catch(NoSuchElementException nse){	  
-	    TestReporter.logFailure("No such Button with context: " + by.toString());
-	    throw new NoSuchElementException(nse.getMessage());
-	}
+		try{
+		    return new ButtonImpl(driver.findElement(by), this);
+		}catch(NoSuchElementException nse){	  
+		    TestReporter.logFailure("No such Button with context: " + by.toString());
+		    throw new NoSuchElementException(nse.getMessage());
+		}
+    }
+
+	public Button findButton(ByNG by) {
+    	try{
+    	    return new ButtonImpl(driver.findElement(getByNGType(by)), this);
+    	}catch(NoSuchElementException nse){	  
+    	    TestReporter.logFailure("No such Button with context: " + by.toString());
+    	    throw new NoSuchElementException(nse.getMessage());
+    	}
     }
     
     public Checkbox findCheckbox(By by) {
-	try{
-	    return new CheckboxImpl(driver.findElement(by));
-	}catch(NoSuchElementException nse){	  
-	    TestReporter.logFailure("No such Checkbox with context: " + by.toString());
-	    throw new NoSuchElementException(nse.getMessage());
-	}
+		try{
+		    return new CheckboxImpl(driver.findElement(by), this);
+		}catch(NoSuchElementException nse){	  
+		    TestReporter.logFailure("No such Checkbox with context: " + by.toString());
+		    throw new NoSuchElementException(nse.getMessage());
+		}
+    }
+    
+    public Checkbox findCheckbox(ByNG by) {
+		try{
+		    return new CheckboxImpl(driver.findElement(getByNGType(by)), this);
+		}catch(NoSuchElementException nse){	  
+		    TestReporter.logFailure("No such Checkbox with context: " + by.toString());
+		    throw new NoSuchElementException(nse.getMessage());
+		}
     }
     
     public Label findLabel(By by) {
-	try{
-	    return new LabelImpl(driver.findElement(by));
-	}catch(NoSuchElementException nse){	  
-	    TestReporter.logFailure("No such Label with context: " + by.toString());
-	    throw new NoSuchElementException(nse.getMessage());
-	}
+		try{
+		    return new LabelImpl(driver.findElement(by), this);
+		}catch(NoSuchElementException nse){	  
+		    TestReporter.logFailure("No such Label with context: " + by.toString());
+		    throw new NoSuchElementException(nse.getMessage());
+		}
+    }
+    
+    public Label findLabel(ByNG by) {
+		try{
+		    return new LabelImpl(driver.findElement(getByNGType(by)), this);
+		}catch(NoSuchElementException nse){	  
+		    TestReporter.logFailure("No such Label with context: " + by.toString());
+		    throw new NoSuchElementException(nse.getMessage());
+		}
     }
     
     public Link findLink(By by) {
-	try{
-	    return new LinkImpl(driver.findElement(by));
-	}catch(NoSuchElementException nse){	  
-	    TestReporter.logFailure("No such Link with context: " + by.toString());
-	    throw new NoSuchElementException(nse.getMessage());
-	}
-    }
+		try{
+		    return new LinkImpl(driver.findElement(by), this);
+		}catch(NoSuchElementException nse){	  
+		    TestReporter.logFailure("No such Link with context: " + by.toString());
+		    throw new NoSuchElementException(nse.getMessage());
+		}
+    }    
+    
+    public Link findLink(ByNG by) {
+		try{
+		    return new LinkImpl(driver.findElement(getByNGType(by)), this);
+		}catch(NoSuchElementException nse){	  
+		    TestReporter.logFailure("No such Link with context: " + by.toString());
+		    throw new NoSuchElementException(nse.getMessage());
+		}
+    }    
     
     public Listbox findListbox(By by) {
-	try{	
-	    return new ListboxImpl(driver.findElement(by));
-	}catch(NoSuchElementException nse){	  
-	    TestReporter.logFailure("No such Listbox with context: " + by.toString());
-	    throw new NoSuchElementException(nse.getMessage());
-	}
+		try{	
+		    return new ListboxImpl(driver.findElement(by), this);
+		}catch(NoSuchElementException nse){	  
+		    TestReporter.logFailure("No such Listbox with context: " + by.toString());
+		    throw new NoSuchElementException(nse.getMessage());
+		}
+    }    
+    
+    public Listbox findListbox(ByNG by) {
+		try{	
+		    return new ListboxImpl(driver.findElement(getByNGType(by)), this);
+		}catch(NoSuchElementException nse){	  
+		    TestReporter.logFailure("No such Listbox with context: " + by.toString());
+		    throw new NoSuchElementException(nse.getMessage());
+		}
     }
     
     public RadioGroup findRadioGroup(By by) {
-	try{
-	    return new RadioGroupImpl(driver.findElement(by));
-	}catch(NoSuchElementException nse){	  
-	    TestReporter.logFailure("No such RadioGroup with context: " + by.toString());
-	    throw new NoSuchElementException(nse.getMessage());
-	}
+		try{
+		    return new RadioGroupImpl(driver.findElement(by), this);
+		}catch(NoSuchElementException nse){	  
+		    TestReporter.logFailure("No such RadioGroup with context: " + by.toString());
+		    throw new NoSuchElementException(nse.getMessage());
+		}
+    }
+    
+    public RadioGroup findRadioGroup(ByNG by) {
+		try{
+		    return new RadioGroupImpl(driver.findElement(getByNGType(by)), this);
+		}catch(NoSuchElementException nse){	  
+		    TestReporter.logFailure("No such RadioGroup with context: " + by.toString());
+		    throw new NoSuchElementException(nse.getMessage());
+		}
     }
     
     public Webtable findWebtable(By by) {
-	try{
-	    return new WebtableImpl(driver.findElement(by));
-	}catch(NoSuchElementException nse){	  
-	    TestReporter.logFailure("No such Webtable with context: " + by.toString());
-	    throw new NoSuchElementException(nse.getMessage());
-	}
-    }
-    public WebElement findWebElement(By by) {
-	try{return driver.findElement(by);
-	}catch(NoSuchElementException nse){	  
-	    TestReporter.logFailure("No such WebElement with context: " + by.toString());
-	    throw new NoSuchElementException(nse.getMessage());
-	}
+		try{
+		    return new WebtableImpl(driver.findElement(by), this);
+		}catch(NoSuchElementException nse){	  
+		    TestReporter.logFailure("No such Webtable with context: " + by.toString());
+		    throw new NoSuchElementException(nse.getMessage());
+		}
     }
     
+    public Webtable findWebtable(ByNG by) {
+		try{
+		    return new WebtableImpl(driver.findElement(getByNGType(by)), this);
+		}catch(NoSuchElementException nse){	  
+		    TestReporter.logFailure("No such Webtable with context: " + by.toString());
+		    throw new NoSuchElementException(nse.getMessage());
+		}
+    }
+    
+    public WebElement findWebElement(By by) {
+		try{return driver.findElement(by);
+		}catch(NoSuchElementException nse){	  
+		    TestReporter.logFailure("No such WebElement with context: " + by.toString());
+		    throw new NoSuchElementException(nse.getMessage());
+		}
+    }
+    
+    public WebElement findWebElement(ByNG by) {
+		try{return driver.findElement(getByNGType(by));
+		}catch(NoSuchElementException nse){	  
+		    TestReporter.logFailure("No such WebElement with context: " + by.toString());
+		    throw new NoSuchElementException(nse.getMessage());
+		}
+    }
     @Override
     public String getPageSource() {
 	return driver.getPageSource();
@@ -368,11 +468,44 @@ public class OrasiDriver implements WebDriver,   JavaScriptExecutor, TakesScreen
 	}
     }
 
-
+    public Capabilities getDriverCapability(){
+    	return new Capabilities(); 
+    }
+    
     @Override
     public <X> X getScreenshotAs(OutputType<X> target)
 	    throws WebDriverException {
 	return ((TakesScreenshot) driver).getScreenshotAs(target);
     }
+    
+    class Capabilities{
+    	
+    	public String browserName(){
+    		return ((RemoteWebDriver) driver).getCapabilities().getBrowserName();
+    	}
+    	
+    	public String browserVersion(){
+    		return ((RemoteWebDriver) driver).getCapabilities().getVersion();
+    	}
+    	
+    	public String platformOS(){    		
+    		return ((RemoteWebDriver) driver).getCapabilities().getPlatform().name() + " " +
+    		       ((RemoteWebDriver) driver).getCapabilities().getPlatform().getMajorVersion() + "." +
+    		       ((RemoteWebDriver) driver).getCapabilities().getPlatform().getMinorVersion(); 
+    	}
+    	
+    }
 
+    
+    @SuppressWarnings("static-access")
+	private ByAngular.BaseBy getByNGType(ByNG by){
+    	String text = by.toString().replace("By.buttonText:", "").trim();
+    	if(by instanceof ByNGButton) return new ByAngular(getDriver()).buttonText(text);
+    	if(by instanceof ByNGController) return new ByAngular(getDriver()).controller(text);
+    	if(by instanceof ByNGModel) return new ByAngular(getDriver()).model(text);
+    	if(by instanceof ByNGRepeater) return new ByAngular(getDriver()).repeater(text);
+    	if(by instanceof ByNGShow) return new ByAngular(getDriver()).show(text);
+    	return null;
+    }
+    
 }

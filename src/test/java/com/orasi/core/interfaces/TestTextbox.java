@@ -1,7 +1,9 @@
-package com.orasi.core;
+package com.orasi.core.interfaces;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.ITestContext;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
@@ -29,8 +31,8 @@ public class TestTextbox extends TestEnvironment{
     }
     
     @AfterTest(groups ={"regression", "interfaces", "textbox", "dev"})
-    public void close(){
-	endTest("TestTextbox");
+    public void close(ITestContext testResults){
+	endTest("TestAlert", testResults);
     }
 
     @Test(groups ={"regression", "interfaces", "textbox"})
@@ -47,13 +49,13 @@ public class TestTextbox extends TestEnvironment{
     }
     
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="set")
-    public void setScrollIntoView(){
+    public void jsSet(){
 	Textbox textbox= getDriver().findTextbox(By.id("text1"));
-	textbox.set(getDriver(), "setScrollIntoView");
+	textbox.scrollAndSet( "setScrollIntoView");
 	Assert.assertTrue(textbox.getAttribute("value").equals("setScrollIntoView"));
     }
     
-    @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="setScrollIntoView")
+    @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="jsSet")
     public void clear(){
 	Textbox textbox= getDriver().findTextbox(By.id("text1"));
 	textbox.clear();
@@ -86,19 +88,4 @@ public class TestTextbox extends TestEnvironment{
 	textbox.clear();
     }
   
-    @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="safeSetSecure")
-    public void setValidate(){
-	Textbox textbox= getDriver().findTextbox(By.id("text1"));
-	textbox.setValidate(getDriver(), "setValidate");
-	Assert.assertTrue(textbox.getAttribute("value").equals("setValidate"));
-	textbox.clear();
-    }
-    
-    @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="setValidate")
-    public void safeSetValidate(){
-	Textbox textbox= getDriver().findTextbox(By.id("text1"));
-	textbox.safeSetValidate(getDriver(), "safeSetValidate");
-	Assert.assertTrue(textbox.getAttribute("value").contains("safeSetValidate"));
-	textbox.clear();
-    }
 }

@@ -1,8 +1,10 @@
-package com.orasi.core;
+package com.orasi.core.interfaces;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
+import org.testng.ITestContext;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
@@ -32,8 +34,8 @@ public class TestCheckbox extends TestEnvironment{
     }
     
     @AfterTest(groups ={"regression", "interfaces", "checkbox", "dev"})
-    public void close(){
-	endTest("TestCheckbox");
+    public void close(ITestContext testResults){
+	endTest("TestAlert", testResults);
     }
 
       
@@ -44,12 +46,6 @@ public class TestCheckbox extends TestEnvironment{
 	Assert.assertTrue(checkbox.isChecked());
     }
     
-    @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="toggle")
-    public void checkValidate(){
-	Checkbox checkbox= getDriver().findCheckbox(By.name("checkbox"));
-	checkbox.check();
-	Assert.assertTrue(checkbox.checkValidate(getDriver()));
-    }
       
     @Test(groups ={"regression", "interfaces", "checkbox"})
     public void isChecked(){
@@ -57,11 +53,11 @@ public class TestCheckbox extends TestEnvironment{
 	Assert.assertFalse(checkbox.isChecked());
     }
     
-    @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="uncheck")
+    @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="jsToggle")
     public void toggle(){
 	Checkbox checkbox= getDriver().findCheckbox(By.name("checkbox"));
 	checkbox.toggle();
-	Assert.assertTrue(checkbox.isChecked());
+	Assert.assertFalse(checkbox.isChecked());
     }
     
     @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="check")
@@ -70,18 +66,11 @@ public class TestCheckbox extends TestEnvironment{
 	checkbox.uncheck();
 	Assert.assertFalse(checkbox.isChecked());
     }
-    
-    @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="checkValidate")
-    public void uncheckValidate(){
-	Checkbox checkbox= getDriver().findCheckbox(By.name("checkbox"));
-	checkbox.uncheck();
-	Assert.assertTrue(checkbox.uncheckValidate(getDriver()));
-    }
 
-    @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="uncheckValidate")
+    @Test(groups ={"regression", "interfaces", "checkbox"}, dependsOnMethods="uncheck")
     public void jsToggle(){
 	Checkbox checkbox= getDriver().findCheckbox(By.name("checkbox"));
-	checkbox.jsToggle(getDriver());
+	checkbox.jsToggle();
 	Assert.assertTrue(checkbox.isChecked());
     }
 }

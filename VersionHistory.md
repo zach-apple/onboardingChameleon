@@ -219,3 +219,40 @@ driver.setElementTimeout(currentTimeout);
 
 * **Issues fixed**
 	* [Issue #16- XMLTools.validateNodeContainsValueByXPath - Node loop exiting before last node can be retrieved](https://github.com/Orasi/Selenium-Java-Core/issues/16) 
+
+##Version 1.0.6 - 11/30/2015
+* [**com.orasi.utils.OrasiDriver**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)
+  * New methods
+    * getDriverCapability().browserName() - returns browser name from WebDriver Capabilities
+    * getDriverCapability().browserVersion() - returns browser version from WebDriver Capabilities
+    * getDriverCapability().platformOS() - returns OS name, major and minor version from WebDriver Capabilities
+	
+  * Enhancements
+   * Updated internal core code to associate driver to elements when the OrasiDriver.find methods or @FindBy annotations are used. This allows each element to have access to the OrasiDriver to do javascript execution or set timeouts. This removes the need to sent the driver in as a parameter for methods such as jsClick where Javascript is called to do a click. All methods have been updated as such.
+   * Added ability to reach the Angular locators using the ByNG class
+     * driver.findTextbox(ByNG.model("user.name")).set("blah");
+     * driver.findButton(ByNG.buttonText("Login")).click();
+     * driver.findElement(ByNG.controller("HeaderController")).syncPresent();
+     * driver.findElement(ByNG.repeater("Employee in Employees)).syncVisible();
+
+* [**com.orasi.utils.TestEnvironment**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)
+  * New methods
+    * setThreadDriver() - force the driver to be multithreaded for multiple data-provider data iterations if true
+
+* [**com.orasi.utils.FrameHandler**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)
+  * New methods
+    * getCurrentFrameName(WebDriver driver) - return the name of the current frame
+	* moveToSiblingFrame(WebDriver driver, String frameName) - switch to a frame in the current domain of frames using frame name.
+	* moveToSiblingFrame(WebDriver driver, By byFrameLocator) - switch to a frame in the current domain of frames By locator.
+	* moveToChildFrame(WebDriver driver, String frameName) - switch to a frame in the next domain of frames using frame name.
+	* moveToChildFrame(WebDriver driver, By byFrameLocator) - switch to a frame in the next domain of frames By locator.
+	* moveToChildFrame(WebDriver driver, String[] frameName) - Drill down multiple domains of frames using each frame name in array.
+	* moveToChildFrame(WebDriver driver, By[] byFrameLocator) - Drill down multiple domains of frames using each By locator in array.
+	* moveToDefaultContext(WebDriver driver) - Created to complete frame navigations
+	* moveToParentFrame(WebDriver driver) - Created to complete frame navigations
+
+* [**com.orasi.core.Beta**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/core)	
+ * New annotation to mark methods, classes and features. Indicates that an item is in active development. This item should not be used as it may not be working, working as intended or removed at a future date 
+
+* **Angular support**
+ * Organized classes to fall under a single package. Updated classes with issues and allowed extentions to OrasiDriver 

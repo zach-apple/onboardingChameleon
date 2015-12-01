@@ -9,10 +9,12 @@ import org.apache.commons.lang.time.StopWatch;
 import org.openqa.selenium.By;
 import org.openqa.selenium.By.ByClassName;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -25,6 +27,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.orasi.core.Beta;
 import com.orasi.core.interfaces.Element;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
@@ -37,6 +40,7 @@ import com.orasi.utils.TestReporter;
 public class ElementImpl implements Element {
 
     protected WebElement element;
+    protected OrasiDriver driver;
     private java.util.Date date = new java.util.Date();
     private java.util.Date dateAfter = new java.util.Date();
     private StopWatch stopwatch = new StopWatch();
@@ -44,8 +48,14 @@ public class ElementImpl implements Element {
     private long syncLoopTimeout = 5000; // Milliseconds
 
     public ElementImpl(final WebElement element) {
-	this.element = element;
+    	this.element = element;
     }
+    
+    public ElementImpl(final WebElement element, final OrasiDriver driver) {
+    	this.element = element;
+    	this.driver = driver;
+    }
+
 
     /**
      * @see org.openqa.selenium.WebElement#click()
@@ -64,8 +74,8 @@ public class ElementImpl implements Element {
     }
 
     @Override
-    public void jsClick(OrasiDriver driver) {
-	driver.executeJavaScript(
+    public void jsClick() {
+	getWrappedDriver().executeJavaScript(
 		"arguments[0].scrollIntoView(true);arguments[0].click();",
 		element);
 	TestReporter.interfaceLog("Clicked [ <b>@FindBy: "
@@ -73,13 +83,13 @@ public class ElementImpl implements Element {
     }
 
     @Override
-    public void focus(WebDriver driver) {
-	new Actions(driver).moveToElement(element).click().perform();
+    public void focus() {
+	new Actions(getWrappedDriver()).moveToElement(element).click().perform();
     }
 
     @Override
-    public void focusClick(WebDriver driver) {
-	new Actions(driver).moveToElement(element).click().perform();
+    public void focusClick() {
+	new Actions(getWrappedDriver()).moveToElement(element).click().perform();
 	TestReporter.interfaceLog("Focus Clicked [ <b>@FindBy: "
 		+ getElementLocatorInfo() + " </b>]");
     }
@@ -228,6 +238,11 @@ public class ElementImpl implements Element {
 	return element;
     }
 
+    @Override
+    public OrasiDriver getWrappedDriver() {
+    	if (driver == null)return getWrappedDriver();
+    	return driver;
+    }
     /**
      * @see org.openqa.selenium.internal.Locatable#getCoordinates();
      */
@@ -250,8 +265,8 @@ public class ElementImpl implements Element {
      * @author Justin
      */
     @Override
-    public boolean syncPresent(WebDriver driver) {
-	return syncPresent(driver, Constants.ELEMENT_TIMEOUT);
+    public boolean syncPresent() {
+	return syncPresent(getWrappedDriver().getElementTimeout());
     }
 
     /**
@@ -262,8 +277,8 @@ public class ElementImpl implements Element {
      * 
      * @author Justin
      */
-    public boolean syncPresent(WebDriver driver, int timeout) {
-	return syncPresent(driver, timeout, true);
+    public boolean syncPresent(int timeout) {
+	return syncPresent(timeout, true);
     }
 
     /**
@@ -275,15 +290,16 @@ public class ElementImpl implements Element {
      * @author Justin
      */
     @Override
-    public boolean syncPresent(WebDriver driver, int timeout, boolean returnError) {
+    public boolean syncPresent(int timeout, boolean returnError) {
 	boolean found = false;
-	
+	final OrasiDriver driver = getWrappedDriver();
 	By locator = getElementLocator();
 	TestReporter.interfaceLog("<i> Syncing to element [ <b>@FindBy: "
 		+ getElementLocatorInfo()
 		+ "</b> ] to be <b>PRESENT</b> in DOM within [ " + timeout
 		+ " ] seconds.</i>");
-	driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
+	int currentTimeout = driver.getElementTimeout();
+	driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
 	
 	stopwatch.start();
 	do {
@@ -296,8 +312,8 @@ public class ElementImpl implements Element {
 	stopwatch.stop();
 	stopwatch.reset();
 	
-	driver.manage().timeouts()
-		.implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
+	driver.setElementTimeout(currentTimeout);
+	
 	if (!found && returnError) {
 	    dateAfter = new java.util.Date();
 	    TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
@@ -324,8 +340,8 @@ public class ElementImpl implements Element {
      * @author Justin
      */
     @Override
-    public boolean syncVisible(WebDriver driver) {
-	return syncVisible(driver, Constants.ELEMENT_TIMEOUT);
+    public boolean syncVisible() {
+	return syncVisible(getWrappedDriver().getElementTimeout());
     }
 
     /**
@@ -336,8 +352,8 @@ public class ElementImpl implements Element {
      * @author Justin
      * 
      */
-    public boolean syncVisible(WebDriver driver, int timeout) {
-	return syncVisible(driver, timeout, true);
+    public boolean syncVisible(int timeout) {
+	return syncVisible(timeout, true);
     }
 
     /**
@@ -350,17 +366,16 @@ public class ElementImpl implements Element {
      *
      */
     @Override
-    public boolean syncVisible(WebDriver driver, int timeout,
-	    boolean returnError) {
+    public boolean syncVisible(int timeout,  boolean returnError) {
+    final OrasiDriver driver = getWrappedDriver();
 	boolean found = false;
-	double loopTimeout = 0;
 
-	loopTimeout = timeout * 4;
 	TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 		+ getElementLocatorInfo()
 		+ "</b> ] to be <b>VISIBLE<b> within [ " + timeout
 		+ " ] seconds.</i>");
-	driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
+	int currentTimeout = driver.getElementTimeout();
+	driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
 	
 	stopwatch.start();
 	do {
@@ -373,8 +388,7 @@ public class ElementImpl implements Element {
 	stopwatch.stop();
 	stopwatch.reset();
 	
-	driver.manage().timeouts()
-		.implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
+	driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
 	if (!found && returnError) {
 	    dateAfter = new java.util.Date();
 	    TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
@@ -400,8 +414,8 @@ public class ElementImpl implements Element {
      * @author Justin
      * */
     @Override
-    public boolean syncHidden(WebDriver driver) {
-	return syncHidden(driver, Constants.ELEMENT_TIMEOUT);
+    public boolean syncHidden() {
+	return syncHidden( getWrappedDriver().getElementTimeout());
     }
 
     /**
@@ -412,8 +426,8 @@ public class ElementImpl implements Element {
      * 
      * @author Justin
      */
-    public boolean syncHidden(WebDriver driver, int timeout) {
-	return syncHidden(driver, timeout, true);
+    public boolean syncHidden( int timeout) {
+	return syncHidden(timeout, true);
     }
 
     /**
@@ -425,13 +439,15 @@ public class ElementImpl implements Element {
      * @author Justin
      */
     @Override
-    public boolean syncHidden(WebDriver driver, int timeout, boolean returnError) {
+    public boolean syncHidden(int timeout, boolean returnError) {
 	boolean found = false;
+	final OrasiDriver driver = getWrappedDriver();
 	TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 		+ getElementLocatorInfo()
 		+ "</b> ] to be <b>HIDDEN</b> within [ <b>" + timeout
 		+ "</b> ] seconds.</i>");
-	driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
+	int currentTimeout = driver.getElementTimeout();
+	driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
 	stopwatch.start();
 	do {
 	    if (!webElementVisible(driver, element)) {
@@ -442,8 +458,7 @@ public class ElementImpl implements Element {
 	stopwatch.stop();
 	stopwatch.reset();
 	
-	driver.manage().timeouts()
-		.implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
+	driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
 	if (!found && returnError) {
 	    dateAfter = new java.util.Date();
 	    TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
@@ -470,8 +485,8 @@ public class ElementImpl implements Element {
      * @author Justin
      */
     @Override
-    public boolean syncEnabled(WebDriver driver) {
-	return syncEnabled(driver, Constants.ELEMENT_TIMEOUT);
+    public boolean syncEnabled() {
+	return syncEnabled(getWrappedDriver().getElementTimeout());
     }
 
     /**
@@ -483,8 +498,8 @@ public class ElementImpl implements Element {
      * @author Justin
      * 
      */
-    public boolean syncEnabled(WebDriver driver, int timeout) {
-	return syncEnabled(driver, timeout, true);
+    public boolean syncEnabled(int timeout) {
+	return syncEnabled(timeout, true);
     }
 
     /**
@@ -497,14 +512,16 @@ public class ElementImpl implements Element {
      *
      */
     @Override
-    public boolean syncEnabled(WebDriver driver, int timeout,
-	    boolean returnError) {
+    public boolean syncEnabled(int timeout, boolean returnError) {
 	boolean found = false;
+	final OrasiDriver driver = getWrappedDriver();
+	
 	TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 		+ getElementLocatorInfo()
 		+ "</b> ] to be <b>ENABLED</b> within [ <b>" + timeout
 		+ "</b> ] seconds.</i>");
-	driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
+	int currentTimeout = driver.getElementTimeout();
+	driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
 
 	stopwatch.start();
 	do {
@@ -517,8 +534,7 @@ public class ElementImpl implements Element {
 	stopwatch.stop();
 	stopwatch.reset();
 	
-	driver.manage().timeouts()
-		.implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
+	driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
 	if (!found && returnError) {
 	    dateAfter = new java.util.Date();
 	    TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
@@ -545,8 +561,8 @@ public class ElementImpl implements Element {
      * @author Justin
      */
     @Override
-    public boolean syncDisabled(WebDriver driver) {
-	return syncDisabled(driver, Constants.ELEMENT_TIMEOUT);
+    public boolean syncDisabled() {
+	return syncDisabled(getWrappedDriver().getElementTimeout());
     }
 
     /**
@@ -559,8 +575,8 @@ public class ElementImpl implements Element {
      * @author Justin
      * 
      */
-    public boolean syncDisabled(WebDriver driver, int timeout) {
-	return syncDisabled(driver, timeout, true);
+    public boolean syncDisabled( int timeout) {
+	return syncDisabled(timeout, true);
     }
 
     /**
@@ -573,13 +589,15 @@ public class ElementImpl implements Element {
      *
      */
     @Override
-    public boolean syncDisabled(WebDriver driver, int timeout, boolean returnError) {
+    public boolean syncDisabled(int timeout, boolean returnError) {
 	boolean found = false;
+	final OrasiDriver driver = getWrappedDriver();
 	TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 		+ getElementLocatorInfo()
 		+ "</b> ] to be <b>DISABLED</b> within [ <b>" + timeout
 		+ "</b> ] seconds.</i>");
-	driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
+	int currentTimeout = driver.getElementTimeout();
+	driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
 	
 	stopwatch.start();
 	do {
@@ -591,8 +609,7 @@ public class ElementImpl implements Element {
 	stopwatch.stop();
 	stopwatch.reset();
 	
-	driver.manage().timeouts()
-		.implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
+	driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
 	if (!found && returnError) {
 	    dateAfter = new java.util.Date();
 	    TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
@@ -619,8 +636,8 @@ public class ElementImpl implements Element {
      * @author Justin
      */
     @Override
-    public boolean syncTextInElement(WebDriver driver, String text) {
-	return syncTextInElement(driver, text, Constants.ELEMENT_TIMEOUT);
+    public boolean syncTextInElement(String text) {
+	return syncTextInElement( text, getWrappedDriver().getElementTimeout());
     }
 
     /**
@@ -633,8 +650,8 @@ public class ElementImpl implements Element {
      * @author Justin
      * 
      */
-    public boolean syncTextInElement(WebDriver driver, String text, int timeout) {
-	return syncTextInElement(driver, text, Constants.ELEMENT_TIMEOUT, true);
+    public boolean syncTextInElement( String text, int timeout) {
+	return syncTextInElement(text, Constants.ELEMENT_TIMEOUT, true);
     }
 
     /**
@@ -647,14 +664,15 @@ public class ElementImpl implements Element {
      *
      */
     @Override
-    public boolean syncTextInElement(WebDriver driver, String text,
-	    int timeout, boolean returnError) {
+    public boolean syncTextInElement( String text, int timeout, boolean returnError) {
+    final OrasiDriver driver = getWrappedDriver();
 	boolean found = false;
 	TestReporter.interfaceLog("<i>Syncing to text [<b>" + text
 		+ "</b> ] in element [<b>@FindBy: " + getElementLocatorInfo()
 		+ "</b> ] to be displayed within [ <b>" + timeout
 		+ "</b> ] seconds.</i>");
-	driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
+	int currentTimeout = driver.getElementTimeout();
+	driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
 	stopwatch.start();
 	do {
 	    if (webElementTextPresent(driver, element, text)) {
@@ -666,8 +684,7 @@ public class ElementImpl implements Element {
 	stopwatch.stop();
 	stopwatch.reset();
 	
-	driver.manage().timeouts()
-		.implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
+	driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
 	if (!found && returnError) {
 	    dateAfter = new java.util.Date();
 	    TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
@@ -947,33 +964,40 @@ public class ElementImpl implements Element {
     }
 
     @Override
-    public void highlight(OrasiDriver driver) {
-	// OrasiDriver wDriver = driver;
-	driver.executeJavaScript("arguments[0].style.border='3px solid red'",
-		this);
+    public void highlight() {
+	
+	driver.executeJavaScript("arguments[0].style.border='3px solid red'",this);
     }
 
     @Override
-    public void scrollIntoView(OrasiDriver driver) {
+    public void scrollIntoView() {
+	
 	driver.executeJavaScript("arguments[0].scrollIntoView(true);", element);
     }
 
     @Override
-    public ArrayList getAllAttributes(OrasiDriver driver) {
-	return (ArrayList) driver
-		.executeJavaScript(
-			"var s = []; var attrs = arguments[0].attributes; for (var l = 0; l < attrs.length; ++l) { var a = attrs[l]; s.push(a.name + ':' + a.value); } ; return s;",
+    public ArrayList getAllAttributes() {
+	
+	return (ArrayList)  driver.executeJavaScript("var s = []; var attrs = arguments[0].attributes; for (var l = 0; l < attrs.length; ++l) { var a = attrs[l]; s.push(a.name + ':' + a.value); } ; return s;",
 			getWrappedElement());
     }
-
-    @Override
+    
+    @Beta
+	@Override
+	public <X> X getScreenshotAs(OutputType<X> target) {
+		// TODO Auto-generated method stub
+		return ((TakesScreenshot)driver.getDriver()).getScreenshotAs(target);
+	}
+	
+ /*   @Override
     public <X> X getScreenshotAs(OutputType<X> target)
 	    throws WebDriverException {
+    	getScreenshotAs(target);
 	// String base64 =
 	// execute(DriverCommand.SCREENSHOT).getValue().toString();
 	// ... and convert it.
 
 	System.out.println("getScreenShotAs is unimplemented");
 	return null; // target.convertFromBase64Png(base64);
-    }
+    }*/
 }
