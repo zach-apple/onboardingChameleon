@@ -62,14 +62,14 @@ public class ElementImpl implements Element {
      */
     public void click() {
 	try {
-	    element.click();
+	    getWrappedElement().click();
 	} catch (RuntimeException rte) {
 	    TestReporter
 		    .interfaceLog("Clicked [ <font size = 2 color=\"red\"><b>@FindBy: "
 			    + getElementLocatorInfo() + " </font></b>]");
 	}
-//	TestReporter.interfaceLog("Clicked [ <b>@FindBy: "
-//		+ getElementLocatorInfo() + " </b>]");
+	TestReporter.interfaceLog("Clicked [ <b>@FindBy: "
+		+ getElementLocatorInfo() + " </b>]");
     }
 
     public void jsClick() {
@@ -210,7 +210,7 @@ public class ElementImpl implements Element {
      */
     @Override
     public void clear() {
-	element.clear();
+    	getWrappedElement().clear();
 	TestReporter.interfaceLog(" Clear text from Element [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
     }
 
@@ -220,7 +220,7 @@ public class ElementImpl implements Element {
     @Override
     public void sendKeys(CharSequence... keysToSend) {
 	if (keysToSend.toString() != "") {
-	    element.sendKeys(keysToSend);
+		getWrappedElement().sendKeys(keysToSend);
 	    TestReporter.interfaceLog(" Send Keys [ <b>"   + keysToSend[0].toString()  + "</b> ] to Textbox [ <b>@FindBy: "   + getElementLocatorInfo() + " </b> ]");
 	}
     }

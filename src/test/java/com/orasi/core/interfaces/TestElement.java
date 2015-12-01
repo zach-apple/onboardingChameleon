@@ -266,7 +266,7 @@ public class TestElement extends TestEnvironment{
     
     @Test(groups ={"regression", "interfaces", "element"}, dependsOnMethods="elementWired")
     public void syncVisibleBasic(){
-	Element element= getDriver().findElement(By.id("text1"));
+	Textbox element= getDriver().findTextbox(By.id("text1"));
 	Assert.assertTrue(element.syncVisible());
     }
     
