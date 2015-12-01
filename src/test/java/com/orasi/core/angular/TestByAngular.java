@@ -30,7 +30,7 @@ public class TestByAngular extends TestEnvironment{
 		setBrowserUnderTest(browserUnderTest);
 		setBrowserVersion(browserVersion);
 		setOperatingSystem(operatingSystem);
-		if(browserUnderTest.toLowerCase().equals("html") || browserUnderTest.isEmpty() ) throw new SkipException("Test not valid for HTMLUnitDriver");
+		if(getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty() ) throw new SkipException("Test not valid for HTMLUnitDriver");
 		
 		setRunLocation(runLocation);
 		setPageURL("http://cafetownsend-angular-rails.herokuapp.com/login");	
