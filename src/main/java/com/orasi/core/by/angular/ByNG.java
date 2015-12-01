@@ -394,7 +394,7 @@ public static ByNG show(final String show) {
 
 	    @Override
 	    public String toString() {
-	      return "By.buttonText: " + name;
+	      return name;
 	    }
 	  }
   
@@ -426,7 +426,7 @@ public static ByNG show(final String show) {
 
     @Override
     public String toString() {
-      return "By.model: " + name;
+      return name;
     }
   }
   
@@ -458,7 +458,7 @@ public static ByNG show(final String show) {
 
       @Override
       public String toString() {
-        return "By.show: " + name;
+        return name;
       }
     }
   
@@ -490,7 +490,7 @@ public static ByNG show(final String show) {
 
 	    @Override
 	    public String toString() {
-	      return "By.controller: " + name;
+	      return name;
 	    }
 	  }
   
@@ -521,7 +521,7 @@ public static ByNG show(final String show) {
 
     @Override
     public String toString() {
-      return "By.repeater: " + name;
+      return name;
     }
   }
   /*

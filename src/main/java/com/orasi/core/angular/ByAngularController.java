@@ -28,7 +28,7 @@ public class ByAngularController  extends ByAngular.BaseBy {
                  "var rows = [];\n" +
                  "var prefixes = ['ng-', 'ng_', 'data-ng-', 'x-ng-'];\n" +
                  "for (var p = 0; p < prefixes.length; ++p) {\n" +
-                 "  var attr = prefixes[p] + 'model';\n" +
+                 "  var attr = prefixes[p] + 'controller';\n" +
                  "  var repeatElems = using.querySelectorAll('[' + attr + ']');\n" +
                  "  attr = attr.replace(/\\\\/g, '');\n" +
                  "  for (var i = 0; i < repeatElems.length; ++i) {\n" +

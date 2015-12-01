@@ -1,7 +1,9 @@
 package com.orasi.core.angular;
 
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 
+import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.TestEnvironment;
 
 /*
@@ -15,13 +17,13 @@ public class WaitForAngularRequestsToFinish extends TestEnvironment {
 		// TODO Auto-generated constructor stub
 	}
 
-	public static void waitForAngularRequestsToFinish(JavascriptExecutor driver) {
-    	//if(!WebDriverSetup.browser.equalsIgnoreCase("IE")){   		    	
-    		driver.executeAsyncScript("var callback = arguments[arguments.length - 1];" +
+	public static void waitForAngularRequestsToFinish(WebDriver driver) {
+		if(driver instanceof OrasiDriver) {
+			driver = ((OrasiDriver)driver).getDriver();
+		} 		    	
+    	
+		((JavascriptExecutor) driver).executeAsyncScript("var callback = arguments[arguments.length - 1];" +
     				"angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
-    	//}else{
-    	//	driver.executeAsyncScript("var callback = arguments[arguments.length - 1];" +
-    	//			"angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
-    	//}
+   
     }
 }
