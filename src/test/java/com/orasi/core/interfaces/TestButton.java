@@ -1,4 +1,4 @@
-package com.orasi.core;
+package com.orasi.core.interfaces;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;

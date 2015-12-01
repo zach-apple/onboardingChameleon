@@ -1,4 +1,4 @@
-package com.orasi.core;
+package com.orasi.core.interfaces;
 
 import java.util.List;
 
