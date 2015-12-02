@@ -41,7 +41,7 @@ The capabilities of the Sauce Labs VM farm are harnessed to test the OS-Browser 
 
 ## Reporting
 
-* <strong>Test NG:</strong> Contains results for individual tests using the TestNG-extended Orasi reporter.
+* <strong>TestReporter:</strong> Contains results for individual tests using the TestNG-extended reporting.
 
 * <strong>Jenkins CI:</strong> Contains results for individual tests using the TestNG-extended Orasi reporter.  Also, keeps a build history to show the relative stability of past builds.
 
@@ -51,12 +51,12 @@ The capabilities of the Sauce Labs VM farm are harnessed to test the OS-Browser 
 
 ## [TestEnvironment.java](https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/utils/TestEnvironment.java)
 
-This is a crucial class for this framework. This class is designed to be extended by page classes and implemented by test classes. It houses test environment data and remote WebDrivers as well as page class methods used to sync page behavior.  The need for this arose due to the parallel behavior that indicated that WebDriver instances were crossing threads and testing on the wrong os/browser configurations.
+This class is designed to be extended by test classes and can be passed into page classes. It houses test environment data and remote WebDrivers as well as page class methods used to sync page behavior.  The need for this arose due to the parallel behavior that indicated that WebDriver instances were crossing threads and testing on the wrong os/browser configurations.
 
 Also contained in this class is the determination as to whether the test should be executed locally or remotely based on a TestNG parameter. Once this is established, a webdriver is created and executed appropriately.
 
 ## [OrasiDriver.java](https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/utils/OrasiDriver.java)
-This is an extention of WebDriver that grants access to the Element interfaces by giving them their own find method ( i.e. driver.findButton(By by) ), but also making some methods easier to reach such as setting timeouts, or executing Javascript. 
+This is an extention of WebDriver that grants access to the Element interfaces by giving them their own find method ( i.e. driver.findButton(By by) ), but also making interface methods easier to reach such as setting timeouts, or executing Javascript. 
 
 More info on usage and availible methods [in the VersionHistory](https://github.com/Orasi/Selenium-Java-Core/blob/master/VersionHistory.md#version-105---10202015)
 ## Page Class
@@ -124,11 +124,3 @@ These resources are being used directly, or have been extended upon.
 * [Sauce Labs 2.1.18](https://github.com/saucelabs/sauce-java): Facilitates the use of using the Sauce Lab VM farm as a remote Selenium grid on which to execute tests.
 * [Apache HttpClient 4.3.1](https://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/index.html) Used to transmit and receive SOAP and REST message requests and responses.
 * [Allure Reports for TestNG 1.4.13](http://allure.qatools.ru/): Generates high level executive reporting
-	
-## Accessing this module
-* Clone/Fork Git repository: This will be the preferred method if the consumer does not want all the functionality of the libraries,
-							but still wants access to some. This also allows the consumer to control what Maven dependencies are used and what functionality he wants to keep or tweak.
-
-* Link Git repository as Maven Module: This method will separate the core functionality from the consumers source code. The core module
-										can then be pulled at any time for general updates, and allows consumers to control what updates
-										are allowed. This is recommended for advanced Maven and GIT users.
