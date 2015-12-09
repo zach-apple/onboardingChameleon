@@ -3,14 +3,12 @@ package com.orasi.core.interfaces;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.ITestContext;
-import org.testng.ITestResult;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.orasi.core.interfaces.Label;
 import com.orasi.utils.TestEnvironment;
 
 public class TestLabel extends TestEnvironment{

@@ -407,7 +407,7 @@ public class TestEnvironment {
 	 * @throws InterruptedException
 	 */
 	private void driverSetup() {
-		DesiredCapabilities caps = null;
+		DesiredCapabilities caps = new DesiredCapabilities();
 		// If the location is local, grab the drivers for each browser type from
 		// within the project
 		if (getRunLocation().equalsIgnoreCase("local")) {
