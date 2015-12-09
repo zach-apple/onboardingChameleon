@@ -2,9 +2,6 @@ package com.orasi.utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.openqa.selenium.OutputType;
@@ -44,9 +41,9 @@ public class Screenshot extends TestListenerAdapter implements IReporter{
 		Reporter.setCurrentTestResult(result);
 
 		new File(destDir).mkdirs();
-		DateFormat dateFormat = new SimpleDateFormat("dd_MMM_yyyy__hh_mm_ssaa");
+//		DateFormat dateFormat = new SimpleDateFormat("dd_MMM_yyyy__hh_mm_ssaa");
 
-		String destFile = dateFormat.format(new Date()) + ".png";
+//		String destFile = dateFormat.format(new Date()) + ".png";
 
 		//Capture a screenshot for TestNG reporting
 		//TestReporter.logScreenshot(driver, destDir + slash + destFile, slash, runLocation);
