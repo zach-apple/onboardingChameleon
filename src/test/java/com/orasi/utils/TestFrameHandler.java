@@ -31,10 +31,9 @@ public class TestFrameHandler extends TestEnvironment {
 		endTest("TestFrame", testResults);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test(groups = { "regression", "utils", "dev", "framehandler" })
 	public void findAndSwitchToFrameFromOutsideFrame() {
-		// String test = FrameHandler.getCurrentFrameName(getDriver());
-		FrameHandler.moveToDefaultContext(driver);
 		FrameHandler.findAndSwitchToFrame(getDriver(), "menu_page");
 		Assert.assertTrue("Link was not found in 'menu_page'",
 				getDriver().findElement(By.id("googleLink")).isDisplayed());
