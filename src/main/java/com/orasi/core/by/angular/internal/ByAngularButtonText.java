@@ -8,8 +8,6 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import com.orasi.utils.OrasiDriver;
-
 /*
  * Original Code from https://github.com/paul-hammant/ngWebDriver
  */
