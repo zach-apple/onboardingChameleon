@@ -856,4 +856,42 @@ public class PageLoaded {
 
 		}
 	}
+	
+	/**
+	 * @summary Used to create all page objects WebElements as proxies (not
+	 *          actual objects, but rather placeholders) or to reinitialize all
+	 *          page object WebElements to allow for the state of a page to
+	 *          change and not fail a test
+	 * @return N/A
+	 * @param clazz
+	 *            - page class that is calling this method for which to
+	 *            initialize elements
+	 */
+	public static void initializePage(Class<?> clazz) {
+		try {
+			ElementFactory.initElements(driver, clazz.getConstructor(TestEnvironment.class));
+		} catch (NoSuchMethodException | SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * @summary Used to create all page objects WebElements as proxies (not
+	 *          actual objects, but rather placeholders) or to reinitialize all
+	 *          page object WebElements to allow for the state of a page to
+	 *          change and not fail a test
+	 * @return N/A
+	 * @param clazz
+	 *            - page class that is calling this method for which to
+	 *            initialize elements
+	 */
+	public static void initializePage(Class<?> clazz, OrasiDriver oDriver) {
+		try {
+			ElementFactory.initElements(oDriver, clazz.getConstructor(TestEnvironment.class));
+		} catch (NoSuchMethodException | SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
