@@ -17,6 +17,7 @@ import org.openqa.selenium.support.FindBy;
 import com.orasi.core.Beta;
 import com.orasi.core.interfaces.impl.ElementImpl;
 import com.orasi.core.interfaces.impl.internal.ImplementedBy;
+import com.orasi.utils.PageLoaded;
 
 /**
  * wraps a web element interface with extra functionality. Anything added here
@@ -240,4 +241,197 @@ public interface Element extends WebElement, WrapsElement, Locatable {
 	@Beta
 	@Override
 	public <X> X getScreenshotAs(OutputType<X> target);
+
+	/**
+	 * Used in conjunction with WebObjectPresent to determine if the desired
+	 * element is present in the DOM Will loop for the time out listed in
+	 * com.orasi.utils.Constants If object is not present within the time, throw
+	 * an error
+	 * 
+	 * @author Justin
+	 */
+	public boolean syncPresent();
+
+	/**
+	 * Used in conjunction with WebObjectPresent to determine if the desired
+	 * element is present in the DOM Will loop for the time out passed in
+	 * parameter timeout If object is not present within the time, throw an
+	 * error
+	 * 
+	 * @author Justin
+	 */
+	public boolean syncPresent(int timeout);
+
+	/**
+	 * Used in conjunction with WebObjectPresent to determine if the desired
+	 * element is present in the DOM Will loop for the time out passed in
+	 * parameter timeout If object is not present within the time, handle error
+	 * based on returnError
+	 * 
+	 * @author Justin
+	 */
+	public boolean syncPresent(int timeout, boolean returnError);
+
+	/**
+	 *
+	 * Used in conjunction with WebObjectVisible to determine if the desired
+	 * element is visible on the screen Will loop for the time out listed in
+	 * org.orasi.chameleon.CONSTANT.TIMEOUT If object is not visible within the
+	 * time, throw an error
+	 * 
+	 * @author Justin
+	 */
+	public boolean syncVisible();
+
+	/**
+	 * Used in conjunction with WebObjectVisible to determine if the desired
+	 * element is visible on the screen Will loop for the time out passed in the
+	 * variable timeout If object is not visible within the time, throw an error
+	 * 
+	 * @author Justin
+	 * 
+	 */
+	public boolean syncVisible(int timeout);
+
+	/**
+	 * Used in conjunction with WebObjectVisible to determine if the desired
+	 * element is visible on the screen Will loop for the time out passed in the
+	 * variable timeout If object is not visible within the time, handle the
+	 * error based on the boolean
+	 *
+	 * @author Justin
+	 *
+	 */
+	public boolean syncVisible(int timeout, boolean returnError);
+
+	/**
+	 * Used in conjunction with WebObjectVisible to determine if the desired
+	 * element is hidden from the screen Will loop for the time out listed in
+	 * org.orasi.chameleon.CONSTANT.TIMEOUT If object is not visible within the
+	 * time, throw an error
+	 * 
+	 * @author Justin
+	 */
+	public boolean syncHidden();
+
+	/**
+	 * Used in conjunction with WebObjectVisible to determine if the desired
+	 * element is hidden from the screen Will loop for the time out listed in
+	 * org.orasi.chameleon.CONSTANT.TIMEOUT If object is not visible within the
+	 * time, throw an error
+	 * 
+	 * @author Justin
+	 */
+	public boolean syncHidden(int timeout);
+
+	/**
+	 * Used in conjunction with WebObjectVisible to determine if the desired
+	 * element is visible on the screen Will loop for the time out passed in the
+	 * variable timeout If object is not visible within the time, handle the
+	 * error based on the boolean
+	 * 
+	 * @author Justin
+	 */
+	public boolean syncHidden(int timeout, boolean returnError);
+
+	/**
+	 *
+	 * Used in conjunction with WebObjectEnabled to determine if the desired
+	 * element is enabled on the screen Will loop for the time out listed in
+	 * org.orasi.chameleon.CONSTANT.TIMEOUT If object is not enabled within the
+	 * time, throw an error
+	 * 
+	 * @author Justin
+	 */
+	public boolean syncEnabled();
+
+	/**
+	 * 
+	 * Used in conjunction with WebObjectEnabled to determine if the desired
+	 * element is enabled on the screen Will loop for the time out passed in the
+	 * variable timeout If object is not enabled within the time, throw an error
+	 * 
+	 * @author Justin
+	 * 
+	 */
+	public boolean syncEnabled(int timeout);
+
+	/**
+	 * Used in conjunction with WebObjectEnabled to determine if the desired
+	 * element is enabled on the screen Will loop for the time out passed in the
+	 * variable timeout If object is not enabled within the time, handle the
+	 * error based on the boolean
+	 *
+	 * @author Justin
+	 *
+	 */
+	public boolean syncEnabled(int timeout, boolean returnError);
+
+	/**
+	 *
+	 * Used in conjunction with WebObjectEnabled to determine if the desired
+	 * element is disabled on the screen Will loop for the time out listed in
+	 * org.orasi.chameleon.CONSTANT.TIMEOUT If object is not disabled within the
+	 * time, throw an error
+	 * 
+	 * @author Justin
+	 */
+	public boolean syncDisabled();
+
+	/**
+	 * 
+	 * Used in conjunction with WebObjectDisabled to determine if the desired
+	 * element is disabled on the screen Will loop for the time out passed in
+	 * the variable timeout If object is not disabled within the time, throw an
+	 * error
+	 * 
+	 * @author Justin
+	 * 
+	 */
+	public boolean syncDisabled(int timeout);
+
+	/**
+	 * Used in conjunction with WebObjectDisabled to determine if the desired
+	 * element is disabled on the screen Will loop for the time out passed in
+	 * the variable timeout If object is not disabled within the time, handle
+	 * the error based on the boolean
+	 *
+	 * @author Justin
+	 *
+	 */
+	public boolean syncDisabled(int timeout, boolean returnError);
+
+	/**
+	 *
+	 * Used in conjunction with WebObjectText Present to determine if the
+	 * desired text is present in the desired element Will loop for the time out
+	 * listed in org.orasi.chameleon.CONSTANT.TIMEOUT If text is not present
+	 * within the time, throw an error
+	 * 
+	 * @author Justin
+	 */
+	public boolean syncTextInElement(String text);
+
+	/**
+	 * 
+	 * Used in conjunction with WebObjectText Present to determine if the
+	 * desired text is present in the desired element Will loop for the time out
+	 * passed in the variable timeout If text is not present within the time,
+	 * throw an error
+	 * 
+	 * @author Justin
+	 * 
+	 */
+	public boolean syncTextInElement(String text, int timeout);
+
+	/**
+	 * Used in conjunction with WebObjectText Present to determine if the
+	 * desired text is present in the desired element Will loop for the time out
+	 * passed in the variable timeout If text is not present within the time,
+	 * handle the error based on the boolean
+	 *
+	 * @author Justin
+	 *
+	 */
+	public boolean syncTextInElement(String text, int timeout, boolean returnError);
 }
