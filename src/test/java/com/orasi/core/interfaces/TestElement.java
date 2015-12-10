@@ -180,7 +180,6 @@ public class TestElement extends TestEnvironment {
 	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
 	public void syncPresentBasic() {
 		Element element = getDriver().findElement(By.id("text1"));
-//		Assert.assertTrue(PageLoaded.syncPresent(getDriver(), element));
 		Assert.assertTrue(element.syncPresent());
 	}
 
@@ -189,7 +188,6 @@ public class TestElement extends TestEnvironment {
 		boolean pass = false;
 		try {
 			Element element = getDriver().findElement(By.id("NoElement"));
-//			PageLoaded.syncPresent(getDriver(), element);
 			element.syncPresent();
 		} catch (RuntimeException rte) {
 			pass = true;
@@ -201,14 +199,12 @@ public class TestElement extends TestEnvironment {
 	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired")
 	public void syncPresentAdvanced() {
 		Element element = getDriver().findElement(By.id("text1"));
-//		Assert.assertTrue(PageLoaded.syncPresent(getDriver(), 5, false, element));
 		Assert.assertTrue(element.syncPresent(5, false));
 	}
 
 	@Test(groups = { "regression", "interfaces", "element" })
 	public void syncDisabledBasic() {
 		Element element = getDriver().findElement(By.id("disable"));
-//		Assert.assertTrue(PageLoaded.syncDisabled(getDriver(), element));
 		Assert.assertTrue(element.syncDisabled());
 	}
 
@@ -217,7 +213,6 @@ public class TestElement extends TestEnvironment {
 		boolean pass = false;
 		try {
 			Element element = getDriver().findElement(By.id("text1"));
-//			PageLoaded.syncDisabled(getDriver(), element);
 			element.syncDisabled();
 		} catch (RuntimeException rte) {
 			pass = true;
@@ -229,21 +224,18 @@ public class TestElement extends TestEnvironment {
 	@Test(groups = { "regression", "element" }, dependsOnMethods = { "syncDisabledBasic" })
 	public void syncDisabledAdvanced() {
 		Element element = getDriver().findElement(By.id("disable"));
-//		Assert.assertTrue(PageLoaded.syncDisabled(getDriver(), 5, false, element));
 		Assert.assertTrue(element.syncDisabled(5, false));
 	}
 
 	@Test(groups = { "regression", "element" }, dependsOnMethods = { "syncDisabledBasic" })
 	public void syncDisabledAdvancedNegative() {
 		Element element = getDriver().findElement(By.id("text1"));
-//		Assert.assertFalse(PageLoaded.syncDisabled(getDriver(), 1, false, element));
 		Assert.assertFalse(element.syncDisabled(1, false));
 	}
 
 	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
 	public void syncHiddenBasic() {
 		Element element = getDriver().findElement(By.id("hidden"));
-//		Assert.assertTrue(PageLoaded.syncHidden(getDriver(), element));
 		Assert.assertTrue(element.syncHidden());
 	}
 
@@ -252,7 +244,6 @@ public class TestElement extends TestEnvironment {
 		boolean pass = false;
 		try {
 			Element element = getDriver().findElement(By.id("text1"));
-//			PageLoaded.syncHidden(getDriver(), element);
 			element.syncHidden();
 		} catch (RuntimeException rte) {
 			pass = true;
@@ -264,21 +255,18 @@ public class TestElement extends TestEnvironment {
 	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired")
 	public void syncHiddenAdvanced() {
 		Element element = getDriver().findElement(By.id("hidden"));
-//		Assert.assertTrue(PageLoaded.syncHidden(getDriver(), 5, false, element));
 		Assert.assertTrue(element.syncHidden(5, false));
 	}
 
 	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired")
 	public void syncHiddenAdvancedNegative() {
 		Element element = getDriver().findElement(By.id("text1"));
-//		Assert.assertFalse(PageLoaded.syncHidden(getDriver(), 1, false, element));
 		Assert.assertFalse(element.syncHidden(1, false));
 	}
 
 	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
 	public void syncVisibleBasic() {
 		Textbox element = getDriver().findTextbox(By.id("text1"));
-//		Assert.assertTrue(PageLoaded.syncVisible(getDriver(), element));
 		Assert.assertTrue(element.syncVisible());
 	}
 
@@ -287,7 +275,6 @@ public class TestElement extends TestEnvironment {
 		boolean pass = false;
 		try {
 			Element element = getDriver().findElement(By.id("hidden"));
-//			PageLoaded.syncVisible(getDriver(), element);
 			element.syncVisible();
 		} catch (RuntimeException rte) {
 			pass = true;
@@ -299,21 +286,18 @@ public class TestElement extends TestEnvironment {
 	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired")
 	public void syncVisibleAdvanced() {
 		Element element = getDriver().findElement(By.id("text1"));
-//		Assert.assertTrue(PageLoaded.syncVisible(getDriver(), 5, false, element));
 		Assert.assertTrue(element.syncVisible(5, false));
 	}
 
 	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired")
 	public void syncVisibleAdvancedNegative() {
 		Element element = getDriver().findElement(By.id("hidden"));
-//		Assert.assertFalse(PageLoaded.syncVisible(getDriver(), 1, false, element));
 		Assert.assertFalse(element.syncVisible(1, false));
 	}
 
 	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
 	public void syncEnabledBasic() {
 		Element element = getDriver().findElement(By.id("text1"));
-//		Assert.assertTrue(PageLoaded.syncEnabled(getDriver(), element));
 		Assert.assertTrue(element.syncEnabled());
 	}
 
@@ -322,7 +306,6 @@ public class TestElement extends TestEnvironment {
 		boolean pass = false;
 		try {
 			Element element = getDriver().findElement(By.id("disable"));
-//			PageLoaded.syncEnabled(getDriver(), element);
 			element.syncEnabled();
 		} catch (RuntimeException rte) {
 			pass = true;
@@ -334,21 +317,18 @@ public class TestElement extends TestEnvironment {
 	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired")
 	public void syncEnabledAdvanced() {
 		Element element = getDriver().findElement(By.id("text1"));
-//		Assert.assertTrue(PageLoaded.syncEnabled(getDriver(), 5, false, element));
 		Assert.assertTrue(element.syncEnabled(5, false));
 	}
 
 	@Test(groups = { "regression", "element" })
 	public void syncEnabledAdvancedNegative() {
 		Element element = getDriver().findElement(By.id("disable"));
-//		Assert.assertFalse(PageLoaded.syncEnabled(getDriver(), 1, false, element));
 		Assert.assertFalse(element.syncEnabled(1, false));
 	}
 
 	@Test(groups = { "regression", "interfaces", "element" })
 	public void syncTextInElementBasic() {
 		Element element = getDriver().findElement(By.id("pageheader"));
-//		Assert.assertTrue(PageLoaded.syncTextInElement(getDriver(), "Element test page", element));
 		Assert.assertTrue(element.syncTextInElement("Element test page"));
 	}
 
@@ -357,7 +337,6 @@ public class TestElement extends TestEnvironment {
 		boolean pass = false;
 		try {
 			Element element = getDriver().findElement(By.id("pageheader"));
-//			PageLoaded.syncTextInElement(getDriver(), "Loading", element);
 			element.syncTextInElement("Loading");
 		} catch (RuntimeException rte) {
 			pass = true;
@@ -369,14 +348,12 @@ public class TestElement extends TestEnvironment {
 	@Test(groups = { "regression", "element" })
 	public void syncTextInElementAdvanced() {
 		Element element = getDriver().findElement(By.id("pageheader"));
-//		Assert.assertTrue(PageLoaded.syncTextInElement(getDriver(), "Element test page", 5, false, element));
 		Assert.assertTrue(element.syncTextInElement("Element test page", 5, false));
 	}
 
 	@Test(groups = { "regression", "element" })
 	public void syncTextInElementAdvancedNegative() {
 		Element element = getDriver().findElement(By.id("pageheader"));
-//		Assert.assertFalse(PageLoaded.syncTextInElement(getDriver(), "negative", 2, false, element));
 		Assert.assertFalse(element.syncTextInElement("negative", 2, false));
 	}
 }
