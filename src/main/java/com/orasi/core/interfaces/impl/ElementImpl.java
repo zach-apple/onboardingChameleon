@@ -3,24 +3,32 @@ package com.orasi.core.interfaces.impl;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.By.ByClassName;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitWebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.internal.Locatable;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.orasi.core.Beta;
 import com.orasi.core.interfaces.Element;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.TestReporter;
+import com.orasi.utils.PageLoaded;
 
 /**
  * An implementation of the Element interface. Delegates its work to an
@@ -393,4 +401,233 @@ public class ElementImpl implements Element {
 	 * System.out.println("getScreenShotAs is unimplemented"); return null; //
 	 * target.convertFromBase64Png(base64); }
 	 */
+
+	/**
+	 * Used in conjunction with WebObjectPresent to determine if the desired
+	 * element is present in the DOM Will loop for the time out listed in
+	 * com.orasi.utils.Constants If object is not present within the time, throw
+	 * an error
+	 * 
+	 * @author Justin
+	 */
+	public boolean syncPresent() {
+		return PageLoaded.syncPresent(getWrappedDriver(), getWrappedDriver().getElementTimeout(), new ElementImpl(getWrappedElement()));
+	}
+
+	/**
+	 * Used in conjunction with WebObjectPresent to determine if the desired
+	 * element is present in the DOM Will loop for the time out passed in
+	 * parameter timeout If object is not present within the time, throw an
+	 * error
+	 * 
+	 * @author Justin
+	 */
+	public boolean syncPresent(int timeout) {
+		return PageLoaded.syncPresent(getWrappedDriver(), timeout, true, new ElementImpl(getWrappedElement()));
+	}
+
+	/**
+	 * Used in conjunction with WebObjectPresent to determine if the desired
+	 * element is present in the DOM Will loop for the time out passed in
+	 * parameter timeout If object is not present within the time, handle error
+	 * based on returnError
+	 * 
+	 * @author Justin
+	 */
+	public boolean syncPresent(int timeout, boolean returnError) {
+		return PageLoaded.syncPresent(getWrappedDriver(), timeout, returnError, new ElementImpl(getWrappedElement()));
+	}
+
+	/**
+	 *
+	 * Used in conjunction with WebObjectVisible to determine if the desired
+	 * element is visible on the screen Will loop for the time out listed in
+	 * org.orasi.chameleon.CONSTANT.TIMEOUT If object is not visible within the
+	 * time, throw an error
+	 * 
+	 * @author Justin
+	 */
+	public boolean syncVisible() {
+		return PageLoaded.syncVisible(getWrappedDriver(), getWrappedDriver().getElementTimeout(), new ElementImpl(getWrappedElement()));
+	}
+
+	/**
+	 * Used in conjunction with WebObjectVisible to determine if the desired
+	 * element is visible on the screen Will loop for the time out passed in the
+	 * variable timeout If object is not visible within the time, throw an error
+	 * 
+	 * @author Justin
+	 * 
+	 */
+	public boolean syncVisible(int timeout) {
+		return PageLoaded.syncVisible(getWrappedDriver(), timeout, true, new ElementImpl(getWrappedElement()));
+	}
+
+	/**
+	 * Used in conjunction with WebObjectVisible to determine if the desired
+	 * element is visible on the screen Will loop for the time out passed in the
+	 * variable timeout If object is not visible within the time, handle the
+	 * error based on the boolean
+	 *
+	 * @author Justin
+	 *
+	 */
+	public boolean syncVisible(int timeout, boolean returnError) {
+		return PageLoaded.syncVisible(getWrappedDriver(), timeout, returnError, new ElementImpl(getWrappedElement()));
+	}
+
+	/**
+	 * Used in conjunction with WebObjectVisible to determine if the desired
+	 * element is hidden from the screen Will loop for the time out listed in
+	 * org.orasi.chameleon.CONSTANT.TIMEOUT If object is not visible within the
+	 * time, throw an error
+	 * 
+	 * @author Justin
+	 */
+	public boolean syncHidden() {
+		return PageLoaded.syncHidden(getWrappedDriver(), getWrappedDriver().getElementTimeout(), new ElementImpl(getWrappedElement()));
+	}
+
+	/**
+	 * Used in conjunction with WebObjectVisible to determine if the desired
+	 * element is hidden from the screen Will loop for the time out listed in
+	 * org.orasi.chameleon.CONSTANT.TIMEOUT If object is not visible within the
+	 * time, throw an error
+	 * 
+	 * @author Justin
+	 */
+	public boolean syncHidden(int timeout) {
+		return PageLoaded.syncHidden(getWrappedDriver(), timeout, true, new ElementImpl(getWrappedElement()));
+	}
+
+	/**
+	 * Used in conjunction with WebObjectVisible to determine if the desired
+	 * element is visible on the screen Will loop for the time out passed in the
+	 * variable timeout If object is not visible within the time, handle the
+	 * error based on the boolean
+	 * 
+	 * @author Justin
+	 */
+	public boolean syncHidden(int timeout, boolean returnError) {
+		return PageLoaded.syncHidden(getWrappedDriver(), timeout, returnError, new ElementImpl(getWrappedElement()));
+	}
+
+	/**
+	 *
+	 * Used in conjunction with WebObjectEnabled to determine if the desired
+	 * element is enabled on the screen Will loop for the time out listed in
+	 * org.orasi.chameleon.CONSTANT.TIMEOUT If object is not enabled within the
+	 * time, throw an error
+	 * 
+	 * @author Justin
+	 */
+	public boolean syncEnabled() {
+		return PageLoaded.syncEnabled(getWrappedDriver(), getWrappedDriver().getElementTimeout(), new ElementImpl(getWrappedElement()));
+	}
+
+	/**
+	 * 
+	 * Used in conjunction with WebObjectEnabled to determine if the desired
+	 * element is enabled on the screen Will loop for the time out passed in the
+	 * variable timeout If object is not enabled within the time, throw an error
+	 * 
+	 * @author Justin
+	 * 
+	 */
+	public boolean syncEnabled(int timeout) {
+		return PageLoaded.syncEnabled(getWrappedDriver(), timeout, true, new ElementImpl(getWrappedElement()));
+	}
+
+	/**
+	 * Used in conjunction with WebObjectEnabled to determine if the desired
+	 * element is enabled on the screen Will loop for the time out passed in the
+	 * variable timeout If object is not enabled within the time, handle the
+	 * error based on the boolean
+	 *
+	 * @author Justin
+	 *
+	 */
+	public boolean syncEnabled(int timeout, boolean returnError) {
+		return PageLoaded.syncEnabled(getWrappedDriver(), timeout, returnError, new ElementImpl(getWrappedElement()));
+	}
+
+	/**
+	 *
+	 * Used in conjunction with WebObjectEnabled to determine if the desired
+	 * element is disabled on the screen Will loop for the time out listed in
+	 * org.orasi.chameleon.CONSTANT.TIMEOUT If object is not disabled within the
+	 * time, throw an error
+	 * 
+	 * @author Justin
+	 */
+	public boolean syncDisabled() {
+		return PageLoaded.syncDisabled(getWrappedDriver(), getWrappedDriver().getElementTimeout(), new ElementImpl(getWrappedElement()));
+	}
+
+	/**
+	 * 
+	 * Used in conjunction with WebObjectDisabled to determine if the desired
+	 * element is disabled on the screen Will loop for the time out passed in
+	 * the variable timeout If object is not disabled within the time, throw an
+	 * error
+	 * 
+	 * @author Justin
+	 * 
+	 */
+	public boolean syncDisabled(int timeout) {
+		return PageLoaded.syncDisabled(getWrappedDriver(), timeout, true, new ElementImpl(getWrappedElement()));
+	}
+
+	/**
+	 * Used in conjunction with WebObjectDisabled to determine if the desired
+	 * element is disabled on the screen Will loop for the time out passed in
+	 * the variable timeout If object is not disabled within the time, handle
+	 * the error based on the boolean
+	 *
+	 * @author Justin
+	 *
+	 */
+	public boolean syncDisabled(int timeout, boolean returnError) {
+		return PageLoaded.syncDisabled(getWrappedDriver(), timeout, returnError, new ElementImpl(getWrappedElement()));
+	}
+
+	/**
+	 *
+	 * Used in conjunction with WebObjectText Present to determine if the
+	 * desired text is present in the desired element Will loop for the time out
+	 * listed in org.orasi.chameleon.CONSTANT.TIMEOUT If text is not present
+	 * within the time, throw an error
+	 * 
+	 * @author Justin
+	 */
+	public boolean syncTextInElement(String text) {
+		return PageLoaded.syncTextInElement(getWrappedDriver(), text, getWrappedDriver().getElementTimeout(), new ElementImpl(getWrappedElement()));
+	}
+
+	/**
+	 * 
+	 * Used in conjunction with WebObjectText Present to determine if the
+	 * desired text is present in the desired element Will loop for the time out
+	 * passed in the variable timeout If text is not present within the time,
+	 * throw an error
+	 * 
+	 * @author Justin
+	 * 
+	 */
+	public boolean syncTextInElement(String text, int timeout) {
+		return PageLoaded.syncTextInElement(getWrappedDriver(), text, timeout, true, new ElementImpl(getWrappedElement()));
+	}
+
+	/**
+	 * Used in conjunction with WebObjectText Present to determine if the
+	 * desired text is present in the desired element Will loop for the time out
+	 * passed in the variable timeout If text is not present within the time,
+	 * handle the error based on the boolean
+	 *
+	 * @author Justin
+	 *
+	 */
+	public boolean syncTextInElement(String text, int timeout, boolean returnError) {
+		return PageLoaded.syncTextInElement(getWrappedDriver(), text, timeout, returnError, new ElementImpl(getWrappedElement()));
+	}
 }
