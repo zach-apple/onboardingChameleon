@@ -10,7 +10,6 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.orasi.utils.PageLoaded;
 import com.orasi.utils.TestEnvironment;
 
 public class TestElement extends TestEnvironment {
