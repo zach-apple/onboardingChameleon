@@ -17,7 +17,6 @@ import org.openqa.selenium.support.FindBy;
 import com.orasi.core.Beta;
 import com.orasi.core.interfaces.impl.ElementImpl;
 import com.orasi.core.interfaces.impl.internal.ImplementedBy;
-import com.orasi.utils.PageLoaded;
 
 /**
  * wraps a web element interface with extra functionality. Anything added here
