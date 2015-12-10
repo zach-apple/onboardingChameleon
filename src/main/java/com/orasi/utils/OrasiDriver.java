@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.bouncycastle.jce.provider.symmetric.SEED;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
@@ -584,61 +585,115 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	public void quit() {
 		driver.quit();
 	}
-
+	/**
+	 * Method to return all window handles contained within a given current driver
+	 * @return Set of string window handles
+	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#getWindowHandles--
+	 */
 	@Override
 	public Set<String> getWindowHandles() {
 		return driver.getWindowHandles();
 	}
-
+	/**
+	 * Method to return the current window handle for a given currnet driver
+	 * @return Current window handle as a String
+	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#getWindowHandle--
+	 */
 	@Override
 	public String getWindowHandle() {
 		return driver.getWindowHandle();
 	}
-
+	/**
+	 * Method to switch to another frame or window
+	 * @return TargetLocator that can be used to select a frame or window
+	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#switchTo--
+	 */
 	@Override
 	public TargetLocator switchTo() {
 		return driver.switchTo();
 	}
-
+	/**
+	 * Method to navigate to a pre-defined URL
+	 * @return Navigation object that allows the selection of what to do next
+	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#navigate--
+	 */
 	@Override
 	public Navigation navigate() {
 		return driver.navigate();
 	}
-
+	/**
+	 * Method to facilitate the management of the driver (e.g. timeouts, cookies, etc)
+	 * @return Options interface
+	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#manage--
+	 */
 	@Override
 	public Options manage() {
 		return driver.manage();
 	}
-
+	/**
+	 * Method to clone this class
+	 * @return Object clone of the current state of this class
+	 * @throws CloneNotSupportedException
+	 * @see http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#clone()
+	 */
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}
-
+	/**
+	 * Method to determine if an object is equal to an instance of this class
+	 * @param obj - object with which to compare
+	 * @return -boolean true if the two objects are equal, false otherwise
+	 * @see http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		return super.equals(obj);
 	}
-
+	/**
+	 * Method to dispose of system resources
+	 * @throws Throwable
+	 * @see http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#finalize()
+	 */
 	@Override
 	protected void finalize() throws Throwable {
 		super.finalize();
 	}
-
+	/**
+	 * Method to return the hascode for an instance of this class
+	 * @return hashcode for an instance of this class as an integer
+	 * @see http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#hashCode--
+	 */
 	@Override
 	public int hashCode() {
 		return super.hashCode();
 	}
-
+	/**
+	 * Method to return a current instance of this class as a String
+	 * @return - current instance of this class as a String
+	 * @see http://docs.oracle.com/javase/8/docs/api/java/lang/String.html#toString--
+	 */
 	@Override
 	public String toString() {
 		return super.toString();
 	}
-
+	/**
+	 * Method to execute a user-defined JavaScript
+	 * @param script script to be executed
+	 * @param parameters any parameters that may need to be referenced by the script
+	 * @return Return value types vary based on the return type of the script
+	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/JavascriptExecutor.html
+	 */
 	public Object executeJavaScript(String script, Object... parameters) {
 		return ((JavascriptExecutor) driver).executeScript(script, parameters);
 	}
-
+	/**
+	 * Method to execute a user-defined JavaScript
+	 * @param script script to be executed
+	 * @param parameters any parameters that may need to be referenced by the script
+	 * @return Return value types vary based on the return type of the script
+	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/JavascriptExecutor.html
+	 */
 	public Object executeAsyncJavaScript(String script, Object... parameters) {
 		return ((JavascriptExecutor) driver).executeAsyncScript(script, parameters);
 	}
@@ -662,11 +717,24 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	public int pumpEventLoop(long timeoutMillis) {
 		return ((DefaultJavaScriptExecutor) driver).pumpEventLoop(timeoutMillis);
 	}
-
+	/**
+	 * Method to return the RemoteWebDriver session ID
+	 * @return RemotWebDriver session ID as a String
+	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/remote/RemoteWebDriver.html#getSessionId()
+	 */
 	public String getSessionId() {
 		return ((RemoteWebDriver) driver).getSessionId().toString();
 	}
-
+	/**
+	 * Method to set the capabilities for a driver, based on the browser type
+	 * @param caps - Selenium DesiredCapabilities to be used to generate a WebDriver
+	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/firefox/FirefoxDriver.html
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/ie/InternetExplorerDriver.html
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/chrome/ChromeDriver.html
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/safari/SafariDriver.html
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/htmlunit/HtmlUnitDriver.html
+	 * @see https://msdn.microsoft.com/en-us/library/mt188085(v=vs.85).aspx
+	 */
 	private void setDriverWithCapabilties(DesiredCapabilities caps) {
 		switch (caps.getBrowserName().toLowerCase()) {
 		case "firefox":
@@ -696,16 +764,29 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 			break;
 		}
 	}
-
+	/**
+	 * Method to return the Selenium DesiredCapabilities
+	 * @return Selenium DesiredCapabilitie
+	 */
 	public Capabilities getDriverCapability() {
 		return new Capabilities();
 	}
-
+	/**
+	 * Method to take a screen shot
+	 * @param target - image type to capture the screenshot
+	 * @return Object which si stored information about the screenshot
+	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/TakesScreenshot.html#getScreenshotAs-org.openqa.selenium.OutputType-
+	 */
 	@Override
 	public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
 		return ((TakesScreenshot) driver).getScreenshotAs(target);
 	}
-
+	/**
+	 * Subclass to assist with interacting with a RemoteWebDriver
+	 * @author Justin Phlegar
+	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/remote/RemoteWebDriver.html#getCapabilities()
+	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/Capabilities.html
+	 */
 	class Capabilities {
 
 		public String browserName() {
@@ -723,7 +804,13 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		}
 
 	}
-
+	/**
+	 * Method to return an Orasi <b><i>ByAngular.BaseBy</i></b> locator for a given Orasi <b><i>ByNG</i></b> locator
+	 * @param by - Orasi <b><i>ByNG</i></b> locator
+	 * @return Orasi <b><i>ByAngular.BaseBy</i></b> locator
+	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
+	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/internal/ByAngular.java
+	 */
 	@SuppressWarnings("static-access")
 	private ByAngular.BaseBy getByNGType(ByNG by) {
 		String text = by.toString().replace("By.buttonText:", "").trim();
@@ -739,7 +826,10 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 			return new ByAngular(getDriver()).show(text);
 		return null;
 	}
-
+	/**
+	 * Method that return the <b><i>Page</i></b> class
+	 * @return <b><i>Page</i></b> class
+	 */
 	public Page page() {
 		return new Page();
 	}
