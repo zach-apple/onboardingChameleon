@@ -1,5 +1,6 @@
 package com.orasi.utils;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -16,8 +17,6 @@ public class TestTestEnvironment {
 	private String testingName = "TestEnvironment";
 	private String pageURL = "http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/element.html";
 
-	@FindBy(id = "text1")
-	private Element firstname;
 
 	@Test(groups = "regression")
 	public void testEnviroment() {
@@ -121,7 +120,7 @@ public class TestTestEnvironment {
 		te.setPageURL(pageURL);
 		OrasiDriver driver = te.testStart(testingName);
 		Assert.assertTrue(new PageLoaded(driver).isDomComplete());
-		Assert.assertTrue(PageLoaded.syncPresent(driver, firstname));
+		Assert.assertTrue(PageLoaded.syncPresent(driver, driver.findElement(By.id("text1"))));
 	}
 
 }
