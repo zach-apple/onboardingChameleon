@@ -32,7 +32,7 @@ public class PageLoaded {
 	@SuppressWarnings("rawtypes")
 	private Class clazz = null;
 	private int timeout = 0;
-	private static StopWatch stopwatch = new StopWatch();
+	//private static StopWatch stopwatch = new StopWatch();
 
 	public PageLoaded() {
 		this.timeout = Constants.ELEMENT_TIMEOUT;
@@ -371,6 +371,7 @@ public class PageLoaded {
 	public static boolean syncPresent(OrasiDriver driver, int timeout, boolean returnError, Element element) {
 		boolean found = false;
 		long timeLapse;
+		StopWatch stopwatch = new StopWatch();
 		By locator = element.getElementLocator();
 		TestReporter.interfaceLog("<i> Syncing to element [ <b>@FindBy: " + element.getElementLocatorInfo()
 				+ "</b> ] to be <b>PRESENT</b> in DOM within [ " + timeout + " ] seconds.</i>");
@@ -439,7 +440,7 @@ public class PageLoaded {
 	public static boolean syncVisible(OrasiDriver driver, int timeout, boolean returnError, Element element) {
 		boolean found = false;
 		long timeLapse;
-
+		StopWatch stopwatch = new StopWatch();
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: " + element.getElementLocatorInfo()
 				+ "</b> ] to be <b>VISIBLE<b> within [ " + timeout + " ] seconds.</i>");
 		int currentTimeout = driver.getElementTimeout();
@@ -504,7 +505,7 @@ public class PageLoaded {
 	public static boolean syncHidden(OrasiDriver driver, int timeout, boolean returnError, Element element) {
 		boolean found = false;
 		long timeLapse;
-		
+		StopWatch stopwatch = new StopWatch();
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: " + element.getElementLocatorInfo()
 				+ "</b> ] to be <b>HIDDEN</b> within [ <b>" + timeout + "</b> ] seconds.</i>");
 		int currentTimeout = driver.getElementTimeout();
@@ -570,7 +571,7 @@ public class PageLoaded {
 	public static boolean syncEnabled(OrasiDriver driver, int timeout, boolean returnError, Element element) {
 		boolean found = false;
 		long timeLapse;
-
+		StopWatch stopwatch = new StopWatch();
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: " + element.getElementLocatorInfo()
 				+ "</b> ] to be <b>ENABLED</b> within [ <b>" + timeout + "</b> ] seconds.</i>");
 		int currentTimeout = driver.getElementTimeout();
@@ -639,7 +640,7 @@ public class PageLoaded {
 	public static boolean syncDisabled(OrasiDriver driver, int timeout, boolean returnError, Element element) {
 		boolean found = false;
 		long timeLapse;
-		
+		StopWatch stopwatch = new StopWatch();
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: " + element.getElementLocatorInfo()
 				+ "</b> ] to be <b>DISABLED</b> within [ <b>" + timeout + "</b> ] seconds.</i>");
 		int currentTimeout = driver.getElementTimeout();
@@ -707,7 +708,7 @@ public class PageLoaded {
 	public static boolean syncTextInElement(OrasiDriver driver, String text, int timeout, boolean returnError, Element element) {
 		boolean found = false;
 		long timeLapse;
-		
+		StopWatch stopwatch = new StopWatch();
 		TestReporter.interfaceLog("<i>Syncing to text [<b>" + text + "</b> ] in element [<b>@FindBy: "
 				+ element.getElementLocatorInfo() + "</b> ] to be displayed within [ <b>" + timeout + "</b> ] seconds.</i>");
 		int currentTimeout = driver.getElementTimeout();
