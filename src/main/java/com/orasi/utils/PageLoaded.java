@@ -33,8 +33,6 @@ public class PageLoaded {
 	private Class clazz = null;
 	private int timeout = 0;
 	private static StopWatch stopwatch = new StopWatch();
-	private static java.util.Date date = new java.util.Date();
-	private static java.util.Date dateAfter = new java.util.Date();
 
 	public PageLoaded() {
 		this.timeout = Constants.ELEMENT_TIMEOUT;
@@ -372,6 +370,7 @@ public class PageLoaded {
 	 */
 	public static boolean syncPresent(OrasiDriver driver, int timeout, boolean returnError, Element element) {
 		boolean found = false;
+		long timeLapse;
 		By locator = element.getElementLocator();
 		TestReporter.interfaceLog("<i> Syncing to element [ <b>@FindBy: " + element.getElementLocatorInfo()
 				+ "</b> ] to be <b>PRESENT</b> in DOM within [ " + timeout + " ] seconds.</i>");
@@ -387,18 +386,18 @@ public class PageLoaded {
 
 		} while (stopwatch.getTime() / 1000.0 < (long) timeout);
 		stopwatch.stop();
+		timeLapse = stopwatch.getTime();
 		stopwatch.reset();
 
 		driver.setElementTimeout(currentTimeout);
 
 		if (!found && returnError) {
-			dateAfter = new java.util.Date();
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: " + element.getElementLocatorInfo()
 					+ " </b>] is not <b>PRESENT</b> on the page after [ "
-					+ (dateAfter.getTime() - date.getTime()) / 1000.0 + " ] seconds.</i>");
+					+ (timeLapse) / 1000.0 + " ] seconds.</i>");
 			throw new RuntimeException(
 					"Element [ @FindBy: " + element.getElementLocatorInfo() + " ] is not PRESENT on the page after [ "
-							+ (dateAfter.getTime() - date.getTime()) / 1000.0 + " ] seconds.");
+							+ (timeLapse) / 1000.0 + " ] seconds.");
 		}
 		return found;
 	}
@@ -439,6 +438,7 @@ public class PageLoaded {
 	 */
 	public static boolean syncVisible(OrasiDriver driver, int timeout, boolean returnError, Element element) {
 		boolean found = false;
+		long timeLapse;
 
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: " + element.getElementLocatorInfo()
 				+ "</b> ] to be <b>VISIBLE<b> within [ " + timeout + " ] seconds.</i>");
@@ -454,17 +454,17 @@ public class PageLoaded {
 
 		} while (stopwatch.getTime() / 1000.0 < (long) timeout);
 		stopwatch.stop();
+		timeLapse = stopwatch.getTime();
 		stopwatch.reset();
 
 		driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
 		if (!found && returnError) {
-			dateAfter = new java.util.Date();
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: " + element.getElementLocatorInfo()
 					+ " </b>] is not <b>VISIBLE</b> on the page after [ "
-					+ (dateAfter.getTime() - date.getTime()) / 1000.0 + " ] seconds.</i>");
+					+ (timeLapse) / 1000.0 + " ] seconds.</i>");
 			throw new RuntimeException(
 					"Element [ @FindBy: " + element.getElementLocatorInfo() + " ] is not VISIBLE on the page after [ "
-							+ (dateAfter.getTime() - date.getTime()) / 1000.0 + " ] seconds.");
+							+ (timeLapse) / 1000.0 + " ] seconds.");
 		}
 		return found;
 	}
@@ -503,6 +503,8 @@ public class PageLoaded {
 	 */
 	public static boolean syncHidden(OrasiDriver driver, int timeout, boolean returnError, Element element) {
 		boolean found = false;
+		long timeLapse;
+		
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: " + element.getElementLocatorInfo()
 				+ "</b> ] to be <b>HIDDEN</b> within [ <b>" + timeout + "</b> ] seconds.</i>");
 		int currentTimeout = driver.getElementTimeout();
@@ -515,17 +517,17 @@ public class PageLoaded {
 			}
 		} while (stopwatch.getTime() / 1000.0 < (long) timeout);
 		stopwatch.stop();
+		timeLapse = stopwatch.getTime();
 		stopwatch.reset();
 
 		driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
 		if (!found && returnError) {
-			dateAfter = new java.util.Date();
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: " + element.getElementLocatorInfo()
 					+ " </b>] is not <b>HIDDEN</b> on the page after [ "
-					+ (dateAfter.getTime() - date.getTime()) / 1000.0 + " ] seconds.</i>");
+					+ (timeLapse) / 1000.0 + " ] seconds.</i>");
 			throw new RuntimeException(
 					"Element [ @FindBy: " + element.getElementLocatorInfo() + " ] is not HIDDEN on the page after [ "
-							+ (dateAfter.getTime() - date.getTime()) / 1000.0 + " ] seconds.");
+							+ (timeLapse) / 1000.0 + " ] seconds.");
 		}
 		return found;
 	}
@@ -567,6 +569,7 @@ public class PageLoaded {
 	 */
 	public static boolean syncEnabled(OrasiDriver driver, int timeout, boolean returnError, Element element) {
 		boolean found = false;
+		long timeLapse;
 
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: " + element.getElementLocatorInfo()
 				+ "</b> ] to be <b>ENABLED</b> within [ <b>" + timeout + "</b> ] seconds.</i>");
@@ -582,17 +585,17 @@ public class PageLoaded {
 
 		} while (stopwatch.getTime() / 1000.0 < (long) timeout);
 		stopwatch.stop();
+		timeLapse = stopwatch.getTime();
 		stopwatch.reset();
 
 		driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
 		if (!found && returnError) {
-			dateAfter = new java.util.Date();
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: " + element.getElementLocatorInfo()
 					+ " </b>] is not <b>ENABLED</b> on the page after [ "
-					+ (dateAfter.getTime() - date.getTime()) / 1000.0 + " ] seconds.</i>");
+					+ (timeLapse) / 1000.0 + " ] seconds.</i>");
 			throw new RuntimeException(
 					"Element [ @FindBy: " + element.getElementLocatorInfo() + " ] is not ENABLED on the page after [ "
-							+ (dateAfter.getTime() - date.getTime()) / 1000.0 + " ] seconds.");
+							+ (timeLapse) / 1000.0 + " ] seconds.");
 		}
 		return found;
 	}
@@ -635,6 +638,8 @@ public class PageLoaded {
 	 */
 	public static boolean syncDisabled(OrasiDriver driver, int timeout, boolean returnError, Element element) {
 		boolean found = false;
+		long timeLapse;
+		
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: " + element.getElementLocatorInfo()
 				+ "</b> ] to be <b>DISABLED</b> within [ <b>" + timeout + "</b> ] seconds.</i>");
 		int currentTimeout = driver.getElementTimeout();
@@ -648,17 +653,17 @@ public class PageLoaded {
 			}
 		} while (stopwatch.getTime() / 1000.0 < (long) timeout);
 		stopwatch.stop();
+		timeLapse = stopwatch.getTime();
 		stopwatch.reset();
 
 		driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
 		if (!found && returnError) {
-			dateAfter = new java.util.Date();
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: " + element.getElementLocatorInfo()
 					+ " </b>] is not <b>DISABLED</b> on the page after [ "
-					+ (dateAfter.getTime() - date.getTime()) / 1000.0 + " ] seconds.</i>");
+					+ (timeLapse) / 1000.0 + " ] seconds.</i>");
 			throw new RuntimeException(
 					"Element [ @FindBy: " + element.getElementLocatorInfo() + " ] is not DISABLED on the page after [ "
-							+ (dateAfter.getTime() - date.getTime()) / 1000.0 + " ] seconds.");
+							+ (timeLapse) / 1000.0 + " ] seconds.");
 		}
 		return found;
 	}
@@ -701,6 +706,8 @@ public class PageLoaded {
 	 */
 	public static boolean syncTextInElement(OrasiDriver driver, String text, int timeout, boolean returnError, Element element) {
 		boolean found = false;
+		long timeLapse;
+		
 		TestReporter.interfaceLog("<i>Syncing to text [<b>" + text + "</b> ] in element [<b>@FindBy: "
 				+ element.getElementLocatorInfo() + "</b> ] to be displayed within [ <b>" + timeout + "</b> ] seconds.</i>");
 		int currentTimeout = driver.getElementTimeout();
@@ -714,17 +721,17 @@ public class PageLoaded {
 
 		} while (stopwatch.getTime() / 1000.0 < (long) timeout);
 		stopwatch.stop();
+		timeLapse = stopwatch.getTime();
 		stopwatch.reset();
 
 		driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
 		if (!found && returnError) {
-			dateAfter = new java.util.Date();
 			TestReporter.interfaceLog(
 					"<i>Element [<b>@FindBy: " + element.getElementLocatorInfo() + " </b>] did not contain the text [ " + text
-							+ " ] after [ " + (dateAfter.getTime() - date.getTime()) / 1000.0 + " ] seconds.</i>");
+							+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
 			throw new RuntimeException(
 					"Element [ @FindBy: " + element.getElementLocatorInfo() + " ] did not contain the text [ " + text
-							+ " ] after [ " + (dateAfter.getTime() - date.getTime()) / 1000.0 + " ] seconds.");
+							+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.");
 		}
 		return found;
 	}
