@@ -7,7 +7,6 @@ import org.testng.annotations.Test;
 
 import com.orasi.core.by.angular.ByNG;
 import com.orasi.core.interfaces.Textbox;
-import com.orasi.core.interfaces.impl.ElementImpl;
 
 public class Sandbox2 extends TestEnvironment{
 
@@ -35,7 +34,7 @@ public class Sandbox2 extends TestEnvironment{
 	username.set("company.admin");
 	
 	//new ElementImpl(getDriver().findElement(By.id("employee_username"))).sendKeys("TESTING");
-	driver.findTextbox(By.name("employee[password]")).syncEnabled();
+	PageLoaded.syncEnabled(driver, driver.findTextbox(By.name("employee[password]")));
 	driver.findTextbox(By.name("employee[password]")).set("test");
 	
 	driver.findButton(ByNG.buttonText("Login")).click();

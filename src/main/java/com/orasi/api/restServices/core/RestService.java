@@ -4,11 +4,13 @@ package com.orasi.api.restServices.core;
  * Just playing around with some different ways of using rest services with Jackson 
  */
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -28,13 +30,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
-
 public class RestService {
-	int statusCode = 0;
-	String responseFormat;
-	String responseAsString = null;
-	String userAgent; 
+	private int statusCode = 0;
+	private String responseFormat;
+	private String responseAsString = null;
+	private String userAgent; 
 	
 	private ObjectMapper mapper = new ObjectMapper().
 		      configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -45,16 +45,11 @@ public class RestService {
 	/*
 	 * Encapsulation area 
 	 */ 
-	public String getUserAgent(){ return this.userAgent;}
-	
-	public void setUserAgent(String userAgent){ this.userAgent = userAgent;	}	
-	
-	public int getStatusCode(){ return statusCode; }
-	
-	private void setStatusCode(HttpResponse httpResponse){ 	statusCode = httpResponse.getStatusLine().getStatusCode(); }
-	
-	public String getResponseFormat(){ return responseFormat; }
-	
+	public String getUserAgent(){ return this.userAgent;}	
+	public void setUserAgent(String userAgent){ this.userAgent = userAgent;	}		
+	public int getStatusCode(){ return statusCode; }	
+	private void setStatusCode(HttpResponse httpResponse){ 	statusCode = httpResponse.getStatusLine().getStatusCode(); }	
+	public String getResponseFormat(){ return responseFormat; }	
 	private void setResponseFormat(HttpResponse httpResponse){ responseFormat = ContentType.getOrDefault(httpResponse.getEntity()).getMimeType().replace("application/", "");	}
 	
 	/**
@@ -65,14 +60,25 @@ public class RestService {
 	 * @throws 	ClientProtocolException
 	 * @throws 	IOException
 	 */
-	public String sendGetRequest(String URL) throws ClientProtocolException, IOException{
+	public String sendGetRequest(String URL){
 		HttpUriRequest request = new HttpGet(URL);
-		HttpResponse httpResponse = HttpClientBuilder.create().setUserAgent(getUserAgent()).build().execute( request );
+		HttpResponse httpResponse = null;
+		try {
+			httpResponse = HttpClientBuilder.create().setUserAgent(getUserAgent()).build().execute( request );
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		setStatusCode(httpResponse);		
 		setResponseFormat(httpResponse);
 		
-		responseAsString = EntityUtils.toString(httpResponse.getEntity());
+		try {
+			responseAsString = EntityUtils.toString(httpResponse.getEntity());
+		} catch (ParseException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("String response: " + responseAsString);
 		
 		return responseAsString;
@@ -87,20 +93,34 @@ public class RestService {
 	 * @throws 	ClientProtocolException
 	 * @throws 	IOException
 	 */
-	public String sendPostRequest(String URL, List<NameValuePair> params) throws ClientProtocolException, IOException{
+	public String sendPostRequest(String URL, List<NameValuePair> params){
 		
 		HttpClient httpclient = HttpClients.createDefault();
 		HttpPost httppost = new HttpPost(URL);
-		httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+		try {
+			httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		HttpResponse httpResponse = httpclient.execute(httppost);
+		HttpResponse httpResponse = null;
+		try {
+			httpResponse = httpclient.execute(httppost);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		setStatusCode(httpResponse);		
 		setResponseFormat(httpResponse);
 		
-		responseAsString = EntityUtils.toString(httpResponse.getEntity());
-		System.out.println("String response: " + responseAsString);
-		
-		
+		try {
+			responseAsString = EntityUtils.toString(httpResponse.getEntity());
+		} catch (ParseException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("String response: " + responseAsString);		
 		
 		return responseAsString;
 	}
@@ -115,16 +135,32 @@ public class RestService {
 	 * @throws 	ClientProtocolException
 	 * @throws 	IOException
 	 */
-	public String sendPutRequest(String URL, List<NameValuePair> params) throws ClientProtocolException, IOException{
+	public String sendPutRequest(String URL, List<NameValuePair> params){
 		HttpClient httpclient = HttpClients.createDefault();
 		HttpPut putRequest = new HttpPut(URL);
-		putRequest.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+		try {
+			putRequest.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		HttpResponse httpResponse = httpclient.execute(putRequest);
+		HttpResponse httpResponse = null;
+		try {
+			httpResponse = httpclient.execute(putRequest);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		setStatusCode(httpResponse);		
 		setResponseFormat(httpResponse);
 		
-		responseAsString = EntityUtils.toString(httpResponse.getEntity());
+		try {
+			responseAsString = EntityUtils.toString(httpResponse.getEntity());
+		} catch (ParseException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("String response: " + responseAsString);
 		
 		return responseAsString;
@@ -139,16 +175,32 @@ public class RestService {
 	 * @throws 	ClientProtocolException
 	 * @throws 	IOException
 	 */
-	public String sendPatchRequest(String URL, List<NameValuePair> params) throws ClientProtocolException, IOException{
+	public String sendPatchRequest(String URL, List<NameValuePair> params){
 		HttpClient httpclient = HttpClients.createDefault();
 		HttpPatch patchRequest = new HttpPatch(URL);
-		patchRequest.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+		try {
+			patchRequest.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		HttpResponse httpResponse = httpclient.execute(patchRequest);
+		HttpResponse httpResponse = null;
+		try {
+			httpResponse = httpclient.execute(patchRequest);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		setStatusCode(httpResponse);		
 		setResponseFormat(httpResponse);
 		
-		responseAsString = EntityUtils.toString(httpResponse.getEntity());
+		try {
+			responseAsString = EntityUtils.toString(httpResponse.getEntity());
+		} catch (ParseException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("String response: " + responseAsString);
 		
 		return responseAsString;
@@ -163,16 +215,27 @@ public class RestService {
 	 * @throws 	ClientProtocolException
 	 * @throws 	IOException
 	 */
-	public String sendDeleteRequest(String URL) throws ClientProtocolException, IOException{
+	public String sendDeleteRequest(String URL){
 
 		HttpUriRequest deleteRequest = new HttpDelete(URL);
-		HttpResponse httpResponse = HttpClientBuilder.create().build().execute( deleteRequest );
+		HttpResponse httpResponse = null;
+		try {
+			httpResponse = HttpClientBuilder.create().build().execute( deleteRequest );
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		setStatusCode(httpResponse);		
 		setResponseFormat(httpResponse);
 		
 		if (httpResponse.getEntity()!=null){
-			responseAsString = EntityUtils.toString(httpResponse.getEntity());
+			try {
+				responseAsString = EntityUtils.toString(httpResponse.getEntity());
+			} catch (ParseException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println("String response: " + responseAsString);
 		}		
 		
@@ -193,11 +256,17 @@ public class RestService {
 	 * @throws 	ClientProtocolException
 	 * @throws 	IOException
 	 */
-	public Header[] sendOptionsRequest(String URL ) throws ClientProtocolException, IOException{
+	public Header[] sendOptionsRequest(String URL ){
 		HttpClient httpclient = HttpClients.createDefault();
 		HttpOptions httpOptions=new HttpOptions(URL);
 		
-		HttpResponse httpResponse=httpclient.execute(httpOptions);
+		HttpResponse httpResponse = null;
+		try {
+			httpResponse = httpclient.execute(httpOptions);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("Response Headers: ");
 		Header[] headers = httpResponse.getAllHeaders();
 		for (Header header: headers ){	
@@ -210,17 +279,14 @@ public class RestService {
 		return headers;
 	}
 	
-
-	
 	/**
 	 * Uses the class instance of the responeAsString to map to object
 	 * @param clazz
 	 * @return
 	 * @throws IOException
 	 */
-	public <T> T mapJSONToObject(Class<T> clazz) throws IOException {
-		return mapJSONToObject(responseAsString, clazz);
-		
+	public <T> T mapJSONToObject(Class<T> clazz){
+		return mapJSONToObject(responseAsString, clazz);		
 	}
 	
 	/**
@@ -229,9 +295,14 @@ public class RestService {
 	 * @return
 	 * @throws IOException
 	 */
-	public <T> T mapJSONToObject(String stringResponse, Class<T> clazz) throws IOException {
-		
-		return mapper.readValue(stringResponse, clazz);
+	public <T> T mapJSONToObject(String stringResponse, Class<T> clazz){
+		try {
+			return mapper.readValue(stringResponse, clazz);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	/**
@@ -240,9 +311,15 @@ public class RestService {
 	 * @return
 	 * @throws IOException
 	 */
-	public JsonNode mapJSONToTree(String stringResponse) throws IOException {
+	public JsonNode mapJSONToTree(String stringResponse){
 				
-		return mapper.readTree(stringResponse);
+		try {
+			return mapper.readTree(stringResponse);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	/**
@@ -251,7 +328,7 @@ public class RestService {
 	 * @return
 	 * @throws IOException
 	 */
-	public JsonNode mapJSONToTree() throws IOException {
+	public JsonNode mapJSONToTree(){
 		return mapJSONToTree(responseAsString);
 	}
 	

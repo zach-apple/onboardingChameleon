@@ -3,14 +3,13 @@ package com.orasi.core.interfaces;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.ITestContext;
-import org.testng.ITestResult;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.orasi.core.interfaces.Link;
+import com.orasi.utils.PageLoaded;
 import com.orasi.utils.TestEnvironment;
 
 
@@ -40,14 +39,14 @@ public class TestLink extends TestEnvironment {
     public void click(){
 	Link link= getDriver().findLink(By.xpath("//a[@href='testLinks.html']"));
 	link.click();
-	Assert.assertTrue(getDriver().findElement(By.xpath("//a[@href='link.html']")).syncVisible());
+	Assert.assertTrue(PageLoaded.syncVisible(getDriver(), getDriver().findElement(By.xpath("//a[@href='link.html']"))));
 	}
     
     @Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="click")
     public void jsClick(){
 	Link link= getDriver().findLink(By.xpath("//a[@href='link.html']"));
 	link.jsClick();
-	Assert.assertTrue(getDriver().findLink(By.xpath("//a[@href='testLinks.html']")).syncVisible());
+	Assert.assertTrue(PageLoaded.syncVisible(getDriver(), getDriver().findLink(By.xpath("//a[@href='testLinks.html']"))));
     }
     
     @Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="jsClick")

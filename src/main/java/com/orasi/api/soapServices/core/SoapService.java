@@ -125,14 +125,10 @@ public abstract class SoapService{
 
 	/**
 	 * @summary Returns the environment under test. Current accepted
-	 *          environments are: <br>
+	 *          environments are (examples): <br>
 	 *          Dev - Developer server or environment <br>
-	 *          Bashful - Integrated Testing Environment <br>
-	 *          Sleepy - Functional Environment 1 <br>
-	 *          Snow White - Functional Environment 2 <br>
-	 *          Doc - Performance Environment 1 <br>
-	 *          Evil Queen - Performance Environment 2 <br>
-	 *          Grumpy - Pre-Production Staging Environment
+	 *          Test - Integrated Testing Environment <br>
+	 *          Stage - Pre-Production Staging Environment
 	 * @precondition The environment under test needs to be set by
 	 *               {@link #setEnvironment(String)}
 	 * @author Justin Phlegar
@@ -223,14 +219,10 @@ public abstract class SoapService{
 
 	/**
 	 * @summary Sets the environment under test. Current accepted environments
-	 *          are: <br>
+	 *          are(examples): <br>
 	 *          Dev - Developer server or environment <br>
-	 *          Bashful - Integrated Testing Environment <br>
-	 *          Sleepy - Functional Environment 1 <br>
-	 *          Snow White - Functional Environment 2 <br>
-	 *          Doc - Performance Environment 1 <br>
-	 *          Evil Queen - Performance Environment 2 <br>
-	 *          Grumpy - Pre-Production Staging Environment <br>
+	 *          Test - Integrated Testing Environment <br>
+	 *          Stage - Pre-Production Staging Environment
 	 * <br>
 	 *          Can be retrieved by {@link #getEnvironment()}
 	 * @precondition The environment under test must be one of the environments
@@ -375,13 +367,6 @@ public abstract class SoapService{
 	 *            path
 	 * @param scenario
 	 *            String: Name of the scenario to poll data for
-	 * @throws FileNotFoundException
-	 *             Could not find the file in the path given
-	 * @throws BiffException
-	 * @throws IOException
-	 *             Failed to open the file
-	 * @throws ArrayIndexOutOfBoundsException
-	 *             Loop failed to catch and ending row
 	 */
 	protected Object[][] getTestScenario(String file, String scenario) {
 
@@ -449,11 +434,6 @@ public abstract class SoapService{
 	 *          service
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
-	 * @throws UnsupportedOperationException
-	 *             Operation given did not match any of the existing operations
-	 * @throws SOAPException
-	 * @throws IOException
-	 *             Failed to read the Request properly
 	 */
 	public SOAPMessage sendRequest() {
 		SOAPMessage request = null;
