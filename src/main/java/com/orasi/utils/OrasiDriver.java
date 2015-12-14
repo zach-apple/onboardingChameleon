@@ -80,13 +80,14 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	    int maxTriesToConnectToSauce = 3;
 	    boolean successfulLaunch = false;
 	    UnreachableBrowserException exception= null;
-	    for (int loopForSauce = 1 ; loopForSauce == maxTriesToConnectToSauce ; loopForSauce++) {
+	    for (int loopForSauce = 1 ; loopForSauce <= maxTriesToConnectToSauce ; loopForSauce++) {
 		try{
 		    driver = new RemoteWebDriver(url, caps);	
 		    successfulLaunch = true;
+		    break;
 		}catch(UnreachableBrowserException ube){
 		    exception = ube;
-		    TestReporter.logFailure("Failed to connect to Sauce Labs. Retrying... Atempt " + loopForSauce + " of " + maxTriesToConnectToSauce);
+		    TestReporter.logFailure("Failed to connect to Sauce Labs. Retrying... Attempt " + loopForSauce + " of " + maxTriesToConnectToSauce);
 		}
 	    }
 	    if(!successfulLaunch) throw exception;
