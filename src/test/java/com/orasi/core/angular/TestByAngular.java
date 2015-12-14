@@ -17,6 +17,7 @@ import com.orasi.core.by.angular.internal.ByAngularButtonText;
 import com.orasi.core.by.angular.internal.ByAngularController;
 import com.orasi.core.by.angular.internal.ByAngularModel;
 import com.orasi.core.by.angular.internal.ByAngularRepeater;
+import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestEnvironment;
 
 public class TestByAngular extends TestEnvironment{
@@ -65,6 +66,9 @@ public class TestByAngular extends TestEnvironment{
     	driver.findTextbox(ByNG.model("user.name")).set("Luke");
     	driver.findTextbox(ByNG.model("user.password")).set("Skywalker");
     	driver.findTextbox(ByNG.buttonText("Login")).click();
+    	driver.findTextbox(ByNG.buttonText("Login")).syncHidden();
+    	Sleeper.sleep(2000);
+    	
     }
     
     
