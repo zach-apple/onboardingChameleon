@@ -66,8 +66,6 @@ public class TestByAngular extends TestEnvironment{
     	driver.findTextbox(ByNG.model("user.name")).set("Luke");
     	driver.findTextbox(ByNG.model("user.password")).set("Skywalker");
     	driver.findTextbox(ByNG.buttonText("Login")).click();
-    	driver.findTextbox(ByNG.buttonText("Login")).syncHidden();
-    	Sleeper.sleep(2000);
     	
     }
     
