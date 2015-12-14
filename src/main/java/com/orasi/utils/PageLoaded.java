@@ -32,8 +32,8 @@ public class PageLoaded {
 	@SuppressWarnings("rawtypes")
 	private Class clazz = null;
 	private int timeout = 0;
-	//private static StopWatch stopwatch = new StopWatch();
-
+	private static boolean defaultSyncHandler = true;
+	
 	public PageLoaded() {
 		this.timeout = Constants.ELEMENT_TIMEOUT;
 	}
@@ -345,7 +345,7 @@ public class PageLoaded {
 	 * @author Justin
 	 */
 	public static boolean syncPresent(OrasiDriver driver, Element element) {
-		return syncPresent(driver, driver.getElementTimeout(), element);
+		return syncPresent(driver, driver.getElementTimeout(),getSyncToFailTest(), element);
 	}
 
 	/**
@@ -357,7 +357,7 @@ public class PageLoaded {
 	 * @author Justin
 	 */
 	public static boolean syncPresent(OrasiDriver driver, int timeout, Element element) {
-		return syncPresent(driver, timeout, true, element);
+		return syncPresent(driver, timeout, getSyncToFailTest(), element);
 	}
 
 	/**
@@ -413,7 +413,7 @@ public class PageLoaded {
 	 * @author Justin
 	 */
 	public static boolean syncVisible(OrasiDriver driver, Element element) {
-		return syncVisible(driver, driver.getElementTimeout(), element);
+		return syncVisible(driver, driver.getElementTimeout(),getSyncToFailTest(),  element);
 	}
 
 	/**
@@ -425,7 +425,7 @@ public class PageLoaded {
 	 * 
 	 */
 	public static boolean syncVisible(OrasiDriver driver, int timeout, Element element) {
-		return syncVisible(driver, timeout, true, element);
+		return syncVisible(driver, timeout, getSyncToFailTest(), element);
 	}
 
 	/**
@@ -479,7 +479,7 @@ public class PageLoaded {
 	 * @author Justin
 	 */
 	public static boolean syncHidden(OrasiDriver driver, Element element) {
-		return syncHidden(driver, driver.getElementTimeout(), element);
+		return syncHidden(driver, driver.getElementTimeout(),getSyncToFailTest(),  element);
 	}
 
 	/**
@@ -491,7 +491,7 @@ public class PageLoaded {
 	 * @author Justin
 	 */
 	public static boolean syncHidden(OrasiDriver driver, int timeout, Element element) {
-		return syncHidden(driver, timeout, true, element);
+		return syncHidden(driver, timeout, getSyncToFailTest(), element);
 	}
 
 	/**
@@ -543,7 +543,7 @@ public class PageLoaded {
 	 * @author Justin
 	 */
 	public static boolean syncEnabled(OrasiDriver driver, Element element) {
-		return syncEnabled(driver, driver.getElementTimeout(), element);
+		return syncEnabled(driver, driver.getElementTimeout(),getSyncToFailTest(),  element);
 	}
 
 	/**
@@ -556,7 +556,7 @@ public class PageLoaded {
 	 * 
 	 */
 	public static boolean syncEnabled(OrasiDriver driver, int timeout, Element element) {
-		return syncEnabled(driver, timeout, true, element);
+		return syncEnabled(driver, timeout, getSyncToFailTest(), element);
 	}
 
 	/**
@@ -611,7 +611,7 @@ public class PageLoaded {
 	 * @author Justin
 	 */
 	public static boolean syncDisabled(OrasiDriver driver, Element element) {
-		return syncDisabled(driver, driver.getElementTimeout(), element);
+		return syncDisabled(driver, driver.getElementTimeout(), getSyncToFailTest(),  element);
 	}
 
 	/**
@@ -625,7 +625,7 @@ public class PageLoaded {
 	 * 
 	 */
 	public static boolean syncDisabled(OrasiDriver driver, int timeout, Element element) {
-		return syncDisabled(driver, timeout, true, element);
+		return syncDisabled(driver, timeout, getSyncToFailTest(), element);
 	}
 
 	/**
@@ -679,7 +679,7 @@ public class PageLoaded {
 	 * @author Justin
 	 */
 	public static boolean syncTextInElement(OrasiDriver driver, String text, Element element) {
-		return syncTextInElement(driver, text, driver.getElementTimeout(), element);
+		return syncTextInElement(driver, text, driver.getElementTimeout(), getSyncToFailTest(), element);
 	}
 
 	/**
@@ -693,7 +693,7 @@ public class PageLoaded {
 	 * 
 	 */
 	public static boolean syncTextInElement(OrasiDriver driver, String text, int timeout, Element element) {
-		return syncTextInElement(driver, text, timeout, true, element);
+		return syncTextInElement(driver, text, timeout, getSyncToFailTest(), element);
 	}
 
 	/**
@@ -901,5 +901,13 @@ public class PageLoaded {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public static boolean getSyncToFailTest() {
+	    return defaultSyncHandler;
+	}
+
+	public static void setSyncToFailTest(boolean defaultSyncHandler) {
+	    PageLoaded.defaultSyncHandler = defaultSyncHandler;
 	}
 }
