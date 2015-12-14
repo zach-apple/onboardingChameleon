@@ -20,6 +20,7 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.safari.SafariDriver;
 
 import com.gargoylesoftware.htmlunit.WebWindow;
@@ -76,7 +77,18 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @param url - 
 	 */
 	public OrasiDriver(DesiredCapabilities caps, URL url) {
-		driver = new RemoteWebDriver(url, caps);
+	    int maxTriesToConnectToSauce = 3;
+	    boolean successfulLaunch = false;
+	    UnreachableBrowserException exception= null;
+	    for (int loopForSauce = 0 ; loopForSauce < maxTriesToConnectToSauce ; loopForSauce++) {
+		try{
+		    driver = new RemoteWebDriver(url, caps);	
+		    successfulLaunch = true;
+		}catch(UnreachableBrowserException ube){
+		    exception = ube;
+		}
+	    }
+	    if(!successfulLaunch) throw exception;
 	}
 	/**
 	 * Method to return the current OrasiDriver
