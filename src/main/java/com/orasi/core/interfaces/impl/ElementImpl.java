@@ -48,8 +48,8 @@ public class ElementImpl implements Element {
 		try {
 			getWrappedElement().click();
 		} catch (RuntimeException rte) {
-			TestReporter.interfaceLog(
-					"Clicked [ <font size = 2 color=\"red\"><b>@FindBy: " + getElementLocatorInfo() + " </font></b>]");
+			TestReporter.interfaceLog("Clicked [ <font size = 2 color=\"red\"><b>@FindBy: " + getElementLocatorInfo() + " </font></b>]");
+			throw rte;
 		}
 		TestReporter.interfaceLog("Clicked [ <b>@FindBy: " + getElementLocatorInfo() + " </b>]");
 	}
@@ -404,7 +404,7 @@ public class ElementImpl implements Element {
 	 * @author Justin
 	 */
 	public boolean syncPresent() {
-		return PageLoaded.syncPresent(getWrappedDriver(), getWrappedDriver().getElementTimeout(), new ElementImpl(getWrappedElement()));
+		return PageLoaded.syncPresent(getWrappedDriver(), getWrappedDriver().getElementTimeout(), PageLoaded.getSyncToFailTest(), new ElementImpl(getWrappedElement()));
 	}
 
 	/**
@@ -416,7 +416,7 @@ public class ElementImpl implements Element {
 	 * @author Justin
 	 */
 	public boolean syncPresent(int timeout) {
-		return PageLoaded.syncPresent(getWrappedDriver(), timeout, true, new ElementImpl(getWrappedElement()));
+		return PageLoaded.syncPresent(getWrappedDriver(), timeout, PageLoaded.getSyncToFailTest(),  new ElementImpl(getWrappedElement()));
 	}
 
 	/**
@@ -441,7 +441,7 @@ public class ElementImpl implements Element {
 	 * @author Justin
 	 */
 	public boolean syncVisible() {
-		return PageLoaded.syncVisible(getWrappedDriver(), getWrappedDriver().getElementTimeout(), new ElementImpl(getWrappedElement()));
+		return PageLoaded.syncVisible(getWrappedDriver(), getWrappedDriver().getElementTimeout(), PageLoaded.getSyncToFailTest(), new ElementImpl(getWrappedElement()));
 	}
 
 	/**
@@ -453,7 +453,7 @@ public class ElementImpl implements Element {
 	 * 
 	 */
 	public boolean syncVisible(int timeout) {
-		return PageLoaded.syncVisible(getWrappedDriver(), timeout, true, new ElementImpl(getWrappedElement()));
+		return PageLoaded.syncVisible(getWrappedDriver(), timeout,PageLoaded.getSyncToFailTest(), new ElementImpl(getWrappedElement()));
 	}
 
 	/**
@@ -478,7 +478,7 @@ public class ElementImpl implements Element {
 	 * @author Justin
 	 */
 	public boolean syncHidden() {
-		return PageLoaded.syncHidden(getWrappedDriver(), getWrappedDriver().getElementTimeout(), new ElementImpl(getWrappedElement()));
+		return PageLoaded.syncHidden(getWrappedDriver(), getWrappedDriver().getElementTimeout(), PageLoaded.getSyncToFailTest(), new ElementImpl(getWrappedElement()));
 	}
 
 	/**
@@ -490,7 +490,7 @@ public class ElementImpl implements Element {
 	 * @author Justin
 	 */
 	public boolean syncHidden(int timeout) {
-		return PageLoaded.syncHidden(getWrappedDriver(), timeout, true, new ElementImpl(getWrappedElement()));
+		return PageLoaded.syncHidden(getWrappedDriver(), timeout, PageLoaded.getSyncToFailTest(), new ElementImpl(getWrappedElement()));
 	}
 
 	/**
@@ -515,7 +515,7 @@ public class ElementImpl implements Element {
 	 * @author Justin
 	 */
 	public boolean syncEnabled() {
-		return PageLoaded.syncEnabled(getWrappedDriver(), getWrappedDriver().getElementTimeout(), new ElementImpl(getWrappedElement()));
+		return PageLoaded.syncEnabled(getWrappedDriver(), getWrappedDriver().getElementTimeout(),PageLoaded.getSyncToFailTest(),  new ElementImpl(getWrappedElement()));
 	}
 
 	/**
@@ -528,7 +528,7 @@ public class ElementImpl implements Element {
 	 * 
 	 */
 	public boolean syncEnabled(int timeout) {
-		return PageLoaded.syncEnabled(getWrappedDriver(), timeout, true, new ElementImpl(getWrappedElement()));
+		return PageLoaded.syncEnabled(getWrappedDriver(), timeout,PageLoaded.getSyncToFailTest(), new ElementImpl(getWrappedElement()));
 	}
 
 	/**
@@ -554,7 +554,7 @@ public class ElementImpl implements Element {
 	 * @author Justin
 	 */
 	public boolean syncDisabled() {
-		return PageLoaded.syncDisabled(getWrappedDriver(), getWrappedDriver().getElementTimeout(), new ElementImpl(getWrappedElement()));
+		return PageLoaded.syncDisabled(getWrappedDriver(), getWrappedDriver().getElementTimeout(), PageLoaded.getSyncToFailTest(), new ElementImpl(getWrappedElement()));
 	}
 
 	/**
@@ -568,7 +568,7 @@ public class ElementImpl implements Element {
 	 * 
 	 */
 	public boolean syncDisabled(int timeout) {
-		return PageLoaded.syncDisabled(getWrappedDriver(), timeout, true, new ElementImpl(getWrappedElement()));
+		return PageLoaded.syncDisabled(getWrappedDriver(), timeout, PageLoaded.getSyncToFailTest(), new ElementImpl(getWrappedElement()));
 	}
 
 	/**
@@ -594,7 +594,7 @@ public class ElementImpl implements Element {
 	 * @author Justin
 	 */
 	public boolean syncTextInElement(String text) {
-		return PageLoaded.syncTextInElement(getWrappedDriver(), text, getWrappedDriver().getElementTimeout(), new ElementImpl(getWrappedElement()));
+		return PageLoaded.syncTextInElement(getWrappedDriver(), text, getWrappedDriver().getElementTimeout(), PageLoaded.getSyncToFailTest(), new ElementImpl(getWrappedElement()));
 	}
 
 	/**
@@ -608,7 +608,7 @@ public class ElementImpl implements Element {
 	 * 
 	 */
 	public boolean syncTextInElement(String text, int timeout) {
-		return PageLoaded.syncTextInElement(getWrappedDriver(), text, timeout, true, new ElementImpl(getWrappedElement()));
+		return PageLoaded.syncTextInElement(getWrappedDriver(), text, timeout, PageLoaded.getSyncToFailTest(), new ElementImpl(getWrappedElement()));
 	}
 
 	/**
