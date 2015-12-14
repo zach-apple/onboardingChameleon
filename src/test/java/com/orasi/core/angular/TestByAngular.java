@@ -82,7 +82,7 @@ public class TestByAngular extends TestEnvironment{
     }
     
     
-    @Test(groups ={"regression", "interfaces", "byAngularController"}, dependsOnMethods="byAngularButtonText")
+  //  @Test(groups ={"regression", "interfaces", "byAngularController"}, dependsOnMethods="byAngularButtonText")
     public void byAngularRepeater(){
     	ByAngularRepeater repeat = new ByAngularRepeater((JavascriptExecutor)driver.getDriver(), "employee in employees");
     	Assert.assertNotNull(repeat);
