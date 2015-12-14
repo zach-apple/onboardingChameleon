@@ -48,8 +48,8 @@ public class ElementImpl implements Element {
 		try {
 			getWrappedElement().click();
 		} catch (RuntimeException rte) {
-			TestReporter.interfaceLog(
-					"Clicked [ <font size = 2 color=\"red\"><b>@FindBy: " + getElementLocatorInfo() + " </font></b>]");
+			TestReporter.interfaceLog("Clicked [ <font size = 2 color=\"red\"><b>@FindBy: " + getElementLocatorInfo() + " </font></b>]");
+			throw rte;
 		}
 		TestReporter.interfaceLog("Clicked [ <b>@FindBy: " + getElementLocatorInfo() + " </b>]");
 	}
