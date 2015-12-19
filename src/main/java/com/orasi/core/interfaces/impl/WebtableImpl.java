@@ -19,7 +19,7 @@ import com.orasi.utils.OrasiDriver;
 public class WebtableImpl extends ElementImpl implements Webtable {
 
 	/**
-	 * @summary - Wraps a WebElement with checkbox functionality.
+	 * Wraps a WebElement with checkbox functionality.
 	 * @param element
 	 *            to wrap up
 	 */
@@ -49,11 +49,9 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	}
 
 	/**
-	 * @summary - Attempts to locate the number of child elements with the HTML
-	 *          tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
-	 *          used.
-	 * @param driver
-	 *            - Current active WebDriver object
+	 * Attempts to locate the number of child elements with the HTML
+	 * tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
+	 * used.
 	 * @return int - number of rows found for a given table
 	 */
 	@Override
@@ -62,16 +60,13 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	}
 
 	/**
-	 * @summary - Attempts to locate the number of child elements with the HTML
-	 *          tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
-	 *          used. All rows are then iterated through until the desired row,
-	 *          determined by the parameter, is found.
-	 * @param driver
-	 *            - Current active WebDriver object
+	 * Attempts to locate the number of child elements with the HTML
+	 * tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
+	 * used. All rows are then iterated through until the desired row,
+	 * determined by the parameter, is found.
 	 * @param row
 	 *            - Desired row for which to return a column count
 	 * @return int - number of columns found for a given row
-	 * @throws NoSuchAttributeException
 	 */
 	@Override
 	public int getColumnCount(int row) {
@@ -79,20 +74,17 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	}
 
 	/**
-	 * @summary - Attempts to locate the number of child elements with the HTML
-	 *          tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
-	 *          used. All rows are then iterated through until the desired row,
-	 *          determined by the parameter 'row', is found. For this row, all
-	 *          columns are then iterated through until the desired column,
-	 *          determined by the parameter 'column', is found.
-	 * @param te
-	 *            - TestEnvironment super class that contains the current driver
+	 * Attempts to locate the number of child elements with the HTML
+	 * tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
+	 * used. All rows are then iterated through until the desired row,
+	 * determined by the parameter 'row', is found. For this row, all
+	 * columns are then iterated through until the desired column,
+	 * determined by the parameter 'column', is found.
 	 * @param row
 	 *            - Desired row in which to search for a particular cell
 	 * @param column
 	 *            - Desired column in which to find the cell
 	 * @return WebElement - the desired cell
-	 * @throws NoSuchAttributeException
 	 */
 	@Override
 	public Element getCell(int row, int column) {
@@ -105,20 +97,17 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	}
 
 	/**
-	 * @summary - Attempts to locate the number of child elements with the HTML
-	 *          tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
-	 *          used. All rows are then iterated through until the desired row,
-	 *          determined by the parameter 'row', is found. For this row, all
-	 *          columns are then iterated through until the desired column,
-	 *          determined by the parameter 'column', is found. The cell found
-	 *          by the row/column indices is then clicked
-	 * @param driver
-	 *            - Current active WebDriver object
+	 * Attempts to locate the number of child elements with the HTML
+	 * tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
+	 * used. All rows are then iterated through until the desired row,
+	 * determined by the parameter 'row', is found. For this row, all
+	 * columns are then iterated through until the desired column,
+	 * determined by the parameter 'column', is found. The cell found
+	 * by the row/column indices is then clicked
 	 * @param row
 	 *            - Desired row in which to search for a particular cell
 	 * @param column
 	 *            - Desired column in which to find the cell
-	 * @throws NoSuchAttributeException
 	 */
 	@Override
 	public void clickCell(int row, int column) {
@@ -126,20 +115,17 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	}
 
 	/**
-	 * @summary - Attempts to locate the number of child elements with the HTML
-	 *          tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
-	 *          used. All rows are then iterated through until the desired row,
-	 *          determined by the parameter 'row', is found. For this row, all
-	 *          columns are then iterated through until the desired column,
-	 *          determined by the parameter 'column', is found.
-	 * @param driver
-	 *            - Current active WebDriver object
+	 * Attempts to locate the number of child elements with the HTML
+	 * tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
+	 * used. All rows are then iterated through until the desired row,
+	 * determined by the parameter 'row', is found. For this row, all
+	 * columns are then iterated through until the desired column,
+	 * determined by the parameter 'column', is found.
 	 * @param row
 	 *            - Desired row in which to search for a particular cell
 	 * @param column
 	 *            - Desired column in which to find the cell
 	 * @return String - text of cell contents
-	 * @throws NoSuchAttributeException
 	 */
 	@Override
 	public String getCellData(int row, int column) {
@@ -147,13 +133,11 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	}
 
 	/**
-	 * @summary - Attempts to locate the number of child elements with the HTML
-	 *          tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
-	 *          used. All rows are then iterated through as well as each column
-	 *          for each row until the cell with the desired text, determined by
-	 *          the parameter, is found.
-	 * @param driver
-	 *            - Current active WebDriver object
+	 * Attempts to locate the number of child elements with the HTML
+	 * tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
+	 * used. All rows are then iterated through as well as each column
+	 * for each row until the cell with the desired text, determined by
+	 * the parameter, is found.
 	 * @param text
 	 *            - text for which to search
 	 * @return int - row number containing the desired text
@@ -164,13 +148,11 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	}
 
 	/**
-	 * @summary - Attempts to locate the number of child elements with the HTML
-	 *          tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
-	 *          used. All rows are then iterated through as well as each column
-	 *          for each row until the desired cell is located. The cell text is
-	 *          then validated against the parameter 'text'
-	 * @param driver
-	 *            - Current active WebDriver object
+	 * Attempts to locate the number of child elements with the HTML
+	 * tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
+	 * used. All rows are then iterated through as well as each column
+	 * for each row until the desired cell is located. The cell text is
+	 * then validated against the parameter 'text'
 	 * @param text
 	 *            - text for which to search
 	 * @param columnPosition
@@ -183,14 +165,13 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	}
 
 	/**
-	 * @summary - Attempts to locate the number of child elements with the HTML
-	 *          tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
-	 *          used. All rows are then iterated through as well as each column
-	 *          for each row until the desired cell is located. The cell text is
-	 *          then validated against the parameter 'text'
-	 * @param driver
-	 *            - Current active WebDriver object
+	 * Attempts to locate the number of child elements with the HTML
+	 * tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
+	 * used. All rows are then iterated through as well as each column
+	 * for each row until the desired cell is located. The cell text is
+	 * then validated against the parameter 'text'
 	 * @param text
+     *
 	 *            - text for which to search
 	 * @param columnPosition
 	 *            - column number where the desired text is expected
@@ -204,14 +185,13 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	}
 
 	/**
-	 * @summary - Attempts to locate the number of child elements with the HTML
-	 *          tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
-	 *          used. All rows are then iterated through as well as each column
-	 *          for each row until the desired cell is located. The cell text is
-	 *          then validated against the parameter 'text'
-	 * @param driver
-	 *            - Current active WebDriver object
-	 * @param text
+	 * Attempts to locate the number of child elements with the HTML
+	 * tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
+	 * used. All rows are then iterated through as well as each column
+	 * for each row until the desired cell is located. The cell text is
+	 * then validated against the parameter 'text'
+	 *
+     * @param text
 	 *            - text for which to search
 	 * @param columnPosition
 	 *            - column number where the desired text is expected
@@ -225,7 +205,6 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	public int getRowWithCellText(String text, int columnPosition, int startRow, boolean exact) {
 
 		int currentRow = 1, rowFound = 0;
-		Boolean found = false;
 
 		List<WebElement> rowCollection = getRowCollection();
 		for (WebElement rowElement : rowCollection) {
@@ -258,21 +237,17 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 				}
 			}
 		}
-		Assert.assertEquals(Boolean.valueOf(found), Boolean.TRUE, "No cell in column [" + String.valueOf(columnPosition)
-				+ "] was found to contain the text [" + text + "].");
+
 		return rowFound;
 	}
 
 	/**
-	 * @summary - Attempts to locate the number of child elements with the HTML
-	 *          tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
-	 *          used. All rows are then iterated through as well as each column
-	 *          for each row until the desired cell is located. The cell text is
-	 *          then validated against the parameter 'text'
-	 * @param driver
-	 *            - Current active WebDriver object
-	 * @param text
-	 *            - text for which to search
+	 * Attempts to locate the number of child elements with the HTML
+	 * tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
+	 * used. All rows are then iterated through as well as each column
+	 * for each row until the desired cell is located. The cell text is
+	 * then validated against the parameter 'text'
+	 * @param text - text for which to search
 	 * @return int - column number containing the desired text
 	 */
 	@Override
@@ -281,13 +256,10 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	}
 
 	/**
-	 * @summary - Attempts to locate the number of child elements with the HTML
-	 *          tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
-	 *          used. All rows are then iterated through until the desired row
-	 *          is found, then all columns are iterated through until the
-	 *          desired text is found.
-	 * @param driver
-	 *            - Current active WebDriver object
+	 * Attempts to locate the number of child elements with the HTML
+	 * tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
+	 * used. All rows are then iterated through until the desired row
+	 * is found, then all columns are iterated through until the
 	 * @param text
 	 *            - text for which to search
 	 * @param rowPosition
