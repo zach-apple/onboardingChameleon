@@ -52,11 +52,9 @@ public class PageLoaded {
 	 * This waits for a specified element on the page to be found on the page by
 	 * the driver Uses the default test time out set by WebDriverSetup
 	 * 
-	 * @param class
+	 * @param clazz
 	 *            the class calling this method - used so can initialize the
 	 *            page class repeatedly
-	 * @param driver
-	 *            The webDriver
 	 * @param obj
 	 *            The element you are waiting to display on the page
 	 * @version 10/16/2014
@@ -104,10 +102,10 @@ public class PageLoaded {
 	 * This waits for a specified element on the page to be found on the page by
 	 * the driver Uses the default test time out set by WebDriverSetup
 	 * 
-	 * @param class
+	 * @param clazz
 	 *            the class calling this method - used so can initialize the
 	 *            page class repeatedly
-	 * @param driver
+	 * @param oDriver
 	 *            The webDriver
 	 * @param obj
 	 *            The element you are waiting to display on the page
@@ -129,7 +127,7 @@ public class PageLoaded {
 	 * specified element on the page to be found on the page by the driver
 	 * 
 	 * 
-	 * @param class
+	 * @param clazz
 	 *            the class calling this method - used so can initialize the
 	 *            page class repeatedly
 	 * @param driver
@@ -152,14 +150,7 @@ public class PageLoaded {
 	 * This uses the HTML DOM readyState property to wait until a page is
 	 * finished loading. It will wait for the ready state to be either
 	 * 'interactive' or 'complete'.
-	 * 
-	 * @param class
-	 *            the class calling this method - used so can initialize the
-	 *            page class repeatedly
-	 * @param driver
-	 *            The webDriver
-	 * @param obj
-	 *            The element you are waiting to display on the page
+	 *
 	 * @version 12/16/2014
 	 * @author Jessica Marshall
 	 * @return False if the element is not found after the timeout, true if is
@@ -193,14 +184,7 @@ public class PageLoaded {
 	 * This uses the HTML DOM readyState property to wait until a page is
 	 * finished loading. It will wait for the ready state to be either
 	 * 'interactive' or 'complete'.
-	 * 
-	 * @param class
-	 *            the class calling this method - used so can initialize the
-	 *            page class repeatedly
-	 * @param driver
-	 *            The webDriver
-	 * @param obj
-	 *            The element you are waiting to display on the page
+	 *
 	 * @version 12/16/2014
 	 * @author Jessica Marshall
 	 * @return False if the element is not found after the timeout, true if is
@@ -234,9 +218,7 @@ public class PageLoaded {
 	/**
 	 * This uses protractor method to wait until a page is ready -
 	 * notifyWhenNoOutstandingRequests
-	 * 
-	 * @param driver
-	 *            The webDriver
+	 *
 	 * @version 10/16/2014
 	 * @author Justin Phlegar
 	 * 
@@ -257,14 +239,7 @@ public class PageLoaded {
 	 * A more strict version of isDomInteractive. This uses the HTML DOM
 	 * readyState property to wait until a page is finished loading. It will
 	 * wait for the ready state to be 'complete'.
-	 * 
-	 * @param class
-	 *            the class calling this method - used so can initialize the
-	 *            page class repeatedly
-	 * @param driver
-	 *            The webDriver
-	 * @param obj
-	 *            The element you are waiting to display on the page
+	 *
 	 * @version 12/16/2014
 	 * @author Jessica Marshall
 	 * @return False if the element is not found after the timeout, true if is
@@ -298,13 +273,8 @@ public class PageLoaded {
 	 * readyState property to wait until a page is finished loading. It will
 	 * wait for the ready state to be 'complete'.
 	 * 
-	 * @param class
-	 *            the class calling this method - used so can initialize the
-	 *            page class repeatedly
-	 * @param driver
+	 * @param oDriver
 	 *            The webDriver
-	 * @param obj
-	 *            The element you are waiting to display on the page
 	 * @version 12/16/2014
 	 * @author Jessica Marshall
 	 * @return False if the element is not found after the timeout, true if is

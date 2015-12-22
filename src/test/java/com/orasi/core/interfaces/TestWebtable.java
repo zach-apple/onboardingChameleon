@@ -1,5 +1,6 @@
 package com.orasi.core.interfaces;
 
+import com.orasi.core.interfaces.impl.WebtableImpl;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.ITestContext;
@@ -34,7 +35,17 @@ public class TestWebtable extends TestEnvironment{
     public void close(ITestContext testResults){
 	endTest("TestAlert", testResults);
     }
-    
+
+    @Test(groups ={"regression", "interfaces", "webtable"})
+    public void constructorWithElement(){
+        Assert.assertNotNull((new WebtableImpl(getDriver().findWebElement((By.xpath(xpath))))));
+    }
+
+    @Test(groups ={"regression", "interfaces", "webtable"})
+    public void constructorWithElementAndDriver(){
+        Assert.assertNotNull((new WebtableImpl(getDriver().findWebElement((By.xpath(xpath))), getDriver())));
+    }
+
     @Test(groups ={"regression", "interfaces", "webtable"})
     public void clickCell(){
     	Webtable webtable= getDriver().findWebtable(By.xpath(xpath));
@@ -72,7 +83,13 @@ public class TestWebtable extends TestEnvironment{
 	Webtable webtable= getDriver().findWebtable(By.xpath(xpath));
 	Assert.assertTrue(webtable.getColumnWithCellText( "$xx,xxx", 7) == 3);
     }
-    
+
+    @Test(groups ={"regression", "interfaces", "webtable"})
+    public void getColumnWithCellTextNothingFound(){
+        Webtable webtable= getDriver().findWebtable(By.xpath(xpath));
+        Assert.assertTrue(webtable.getColumnWithCellText("Blah") == 0);
+    }
+
     @Test(groups ={"regression", "interfaces", "webtable"})
     public void getRowCount(){
 	Webtable webtable= getDriver().findWebtable(By.xpath(xpath));
@@ -86,13 +103,13 @@ public class TestWebtable extends TestEnvironment{
     }
     
     @Test(groups ={"regression", "interfaces", "webtable"})
-    public void getRowWithCellTextSpecifedColumn(){
+    public void getRowWithCellTextSpecifiedColumn(){
 	Webtable webtable= getDriver().findWebtable(By.xpath(xpath));
 	Assert.assertTrue(webtable.getRowWithCellText( "13.", 1) == 5);
     }
     
     @Test(groups ={"regression", "interfaces", "webtable"})
-    public void getRowWithCellTextSpecifedRowAndColumn(){
+    public void getRowWithCellTextSpecifiedRowAndColumn(){
 	Webtable webtable= getDriver().findWebtable(By.xpath(xpath));
 	Assert.assertTrue(webtable.getRowWithCellText( "14.", 1, 2) == 6);
     }
@@ -100,8 +117,18 @@ public class TestWebtable extends TestEnvironment{
     @Test(groups ={"regression", "interfaces", "webtable"})
     public void getRowWithCellTextNotExact(){
 	Webtable webtable= getDriver().findWebtable(By.xpath(xpath));
-	Assert.assertTrue(webtable.getRowWithCellText( "duplicating", 2, 2, false) == 4);
+	Assert.assertTrue(webtable.getRowWithCellText( "duplICatING", 2, 2, false) == 4);
     }
-    
 
+    @Test(groups ={"regression", "interfaces", "webtable"})
+    public void getRowWithCellTextNothingFound(){
+        Webtable webtable= getDriver().findWebtable(By.xpath(xpath));
+        Assert.assertTrue(webtable.getRowWithCellText( "NOTHING!", 2, 2, true) == 0);
+    }
+
+    @Test(groups ={"regression", "interfaces", "webtable"})
+    public void getRowWithCellTextNoColumn(){
+        Webtable webtable= getDriver().findWebtable(By.xpath(xpath));
+        Assert.assertTrue(webtable.getRowWithCellText( "Supplies and Expenses", -1, 2, false) == 7);
+    }
 }

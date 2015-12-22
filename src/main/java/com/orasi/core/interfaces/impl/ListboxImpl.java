@@ -69,8 +69,8 @@ public class ListboxImpl extends ElementImpl implements Listbox {
 
 	/**
 	 * @summary - Wraps Selenium's method.
-	 * @param text
-	 *            - visible text to select
+	 * @param value
+	 *            - option value to select
 	 * @see org.openqa.selenium.support.ui.Select#selectByVisibleText(String)
 	 */
 	@Override

@@ -13,6 +13,12 @@
 		</classes>
 	</test>
 
+	<test name="TestElementInternalHandlers">
+		<classes>
+			<class name="com.orasi.core.interfaces.TestElementInternalHandlers" />
+		</classes>
+	</test>
+
 	<test name="Button">
 		<classes>
 			<class name="com.orasi.core.interfaces.TestButton" />

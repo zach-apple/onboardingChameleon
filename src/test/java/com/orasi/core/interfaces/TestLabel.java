@@ -1,5 +1,6 @@
 package com.orasi.core.interfaces;
 
+import com.orasi.core.interfaces.impl.LabelImpl;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.ITestContext;
@@ -33,11 +34,14 @@ public class TestLabel extends TestEnvironment{
 	endTest("TestAlert", testResults);
     }
 
-      
+	@Test(groups ={"regression", "interfaces", "label"})
+	public void constructorWithElement(){
+		Assert.assertNotNull((new LabelImpl(getDriver().findWebElement((By.xpath("//*[@id='radioForm']/label[1]"))))));
+	}
     @Test(groups ={"regression", "interfaces", "label"})
     public void getFor(){
-	Label label= getDriver().findLabel(By.xpath("//*[@id='radioForm']/label[1]"));
-	Assert.assertTrue(label.getFor().equals("genderm"));
+		Label label= getDriver().findLabel(By.xpath("//*[@id='radioForm']/label[1]"));
+		Assert.assertTrue(label.getFor().equals("genderm"));
     }
 
 }

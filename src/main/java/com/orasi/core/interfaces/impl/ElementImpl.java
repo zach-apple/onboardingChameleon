@@ -87,7 +87,7 @@ public class ElementImpl implements Element {
 	}
 
 	/**
-	 * @see org.openqa.selenium.WebElement#getAttribute()
+	 * @see org.openqa.selenium.WebElement#getAttribute(String)
 	 */
 	@Override
 	public String getAttribute(String name) {
@@ -95,7 +95,7 @@ public class ElementImpl implements Element {
 	}
 
 	/**
-	 * @see org.openqa.selenium.WebElement#getCssValue()
+	 * @see org.openqa.selenium.WebElement#getCssValue(String)
 	 */
 	@Override
 	public String getCssValue(String propertyName) {
@@ -118,7 +118,7 @@ public class ElementImpl implements Element {
 	}
 
 	/**
-	 * @see org.openqa.selenium.WebElement#findElements()
+	 * @see org.openqa.selenium.WebElement#findElement(By)
 	 */
 	@Override
 	public List<WebElement> findElements(By by) {
@@ -142,7 +142,7 @@ public class ElementImpl implements Element {
 	}
 
 	/**
-	 * @see org.openqa.selenium.WebElement#findElement()
+	 * @see org.openqa.selenium.WebElement#findElement(By)
 	 */
 	@Override
 	public WebElement findElement(By by) {
@@ -166,7 +166,7 @@ public class ElementImpl implements Element {
 	}
 
 	/**
-	 * @see org.openqa.selenium.WebElement.isSelected()
+	 * @see org.openqa.selenium.WebElement#isSelected()
 	 */
 	@Override
 	public boolean isSelected() {
@@ -191,7 +191,7 @@ public class ElementImpl implements Element {
 	}
 
 	/**
-	 * @see org.openqa.selenium.WebElement#sendKeys()
+	 * @see org.openqa.selenium.WebElement#sendKeys(CharSequence...)
 	 */
 	@Override
 	public void sendKeys(CharSequence... keysToSend) {
@@ -202,9 +202,6 @@ public class ElementImpl implements Element {
 		}
 	}
 
-	/**
-	 * @see org.openqa.selenium.WebElement#getWrappedElement()
-	 */
 	@Override
 	public WebElement getWrappedElement() {
 		return element;
@@ -252,7 +249,7 @@ public class ElementImpl implements Element {
 			locator = getElementLocatorAsString();
 			switch (locator) {
 			case "className":
-				by = new ByClassName(getElementIdentifier());
+				by = By.className(getElementIdentifier());
 				break;
 			case "cssSelector":
 				by = By.cssSelector(getElementIdentifier());

@@ -1,5 +1,6 @@
 package com.orasi.core.interfaces;
 
+import com.orasi.core.interfaces.impl.LinkImpl;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.ITestContext;
@@ -35,20 +36,50 @@ public class TestLink extends TestEnvironment {
 	endTest("TestAlert", testResults);
     }
 
+	@Test(groups ={"regression", "interfaces", "link"})
+	public void constructorWithElement(){
+		Assert.assertNotNull((new LinkImpl(getDriver().findLink(By.xpath("//a[@href='link.html']")))));
+	}
+
     @Test(groups ={"regression", "interfaces", "link"})
     public void click(){
-	Link link= getDriver().findLink(By.xpath("//a[@href='testLinks.html']"));
-	link.click();
-	Assert.assertTrue(PageLoaded.syncVisible(getDriver(), getDriver().findElement(By.xpath("//a[@href='link.html']"))));
+		Link link= getDriver().findLink(By.xpath("//a[@href='testLinks.html']"));
+		link.click();
+		Assert.assertTrue(PageLoaded.syncVisible(getDriver(), getDriver().findElement(By.xpath("//a[@href='link.html']"))));
 	}
-    
+
+	@Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="click")
+	public void clickNegative(){
+		Link link= getDriver().findLink(By.xpath("//a[@href='hiddenLink.html']"));
+		boolean valid = false;
+		try{
+			link.click();
+		}catch (RuntimeException rte){
+			valid = true;
+		}
+		Assert.assertTrue(valid);
+	}
+
     @Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="click")
     public void jsClick(){
-	Link link= getDriver().findLink(By.xpath("//a[@href='link.html']"));
-	link.jsClick();
-	Assert.assertTrue(PageLoaded.syncVisible(getDriver(), getDriver().findLink(By.xpath("//a[@href='testLinks.html']"))));
+		Link link= getDriver().findLink(By.xpath("//a[@href='link.html']"));
+		link.jsClick();
+		Assert.assertTrue(PageLoaded.syncVisible(getDriver(), getDriver().findLink(By.xpath("//a[@href='testLinks.html']"))));
     }
-    
+
+	@Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="jsClick")
+	public void jsClickNegative(){
+		Link link= getDriver().findLink(By.xpath("//a[@href='hiddenLink.html']"));
+		getDriver().findLink(By.xpath("//a[@href='testLinks.html']")).click();
+		boolean valid = false;
+		try{
+			link.jsClick();
+		}catch (RuntimeException rte){
+			valid = true;
+		}
+		Assert.assertTrue(valid);
+	}
+
     @Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="jsClick")
     public void getURL(){
 	Link link= getDriver().findLink(By.xpath("//a[@href='testLinks.html']"));

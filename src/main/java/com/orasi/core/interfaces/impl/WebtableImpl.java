@@ -3,11 +3,8 @@ package com.orasi.core.interfaces.impl;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import javax.naming.directory.NoSuchAttributeException;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.testng.Assert;
 
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Webtable;
@@ -260,10 +257,8 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	 * tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
 	 * used. All rows are then iterated through until the desired row
 	 * is found, then all columns are iterated through until the
-	 * @param text
-	 *            - text for which to search
-	 * @param rowPosition
-	 *            - row where the expected text is anticipated
+	 * @param text - text for which to search
+	 * @param rowPosition - row where the expected text is anticipated
 	 * @return int - column number containing the desired text
 	 */
 	@Override

@@ -1,5 +1,6 @@
 package com.orasi.core.interfaces;
 
+import com.orasi.core.interfaces.impl.ListboxImpl;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
@@ -36,7 +37,15 @@ public class TestListbox extends TestEnvironment{
 	endTest("TestAlert", testResults);
     }
 
-      
+	@Test(groups ={"regression", "interfaces", "listbox"})
+	public void constructorWithElement(){
+		Assert.assertNotNull((new ListboxImpl(getDriver().findWebElement((By.id("singleSelect"))))));
+	}
+
+	@Test(groups ={"regression", "interfaces", "listbox"})
+	public void constructorWithElementAndDriver(){
+		Assert.assertNotNull((new ListboxImpl(getDriver().findWebElement((By.id("singleSelect"))), getDriver())));
+	}
     @Test(groups ={"regression", "interfaces", "listbox"})
     public void isMultiple(){
 	Listbox listbox= getDriver().findListbox(By.id("multiSelect"));
@@ -49,7 +58,57 @@ public class TestListbox extends TestEnvironment{
 	listbox.select("Sports");
 	Assert.assertTrue(listbox.getFirstSelectedOption().getText().equals("Sports"));
     }
-    
+
+	@Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="select")
+	public void selectNoText(){
+		Listbox listbox= getDriver().findListbox(By.id("singleSelect"));
+		listbox.select("");
+		Assert.assertTrue(listbox.getAttribute("value").equals("Sports"));
+	}
+
+	@Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="select")
+	public void selectNegative(){
+		Listbox listbox= getDriver().findListbox(By.id("singleSelect"));
+		boolean valid = false;
+		try{
+			listbox.select("text");
+		}catch (RuntimeException rte){
+			valid = true;
+		}
+		Assert.assertTrue(valid);
+	}
+
+    @Test(groups ={"regression", "interfaces", "listbox"})
+    public void selectValue(){
+        Listbox listbox= getDriver().findListbox(By.id("singleSelect"));
+        listbox.selectValue("Sports");
+        Assert.assertTrue(listbox.getFirstSelectedOption().getText().equals("Sports"));
+    }
+
+    @Test(groups ={"regression", "interfaces", "listbox"}, dependsOnMethods="select")
+    public void selectValueNoText(){
+        Listbox listbox= getDriver().findListbox(By.id("singleSelect"));
+        listbox.selectValue("");
+        Assert.assertTrue(listbox.getAttribute("value").equals("Sports"));
+    }
+
+    @Test(groups ={"regression", "interfaces", "listbox"}, dependsOnMethods="select")
+    public void selectValueNegative(){
+        Listbox listbox= getDriver().findListbox(By.id("singleSelect"));
+        boolean valid = false;
+        try{
+            listbox.selectValue("text");
+        }catch (RuntimeException rte){
+            valid = true;
+        }
+        Assert.assertTrue(valid);
+    }
+
+    @Test(groups ={"regression", "interfaces", "listbox"}, dependsOnMethods="select")
+    public void getAllOptions(){
+        Listbox listbox= getDriver().findListbox(By.id("singleSelect"));
+        Assert.assertTrue(listbox.getOptions().get(0).getText().equals("Other"));
+    }
     @Test(groups ={"regression", "interfaces", "listbox"}, dependsOnMethods="select")
     public void getAllSelectedOptions(){
 	Listbox listbox= getDriver().findListbox(By.id("singleSelect"));

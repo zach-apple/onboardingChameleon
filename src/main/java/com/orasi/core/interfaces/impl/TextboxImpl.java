@@ -28,7 +28,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 
 	/**
 	 * @summary - Gets the value of an input field. Overrides default clear().
-	 * @see org.openqa.selenium.WebElement.clear()
+	 * @see org.openqa.selenium.WebElement#clear()
 	 */
 	@Override
 	public void clear() {
@@ -62,8 +62,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 				throw rte;
 			}
 		} else {
-			TestReporter
-					.interfaceLog(" Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+			TestReporter.interfaceLog(" Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
 		}
 	}
 
@@ -74,8 +73,6 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 	 *          uses Selenium to clear any existing values and performs a
 	 *          "sendKeys(text)" to simulate typing the value. If the text
 	 *          parameter is an empty string, this step is skipped.
-	 * @param driver
-	 *            - Current active WebDriver object
 	 * @param text
 	 *            - text to enter into the field
 	 */
@@ -87,11 +84,11 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 						getWrappedElement());
 				getWrappedElement().clear();
 				getWrappedElement().sendKeys(text);
-				TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: "
+				TestReporter.interfaceLog(" Send Keys [ <b>" + text + "</b> ] to Textbox [ <b>@FindBy: "
 						+ getElementLocatorInfo() + " </b> ]");
 
 			} catch (RuntimeException rte) {
-				TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: "
+				TestReporter.interfaceLog("Send Keys [ <b>" + text + "</b> ] to Textbox [ <b>@FindBy: "
 						+ getElementLocatorInfo() + " </b> ]", true);
 				throw rte;
 			}
