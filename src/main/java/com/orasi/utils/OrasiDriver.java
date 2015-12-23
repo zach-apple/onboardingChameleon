@@ -817,15 +817,7 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
 		public boolean isDomInteractive() {
 			return new PageLoaded(getOrasiDriver()).isDomInteractive();
 		}
-		/**
-		 * Method that determines when/if the DOM is interactive
-		 * Example usage: getDriver().page().isDomComplete(oDriver);
-		 * @param oDriver - current OrasiDriver
-		 * @return - boolean true if interactive, false otherwise
-		 */
-		public boolean isDomInteractive(OrasiDriver oDriver) {
-			return new PageLoaded().isDomInteractive(oDriver);
-		}
+	
 		/**
 		 * Method that determines when/if the DOM is interactive
 		 * Example usage: getDriver().page().initializePage(oDriver, timeout);
@@ -833,8 +825,8 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
 		 * @param timeout - user-defined timeout to allow the DOM to become interactive
 		 * @return - boolean true if interactive, false otherwise
 		 */
-		public boolean isDomInteractive(OrasiDriver oDriver, int timeout) {
-			return new PageLoaded().isDomInteractive(oDriver, timeout);
+		public boolean isDomInteractive( int timeout) {
+			return new PageLoaded().isDomInteractive(getOrasiDriver(), timeout);
 		}
 
 		/*
@@ -859,15 +851,7 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
 		public boolean isDomComplete() {
 			return new PageLoaded().isDomComplete(getOrasiDriver());
 		}
-		/**
-		 * Method that determines when/if the DOM is complete
-		 * Example usage: getDriver().page().isDomComplete(oDriver);
-		 * @param oDriver - current OrasiDriver
-		 * @return - boolean true if complete, false otherwise
-		 */
-		public boolean isDomComplete(OrasiDriver oDriver) {
-			return new PageLoaded(getOrasiDriver()).isDomComplete();
-		}
+	
 		/**
 		 * Method that determines when/if the DOM is complete
 		 * Example usage: getDriver().page().isDomComplete(oDriver, timeout);
@@ -876,35 +860,35 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
 		 * @return - boolean true if complete, false otherwise
 		 * @return
 		 */
-		public boolean isDomComplete(OrasiDriver oDriver, int timeout) {
+		public boolean isDomComplete(int timeout) {
 			return new PageLoaded().isDomComplete(getOrasiDriver(), timeout);
 		}
 
 		/*
 		 * syncPresent
-		 */
-		/**
+		 
+		*//**
 		 * Method that determines if an element is present in the DOM
 		 * Example usage: getDriver().page().syncPresent(oDriver, element);
 		 * @param oDriver - current OrasiDriver
 		 * @param element - element for which to be searched
 		 * @return - boolean true if present, false otherwise
-		 */
+		 *//*
 		public boolean syncPresent(OrasiDriver oDriver, Element element) {
 			return PageLoaded.syncPresent(oDriver, element);
 		}
-		/**
+		*//**
 		 * Method that determines if an element is present in the DOM
 		 * Example usage: getDriver().page().syncPresent(oDriver, timeout, element);
 		 * @param oDriver - current OrasiDriver
 		 * @param timeout - amount of time to wait for the element to be present
 		 * @param element - element for which to be searched
 		 * @return - boolean true if present, false otherwise
-		 */
+		 *//*
 		public boolean syncPresent(OrasiDriver oDriver, int timeout, Element element) {
 			return PageLoaded.syncPresent(oDriver, timeout, element);
 		}
-		/**
+		*//**
 		 * Method that determines if an element is present in the DOM
 		 * Example usage: getDriver().page().syncPresent(oDriver, timeout, returnError, element);
 		 * @param oDriver - current OrasiDriver
@@ -912,36 +896,36 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
 		 * @param returnError - boolean true if and error is to be thrown if the element is not present, false otherwise
 		 * @param element - element for which to be searched
 		 * @return - boolean true if present, false otherwise
-		 */
+		 *//*
 		public boolean syncPresent(OrasiDriver oDriver, int timeout, boolean returnError, Element element) {
 			return PageLoaded.syncPresent(oDriver, timeout, returnError, element);
 		}
 
-		/*
+		
 		 * syncVisible
-		 */
-		/**
+		 
+		*//**
 		 * Method that determines if an element is visible on the screen
 		 * Example usage: getDriver().page().syncVisible(oDriver, element);
 		 * @param oDriver - current OrasiDriver
 		 * @param element - element for which to be searched
 		 * @return - boolean true if visible, false otherwise
-		 */
+		 *//*
 		public boolean syncVisible(OrasiDriver oDriver, Element element) {
 			return PageLoaded.syncVisible(oDriver, element);
 		}
-		/**
+		*//**
 		 * Method that determines if an element is visible on the screen
 		 * Example usage: getDriver().page().syncVisible(oDriver, timeout, element);
 		 * @param oDriver - current OrasiDriver
 		 * @param timeout - amount of time to wait for the element to be visible on the screen
 		 * @param element - element for which to be searched
 		 * @return - boolean true if visible, false otherwise
-		 */
+		 *//*
 		public boolean syncVisible(OrasiDriver oDriver, int timeout, Element element) {
 			return PageLoaded.syncVisible(oDriver, timeout, true, element);
 		}
-		/**
+		*//**
 		 * Method that determines if an element is visible on the screen
 		 * Example usage: getDriver().page().syncVisible(oDriver, timeout, returnError, element);
 		 * @param oDriver - current OrasiDriver
@@ -949,36 +933,36 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
 		 * @param returnError - boolean true if and error is to be thrown if the element is not visible, false otherwise
 		 * @param element - element for which to be searched
 		 * @return - boolean true if visible, false otherwise
-		 */
+		 *//*
 		public boolean syncVisible(OrasiDriver oDriver, int timeout, boolean returnError, Element element) {
 			return PageLoaded.syncVisible(oDriver, timeout, returnError, element);
 		}
 
-		/*
+		
 		 * syncHidden
-		 */
-		/**
+		 
+		*//**
 		 * Method that determines if an element is hidden on the screen
 		 * Example usage: getDriver().page().syncHidden(oDriver, element);
 		 * @param oDriver - current OrasiDriver
 		 * @param element - element for which to be searched
 		 * @return - boolean true if hidden, false otherwise
-		 */
+		 *//*
 		public boolean syncHidden(OrasiDriver oDriver, Element element) {
 			return PageLoaded.syncHidden(oDriver, oDriver.getElementTimeout(), element);
 		}
-		/**
+		*//**
 		 * Method that determines if an element is hidden on the screen
 		 * Example usage: getDriver().page().syncHidden(oDriver, timeout, element);
 		 * @param oDriver - current OrasiDriver
 		 * @param timeout - amount of time to wait for the element to be hidden on the screen
 		 * @param element - element for which to be searched
 		 * @return - boolean true if hidden, false otherwise
-		 */
+		 *//*
 		public boolean syncHidden(OrasiDriver oDriver, int timeout, Element element) {
 			return PageLoaded.syncHidden(oDriver, timeout, true, element);
 		}
-		/**
+		*//**
 		 * Method that determines if an element is hidden on the screen
 		 * Example usage: getDriver().page().syncHidden(oDriver, timeout, returnError, element);
 		 * @param oDriver - current OrasiDriver
@@ -986,36 +970,36 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
 		 * @param returnError - boolean true if and error is to be thrown if the element is not hidden, false otherwise
 		 * @param element - element for which to be searched
 		 * @return - boolean true if hidden, false otherwise
-		 */
+		 *//*
 		public boolean syncHidden(OrasiDriver oDriver, int timeout, boolean returnError, Element element) {
 			return PageLoaded.syncHidden(oDriver, timeout, returnError, element);
 		}
 
-		/*
+		
 		 * syncEnabled
-		 */
-		/**
+		 
+		*//**
 		 * Method that determines if an element is clickable
 		 * Example usage: getDriver().page().syncEnabled(oDriver, element);
 		 * @param oDriver - current OrasiDriver
 		 * @param element - element for which to be searched
 		 * @return - boolean true if clickable, false otherwise
-		 */
+		 *//*
 		public boolean syncEnabled(OrasiDriver oDriver, Element element) {
 			return PageLoaded.syncEnabled(oDriver, oDriver.getElementTimeout(), element);
 		}
-		/**
+		*//**
 		 * Method that determines if an element is clickable
 		 * Example usage: getDriver().page().syncEnabled(oDriver, timeout, element);
 		 * @param oDriver - current OrasiDriver
 		 * @param timeout - amount of time to wait for the element to be clickable
 		 * @param element - element for which to be searched
 		 * @return - boolean true if clickable, false otherwise
-		 */
+		 *//*
 		public boolean syncEnabled(OrasiDriver oDriver, int timeout, Element element) {
 			return PageLoaded.syncEnabled(oDriver, timeout, true, element);
 		}
-		/**
+		*//**
 		 * Method that determines if an element is clickable
 		 * Example usage: getDriver().page().syncEnabled(oDriver, timeout, returnError, element);
 		 * @param oDriver - current OrasiDriver
@@ -1023,36 +1007,36 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
 		 * @param returnError - boolean true if and error is to be thrown if the element is not clickable, false otherwise
 		 * @param element - element for which to be searched
 		 * @return - boolean true if clickable, false otherwise
-		 */
+		 *//*
 		public boolean syncEnabled(OrasiDriver oDriver, int timeout, boolean returnError, Element element) {
 			return syncEnabled(oDriver, timeout, returnError, element);
 		}
 
-		/*
+		
 		 * syncDisabled
-		 */
-		/**
+		 
+		*//**
 		 * Method that determines if an element is not clickable
 		 * Example usage: getDriver().page().syncDisabled(oDriver, element);
 		 * @param oDriver - current OrasiDriver
 		 * @param element - element for which to be searched
 		 * @return - boolean true if not clickable, false otherwise
-		 */
+		 *//*
 		public boolean syncDisabled(OrasiDriver oDriver, Element element) {
 			return PageLoaded.syncDisabled(oDriver, oDriver.getElementTimeout(), element);
 		}
-		/**
+		*//**
 		 * Method that determines if an element is not clickable
 		 * Example usage: getDriver().page().syncDisabled(oDriver, timeout, element);
 		 * @param oDriver - current OrasiDriver
 		 * @param timeout - amount of time to wait for the element to be not clickable
 		 * @param element - element for which to be searched
 		 * @return - boolean true if not clickable, false otherwise
-		 */
+		 *//*
 		public boolean syncDisabled(OrasiDriver oDriver, int timeout, Element element) {		
 			return PageLoaded.syncDisabled(oDriver, timeout, true, element);
 		}
-		/**
+		*//**
 		 * Method that determines if an element is not clickable
 		 * Example usage: getDriver().page().syncDisabled(oDriver, timeout, returnError, element);
 		 * @param oDriver - current OrasiDriver
@@ -1060,26 +1044,26 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
 		 * @param returnError - boolean true if and error is to be thrown if the element is clickable, false otherwise
 		 * @param element - element for which to be searched
 		 * @return - boolean true if not clickable, false otherwise
-		 */
+		 *//*
 		public boolean syncDisabled(OrasiDriver oDriver, int timeout, boolean returnError, Element element) {
 			return PageLoaded.syncDisabled(oDriver, timeout, returnError, element);
 		}
 
-		/*
+		
 		 * syncTextInElement
-		 */
-		/**
+		 
+		*//**
 		 * Method that determines if an element contains user-defined text
 		 * Example usage: getDriver().page().syncTextInElement(oDriver, text, element);
 		 * @param oDriver - current OrasiDriver
 		 * @param text - text for which to search
 		 * @param element - element for which to be searched
 		 * @return - boolean true if the element contains the text, false otherwise
-		 */
+		 *//*
 		public boolean syncTextInElement(OrasiDriver oDriver, String text, Element element) {
 			return PageLoaded.syncTextInElement(oDriver, text, oDriver.getElementTimeout(), element);
 		}
-		/**
+		*//**
 		 * Method that determines if an element contains user-defined text
 		 * Example usage: getDriver().page().syncTextInElement(oDriver, text, timeout, element);
 		 * @param oDriver - current OrasiDriver
@@ -1087,11 +1071,11 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
 		 * @param timeout - amount of time to wait for the element to contain the text
 		 * @param element - element for which to be searched
 		 * @return - boolean true if the element contains the text, false otherwise
-		 */
+		 *//*
 		public boolean syncTextInElement(OrasiDriver oDriver, String text, int timeout, Element element) {
 			return PageLoaded.syncTextInElement(oDriver, text, timeout, true, element);
 		}
-		/**
+		*//**
 		 * Method that determines if an element contains user-defined text
 		 * Example usage: getDriver().page().syncTextInElement(oDriver, text, timeout, returnError, element);
 		 * @param oDriver - current OrasiDriver
@@ -1100,12 +1084,12 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
 		 * @param returnError - boolean true if and error is to be thrown if the element contains the text, false otherwise
 		 * @param element - element for which to be searched
 		 * @return - boolean true if the element contains the text, false otherwise
-		 */
+		 *//*
 		public boolean syncTextInElement(OrasiDriver oDriver, String text, int timeout, boolean returnError,
 				Element element) {
 			return PageLoaded.syncTextInElement(oDriver, text, timeout, returnError, element);
 		}
-
+*/
 		/*
 		 * initializePage
 		 */
