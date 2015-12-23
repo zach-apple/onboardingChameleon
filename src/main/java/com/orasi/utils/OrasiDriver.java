@@ -52,11 +52,10 @@ import com.orasi.core.interfaces.impl.RadioGroupImpl;
 import com.orasi.core.interfaces.impl.TextboxImpl;
 import com.orasi.core.interfaces.impl.WebtableImpl;
 
-public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreenshot {
+public class OrasiDriver implements WebDriver, TakesScreenshot {
 	/*
 	 * Define fields to be used by an OrasiDriver
 	 */
-	private static final long serialVersionUID = -657563735440878909L;
 	private WebDriver driver;
 	private int currentPageTimeout = Constants.PAGE_TIMEOUT;
 	private int currentElementTimeout = Constants.ELEMENT_TIMEOUT;
@@ -643,35 +642,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	public Options manage() {
 		return driver.manage();
 	}
-	/**
-	 * Method to clone this class
-	 * @return Object clone of the current state of this class
-	 * @throws CloneNotSupportedException
-	 * @see http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#clone()
-	 */
-	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
-	/**
-	 * Method to determine if an object is equal to an instance of this class
-	 * @param obj - object with which to compare
-	 * @return -boolean true if the two objects are equal, false otherwise
-	 * @see http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj);
-	}
-	/**
-	 * Method to dispose of system resources
-	 * @throws Throwable
-	 * @see http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#finalize()
-	 */
-	@Override
-	protected void finalize() throws Throwable {
-		super.finalize();
-	}
+	
 	/**
 	 * Method to return the hascode for an instance of this class
 	 * @return hashcode for an instance of this class as an integer
@@ -711,25 +682,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		return ((JavascriptExecutor) driver).executeAsyncScript(script, parameters);
 	}
 
-	@Override
-	public void run() {
-		((DefaultJavaScriptExecutor) driver).run();
-	}
-
-	@Override
-	public void addWindow(WebWindow newWindow) {
-		((DefaultJavaScriptExecutor) driver).addWindow(newWindow);
-	}
-
-	@Override
-	public void shutdown() {
-		((DefaultJavaScriptExecutor) driver).shutdown();
-	}
-
-	@Override
-	public int pumpEventLoop(long timeoutMillis) {
-		return ((DefaultJavaScriptExecutor) driver).pumpEventLoop(timeoutMillis);
-	}
+	
 	/**
 	 * Method to return the RemoteWebDriver session ID
 	 * @return RemotWebDriver session ID as a String
