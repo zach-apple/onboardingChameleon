@@ -30,7 +30,7 @@ public class PageLoaded {
 
 	private static OrasiDriver driver = null;
 	@SuppressWarnings("rawtypes")
-	private Class clazz = null;
+	private static Class clazz = null;
 	private int timeout = 0;
 	private static boolean defaultSyncHandler = true;
 	
@@ -38,13 +38,15 @@ public class PageLoaded {
 		this.timeout = Constants.ELEMENT_TIMEOUT;
 	}
 
-	public PageLoaded(OrasiDriver oDriver) {
+	/*public PageLoaded(OrasiDriver oDriver) {
 		driver = oDriver;
 		this.timeout = driver.getElementTimeout();
-	}
+	}*/
 
 	@SuppressWarnings("unchecked")
-	private void initialize() {
+
+    @Deprecated
+	private static void initialize() {
 		ElementFactory.initElements(driver, clazz);
 	}
 
@@ -130,7 +132,7 @@ public class PageLoaded {
 	 * @param clazz
 	 *            the class calling this method - used so can initialize the
 	 *            page class repeatedly
-	 * @param driver
+	 * @param oDriver
 	 *            The webDriver
 	 * @param obj
 	 *            The element you are waiting to display on the page
@@ -141,9 +143,9 @@ public class PageLoaded {
 	 */
 	@SuppressWarnings("rawtypes")
 	@Deprecated
-	public boolean isElementLoaded(Class clazz, OrasiDriver driver, Element obj, int timeout) {
+	public boolean isElementLoaded(Class clazz, OrasiDriver oDriver, Element obj, int timeout) {
 		this.timeout = timeout;
-		return isElementLoaded(clazz, driver, obj);
+		return isElementLoaded(clazz, oDriver, obj);
 	}
 
 	/**
@@ -156,7 +158,7 @@ public class PageLoaded {
 	 * @return False if the element is not found after the timeout, true if is
 	 *         found
 	 */
-	public boolean isDomInteractive() {
+	/*public boolean isDomInteractive() {
 		int count = 0;
 		Object obj = null;
 
@@ -178,7 +180,7 @@ public class PageLoaded {
 		} else {
 			return false;
 		}
-	}
+	}*/
 
 	/**
 	 * This uses the HTML DOM readyState property to wait until a page is
@@ -190,9 +192,8 @@ public class PageLoaded {
 	 * @return False if the element is not found after the timeout, true if is
 	 *         found
 	 */
-	public boolean isDomInteractive(OrasiDriver oDriver) {
-		driver = oDriver;
-		return isDomInteractive();
+	public static boolean isDomInteractive(OrasiDriver oDriver) {
+		return isDomInteractive(oDriver, driver.getPageTimeout());
 	}
 
 	/**
@@ -200,7 +201,7 @@ public class PageLoaded {
 	 * HTML DOM readyState property to wait until a page is finished loading. It
 	 * will wait for the ready state to be either 'interactive' or 'complete'.
 	 * 
-	 * @param driver
+	 * @param oDriver
 	 *            The webDriver
 	 * @param timeout
 	 *            Integer value of number seconds to wait for a page to finish
@@ -210,9 +211,28 @@ public class PageLoaded {
 	 * @return False if the element is not found after the timeout, true if is
 	 *         found
 	 */
-	public boolean isDomInteractive(OrasiDriver driver, int timeout) {
-		this.timeout = timeout;
-		return isDomInteractive(driver);
+	public static boolean isDomInteractive(OrasiDriver oDriver, int timeout) {
+        int count = 0;
+        Object obj = null;
+
+        do {
+            // this returns a boolean
+            obj = oDriver.executeJavaScript(
+                    "var result = document.readyState; return (result == 'complete' || result == 'interactive');");
+            if (count == timeout)
+                break;
+            else {
+                Sleeper.sleep(500);
+                count++;
+
+            }
+        } while (obj.equals(false));
+
+        if (count < timeout * 2) {
+            return true;
+        } else {
+            return false;
+        }
 	}
 
 	/**
@@ -223,14 +243,14 @@ public class PageLoaded {
 	 * @author Justin Phlegar
 	 * 
 	 */
-	public void isAngularComplete() {
+	public static void isAngularComplete(OrasiDriver oDriver) {
 		try {
-			driver.executeAsyncJavaScript("var callback = arguments[arguments.length - 1];"
+            oDriver.executeAsyncJavaScript("var callback = arguments[arguments.length - 1];"
 					+ "angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
 		} catch (WebDriverException wde) {
 			TestReporter.logFailure(
 					"Unable to perform Angular sync. This is most likely because the $browser service is not injected within the Angular Controller. Performing a IsDomComplete instead");
-			isDomComplete();
+			isDomComplete(oDriver);
 		}
 
 	}
@@ -245,7 +265,7 @@ public class PageLoaded {
 	 * @return False if the element is not found after the timeout, true if is
 	 *         found
 	 */
-	public boolean isDomComplete() {
+	/*public static boolean isDomComplete() {
 		int count = 0;
 		Object obj = null;
 
@@ -266,7 +286,7 @@ public class PageLoaded {
 		} else {
 			return false;
 		}
-	}
+	}*/
 
 	/**
 	 * A more strict version of isDomInteractive. This uses the HTML DOM
@@ -280,9 +300,8 @@ public class PageLoaded {
 	 * @return False if the element is not found after the timeout, true if is
 	 *         found
 	 */
-	public boolean isDomComplete(OrasiDriver oDriver) {
-		driver = oDriver;
-		return isDomComplete();
+	public static boolean isDomComplete(OrasiDriver oDriver) {
+		return isDomComplete(oDriver, oDriver.getPageTimeout());
 	}
 
 	/**
@@ -291,7 +310,7 @@ public class PageLoaded {
 	 * wait until a page is finished loading. It will wait for the ready state
 	 * to be 'complete'.
 	 * 
-	 * @param driver
+	 * @param oDriver
 	 *            The webDriver
 	 * @param timeout
 	 *            Integer value of number seconds to wait for a page to finish
@@ -301,9 +320,27 @@ public class PageLoaded {
 	 * @return False if the element is not found after the timeout, true if is
 	 *         found
 	 */
-	public boolean isDomComplete(OrasiDriver driver, int timeout) {
-		this.timeout = timeout;
-		return isDomComplete(driver);
+	public static boolean isDomComplete(OrasiDriver oDriver, int timeout) {
+        int count = 0;
+        Object obj = null;
+
+        do {
+            // this returns a boolean
+            obj = oDriver.executeJavaScript("var result = document.readyState; return (result == 'complete');");
+            if (count == timeout)
+                break;
+            else {
+                Sleeper.sleep(500);
+                count++;
+
+            }
+        } while (obj.equals(false));
+
+        if (count < timeout * 2) {
+            return true;
+        } else {
+            return false;
+        }
 	}
 
 	/**
