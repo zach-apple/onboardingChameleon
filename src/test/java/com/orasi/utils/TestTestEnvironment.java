@@ -119,7 +119,7 @@ public class TestTestEnvironment {
 				runLocation, testingEnvironment);
 		te.setPageURL(pageURL);
 		OrasiDriver driver = te.testStart(testingName);
-		Assert.assertTrue(new PageLoaded(driver).isDomComplete());
+		Assert.assertTrue(driver.page().isDomComplete());
 		Assert.assertTrue(PageLoaded.syncPresent(driver, driver.findElement(By.id("text1"))));
 	}
 

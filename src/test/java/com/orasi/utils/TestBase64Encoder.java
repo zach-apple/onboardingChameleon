@@ -3,6 +3,7 @@ package com.orasi.utils;
 import java.util.Arrays;
 import java.util.Random;
 
+import org.apache.commons.codec.binary.Base64;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -83,7 +84,35 @@ public class TestBase64Encoder {
 		    "Show me: @, A, B, C, D, E, F, G, H, I, J, K, L, M, " +
 		    "N, O, P, Q, R, S, T, U, V, W, X, Y, Z, [, \\, ], ^, _, `, " +
 		    "a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s.").toCharArray();
-	
+
 	Assert.assertTrue(Arrays.equals( Base64Coder.decodeString(base64_decoded_test).toCharArray(), test_string));
     }
+
+
+    @Test(groups="regression")
+    public void encodeLine(){
+        String test_string = "So?<p>" +
+                "This 4, 5, 6, 7, 8, 9, z, {, |, } tests Base64 encoder. " +
+                "Show me: @, A, B, C, D, E, F, G, H, I, J, K, L, M, " +
+                "N, O, P, Q, R, S, T, U, V, W, X, Y, Z, [, \\, ], ^, _, `, " +
+                "a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s.";
+        byte[]   bytesEncoded = Base64.encodeBase64(test_string.getBytes());
+        Assert.assertNotNull(Base64Coder.encodeLines(bytesEncoded));
+    }
+
+    @Test(groups="regression")
+    public void decodeLine(){
+        String test_string = "VTI4L1BIQStWR2hwY3lBMExDQTFMQ0EyTENBM0xDQTRMQ0E1TENCNkxDQjdMQ0I4TENCOUlIUmxj\n" +
+                "M1J6SUVKaGMyVTJOQ0JsYm1OdlpHVnlMaUJUYUc5M0lHMWxPaUJBTENCQkxDQkNMQ0JETENCRUxD\n" +
+                "QkZMQ0JHTENCSExDQklMQ0JKTENCS0xDQkxMQ0JNTENCTkxDQk9MQ0JQTENCUUxDQlJMQ0JTTENC\n" +
+                "VExDQlVMQ0JWTENCV0xDQlhMQ0JZTENCWkxDQmFMQ0JiTENCY0xDQmRMQ0JlTENCZkxDQmdMQ0Jo\n" +
+                "TENCaUxDQmpMQ0JrTENCbExDQm1MQ0JuTENCb0xDQnBMQ0JxTENCckxDQnNMQ0J0TENCdUxDQnZM\n" +
+                "Q0J3TENCeExDQnlMQ0J6TGc9PQ==";
+        Assert.assertNotNull(Base64Coder.decodeLines(test_string));
+    }
+    @Test(groups="regression")
+    public void constructor(){
+        Assert.assertNotNull(new Base64Coder());
+    }
+
 }

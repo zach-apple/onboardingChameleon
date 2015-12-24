@@ -251,7 +251,7 @@ public class TestOrasiDriver{
     public void findNGButtonText(){
     	Assert.assertNotNull(driver.findButton(ByNG.buttonText("Login")));
     	driver.findButton(ByNG.buttonText("Login")).click();    	
-    	new PageLoaded(driver).isAngularComplete();
+    	PageLoaded.isAngularComplete(driver);
     }
 
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findNGButtonText")
