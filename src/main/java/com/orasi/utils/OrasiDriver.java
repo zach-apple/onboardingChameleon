@@ -848,7 +848,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		 * @return - boolean true if interactive, false otherwise
 		 */
 		public boolean isDomInteractive() {
-			return new PageLoaded(getOrasiDriver()).isDomInteractive();
+			return  PageLoaded.isDomInteractive(getOrasiDriver());
 		}
 		/**
 		 * Method that determines when/if the DOM is interactive
@@ -857,7 +857,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		 * @return - boolean true if interactive, false otherwise
 		 */
 		public boolean isDomInteractive(OrasiDriver oDriver) {
-			return new PageLoaded().isDomInteractive(oDriver);
+			return PageLoaded.isDomInteractive(oDriver);
 		}
 		/**
 		 * Method that determines when/if the DOM is interactive
@@ -867,7 +867,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		 * @return - boolean true if interactive, false otherwise
 		 */
 		public boolean isDomInteractive(OrasiDriver oDriver, int timeout) {
-			return new PageLoaded().isDomInteractive(oDriver, timeout);
+			return PageLoaded.isDomInteractive(oDriver, timeout);
 		}
 
 		/*
@@ -878,7 +878,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		 * Example usage: getDriver().page().isAngularComplete();
 		 */
 		public void isAngularComplete() {
-			new PageLoaded(getOrasiDriver()).isAngularComplete();
+			 PageLoaded.isAngularComplete(getOrasiDriver());
 		}
 
 		/*
@@ -899,7 +899,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		 * @return - boolean true if complete, false otherwise
 		 */
 		public boolean isDomComplete(OrasiDriver oDriver) {
-			return new PageLoaded(getOrasiDriver()).isDomComplete();
+			return PageLoaded.isDomComplete(getOrasiDriver());
 		}
 		/**
 		 * Method that determines when/if the DOM is complete
@@ -910,7 +910,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		 * @return
 		 */
 		public boolean isDomComplete(OrasiDriver oDriver, int timeout) {
-			return new PageLoaded().isDomComplete(getOrasiDriver(), timeout);
+			return PageLoaded.isDomComplete(getOrasiDriver(), timeout);
 		}
 
 		/*
