@@ -735,11 +735,11 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see https://msdn.microsoft.com/en-us/library/mt188085(v=vs.85).aspx
 	 */
 	private void setDriverWithCapabilties(DesiredCapabilities caps) {
-		switch (caps.getBrowserName().toLowerCase()) {
+		switch (caps.getBrowserName().toLowerCase().replace(" ","")) {
 		case "firefox":
 			driver = new FirefoxDriver(caps);
 			break;
-		case "internet explorer":
+		case "internetexplorer":
 		case "ie":
 			driver = new InternetExplorerDriver(caps);
 			break;
