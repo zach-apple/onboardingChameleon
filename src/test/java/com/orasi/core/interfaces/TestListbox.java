@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.ITestContext;
+import org.testng.SkipException;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
@@ -80,6 +81,7 @@ public class TestListbox extends TestEnvironment{
     @Title("selectNoText")
 	@Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="select")
 	public void selectNoText(){
+        if(getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty() ) throw new SkipException("Test not valid for HTMLUnitDriver");
 		Listbox listbox= getDriver().findListbox(By.id("singleSelect"));
 		listbox.select("");
 		Assert.assertTrue(listbox.getAttribute("value").equals("Sports"));
@@ -115,6 +117,7 @@ public class TestListbox extends TestEnvironment{
     @Title("selectValueNoText")
     @Test(groups ={"regression", "interfaces", "listbox"}, dependsOnMethods="select")
     public void selectValueNoText(){
+        if(getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty() ) throw new SkipException("Test not valid for HTMLUnitDriver");
         Listbox listbox= getDriver().findListbox(By.id("singleSelect"));
         listbox.selectValue("");
         Assert.assertTrue(listbox.getAttribute("value").equals("Sports"));
@@ -125,6 +128,7 @@ public class TestListbox extends TestEnvironment{
     @Title("selectValueNegative")
     @Test(groups ={"regression", "interfaces", "listbox"}, dependsOnMethods="select")
     public void selectValueNegative(){
+        if(getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty() ) throw new SkipException("Test not valid for HTMLUnitDriver");
         Listbox listbox= getDriver().findListbox(By.id("singleSelect"));
         boolean valid = false;
         try{

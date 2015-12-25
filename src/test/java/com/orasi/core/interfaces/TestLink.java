@@ -4,6 +4,7 @@ import com.orasi.core.interfaces.impl.LinkImpl;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.ITestContext;
+import org.testng.SkipException;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
@@ -62,6 +63,8 @@ public class TestLink extends TestEnvironment {
 	@Title("clickNegative")
 	@Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="click")
 	public void clickNegative(){
+
+		if(getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty() ) throw new SkipException("Test not valid for HTMLUnitDriver");
 		Link link= getDriver().findLink(By.xpath("//a[@href='hiddenLink.html']"));
 		boolean valid = false;
 		try{
