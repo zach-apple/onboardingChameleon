@@ -785,7 +785,7 @@ public class PageLoaded {
 			Dimension size = element.getSize();
 			if ((location.getX() > 0 & location.getY() > 0) | (size.getHeight() > 0 & size.getWidth() > 0)) {
 				if (element.getAttribute("hidden") != null)
-					return false;
+                    if (element.getAttribute("hidden").toLowerCase().equals("true")) return false;
 				if (element.getAttribute("type") != null) {
 					if (element.getAttribute("type").equals("hidden"))
 						return false;
@@ -842,9 +842,8 @@ public class PageLoaded {
 		Wait wait = new WebDriverWait(driver, 0);
 		try {
 
-			if (wait.until(ExpectedConditions.textToBePresentInElement(element, text)) != null) {
-				return true;
-			} else if (wait.until(ExpectedConditions.textToBePresentInElementValue(element, text)) != null) {
+			if (wait.until(ExpectedConditions.textToBePresentInElement(element, text)) != null) return true;
+            else if (wait.until(ExpectedConditions.textToBePresentInElementValue(element, text)) != null) {
 				return true;
 			} else {
 				return false;
