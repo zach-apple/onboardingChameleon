@@ -11,6 +11,9 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.orasi.utils.TestEnvironment;
+import ru.yandex.qatools.allure.annotations.Features;
+import ru.yandex.qatools.allure.annotations.Stories;
+import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestLabel extends TestEnvironment{
     
@@ -34,10 +37,17 @@ public class TestLabel extends TestEnvironment{
 	endTest("TestAlert", testResults);
     }
 
+	@Features("Element Interfaces")
+	@Stories("Label")
+	@Title("constructor")
 	@Test(groups ={"regression", "interfaces", "label"})
 	public void constructorWithElement(){
 		Assert.assertNotNull((new LabelImpl(getDriver().findWebElement((By.xpath("//*[@id='radioForm']/label[1]"))))));
 	}
+
+	@Features("Element Interfaces")
+	@Stories("Label")
+	@Title("getFor")
     @Test(groups ={"regression", "interfaces", "label"})
     public void getFor(){
 		Label label= getDriver().findLabel(By.xpath("//*[@id='radioForm']/label[1]"));

@@ -33,6 +33,9 @@ import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.Webtable;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.saucerest.SauceREST;
+import ru.yandex.qatools.allure.annotations.Features;
+import ru.yandex.qatools.allure.annotations.Stories;
+import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestOrasiDriver{
     protected ResourceBundle appURLRepository = ResourceBundle
@@ -88,16 +91,28 @@ public class TestOrasiDriver{
 	caps.setCapability(CapabilityType.PLATFORM,operatingSystem);
 	caps.setCapability("enablePersistentHover", false);
 	caps.setCapability("name", "TestOrasiDriver");
-	if(runLocation.toLowerCase().equals("local")){
-	    driver = new OrasiDriver(caps);		    
+	if(runLocation.toLowerCase().equals("local")) {
+		if (browserUnderTest.equalsIgnoreCase("IE") || browserUnderTest.replace(" ", "").equalsIgnoreCase("internetexplorer")) {
+			file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "IEDriverServer.exe").getPath());
+			System.setProperty("webdriver.ie.driver", file.getAbsolutePath());
+		} else if (browserUnderTest.equalsIgnoreCase("Chrome")) {
+			file = new File(
+					this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "ChromeDriver.exe").getPath());
+			System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
+		} else if (browserUnderTest.replace(" ", "").equalsIgnoreCase("microsoftedge")) {
+			file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "MicrosoftWebDriver.exe")
+					.getPath());
+			System.setProperty("webdriver.edge.driver", file.getAbsolutePath());
+		}
+		driver = new OrasiDriver(caps);
 	}else{
-	    TestEnvironment te = new TestEnvironment("",this.browserUnderTest,browserVersion, operatingSystem,runLocation,environment);
-	    try {
-		driver = new OrasiDriver(caps, new URL(te.getRemoteURL()));
-	    } catch (MalformedURLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
+			TestEnvironment te = new TestEnvironment("",this.browserUnderTest,browserVersion, operatingSystem,runLocation,environment);
+			try {
+				driver = new OrasiDriver(caps, new URL(te.getRemoteURL()));
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 	driver.get("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/testsite.html");
 	
@@ -130,87 +145,135 @@ public class TestOrasiDriver{
 	driver.quit();
     }
 
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("getPageTimeout")
     @Test(groups={"regression", "utils", "orasidriver"})
     public void getPageTimeout(){
 	Assert.assertTrue( driver.getPageTimeout() == Constants.PAGE_TIMEOUT);
     }
-    
+
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("setPageTimeout")
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="getPageTimeout")
     public void setPageTimeout(){
 	if(this.browserUnderTest.toLowerCase().contains("safari") || driver.toString().contains("safari") ) throw new SkipException("Test not valid for SafariDriver");
 	driver.setPageTimeout(15);
 	Assert.assertTrue( driver.getPageTimeout() == 15);
     }
-    
+
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("getElementTimeout")
     @Test(groups={"regression", "utils", "orasidriver"})
     public void getElementTimeout(){
 	Assert.assertTrue( driver.getElementTimeout() == Constants.ELEMENT_TIMEOUT);
     }
-    
+
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("setElementTimeout")
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="getElementTimeout")
     public void setElementTimeout(){
 	driver.setElementTimeout(15);
 	Assert.assertTrue( driver.getElementTimeout() == 15);
     }
-    
+
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("getScriptTimeout")
     @Test(groups={"regression", "utils", "orasidriver"})
     public void getScriptTimeout(){
 	Assert.assertTrue( driver.getScriptTimeout() == Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
     }
-    
+
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("setScriptTimeout")
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="getScriptTimeout")
     public void setScriptTimeout(){
 	driver.setScriptTimeout(15);
 	Assert.assertTrue( driver.getScriptTimeout() == 15);
     }
+
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("getDriver")
     @Test(groups={"regression", "utils", "orasidriver"})
     public void getDriver(){
 	Assert.assertNotNull(driver.getDriver());
     }
 
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("executeJavaScript")
     @Test(groups={"regression", "utils", "orasidriver"})
     public void executeJavaScript(){
+		driver.executeJavaScript("var result = document.readyState; return (result == 'complete');");
+
 	WebElement element = (WebElement) driver.executeJavaScript("return document.getElementById('FirstName')");
 	Assert.assertNotNull(element);
     }
-    
+
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("findButton")
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="getDriver")
     public void findButton(){
 	Button button = driver.findButton(By.id("Add"));
 	Assert.assertNotNull(button);
     }
 
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("findElement")
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findButton")
     public void findElement(){
 	Element element= driver.findElement(By.id("FirstName"));
 	Assert.assertNotNull(element);
-    }    
+    }
 
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("findListbox")
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findElement")
     public void findListbox(){
 	Listbox listbox= driver.findListbox(By.id("Category"));
 	Assert.assertNotNull(listbox);
     }
 
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("findTextbox")
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findListbox")
     public void findTextbox(){
 	Textbox textbox = driver.findTextbox(By.id("FirstName"));
 	Assert.assertNotNull(textbox);
     }
-    
+
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("findWebtable")
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findTextbox")
     public void findWebtable(){
 	Webtable webtable = driver.findWebtable(By.id("VIPs"));
 	Assert.assertNotNull(webtable);
     }
 
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("findRadioGroup")
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findWebtable")
     public void findRadioGroup(){
 	driver.get("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/radioGroup.html");
 	RadioGroup radioGroup= driver.findRadioGroup(By.id("Content"));
 	Assert.assertNotNull(radioGroup);
     }
-    
+
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("findCheckbox")
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findRadioGroup")
     public void findCheckbox(){
 	driver.get("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/checkbox.html");
@@ -218,35 +281,50 @@ public class TestOrasiDriver{
 	Assert.assertNotNull(checkbox);
     }
 
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("findLabel")
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findCheckbox")
     public void findLabel(){
 	driver.get("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/label.html");
 	Label label= driver.findLabel(By.xpath("//*[@id='radioForm']/label[1]"));
 	Assert.assertNotNull(label);
     }
-    
 
+
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("findLink")
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findLabel")
     public void findLink(){
 	driver.get("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/link.html");
 	Link link= driver.findLink(By.xpath("//a[@href='testLinks.html']"));
 	Assert.assertNotNull(link);
-    }    
+    }
 
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("executeAsyncJavaScript")
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findLink")
     public void executeAsyncJavaScript(){
 	if(browserUnderTest.toLowerCase().equals("html") || browserUnderTest.isEmpty() ) throw new SkipException("Test not valid for HTMLUnitDriver");
 	driver.get("http://cafetownsend-angular-rails.herokuapp.com/login");
 	driver.executeAsyncJavaScript("var callback = arguments[arguments.length - 1];angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
     }
-    
+
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("findNGModel")
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="executeAsyncJavaScript")
     public void findNGModel(){
     	Assert.assertNotNull(driver.findTextbox(ByNG.model("user.name")));
     	driver.findTextbox(ByNG.model("user.name")).set("Luke");
     	driver.findTextbox(ByNG.model("user.password")).set("Skywalker");    	
     }
-    
+
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("findNGButtonText")
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findNGModel")
     public void findNGButtonText(){
     	Assert.assertNotNull(driver.findButton(ByNG.buttonText("Login")));
@@ -254,12 +332,18 @@ public class TestOrasiDriver{
     	PageLoaded.isAngularComplete(driver);
     }
 
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("findNGController")
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findNGButtonText")
     public void findNGController(){
     	Assert.assertNotNull(driver.findElement(ByNG.controller("HeaderController")));  	
     }
-    
-    
+
+
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("findNGRepeater")
     @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="findNGController")
     public void findNGRepeater(){
     	Assert.assertNotNull(driver.findElement(ByNG.repeater("employee in employees")));  	

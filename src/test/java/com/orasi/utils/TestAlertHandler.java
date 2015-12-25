@@ -5,6 +5,9 @@ import org.openqa.selenium.By;
 import org.testng.ITestContext;
 import org.testng.SkipException;
 import org.testng.annotations.*;
+import ru.yandex.qatools.allure.annotations.Features;
+import ru.yandex.qatools.allure.annotations.Stories;
+import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestAlertHandler extends TestEnvironment {
 	@BeforeTest(groups = { "regression", "utils", "dev", "framehandler" })
@@ -29,16 +32,26 @@ public class TestAlertHandler extends TestEnvironment {
 		endTest("TestAlert", testResults);
 	}
 
+
+	@Features("Utilities")
+	@Stories("AlertHandler")
+	@Title("constructor")
 	@Test(groups ={"regression", "interfaces", "textbox"})
 	public void constructorWithElement(){
 		Assert.assertNotNull((new AlertHandler()));
 	}
 
+	@Features("Utilities")
+	@Stories("AlertHandler")
+	@Title("isAlertPresent")
 	@Test(groups = { "regression", "utils", "dev", "alertHandler" })
 	public void isAlertPresent() {
 		Assert.assertTrue("Alert was not present", AlertHandler.isAlertPresent(driver,3));
 	}
 
+	@Features("Utilities")
+	@Stories("AlertHandler")
+	@Title("handleAllAlerts")
 	@Test(groups = { "regression", "utils", "dev", "alertHandler" },
 		  dependsOnMethods = "isAlertPresent")
 	public void handleAllAlerts() {
@@ -46,6 +59,9 @@ public class TestAlertHandler extends TestEnvironment {
 		Assert.assertFalse("Alert was not handled", AlertHandler.isAlertPresent(driver,3));
 	}
 
+	@Features("Utilities")
+	@Stories("AlertHandler")
+	@Title("handleAlert")
 	@Test(groups = { "regression", "utils", "dev", "alertHandler" },
 			dependsOnMethods = "handleAllAlerts")
 	public void handleAlert() {

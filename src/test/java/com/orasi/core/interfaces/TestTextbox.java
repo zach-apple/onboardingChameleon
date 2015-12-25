@@ -11,6 +11,9 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.orasi.utils.TestEnvironment;
+import ru.yandex.qatools.allure.annotations.Features;
+import ru.yandex.qatools.allure.annotations.Stories;
+import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestTextbox extends TestEnvironment{
     
@@ -34,22 +37,34 @@ public class TestTextbox extends TestEnvironment{
 	endTest("TestAlert", testResults);
     }
 
+    @Features("Element Interfaces")
+    @Stories("Textbox")
+    @Title("constructor")
 	@Test(groups ={"regression", "interfaces", "textbox"})
 	public void constructorWithElement(){
 		Assert.assertNotNull((new TextboxImpl(getDriver().findWebElement((By.id("text1"))))));
 	}
 
+    @Features("Element Interfaces")
+    @Stories("Textbox")
+    @Title("constructorWithElement")
 	@Test(groups ={"regression", "interfaces", "textbox"})
 	public void constructorWithElementAndDriver(){
 		Assert.assertNotNull((new TextboxImpl(getDriver().findWebElement((By.id("text1"))), getDriver())));
 	}
 
+    @Features("Element Interfaces")
+    @Stories("Textbox")
+    @Title("getText")
 	@Test(groups ={"regression", "interfaces", "textbox"})
     public void getText(){
         Textbox textbox= getDriver().findTextbox(By.id("text1"));
 	    Assert.assertTrue(textbox.getText().equals("Testing methods"));
     }
-    
+
+    @Features("Element Interfaces")
+    @Stories("Textbox")
+    @Title("set")
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="setNoText")
     public void set(){
         Textbox textbox= getDriver().findTextbox(By.id("text1"));
@@ -57,6 +72,9 @@ public class TestTextbox extends TestEnvironment{
         Assert.assertTrue(textbox.getAttribute("value").equals("set"));
     }
 
+    @Features("Element Interfaces")
+    @Stories("Textbox")
+    @Title("setNoText")
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="getText")
     public void setNoText(){
         Textbox textbox= getDriver().findTextbox(By.id("text1"));
@@ -64,6 +82,9 @@ public class TestTextbox extends TestEnvironment{
         Assert.assertTrue(textbox.getAttribute("value").equals("Testing methods"));
     }
 
+    @Features("Element Interfaces")
+    @Stories("Textbox")
+    @Title("setNegative")
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="set")
     public void setNegative(){
         Textbox textbox= getDriver().findTextbox(By.name("lname"));
@@ -75,7 +96,10 @@ public class TestTextbox extends TestEnvironment{
         }
         Assert.assertTrue(valid);
     }
-    
+
+    @Features("Element Interfaces")
+    @Stories("Textbox")
+    @Title("scrollAndSet")
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="set")
     public void scrollAndSet(){
     	Textbox textbox= getDriver().findTextbox(By.id("text1"));
@@ -84,6 +108,9 @@ public class TestTextbox extends TestEnvironment{
     }
 
 
+    @Features("Element Interfaces")
+    @Stories("Textbox")
+    @Title("scrollAndSetNoText")
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="scrollAndSet")
     public void scrollAndSetNoText(){
         Textbox textbox= getDriver().findTextbox(By.id("text1"));
@@ -92,6 +119,9 @@ public class TestTextbox extends TestEnvironment{
     }
 
 
+    @Features("Element Interfaces")
+    @Stories("Textbox")
+    @Title("scrollAndSetNegative")
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="scrollAndSet")
     public void scrollAndSetNegative(){
         Textbox textbox= getDriver().findTextbox(By.name("lname"));
@@ -103,7 +133,10 @@ public class TestTextbox extends TestEnvironment{
         }
         Assert.assertTrue(valid);
     }
-    
+
+    @Features("Element Interfaces")
+    @Stories("Textbox")
+    @Title("clear")
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="scrollAndSetNoText")
     public void clear(){
         Textbox textbox= getDriver().findTextbox(By.id("text1"));
@@ -111,6 +144,9 @@ public class TestTextbox extends TestEnvironment{
         Assert.assertTrue(textbox.getAttribute("value").equals(""));
     }
 
+    @Features("Element Interfaces")
+    @Stories("Textbox")
+    @Title("clearNegative")
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="clear")
     public void clearNegative(){
         Textbox textbox= getDriver().findTextbox(By.name("lname"));
@@ -123,6 +159,9 @@ public class TestTextbox extends TestEnvironment{
         Assert.assertTrue(valid);
     }
 
+    @Features("Element Interfaces")
+    @Stories("Textbox")
+    @Title("safeSet")
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="clear")
     public void safeSet(){
         Textbox textbox= getDriver().findTextbox(By.id("text1"));
@@ -130,6 +169,9 @@ public class TestTextbox extends TestEnvironment{
         Assert.assertTrue(textbox.getAttribute("value").contains("safeSet"));
     }
 
+    @Features("Element Interfaces")
+    @Stories("Textbox")
+    @Title("safeSetNoText")
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="safeSet")
     public void safeSetNoText(){
         Textbox textbox= getDriver().findTextbox(By.id("text1"));
@@ -137,6 +179,9 @@ public class TestTextbox extends TestEnvironment{
         Assert.assertTrue(textbox.getAttribute("value").contains("safeSet"));
     }
 
+    @Features("Element Interfaces")
+    @Stories("Textbox")
+    @Title("safeSetNegative")
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="safeSet")
     public void safeSetNegative(){
         Textbox textbox= getDriver().findTextbox(By.name("lname"));
@@ -149,6 +194,9 @@ public class TestTextbox extends TestEnvironment{
         Assert.assertTrue(valid);
     }
 
+    @Features("Element Interfaces")
+    @Stories("Textbox")
+    @Title("setSecure")
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="safeSet")
     public void setSecure(){
         Textbox textbox= getDriver().findTextbox(By.id("text1"));
@@ -157,6 +205,9 @@ public class TestTextbox extends TestEnvironment{
         textbox.clear();
     }
 
+    @Features("Element Interfaces")
+    @Stories("Textbox")
+    @Title("setSecureNoText")
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="setSecure")
     public void setSecureNoText(){
         Textbox textbox= getDriver().findTextbox(By.id("text1"));
@@ -165,6 +216,9 @@ public class TestTextbox extends TestEnvironment{
         textbox.clear();
     }
 
+    @Features("Element Interfaces")
+    @Stories("Textbox")
+    @Title("setSecureNegative")
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="setSecureNoText")
     public void setSecureNegative(){
         Textbox textbox= getDriver().findTextbox(By.name("lname"));
@@ -177,6 +231,9 @@ public class TestTextbox extends TestEnvironment{
         Assert.assertTrue(valid);
     }
 
+    @Features("Element Interfaces")
+    @Stories("Textbox")
+    @Title("safeSetSecure")
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="setSecure")
     public void safeSetSecure(){
         Textbox textbox= getDriver().findTextbox(By.id("text1"));
@@ -185,6 +242,9 @@ public class TestTextbox extends TestEnvironment{
         textbox.clear();
     }
 
+    @Features("Element Interfaces")
+    @Stories("Textbox")
+    @Title("safeSetSecureNoText")
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="safeSetSecure")
     public void safeSetSecureNoText(){
         Textbox textbox= getDriver().findTextbox(By.id("text1"));
@@ -193,6 +253,9 @@ public class TestTextbox extends TestEnvironment{
         textbox.clear();
     }
 
+    @Features("Element Interfaces")
+    @Stories("Textbox")
+    @Title("safeSetSecureNegative")
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="safeSetSecure")
     public void safeSetSecureNegative(){
         Textbox textbox= getDriver().findTextbox(By.name("lname"));

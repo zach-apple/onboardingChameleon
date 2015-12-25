@@ -10,6 +10,9 @@ import org.openqa.selenium.support.FindBys;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.*;
+import ru.yandex.qatools.allure.annotations.Features;
+import ru.yandex.qatools.allure.annotations.Stories;
+import ru.yandex.qatools.allure.annotations.Title;
 
 
 public class TestElementInternalHandlers extends TestEnvironment{
@@ -38,6 +41,10 @@ public class TestElementInternalHandlers extends TestEnvironment{
 	endTest("TestAlert", testResults);
     }
 
+
+	@Features("Element Interfaces")
+	@Stories("ElementInternalHandlers")
+	@Title("factory")
     @Test(groups ={"regression", "interfaces", "button"})
     public void factory(){
 		ElementFactory.initElements(driver, this);

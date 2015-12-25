@@ -13,6 +13,9 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.orasi.utils.TestEnvironment;
+import ru.yandex.qatools.allure.annotations.Features;
+import ru.yandex.qatools.allure.annotations.Stories;
+import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestRadioButton extends TestEnvironment{
 //    private String xpath = "//form/fieldset[1]";
@@ -38,11 +41,17 @@ public class TestRadioButton extends TestEnvironment{
     }
 
 
+	@Features("Element Interfaces")
+	@Stories("RadioGroup")
+	@Title("constructor")
 	@Test(groups ={"regression", "interfaces", "textbox"})
 	public void constructorWithElement(){
 		Assert.assertNotNull((new RadioGroupImpl(getDriver().findWebElement((By.id("radioForm"))))));
 	}
 
+	@Features("Element Interfaces")
+	@Stories("RadioGroup")
+	@Title("getNumberOfOptions")
     @Test(groups ={"regression", "interfaces", "radiogroup"})
     public void getNumberOfOptions(){
 
@@ -56,18 +65,27 @@ public class TestRadioButton extends TestEnvironment{
 	Assert.assertTrue(radiogroup.getNumberOfRadioButtons() == 2 );
     }
 */
+   @Features("Element Interfaces")
+   @Stories("RadioGroup")
+   @Title("getSelectedIndex")
     @Test(groups ={"regression", "interfaces", "radiogroup"})
     public void getSelectedIndex(){
 	RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
 	Assert.assertTrue(radiogroup.getSelectedIndex() == 1 );
     }
-    
+
+	@Features("Element Interfaces")
+	@Stories("RadioGroup")
+	@Title("getSelectedOption")
     @Test(groups ={"regression", "interfaces", "radiogroup"})
     public void getSelectedOption(){
 	RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
 	Assert.assertTrue(radiogroup.getSelectedOption().equals("female") );
     }
-    
+
+	@Features("Element Interfaces")
+	@Stories("RadioGroup")
+	@Title("selectByIndex")
     @Test(groups ={"regression", "interfaces", "radiogroup"}, dependsOnMethods="getSelectedIndex")
 	public void selectByIndex(){
 		RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
@@ -75,6 +93,9 @@ public class TestRadioButton extends TestEnvironment{
 		Assert.assertTrue(radiogroup.getSelectedIndex() == 1 );
 	}
 
+	@Features("Element Interfaces")
+	@Stories("RadioGroup")
+	@Title("selectIndexOutOfBounds")
 	@Test(groups ={"regression", "interfaces", "radiogroup"}, dependsOnMethods="selectByIndex")
 	public void selectByIndexOutOfBounds(){
 		RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
@@ -86,7 +107,10 @@ public class TestRadioButton extends TestEnvironment{
 		}
 		Assert.assertTrue(valid);
 	}
-    
+
+	@Features("Element Interfaces")
+	@Stories("RadioGroup")
+	@Title("selectByOption")
     @Test(groups ={"regression", "interfaces", "radiogroup"}, dependsOnMethods="selectByIndex")
     public void selectByOption(){
 		RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
@@ -94,6 +118,9 @@ public class TestRadioButton extends TestEnvironment{
 		Assert.assertTrue(radiogroup.getSelectedIndex() == 0 );
     }
 
+	@Features("Element Interfaces")
+	@Stories("RadioGroup")
+	@Title("selectByOptionNoText")
 	@Test(groups ={"regression", "interfaces", "radiogroup"}, dependsOnMethods="selectByOption")
 	public void selectByOptionNoText(){
 		RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
@@ -101,6 +128,9 @@ public class TestRadioButton extends TestEnvironment{
 		Assert.assertTrue(radiogroup.getSelectedIndex() == 0);
 	}
 
+	@Features("Element Interfaces")
+	@Stories("RadioGroup")
+	@Title("selectByOptionNegative")
 	@Test(groups ={"regression", "interfaces", "radiogroup"}, dependsOnMethods="selectByOption")
 	public void selectByOptionNegative(){
 		RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
@@ -113,6 +143,9 @@ public class TestRadioButton extends TestEnvironment{
 		Assert.assertTrue(valid);
 	}
 
+	@Features("Element Interfaces")
+	@Stories("RadioGroup")
+	@Title("getAllOptions")
     @Test(groups ={"regression", "interfaces", "radiogroup"})
     public void getAllOptions(){
 	RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));

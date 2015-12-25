@@ -6,25 +6,37 @@ import java.util.Random;
 import org.apache.commons.codec.binary.Base64;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import ru.yandex.qatools.allure.annotations.Features;
+import ru.yandex.qatools.allure.annotations.Stories;
+import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestBase64Encoder {
     char[] testByteChars = null;
     byte[] testByteBytes = null;
     byte[] testByteArraytoTest = new byte[]{43,23,64,78,24,14,124,12,23,47,43,21,23,14,45,68,84,93,2,23,114,45,35,35,23,3,32,34};
-    
+
+    @Features("Utilities")
+    @Stories("Base64Coder")
+    @Title("encodeByte")
     @Test(groups={"regression", "smoke"})
     public void encodeByte(){
 	testByteChars = Base64Coder.encode(testByteArraytoTest);
 	Assert.assertTrue(testByteChars.length > 0);
 	Assert.assertTrue(Arrays.equals(testByteChars,"KxdAThgOfAwXLysVFw4tRFRdAhdyLSMjFwMgIg==".toCharArray()));
     }
-    
+
+    @Features("Utilities")
+    @Stories("Base64Coder")
+    @Title("decodeByte")
     @Test(groups="regression", dependsOnMethods="encodeByte")
     public void decodeByte(){
 	testByteBytes = Base64Coder.decode(testByteChars);
 	Assert.assertTrue(Arrays.equals(testByteBytes,testByteArraytoTest));
     }
-       
+
+    @Features("Utilities")
+    @Stories("Base64Coder")
+    @Title("encodeSizes")
     @Test(groups="regression")
     public void encodeSizes(){
 	Random random = new Random();
@@ -55,7 +67,10 @@ public class TestBase64Encoder {
         Assert.assertTrue(Arrays.equals(orig4096, dec4096));
         Assert.assertTrue(Arrays.equals(orig8192, dec8192));
     }
-  
+
+    @Features("Utilities")
+    @Stories("Base64Coder")
+    @Title("encodeString")
     @Test(groups="regression")
     public void encodeString(){
 	char base64_encoded_test[] = ("U28/PHA+VGhpcyA0LCA1LCA2LCA3LCA4LCA5LCB6LCB7LCB8LCB9IHRlc3RzIEJhc2U2NCBlbmNv" +
@@ -71,7 +86,10 @@ public class TestBase64Encoder {
 	
 	Assert.assertTrue(Arrays.equals( Base64Coder.encodeString(test_string).toCharArray(), base64_encoded_test));
     }
-    
+
+    @Features("Utilities")
+    @Stories("Base64Coder")
+    @Title("decodeString")
     @Test(groups="regression")
     public void decodeString(){
 	String base64_decoded_test = "U28/PHA+VGhpcyA0LCA1LCA2LCA3LCA4LCA5LCB6LCB7LCB8LCB9IHRlc3RzIEJhc2U2NCBlbmNv" +
@@ -89,6 +107,9 @@ public class TestBase64Encoder {
     }
 
 
+    @Features("Utilities")
+    @Stories("Base64Coder")
+    @Title("encodeLine")
     @Test(groups="regression")
     public void encodeLine(){
         String test_string = "So?<p>" +
@@ -100,6 +121,9 @@ public class TestBase64Encoder {
         Assert.assertNotNull(Base64Coder.encodeLines(bytesEncoded));
     }
 
+    @Features("Utilities")
+    @Stories("Base64Coder")
+    @Title("decodeLine")
     @Test(groups="regression")
     public void decodeLine(){
         String test_string = "VTI4L1BIQStWR2hwY3lBMExDQTFMQ0EyTENBM0xDQTRMQ0E1TENCNkxDQjdMQ0I4TENCOUlIUmxj\n" +
@@ -110,6 +134,10 @@ public class TestBase64Encoder {
                 "Q0J3TENCeExDQnlMQ0J6TGc9PQ==";
         Assert.assertNotNull(Base64Coder.decodeLines(test_string));
     }
+
+    @Features("Utilities")
+    @Stories("Base64Coder")
+    @Title("constructor")
     @Test(groups="regression")
     public void constructor(){
         Assert.assertNotNull(new Base64Coder());

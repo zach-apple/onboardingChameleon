@@ -12,6 +12,9 @@ import org.testng.annotations.Test;
 
 import com.orasi.utils.PageLoaded;
 import com.orasi.utils.TestEnvironment;
+import ru.yandex.qatools.allure.annotations.Features;
+import ru.yandex.qatools.allure.annotations.Stories;
+import ru.yandex.qatools.allure.annotations.Title;
 
 
 public class TestLink extends TestEnvironment {
@@ -36,11 +39,17 @@ public class TestLink extends TestEnvironment {
 	endTest("TestAlert", testResults);
     }
 
+	@Features("Element Interfaces")
+	@Stories("Link")
+	@Title("constructor")
 	@Test(groups ={"regression", "interfaces", "link"})
 	public void constructorWithElement(){
 		Assert.assertNotNull((new LinkImpl(getDriver().findLink(By.xpath("//a[@href='link.html']")))));
 	}
 
+	@Features("Element Interfaces")
+	@Stories("Link")
+	@Title("click")
     @Test(groups ={"regression", "interfaces", "link"})
     public void click(){
 		Link link= getDriver().findLink(By.xpath("//a[@href='testLinks.html']"));
@@ -48,6 +57,9 @@ public class TestLink extends TestEnvironment {
 		Assert.assertTrue(PageLoaded.syncVisible(getDriver(), getDriver().findElement(By.xpath("//a[@href='link.html']"))));
 	}
 
+	@Features("Element Interfaces")
+	@Stories("Link")
+	@Title("clickNegative")
 	@Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="click")
 	public void clickNegative(){
 		Link link= getDriver().findLink(By.xpath("//a[@href='hiddenLink.html']"));
@@ -60,6 +72,9 @@ public class TestLink extends TestEnvironment {
 		Assert.assertTrue(valid);
 	}
 
+	@Features("Element Interfaces")
+	@Stories("Link")
+	@Title("jsClick")
     @Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="click")
     public void jsClick(){
 		Link link= getDriver().findLink(By.xpath("//a[@href='link.html']"));
@@ -67,6 +82,9 @@ public class TestLink extends TestEnvironment {
 		Assert.assertTrue(PageLoaded.syncVisible(getDriver(), getDriver().findLink(By.xpath("//a[@href='testLinks.html']"))));
     }
 
+	@Features("Element Interfaces")
+	@Stories("Link")
+	@Title("jsClickNegative")
 	@Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="jsClick")
 	public void jsClickNegative(){
 		Link link= getDriver().findLink(By.xpath("//a[@href='hiddenLink.html']"));
@@ -80,6 +98,9 @@ public class TestLink extends TestEnvironment {
 		Assert.assertTrue(valid);
 	}
 
+	@Features("Element Interfaces")
+	@Stories("Link")
+	@Title("getURL")
     @Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="jsClick")
     public void getURL(){
 	Link link= getDriver().findLink(By.xpath("//a[@href='testLinks.html']"));

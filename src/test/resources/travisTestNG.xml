@@ -7,9 +7,15 @@
 	<parameter name="runLocation" value="sauce" />
 	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="linux" />
- 	<test name="Element">
+	<test name="Element">
 		<classes>
 			<class name="com.orasi.core.interfaces.TestElement" />
+		</classes>
+	</test>
+
+	<test name="TestElementInternalHandlers">
+		<classes>
+			<class name="com.orasi.core.interfaces.TestElementInternalHandlers" />
 		</classes>
 	</test>
 
@@ -37,7 +43,7 @@
 		</classes>
 	</test>
 
-  	<test name="Listbox">
+	<test name="Listbox">
 		<classes>
 			<class name="com.orasi.core.interfaces.TestListbox" />
 		</classes>
@@ -61,9 +67,9 @@
 		</classes>
 	</test>
 
-	<test name="TestElementInternalHandlers">
+	<test name="ByAngular">
 		<classes>
-			<class name="com.orasi.core.interfaces.TestElementInternalHandlers" />
+			<class name="com.orasi.core.angular.TestByAngular" />
 		</classes>
 	</test>
 
@@ -82,6 +88,24 @@
 	<test name="TestEnvironment">
 		<classes>
 			<class name="com.orasi.utils.TestTestEnvironment" />
+		</classes>
+	</test>
+
+	<test name="TestAlertHandler">
+		<classes>
+			<class name="com.orasi.utils.TestAlertHandler" />
+		</classes>
+	</test>
+
+	<test name="TestFrameHandler">
+		<classes>
+			<class name="com.orasi.utils.TestFrameHandler" />
+		</classes>
+	</test>
+
+	<test name="TestRegex">
+		<classes>
+			<class name="com.orasi.utils.TestRegex" />
 		</classes>
 	</test>
 
