@@ -327,7 +327,7 @@ public class PageLoaded {
         do {
             // this returns a boolean
             obj = oDriver.executeJavaScript("var result = document.readyState; return (result == 'complete');");
-            if (count == timeout)
+			if (count == timeout)
                 break;
             else {
                 Sleeper.sleep(500);
