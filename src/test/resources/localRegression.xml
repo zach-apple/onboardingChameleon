@@ -2,11 +2,11 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
 <suite name="Core-Regression" parallel="tests" thread-count="1">
-	<parameter name="browserUnderTest" value="microsoftedge" />
+	<parameter name="browserUnderTest" value="html" />
 	<parameter name="environment" value="blah" />
 	<parameter name="runLocation" value="local" />
 	<parameter name="browserVersion" value="" />
-	<parameter name="operatingSystem" value="Windows" />
+	<parameter name="operatingSystem" value="windows" />
     <test name="Element">
 		<classes>
 			<class name="com.orasi.core.interfaces.TestElement" />
