@@ -735,11 +735,11 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see https://msdn.microsoft.com/en-us/library/mt188085(v=vs.85).aspx
 	 */
 	private void setDriverWithCapabilties(DesiredCapabilities caps) {
-		switch (caps.getBrowserName().toLowerCase().replace(" ","")) {
+		switch (caps.getBrowserName().toLowerCase()) {
 		case "firefox":
 			driver = new FirefoxDriver(caps);
 			break;
-		case "internetexplorer":
+		case "internet explorer":
 		case "ie":
 			driver = new InternetExplorerDriver(caps);
 			break;
@@ -848,7 +848,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		 * @return - boolean true if interactive, false otherwise
 		 */
 		public boolean isDomInteractive() {
-			return  PageLoaded.isDomInteractive(getOrasiDriver());
+			return new PageLoaded(getOrasiDriver()).isDomInteractive();
 		}
 		/**
 		 * Method that determines when/if the DOM is interactive
@@ -857,7 +857,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		 * @return - boolean true if interactive, false otherwise
 		 */
 		public boolean isDomInteractive(OrasiDriver oDriver) {
-			return PageLoaded.isDomInteractive(oDriver);
+			return new PageLoaded().isDomInteractive(oDriver);
 		}
 		/**
 		 * Method that determines when/if the DOM is interactive
@@ -867,7 +867,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		 * @return - boolean true if interactive, false otherwise
 		 */
 		public boolean isDomInteractive(OrasiDriver oDriver, int timeout) {
-			return PageLoaded.isDomInteractive(oDriver, timeout);
+			return new PageLoaded().isDomInteractive(oDriver, timeout);
 		}
 
 		/*
@@ -878,7 +878,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		 * Example usage: getDriver().page().isAngularComplete();
 		 */
 		public void isAngularComplete() {
-			 PageLoaded.isAngularComplete(getOrasiDriver());
+			new PageLoaded(getOrasiDriver()).isAngularComplete();
 		}
 
 		/*
@@ -899,7 +899,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		 * @return - boolean true if complete, false otherwise
 		 */
 		public boolean isDomComplete(OrasiDriver oDriver) {
-			return PageLoaded.isDomComplete(getOrasiDriver());
+			return new PageLoaded(getOrasiDriver()).isDomComplete();
 		}
 		/**
 		 * Method that determines when/if the DOM is complete
@@ -910,7 +910,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		 * @return
 		 */
 		public boolean isDomComplete(OrasiDriver oDriver, int timeout) {
-			return PageLoaded.isDomComplete(getOrasiDriver(), timeout);
+			return new PageLoaded().isDomComplete(getOrasiDriver(), timeout);
 		}
 
 		/*
