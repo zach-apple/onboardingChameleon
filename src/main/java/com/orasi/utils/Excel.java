@@ -49,10 +49,10 @@ public class Excel {
 
     }
 
-   /* public Excel(String filePath, String sheetName){
+    public Excel(String filePath, String sheetName){
         this.filePath = filePath;
         this.sheetName = sheetName;
 
 
-    }*/
+    }
 }
