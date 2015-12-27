@@ -64,6 +64,7 @@ public class TestLink extends TestEnvironment {
 	@Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="click")
 	public void clickNegative(){
 
+		if(driver.getDriverCapability().browserName().contains("explorer") ||getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty() ) throw new SkipException("Test not valid for Internet Explorer");
 		if(getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty() ) throw new SkipException("Test not valid for HTMLUnitDriver");
 		Link link= getDriver().findLink(By.xpath("//a[@href='hiddenLink.html']"));
 		boolean valid = false;
@@ -90,6 +91,7 @@ public class TestLink extends TestEnvironment {
 	@Title("jsClickNegative")
 	@Test(groups ={"regression", "interfaces", "link"}, dependsOnMethods="jsClick")
 	public void jsClickNegative(){
+		if(driver.getDriverCapability().browserName().contains("explorer") ) throw new SkipException("Test not valid for Internet Explorer");
 		Link link= getDriver().findLink(By.xpath("//a[@href='hiddenLink.html']"));
 		getDriver().findLink(By.xpath("//a[@href='testLinks.html']")).click();
 		boolean valid = false;

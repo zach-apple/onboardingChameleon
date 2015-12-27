@@ -49,7 +49,7 @@ public class TestRadioButton extends TestEnvironment{
 	@Title("constructor")
 	@Test(groups ={"regression", "interfaces", "textbox"})
 	public void constructorWithElement(){
-		Assert.assertNotNull((new RadioGroupImpl(getDriver().findWebElement((By.id("radioForm"))))));
+		Assert.assertNotNull((new RadioGroupImpl(getDriver().findWebElement((By.id("radioForm"))),driver)));
 	}
 
 	@Features("Element Interfaces")
@@ -127,7 +127,7 @@ public class TestRadioButton extends TestEnvironment{
 	@Test(groups ={"regression", "interfaces", "radiogroup"}, dependsOnMethods="selectByOption")
 	public void selectByOptionNoText(){
 		if(getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty() ) throw new SkipException("Test not valid for HTMLUnitDriver");
-			
+		if(driver.getDriverCapability().browserName().contains("explorer")) throw new SkipException("Test not valid for Internet Explorer");
 		RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
 		radiogroup.selectByOption("");
 		Assert.assertTrue(radiogroup.getSelectedIndex() == 0);
@@ -137,7 +137,8 @@ public class TestRadioButton extends TestEnvironment{
 	@Stories("RadioGroup")
 	@Title("selectByOptionNegative")
 	@Test(groups ={"regression", "interfaces", "radiogroup"}, dependsOnMethods="selectByOption")
-	public void selectByOptionNegative(){
+	public void selectByOptionNegative(){if(driver.getDriverCapability().browserName().contains("explorer")) throw new SkipException("Test not valid for Internet Explorer");
+		if(getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty() ) throw new SkipException("Test not valid for HTMLUnitDriver");
 		if(getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty() ) throw new SkipException("Test not valid for HTMLUnitDriver");
 		RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
 		boolean valid = false;
