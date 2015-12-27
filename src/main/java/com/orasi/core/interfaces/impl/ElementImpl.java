@@ -277,6 +277,7 @@ public class ElementImpl implements Element {
 		}
 	}
 
+
 	@Override
 	public String getElementIdentifier() {
 		String locator = "";
@@ -296,8 +297,16 @@ public class ElementImpl implements Element {
 				elementField.setAccessible(true);
 
 				startPosition = elementField.get(element).toString().lastIndexOf(": ") + 2;
-				locator = elementField.get(element).toString().substring(startPosition,
-						elementField.get(element).toString().lastIndexOf("]"));
+				if(startPosition==1){
+					startPosition = elementField.get(element).toString().indexOf("=\"") + 2;
+					endPosition = elementField.get(element).toString().indexOf("\"", elementField.get(element).toString().indexOf("=\"") + 3);
+					if (startPosition == -1 | endPosition == -1)
+						locator = elementField.get(element).toString();
+					else
+						locator = elementField.get(element).toString().substring(startPosition, endPosition);
+				}else{
+					locator = elementField.get(element).toString().substring(startPosition,elementField.get(element).toString().lastIndexOf("]"));
+				}
 			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 				e.printStackTrace();
 			}
@@ -321,10 +330,8 @@ public class ElementImpl implements Element {
 
 		if (element instanceof HtmlUnitWebElement) {
 			startPosition = element.toString().indexOf(" ");
-			if (startPosition == -1)
-				locator = element.toString();
-			else
-				locator = element.toString().substring(startPosition, element.toString().indexOf("="));
+			if (startPosition == -1)locator = element.toString();
+			else locator = element.toString().substring(startPosition, element.toString().indexOf("="));
 		} else if (element instanceof ElementImpl) {
 			Field elementField = null;
 			try {
@@ -332,8 +339,16 @@ public class ElementImpl implements Element {
 				elementField.setAccessible(true);
 
 				startPosition = elementField.get(element).toString().lastIndexOf("->") + 3;
+				if(startPosition==2){
+					startPosition = elementField.get(element).toString().indexOf(" ");
+					if (startPosition == -1)
+						locator = elementField.get(element).toString();
+					else
+						locator = elementField.get(element).toString().substring(startPosition, elementField.get(element).toString().indexOf("="));
+				}else{
 				locator = elementField.get(element).toString().substring(startPosition,
 						elementField.get(element).toString().lastIndexOf(":"));
+				}
 			} catch (IllegalAccessException | NoSuchFieldException | SecurityException e) {
 				e.printStackTrace();
 			}
@@ -348,6 +363,7 @@ public class ElementImpl implements Element {
 		return locator;
 
 	}
+
 
 	@Override
 	public String getElementLocatorInfo() {
