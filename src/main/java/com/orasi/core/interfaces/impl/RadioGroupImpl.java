@@ -33,7 +33,8 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	 * @throws NoSuchAttributeException
 	 */
 	public RadioGroupImpl(final WebElement element) {
-		super(element);int timeout = getWrappedDriver().getElementTimeout();
+		super(element);
+		int timeout = getWrappedDriver().getElementTimeout();
 		getWrappedDriver().setElementTimeout(0);
 		this.radioButtons = element.findElements(By.tagName("input"));
 		if(radioButtons.size() == 0) radioButtons = getWrappedDriver().findElements(getElementLocator());
