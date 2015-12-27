@@ -9,6 +9,9 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import ru.yandex.qatools.allure.annotations.Features;
+import ru.yandex.qatools.allure.annotations.Stories;
+import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestFrameHandler extends TestEnvironment {
 	@BeforeTest(groups = { "regression", "utils", "dev", "framehandler" })
@@ -31,6 +34,9 @@ public class TestFrameHandler extends TestEnvironment {
 		endTest("TestFrame", testResults);
 	}
 
+	@Features("Utilities")
+	@Stories("FrameHandler")
+	@Title("findAndSwitchToFrameFromOutsideFrame")
 	@SuppressWarnings("deprecation")
 	@Test(groups = { "regression", "utils", "dev", "framehandler" })
 	public void findAndSwitchToFrameFromOutsideFrame() {
@@ -39,6 +45,9 @@ public class TestFrameHandler extends TestEnvironment {
 				getDriver().findElement(By.id("googleLink")).isDisplayed());
 	}
 
+	@Features("Utilities")
+	@Stories("FrameHandler")
+	@Title("testGetCurrentFrameName")
 	@Test(groups = { "regression", "utils", "dev",
 			"framehandler" }, dependsOnMethods = "findAndSwitchToFrameFromOutsideFrame")
 	public void testGetCurrentFrameName() {
@@ -46,12 +55,18 @@ public class TestFrameHandler extends TestEnvironment {
 				FrameHandler.getCurrentFrameName(getDriver()).equals("menu_page"));
 	}
 
+	@Features("Utilities")
+	@Stories("FrameHandler")
+	@Title("testGetDefaultContent")
 	@Test(groups = { "regression", "utils", "dev" }, dependsOnMethods = "testGetCurrentFrameName")
 	public void testGetDefaultContent() {
 		FrameHandler.moveToDefaultContext(getDriver());
 		Assert.assertNull("Failed to move to default Content", FrameHandler.getCurrentFrameName(getDriver()));
 	}
 
+	@Features("Utilities")
+	@Stories("FrameHandler")
+	@Title("testMoveToChildFrameWithName")
 	@Test(groups = { "regression", "utils", "dev" }, dependsOnMethods = "testGetDefaultContent")
 	public void testMoveToChildFrameWithName() {
 		FrameHandler.moveToChildFrame(getDriver(), "main_page");
@@ -59,6 +74,9 @@ public class TestFrameHandler extends TestEnvironment {
 				FrameHandler.getCurrentFrameName(getDriver()).equals("main_page"));
 	}
 
+	@Features("Utilities")
+	@Stories("FrameHandler")
+	@Title("testMoveToChildFrameWithLocator")
 	@Test(groups = { "regression", "utils", "dev" }, dependsOnMethods = "testMoveToChildFrameWithName")
 	public void testMoveToChildFrameWithLocator() {
 		By locator = By.name("main_frame1");
@@ -67,6 +85,9 @@ public class TestFrameHandler extends TestEnvironment {
 				FrameHandler.getCurrentFrameName(getDriver()).equals("main_frame1"));
 	}
 
+	@Features("Utilities")
+	@Stories("FrameHandler")
+	@Title("testMoveToParentFrame")
 	@Test(groups = { "regression", "utils", "dev" }, dependsOnMethods = "testMoveToChildFrameWithLocator")
 	public void testMoveToParentFrame() {
 		if (this.browserUnderTest.toLowerCase().contains("safari") || driver.toString().contains("safari"))
@@ -76,6 +97,9 @@ public class TestFrameHandler extends TestEnvironment {
 				FrameHandler.getCurrentFrameName(getDriver()).equals("main_page"));
 	}
 
+	@Features("Utilities")
+	@Stories("FrameHandler")
+	@Title("testMoveToSiblingFrameWithName")
 	@Test(groups = { "regression", "utils", "dev" }, dependsOnMethods = "testMoveToParentFrame")
 	public void testMoveToSiblingFrameWithName() {
 		if (this.browserUnderTest.toLowerCase().contains("safari") || driver.toString().contains("safari"))
@@ -86,6 +110,9 @@ public class TestFrameHandler extends TestEnvironment {
 				FrameHandler.getCurrentFrameName(getDriver()).equals("main_frame2"));
 	}
 
+	@Features("Utilities")
+	@Stories("FrameHandler")
+	@Title("testMoveToSiblingFrameWithLocator")
 	@Test(groups = { "regression", "utils", "dev" }, dependsOnMethods = "testMoveToSiblingFrameWithName")
 	public void testMoveToSiblingFrameWithLocator() {
 		if (this.browserUnderTest.toLowerCase().contains("safari") || driver.toString().contains("safari"))
@@ -96,6 +123,9 @@ public class TestFrameHandler extends TestEnvironment {
 				FrameHandler.getCurrentFrameName(getDriver()).equals("main_frame1"));
 	}
 
+	@Features("Utilities")
+	@Stories("FrameHandler")
+	@Title("testMoveToMultiChildFrameWithName")
 	@Test(groups = { "regression", "utils", "dev" }, dependsOnMethods = "testMoveToSiblingFrameWithLocator")
 	public void testMoveToMultiChildFrameWithName() {
 		FrameHandler.moveToDefaultContext(getDriver());
@@ -104,6 +134,9 @@ public class TestFrameHandler extends TestEnvironment {
 				FrameHandler.getCurrentFrameName(getDriver()).equals("main_frame1"));
 	}
 
+	@Features("Utilities")
+	@Stories("FrameHandler")
+	@Title("testMoveToMultiChildFrameWithLocator")
 	@Test(groups = { "regression", "utils", "dev" }, dependsOnMethods = "testMoveToMultiChildFrameWithName")
 	public void testMoveToMultiChildFrameWithLocator() {
 		By locatorParentFrame = By.name("main_page");

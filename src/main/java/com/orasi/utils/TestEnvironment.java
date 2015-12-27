@@ -337,6 +337,7 @@ public class TestEnvironment {
 		// Uncomment the following line to have TestReporter outputs output to
 		// the console
 		TestReporter.setPrintToConsole(true);
+		//setThreadDriver(true);
 		setTestName(testName);
 		driverSetup();
 		if (getPageURL().isEmpty())
@@ -460,7 +461,7 @@ public class TestEnvironment {
 				else if (getBrowserUnderTest().equalsIgnoreCase("safari")) {
 					caps = DesiredCapabilities.safari();
 
-				} else if (getBrowserUnderTest().equalsIgnoreCase("microsoftedge")) {
+				} else if (getBrowserUnderTest().replace(" ", "").equalsIgnoreCase("microsoftedge")) {
 					file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "MicrosoftWebDriver.exe")
 							.getPath());
 					System.setProperty("webdriver.edge.driver", file.getAbsolutePath());
@@ -581,10 +582,10 @@ public class TestEnvironment {
 		getDriver().setElementTimeout(Constants.ELEMENT_TIMEOUT);
 		getDriver().setPageTimeout(Constants.PAGE_TIMEOUT);
 		getDriver().setScriptTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+		getDriver().manage().window().maximize();
 		// setDefaultTestTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
 		if (!getBrowserUnderTest().toLowerCase().contains("edge")) {
 			getDriver().manage().deleteAllCookies();
-			getDriver().manage().window().maximize();
 		}
 	}
 

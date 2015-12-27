@@ -19,6 +19,9 @@ import com.orasi.core.by.angular.internal.ByAngularModel;
 import com.orasi.core.by.angular.internal.ByAngularRepeater;
 import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestEnvironment;
+import ru.yandex.qatools.allure.annotations.Features;
+import ru.yandex.qatools.allure.annotations.Stories;
+import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestByAngular extends TestEnvironment{
 	@BeforeTest(groups ={"regression", "interfaces", "ByAngularModel", "dev"})
@@ -45,20 +48,28 @@ public class TestByAngular extends TestEnvironment{
     }
 
 
+	@Features("Element Interfaces")
+	@Stories("Angular")
+	@Title("constructor")
     @Test(groups ={"regression", "interfaces", "ByAngularModel"})
     public void byAngular(){
     	ByAngular angular = new ByAngular(driver);
     	Assert.assertNotNull(angular);
     }
-    
- 
+
+	@Features("Element Interfaces")
+	@Stories("Angular")
+	@Title("Model")
     @Test(groups ={"regression", "interfaces", "ByAngularModel"})
     public void byAngularModel(){
     	ByAngularModel model = new ByAngularModel((JavascriptExecutor)driver.getDriver(), "user.name");
     	Assert.assertNotNull(model);
     }
-    
 
+
+	@Features("Element Interfaces")
+	@Stories("Angular")
+	@Title("Model")
     @Test(groups ={"regression", "interfaces", "ByAngularModel"})
     public void byAngularButtonText(){
     	ByAngularButtonText buttonText = new ByAngularButtonText((JavascriptExecutor)driver.getDriver(), "Login");
@@ -68,21 +79,30 @@ public class TestByAngular extends TestEnvironment{
     	driver.findTextbox(ByNG.buttonText("Login")).click();
     	
     }
-    
-    
+
+
+	@Features("Element Interfaces")
+	@Stories("Angular")
+	@Title("waitForAgnularRequestsToFinish")
     @Test(groups={"regression", "interfaces", "WaitForAngularRequestsToFinish"}, dependsOnMethods="byAngularButtonText")
     public void waitForAngularRequestsToFinish(){
     	WaitForAngularRequestsToFinish.waitForAngularRequestsToFinish(driver);
     }
-    
+
+	@Features("Element Interfaces")
+	@Stories("Angular")
+	@Title("controller")
     @Test(groups ={"regression", "interfaces", "byAngularController"}, dependsOnMethods="byAngularButtonText")
     public void byAngularController(){
     	ByAngularController controller = new ByAngularController((JavascriptExecutor)driver.getDriver(), "HeaderController");
     	Assert.assertNotNull(controller);
     }
-    
-    
-  //  @Test(groups ={"regression", "interfaces", "byAngularController"}, dependsOnMethods="byAngularButtonText")
+
+
+	@Features("Element Interfaces")
+	@Stories("Angular")
+	@Title("repeater")
+    @Test(groups ={"regression", "interfaces", "byAngularController"}, dependsOnMethods="byAngularButtonText")
     public void byAngularRepeater(){
     	ByAngularRepeater repeat = new ByAngularRepeater((JavascriptExecutor)driver.getDriver(), "employee in employees");
     	Assert.assertNotNull(repeat);
