@@ -3,9 +3,11 @@ package com.orasi.core.interfaces;
 import java.util.List;
 
 import com.orasi.core.interfaces.impl.RadioGroupImpl;
+
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.ITestContext;
+import org.testng.SkipException;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
@@ -13,6 +15,7 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.orasi.utils.TestEnvironment;
+
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
@@ -123,6 +126,8 @@ public class TestRadioButton extends TestEnvironment{
 	@Title("selectByOptionNoText")
 	@Test(groups ={"regression", "interfaces", "radiogroup"}, dependsOnMethods="selectByOption")
 	public void selectByOptionNoText(){
+		if(getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty() ) throw new SkipException("Test not valid for HTMLUnitDriver");
+			
 		RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
 		radiogroup.selectByOption("");
 		Assert.assertTrue(radiogroup.getSelectedIndex() == 0);
@@ -133,6 +138,7 @@ public class TestRadioButton extends TestEnvironment{
 	@Title("selectByOptionNegative")
 	@Test(groups ={"regression", "interfaces", "radiogroup"}, dependsOnMethods="selectByOption")
 	public void selectByOptionNegative(){
+		if(getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty() ) throw new SkipException("Test not valid for HTMLUnitDriver");
 		RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
 		boolean valid = false;
 		try{
