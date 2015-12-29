@@ -17,6 +17,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
+import com.orasi.exception.automation.PageInitialization;
 
 /**
  * Several different methods of waiting for a page to finish loading.
@@ -84,7 +85,7 @@ public class PageLoaded {
 					initialize();
 				}
 			}
-		} catch (NullPointerException | NoSuchElementException | StaleElementReferenceException e) {
+		} catch (NullPointerException | NoSuchElementException | StaleElementReferenceException | PageInitialization e) {
 			// do nothing
 		}
 

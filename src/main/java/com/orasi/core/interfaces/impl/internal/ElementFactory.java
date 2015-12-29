@@ -7,6 +7,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
 
+import com.orasi.exception.automation.PageInitialization;
+
 /**
  * Element factory for wrapped elements. Similar to {@link org.openqa.selenium.support.PageFactory}
  */
@@ -54,10 +56,14 @@ public class ElementFactory {
                 Constructor<T> constructor = pageClassToProxy.getConstructor(WebDriver.class);
                 return constructor.newInstance(driver);
             } catch (NoSuchMethodException e) {
-                return pageClassToProxy.newInstance();
+        	try{            		
+        		return pageClassToProxy.newInstance();
+        	}catch(InstantiationException ie){ 
+        		throw new PageInitialization("Failed to create instance of: " + pageClassToProxy.getName(), ie);
+        	}
             }
         } catch (InstantiationException e) {
-            throw new RuntimeException(e);
+            throw new PageInitialization("Failed to create instance of: " + pageClassToProxy.getName(), e);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {

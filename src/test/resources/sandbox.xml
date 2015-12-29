@@ -3,16 +3,12 @@
 <suite name="Core-Regression" parallel="methods" thread-count="20">
 	<parameter name="browserUnderTest" value="firefox" />
 	<parameter name="environment" value="staging" />
-	<parameter name="runLocation" value="local" />
+	<parameter name="runLocation" value="sauce" />
 	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="windows" />
  	<test name="TestEnvironment">
 		<classes>
-<<<<<<< HEAD
-			<class name="com.orasi.utils.TestFrameHandler" />
-=======
-			<class name="com.orasi.core.angular.TestByAngularModel" />
->>>>>>> stage
+			<class name="com.orasi.core.angular.TestByAngular" />
 		</classes>
 	</test> 
 </suite> <!-- Suite -->

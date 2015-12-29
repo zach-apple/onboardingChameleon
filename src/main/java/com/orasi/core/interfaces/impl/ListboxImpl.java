@@ -6,6 +6,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import com.orasi.core.interfaces.Listbox;
+import com.orasi.exception.automation.ListboxOptionNotFoundException;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.TestReporter;
 
@@ -56,10 +57,9 @@ public class ListboxImpl extends ElementImpl implements Listbox {
 				for (WebElement option : optionsList) {
 					optionList += option.getText() + " | ";
 				}
-				TestReporter
-						.interfaceLog(" The value of <b>[ " + text + "</b> ] was not found in Listbox [  <b>@FindBy: "
+				TestReporter.interfaceLog(" The value of <b>[ " + text + "</b> ] was not found in Listbox [  <b>@FindBy: "
 								+ getElementLocatorInfo() + " </b>]. Acceptable values are " + optionList + " ]");
-				throw new NoSuchElementException("The value of [ " + text + " ] was not found in Listbox [  @FindBy: "
+				throw new ListboxOptionNotFoundException("The value of [ " + text + " ] was not found in Listbox [  @FindBy: "
 						+ getElementLocatorInfo() + " ]. Acceptable values are " + optionList);
 			}
 		} else {
@@ -96,7 +96,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
 				TestReporter
 						.interfaceLog(" The value of <b>[ " + value + "</b> ] was not found in Listbox [  <b>@FindBy: "
 								+ getElementLocatorInfo() + " </b>]. Acceptable values are " + optionList + " ]");
-				throw new NoSuchElementException("The value of [ " + value + " ] was not found in Listbox [  @FindBy: "
+				throw new ListboxOptionNotFoundException("The value of [ " + value + " ] was not found in Listbox [  @FindBy: "
 						+ getElementLocatorInfo() + " ]. Acceptable values are " + optionList);
 			}
 		} else {
