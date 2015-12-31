@@ -19,9 +19,6 @@ public class LabelImpl extends ElementImpl implements Label {
 		super(element);
 	}
 
-	public LabelImpl(WebElement element, OrasiDriver driver) {
-		super(element, driver);
-	}
 
 	@Override
 	public String getFor() {

@@ -10,6 +10,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitWebElement;
@@ -36,10 +37,7 @@ public class ElementImpl implements Element {
 		this.element = element;
 	}
 
-	public ElementImpl(final WebElement element, final OrasiDriver driver) {
-		this.element = element;
-		this.driver = driver;
-	}
+
 
 	/**
 	 * @see org.openqa.selenium.WebElement#click()
@@ -87,7 +85,7 @@ public class ElementImpl implements Element {
 	}
 
 	/**
-	 * @see org.openqa.selenium.WebElement#getAttribute()
+	 * @see org.openqa.selenium.WebElement#getAttribute(String)
 	 */
 	@Override
 	public String getAttribute(String name) {
@@ -95,7 +93,7 @@ public class ElementImpl implements Element {
 	}
 
 	/**
-	 * @see org.openqa.selenium.WebElement#getCssValue()
+	 * @see org.openqa.selenium.WebElement#getCssValue(String)
 	 */
 	@Override
 	public String getCssValue(String propertyName) {
@@ -118,7 +116,7 @@ public class ElementImpl implements Element {
 	}
 
 	/**
-	 * @see org.openqa.selenium.WebElement#findElements()
+	 * @see org.openqa.selenium.WebElement#findElement(By)
 	 */
 	@Override
 	public List<WebElement> findElements(By by) {
@@ -142,7 +140,7 @@ public class ElementImpl implements Element {
 	}
 
 	/**
-	 * @see org.openqa.selenium.WebElement#findElement()
+	 * @see org.openqa.selenium.WebElement#findElement(By)
 	 */
 	@Override
 	public WebElement findElement(By by) {
@@ -166,7 +164,7 @@ public class ElementImpl implements Element {
 	}
 
 	/**
-	 * @see org.openqa.selenium.WebElement.isSelected()
+	 * @see org.openqa.selenium.WebElement#isSelected()
 	 */
 	@Override
 	public boolean isSelected() {
@@ -191,7 +189,7 @@ public class ElementImpl implements Element {
 	}
 
 	/**
-	 * @see org.openqa.selenium.WebElement#sendKeys()
+	 * @see org.openqa.selenium.WebElement#sendKeys(CharSequence...)
 	 */
 	@Override
 	public void sendKeys(CharSequence... keysToSend) {
@@ -202,9 +200,6 @@ public class ElementImpl implements Element {
 		}
 	}
 
-	/**
-	 * @see org.openqa.selenium.WebElement#getWrappedElement()
-	 */
 	@Override
 	public WebElement getWrappedElement() {
 		return element;
@@ -212,12 +207,17 @@ public class ElementImpl implements Element {
 
 	@Override
 	public OrasiDriver getWrappedDriver() {
+
+		WebDriver ldriver = null;
 		if (driver == null) {
 			Field privateStringField = null;
 			try {
-				privateStringField = element.getClass().getDeclaredField("driver");
+				privateStringField = element.getClass().getDeclaredField("parent");
 				privateStringField.setAccessible(true);
-				return (OrasiDriver) privateStringField.get(element);
+				ldriver =  (WebDriver)privateStringField.get(element);
+				OrasiDriver oDriver = new OrasiDriver();
+				oDriver.setDriver(ldriver);
+				return oDriver;
 			} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException | SecurityException e) {
 				e.printStackTrace();
 			}
@@ -252,7 +252,7 @@ public class ElementImpl implements Element {
 			locator = getElementLocatorAsString();
 			switch (locator) {
 			case "className":
-				by = new ByClassName(getElementIdentifier());
+				by = By.className(getElementIdentifier());
 				break;
 			case "cssSelector":
 				by = By.cssSelector(getElementIdentifier());
@@ -280,6 +280,7 @@ public class ElementImpl implements Element {
 		}
 	}
 
+
 	@Override
 	public String getElementIdentifier() {
 		String locator = "";
@@ -299,8 +300,16 @@ public class ElementImpl implements Element {
 				elementField.setAccessible(true);
 
 				startPosition = elementField.get(element).toString().lastIndexOf(": ") + 2;
-				locator = elementField.get(element).toString().substring(startPosition,
-						elementField.get(element).toString().lastIndexOf("]"));
+				if(startPosition==1){
+					startPosition = elementField.get(element).toString().indexOf("=\"") + 2;
+					endPosition = elementField.get(element).toString().indexOf("\"", elementField.get(element).toString().indexOf("=\"") + 3);
+					if (startPosition == -1 | endPosition == -1)
+						locator = elementField.get(element).toString();
+					else
+						locator = elementField.get(element).toString().substring(startPosition, endPosition);
+				}else{
+					locator = elementField.get(element).toString().substring(startPosition,elementField.get(element).toString().lastIndexOf("]"));
+				}
 			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 				e.printStackTrace();
 			}
@@ -324,10 +333,8 @@ public class ElementImpl implements Element {
 
 		if (element instanceof HtmlUnitWebElement) {
 			startPosition = element.toString().indexOf(" ");
-			if (startPosition == -1)
-				locator = element.toString();
-			else
-				locator = element.toString().substring(startPosition, element.toString().indexOf("="));
+			if (startPosition == -1)locator = element.toString();
+			else locator = element.toString().substring(startPosition, element.toString().indexOf("="));
 		} else if (element instanceof ElementImpl) {
 			Field elementField = null;
 			try {
@@ -335,8 +342,16 @@ public class ElementImpl implements Element {
 				elementField.setAccessible(true);
 
 				startPosition = elementField.get(element).toString().lastIndexOf("->") + 3;
+				if(startPosition==2){
+					startPosition = elementField.get(element).toString().indexOf(" ");
+					if (startPosition == -1)
+						locator = elementField.get(element).toString();
+					else
+						locator = elementField.get(element).toString().substring(startPosition, elementField.get(element).toString().indexOf("="));
+				}else{
 				locator = elementField.get(element).toString().substring(startPosition,
 						elementField.get(element).toString().lastIndexOf(":"));
+				}
 			} catch (IllegalAccessException | NoSuchFieldException | SecurityException e) {
 				e.printStackTrace();
 			}
@@ -352,6 +367,7 @@ public class ElementImpl implements Element {
 
 	}
 
+
 	@Override
 	public String getElementLocatorInfo() {
 		return getElementLocatorAsString() + " = " + getElementIdentifier();
@@ -360,7 +376,7 @@ public class ElementImpl implements Element {
 	@Override
 	public void highlight() {
 
-		driver.executeJavaScript("arguments[0].style.border='3px solid red'", this);
+		getWrappedDriver().executeJavaScript("arguments[0].style.border='3px solid red'", this);
 	}
 
 	@Override

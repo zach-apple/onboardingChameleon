@@ -20,9 +20,6 @@ public class CheckboxImpl extends ElementImpl implements Checkbox {
         super(element);
     }
 
-    public CheckboxImpl(WebElement element, OrasiDriver driver) {
-        super(element, driver);
-    }
     
     @Override
     public void toggle() {
@@ -31,7 +28,7 @@ public class CheckboxImpl extends ElementImpl implements Checkbox {
 
     @Override
     public void jsToggle() {
-    	driver.executeJavaScript("arguments[0].click();", element);
+    	getWrappedDriver().executeJavaScript("arguments[0].click();", element);
     }
 
     @Override

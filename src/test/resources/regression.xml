@@ -13,6 +13,12 @@
 		</classes>
 	</test>
 
+	<test name="TestElementInternalHandlers">
+		<classes>
+			<class name="com.orasi.core.interfaces.TestElementInternalHandlers" />
+		</classes>
+	</test>
+
 	<test name="Button">
 		<classes>
 			<class name="com.orasi.core.interfaces.TestButton" />
@@ -84,10 +90,22 @@
 			<class name="com.orasi.utils.TestTestEnvironment" />
 		</classes>
 	</test>
-	
+
+	<test name="TestAlertHandler">
+		<classes>
+			<class name="com.orasi.utils.TestAlertHandler" />
+		</classes>
+	</test>
+
 	<test name="TestFrameHandler">
 		<classes>
 			<class name="com.orasi.utils.TestFrameHandler" />
+		</classes>
+	</test>
+
+	<test name="TestRegex">
+		<classes>
+			<class name="com.orasi.utils.TestRegex" />
 		</classes>
 	</test>
 	

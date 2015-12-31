@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Core-Regression" parallel="methods" thread-count="20">
-	<parameter name="browserUnderTest" value="firefox" />
+<suite name="Core-Regression" parallel="methods" thread-count="1">
+	<parameter name="browserUnderTest" value="ie" />
 	<parameter name="environment" value="staging" />
 	<parameter name="runLocation" value="sauce" />
 	<parameter name="browserVersion" value="" />
