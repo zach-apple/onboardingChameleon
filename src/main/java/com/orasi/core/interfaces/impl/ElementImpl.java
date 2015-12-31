@@ -10,6 +10,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitWebElement;
@@ -36,10 +37,7 @@ public class ElementImpl implements Element {
 		this.element = element;
 	}
 
-	public ElementImpl(final WebElement element, final OrasiDriver driver) {
-		this.element = element;
-		this.driver = driver;
-	}
+
 
 	/**
 	 * @see org.openqa.selenium.WebElement#click()
@@ -209,12 +207,17 @@ public class ElementImpl implements Element {
 
 	@Override
 	public OrasiDriver getWrappedDriver() {
+
+		WebDriver ldriver = null;
 		if (driver == null) {
 			Field privateStringField = null;
 			try {
-				privateStringField = element.getClass().getDeclaredField("driver");
+				privateStringField = element.getClass().getDeclaredField("parent");
 				privateStringField.setAccessible(true);
-				return (OrasiDriver) privateStringField.get(element);
+				ldriver =  (WebDriver)privateStringField.get(element);
+				OrasiDriver oDriver = new OrasiDriver();
+				oDriver.setDriver(ldriver);
+				return oDriver;
 			} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException | SecurityException e) {
 				e.printStackTrace();
 			}
@@ -373,7 +376,7 @@ public class ElementImpl implements Element {
 	@Override
 	public void highlight() {
 
-		driver.executeJavaScript("arguments[0].style.border='3px solid red'", this);
+		getWrappedDriver().executeJavaScript("arguments[0].style.border='3px solid red'", this);
 	}
 
 	@Override

@@ -47,14 +47,14 @@ public class TestWebtable extends TestEnvironment{
     public void constructorWithElement(){
         Assert.assertNotNull((new WebtableImpl(getDriver().findWebElement((By.xpath(xpath))))));
     }
-
+/*
     @Features("Element Interfaces")
     @Stories("Webtable")
     @Title("constructorWithElement")
     @Test(groups ={"regression", "interfaces", "webtable"})
     public void constructorWithElementAndDriver(){
         Assert.assertNotNull((new WebtableImpl(getDriver().findWebElement((By.xpath(xpath))), getDriver())));
-    }
+    }*/
 
     @Features("Element Interfaces")
     @Stories("Webtable")

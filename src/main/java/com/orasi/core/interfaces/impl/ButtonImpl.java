@@ -21,9 +21,7 @@ public class ButtonImpl extends ElementImpl implements Button {
 		super(element);
 	}
 
-	public ButtonImpl(WebElement element, OrasiDriver driver) {
-		super(element, driver);
-	}
+
 
 	@Override
 	public void click() {

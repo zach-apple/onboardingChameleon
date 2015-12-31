@@ -44,13 +44,13 @@ public class TestRadioButton extends TestEnvironment{
     }
 
 
-	@Features("Element Interfaces")
+/*	@Features("Element Interfaces")
 	@Stories("RadioGroup")
 	@Title("constructor")
 	@Test(groups ={"regression", "interfaces", "textbox"})
 	public void constructorWithElement(){
 		Assert.assertNotNull((new RadioGroupImpl(getDriver().findWebElement((By.id("radioForm"))),driver)));
-	}
+	}*/
 
 	@Features("Element Interfaces")
 	@Stories("RadioGroup")

@@ -46,15 +46,7 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 		currentIndex = getCurrentIndex();
 	}
 
-	public RadioGroupImpl(WebElement element, OrasiDriver driver) {
-		super(element, driver);
-		this.radioButtons = element.findElements(By.tagName("input"));
-		getNumberOfRadioButtons();
-		getAllOptions();
-		Assert.assertNotEquals(radioButtons.size(), 0,
-				"No radio buttons were found for the element [" + element + "].");
-		currentIndex = getCurrentIndex();
-	}
+
 
 	/**
 	 * @summary - Defines the number of radio buttons in the group by the number

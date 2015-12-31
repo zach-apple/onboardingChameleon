@@ -24,9 +24,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 		super(element);
 	}
 
-	public WebtableImpl(WebElement element, OrasiDriver driver) {
-		super(element, driver);
-	}
+
 
 	private List<WebElement> getRowCollection() {
 		getWrappedDriver().setElementTimeout(1, TimeUnit.SECONDS);

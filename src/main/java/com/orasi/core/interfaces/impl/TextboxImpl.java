@@ -22,9 +22,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 		super(element);
 	}
 
-	public TextboxImpl(WebElement element, OrasiDriver driver) {
-		super(element, driver);
-	}
+
 
 	/**
 	 * @summary - Gets the value of an input field. Overrides default clear().
@@ -80,7 +78,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 	public void scrollAndSet(String text) {
 		if (!text.isEmpty()) {
 			try {
-				driver.executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();",
+				getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();",
 						getWrappedElement());
 				getWrappedElement().clear();
 				getWrappedElement().sendKeys(text);

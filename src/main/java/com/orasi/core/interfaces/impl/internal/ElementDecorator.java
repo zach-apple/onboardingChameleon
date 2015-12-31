@@ -66,7 +66,7 @@ public class ElementDecorator implements FieldDecorator {
 
         if (WebElement.class.isAssignableFrom(fieldType)) {
           //  return proxyForLocator(loader, fieldType, locator);
-        	 return proxyForLocator(loader, fieldType, locator, driverRef);
+        	 return proxyForLocator(loader, fieldType, locator);
         } else if (List.class.isAssignableFrom(fieldType)) {
             Class<?> erasureClass = getErasureClass(field);
             return proxyForListLocator(loader, erasureClass, locator);
@@ -111,7 +111,7 @@ public class ElementDecorator implements FieldDecorator {
       //  InvocationHandler handler = new ElementHandler(interfaceType, locator);
     	final WebDriver driverRef = driver;
         
-    	  InvocationHandler handler = new ElementHandler(interfaceType, locator,driverRef);
+    	  InvocationHandler handler = new ElementHandler(interfaceType, locator);
 
         T proxy;
         proxy = interfaceType.cast(Proxy.newProxyInstance(
