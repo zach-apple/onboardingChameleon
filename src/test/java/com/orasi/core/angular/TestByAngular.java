@@ -62,7 +62,7 @@ public class TestByAngular extends TestEnvironment{
 	@Title("Model")
     @Test(groups ={"regression", "interfaces", "ByAngularModel"})
     public void byAngularModel(){
-    	ByAngularModel model = new ByAngularModel((JavascriptExecutor)driver.getDriver(), "user.name");
+    	ByAngularModel model = new ByAngularModel((JavascriptExecutor)driver.getWebDriver(), "user.name");
     	Assert.assertNotNull(model);
     }
 
@@ -72,7 +72,7 @@ public class TestByAngular extends TestEnvironment{
 	@Title("Model")
     @Test(groups ={"regression", "interfaces", "ByAngularModel"})
     public void byAngularButtonText(){
-    	ByAngularButtonText buttonText = new ByAngularButtonText((JavascriptExecutor)driver.getDriver(), "Login");
+    	ByAngularButtonText buttonText = new ByAngularButtonText((JavascriptExecutor)driver.getWebDriver(), "Login");
     	Assert.assertNotNull(buttonText);
     	driver.findTextbox(ByNG.model("user.name")).set("Luke");
     	driver.findTextbox(ByNG.model("user.password")).set("Skywalker");
@@ -94,7 +94,7 @@ public class TestByAngular extends TestEnvironment{
 	@Title("controller")
     @Test(groups ={"regression", "interfaces", "byAngularController"}, dependsOnMethods="byAngularButtonText")
     public void byAngularController(){
-    	ByAngularController controller = new ByAngularController((JavascriptExecutor)driver.getDriver(), "HeaderController");
+    	ByAngularController controller = new ByAngularController((JavascriptExecutor)driver.getWebDriver(), "HeaderController");
     	Assert.assertNotNull(controller);
     }
 
@@ -104,7 +104,7 @@ public class TestByAngular extends TestEnvironment{
 	@Title("repeater")
     @Test(groups ={"regression", "interfaces", "byAngularController"}, dependsOnMethods="byAngularButtonText")
     public void byAngularRepeater(){
-    	ByAngularRepeater repeat = new ByAngularRepeater((JavascriptExecutor)driver.getDriver(), "employee in employees");
+    	ByAngularRepeater repeat = new ByAngularRepeater((JavascriptExecutor)driver.getWebDriver(), "employee in employees");
     	Assert.assertNotNull(repeat);
     }
     

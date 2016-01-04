@@ -202,7 +202,7 @@ public class TestOrasiDriver{
 	@Title("getDriver")
     @Test(groups={"regression", "utils", "orasidriver"})
     public void getDriver(){
-	Assert.assertNotNull(driver.getDriver());
+	Assert.assertNotNull(driver.getWebDriver());
     }
 
 	@Features("Utilities")

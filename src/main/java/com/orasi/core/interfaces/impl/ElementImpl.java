@@ -398,7 +398,7 @@ public class ElementImpl implements Element {
 	@Override
 	public <X> X getScreenshotAs(OutputType<X> target) {
 		// TODO Auto-generated method stub
-		return ((TakesScreenshot) driver.getDriver()).getScreenshotAs(target);
+		return ((TakesScreenshot) driver.getWebDriver()).getScreenshotAs(target);
 	}
 
 	/*

@@ -57,7 +57,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
 				TestReporter.interfaceLog(" The value of <b>[ " + text + "</b> ] was not found in Listbox [  <b>@FindBy: "
 								+ getElementLocatorInfo() + " </b>]. Acceptable values are " + optionList + " ]");
 				throw new ListboxOptionNotFoundException("The value of [ " + text + " ] was not found in Listbox [  @FindBy: "
-						+ getElementLocatorInfo() + " ]. Acceptable values are " + optionList, getWrappedDriver().getDriver());
+						+ getElementLocatorInfo() + " ]. Acceptable values are " + optionList, getWrappedDriver().getWebDriver());
 			}
 		} else {
 			TestReporter.interfaceLog("Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");

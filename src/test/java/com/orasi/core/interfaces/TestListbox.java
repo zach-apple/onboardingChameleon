@@ -1,6 +1,7 @@
 package com.orasi.core.interfaces;
 
 import com.orasi.core.interfaces.impl.ListboxImpl;
+import com.orasi.exception.AutomationException;
 import com.orasi.exception.automation.ListboxOptionNotFoundException;
 
 import org.openqa.selenium.By;

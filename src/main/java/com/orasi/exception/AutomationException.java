@@ -11,6 +11,8 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.internal.BuildInfo;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import com.orasi.utils.OrasiDriver;
+
 public class AutomationException extends RuntimeException{
 
     public static final String SESSION_ID = "Session ID";
@@ -95,6 +97,8 @@ public class AutomationException extends RuntimeException{
 	      String browserVersion= "N/A";
 	      String osInfo = "N/A";
 	      String sessionId = "N/A";
+	      
+	      if(driver instanceof OrasiDriver)  driver = ((OrasiDriver)driver).getWebDriver();
 	      
 	      if (driver != null){
 		  browserName = browserName(driver);

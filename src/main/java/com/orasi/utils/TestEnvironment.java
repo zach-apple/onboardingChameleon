@@ -66,7 +66,7 @@ public class TestEnvironment {
 	/*
 	 * Selenium Hub Field
 	 */
-	protected String seleniumHubURL = "http://10.238.242.50:4444/wd/hub";
+	protected String seleniumHubURL = "http://40.122.51.143:4444/wd/hub";
 
 	/*
 	 * Sauce Labs Fields

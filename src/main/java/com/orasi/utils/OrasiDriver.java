@@ -84,7 +84,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Example usage: getDriver().getDriver();
 	 * @return - current OrasiDriver
 	 */
-	public WebDriver getDriver() {
+	public WebDriver getWebDriver() {
 		return driver;
 	}
 	public void setDriver(WebDriver driver) {
@@ -825,15 +825,15 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	private ByAngular.BaseBy getByNGType(ByNG by) {
 		String text = by.toString().replace("By.buttonText:", "").trim();
 		if (by instanceof ByNGButton)
-			return new ByAngular(getDriver()).buttonText(text);
+			return new ByAngular(getWebDriver()).buttonText(text);
 		if (by instanceof ByNGController)
-			return new ByAngular(getDriver()).controller(text);
+			return new ByAngular(getWebDriver()).controller(text);
 		if (by instanceof ByNGModel)
-			return new ByAngular(getDriver()).model(text);
+			return new ByAngular(getWebDriver()).model(text);
 		if (by instanceof ByNGRepeater)
-			return new ByAngular(getDriver()).repeater(text);
+			return new ByAngular(getWebDriver()).repeater(text);
 		if (by instanceof ByNGShow)
-			return new ByAngular(getDriver()).show(text);
+			return new ByAngular(getWebDriver()).show(text);
 		return null;
 	}
 	/**
