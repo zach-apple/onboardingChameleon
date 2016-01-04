@@ -59,11 +59,11 @@ public class ElementFactory {
         	try{            		
         		return pageClassToProxy.newInstance();
         	}catch(InstantiationException ie){ 
-        		throw new PageInitialization("Failed to create instance of: " + pageClassToProxy.getName(), ie);
+        		throw new PageInitialization("Failed to create instance of: " + pageClassToProxy.getName(), driver);
         	}
             }
         } catch (InstantiationException e) {
-            throw new PageInitialization("Failed to create instance of: " + pageClassToProxy.getName(), e);
+            throw new PageInitialization("Failed to create instance of: " + pageClassToProxy.getName(), driver);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {

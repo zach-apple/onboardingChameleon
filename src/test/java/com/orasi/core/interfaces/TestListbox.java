@@ -1,6 +1,8 @@
 package com.orasi.core.interfaces;
 
 import com.orasi.core.interfaces.impl.ListboxImpl;
+import com.orasi.exception.automation.ListboxOptionNotFoundException;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
@@ -96,7 +98,7 @@ public class TestListbox extends TestEnvironment{
 		boolean valid = false;
 		try{
 			listbox.select("text");
-		}catch (RuntimeException rte){
+		}catch (ListboxOptionNotFoundException lonfe){
 			valid = true;
 		}
 		Assert.assertTrue(valid);
@@ -133,7 +135,7 @@ public class TestListbox extends TestEnvironment{
         boolean valid = false;
         try{
             listbox.selectValue("text");
-        }catch (RuntimeException rte){
+        }catch (ListboxOptionNotFoundException lonfe){
             valid = true;
         }
         Assert.assertTrue(valid);
