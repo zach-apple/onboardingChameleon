@@ -20,12 +20,12 @@ import ru.yandex.qatools.allure.annotations.Attachment;
 public class Screenshot extends TestListenerAdapter implements IReporter{
 	private OrasiDriver driver = null;
 	private String runLocation = "";
-	
+	private boolean reportToMustard = true;
 	private void init(ITestResult result){
 		Object currentClass = result.getInstance();
 		driver = ((TestEnvironment) currentClass).getDriver();
 		runLocation = ((TestEnvironment) currentClass).getRunLocation().toLowerCase();		
-		
+		reportToMustard = ((TestEnvironment) currentClass).isReportingToMustard();
 	}
 	
 	@Override
@@ -57,21 +57,21 @@ public class Screenshot extends TestListenerAdapter implements IReporter{
 		
 		//Capture a screenshot for Allure reporting
 	//	FailedScreenshot(augmentDriver);
-		Mustard.postResultsToMustard(driver, result, runLocation );
+		if(reportToMustard) Mustard.postResultsToMustard(driver, result, runLocation );
 	}
 
 	@Override
 	public void onTestSkipped(ITestResult result) {
 		// will be called after test will be skipped
 		init(result);
-		Mustard.postResultsToMustard(driver, result, runLocation );
+		if(reportToMustard) Mustard.postResultsToMustard(driver, result, runLocation );
 	}
 
 	@Override
 	public void onTestSuccess(ITestResult result) {
 		// will be called after test will pass
 		init(result);
-		Mustard.postResultsToMustard(driver, result, runLocation );
+		if(reportToMustard) Mustard.postResultsToMustard(driver, result, runLocation );
 	}
 
 	@Attachment(type = "image/png")

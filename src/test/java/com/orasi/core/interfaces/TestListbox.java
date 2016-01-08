@@ -24,7 +24,7 @@ public class TestListbox extends TestEnvironment{
     WebDriver driver = null;
 //    private String multiSelectXpath = "//*[@id='page']/div[2]/div/select";
 //    private String listboxXpath = "//*[@id='para1']/select";
-    @BeforeTest(groups ={"regression", "interfaces", "listbox", "dev"})
+    @BeforeTest(alwaysRun=true)
     @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
 	    "operatingSystem", "environment" })
     public void setup(@Optional String runLocation, String browserUnderTest,
@@ -39,7 +39,7 @@ public class TestListbox extends TestEnvironment{
 	testStart("TestListbox");
     }
     
-    @AfterTest(groups ={"regression", "interfaces", "listbox", "dev"})
+    @AfterTest(alwaysRun=true)
     public void close(ITestContext testResults){
 	endTest("TestListbox", testResults);
     }
@@ -72,7 +72,7 @@ public class TestListbox extends TestEnvironment{
     @Features("Element Interfaces")
     @Stories("Listbox")
     @Title("select")
-    @Test(groups ={"regression", "interfaces", "listbox"})
+    @Test(groups ={"regression", "interfaces", "listbox", "mustard"})
     public void select(){
 	Listbox listbox= getDriver().findListbox(By.id("singleSelect"));
 	listbox.select("Sports");

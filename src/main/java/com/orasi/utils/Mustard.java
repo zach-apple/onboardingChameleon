@@ -1,16 +1,12 @@
 package com.orasi.utils;
 
-import java.io.File;
-import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ResourceBundle;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.StringBody;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.openqa.selenium.OutputType;
 import org.testng.ITestResult;
 
@@ -19,69 +15,54 @@ import com.saucelabs.common.SauceOnDemandAuthentication;
 
 public class Mustard {
 	private static String mustardURL = "http://mustard.orasi.com/results";
-	private static String mustardKey = "c73fbfed815904a032a5cec113bfe85f";
-	
+    	private static String mustardKey = "da8f8779749cfb27bbba1fb9f136c1cf"; //prod key c73fbfed815904a032a5cec113bfe85f
 	protected static ResourceBundle appURLRepository = ResourceBundle.getBundle(Constants.ENVIRONMENT_URL_PATH);
 	protected static SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(
 			Base64Coder.decodeString(appURLRepository.getString("SAUCELABS_USERNAME")),
 			Base64Coder.decodeString(appURLRepository.getString("SAUCELABS_KEY")));
 	
 	public static void postResultsToMustard(OrasiDriver driver, ITestResult result, String runLocation){
+	    	URI addy = null;
+		try {
+		    addy =new URI( "http", null,"10.238.242.61", 3000,"/results", null, null) ;
+
+		} catch (URISyntaxException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+		
 		RestService request = new RestService();
 		
-		String device_id = driver.getDriverCapability().browserName() + "_" + driver.getDriverCapability().browserVersion();
-		String os_version = driver.getDriverCapability().platformOS();
+		String device_id = driver.getDriverCapability().platform().name()  + "-" +driver.getDriverCapability().browserName() + "_" + driver.getDriverCapability().browserVersion().replace(".", "_");
+		//String os_version = driver.getDriverCapability().browserVersion();
+		String device_platform = driver.getDriverCapability().platform().family().name();
 		String test_name = result.getTestClass().getName();
 		test_name = test_name.substring(test_name.lastIndexOf(".") + 1, test_name.length())+ "-" +result.getMethod().getMethodName() ;
 		String status = "";
 		if (result.getStatus() == ITestResult.SUCCESS) status = "pass";
+		else if (result.getStatus() == ITestResult.SKIP) status = "skip";
 		else status = "fail";
-		String sauceURL = "https://saucelabs.com/beta/tests/" + driver.getSessionId().toString();
-		JSONObject json = new JSONObject();
-		try {
-			json.put("project_id", mustardKey);
-			json.put("device_id", test_name);
-			json.put("os_version", os_version);
-			json.put("test_name", device_id);
-			json.put("status", status);
-			
-			if(runLocation.toLowerCase().equals("sauce")) json.put("link", sauceURL);
-			if(status.equals("fail")) {
-				json.put("comment", result.getThrowable().getMessage());
-				json.put("stacktrace", ExceptionUtils.getFullStackTrace(result.getThrowable()));
-				sendScreenshotToMustard(test_name, device_id, driver.getScreenshotAs(OutputType.BYTES));
-			}
-		} catch (JSONException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		 
-		 try {
-			request.sendPostRequest(mustardURL, new StringEntity(json.toString()));
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
-	private static void sendScreenshotToMustard(String device_id, String test_name, byte[] screenshot){
-		JSONObject json = new JSONObject();
-		
-		try {
-			json.put("device_id", test_name);
-			json.put("test_name", device_id);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		String sauceURL = "";
 		MultipartEntityBuilder multipartEntity = MultipartEntityBuilder.create();
-		multipartEntity.addBinaryBody("someName", screenshot, ContentType.create("image/jpeg"), Randomness.randomAlphaNumeric(32));
-		multipartEntity.addPart("someName", new StringBody(json.toString(), ContentType.TEXT_PLAIN));
+		multipartEntity.addTextBody("project_id",mustardKey);
+		multipartEntity.addTextBody("device_id", device_id);
+		multipartEntity.addTextBody("device_platform", device_platform);
+		multipartEntity.addTextBody("test_name",test_name);
+		multipartEntity.addTextBody("status",status);
 		
-		RestService request = new RestService();
-		request.sendPostRequest(mustardURL, multipartEntity.build());
+		if(runLocation.toLowerCase().equals("sauce")){
+		    sauceURL = "https://saucelabs.com/beta/tests/" + driver.getSessionId().toString();
+		    multipartEntity.addTextBody("link",sauceURL);
+		}
+		
+		if(status.equals("fail")) {
+		    multipartEntity.addTextBody("comment",result.getThrowable().getMessage());
+		    multipartEntity.addTextBody("stacktrace",ExceptionUtils.getFullStackTrace(result.getThrowable()));
+		    multipartEntity.addBinaryBody("screenshot", driver.getScreenshotAs(OutputType.FILE), ContentType.create("image/jpeg"), Randomness.randomAlphaNumeric(32));
+		}
+	
+		
+		request.sendPostRequest(addy, multipartEntity.build());
+		
 	}
 }
