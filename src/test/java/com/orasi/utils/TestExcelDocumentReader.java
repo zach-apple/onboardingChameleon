@@ -1,12 +1,17 @@
 package com.orasi.utils;
 
 import org.junit.Assert;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestExcelDocumentReader {
+public class TestExcelDocumentReader extends TestEnvironment{
+    @BeforeTest
+    public void setup(){
+	setReportToMustard(false);
+    }
 	@Features("Utilities")
 	@Stories("ExcelDocumentReader")
 	@Title("readDataFilePathConstructorAllRows")

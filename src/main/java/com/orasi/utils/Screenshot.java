@@ -18,15 +18,21 @@ import org.testng.xml.XmlSuite;
 import ru.yandex.qatools.allure.annotations.Attachment;
 
 public class Screenshot extends TestListenerAdapter implements IReporter{
-
+	private OrasiDriver driver = null;
+	private String runLocation = "";
+	private boolean reportToMustard = true;
+	private void init(ITestResult result){
+		Object currentClass = result.getInstance();
+		driver = ((TestEnvironment) currentClass).getDriver();
+		runLocation = ((TestEnvironment) currentClass).getRunLocation().toLowerCase();		
+		reportToMustard = ((TestEnvironment) currentClass).isReportingToMustard();
+	}
+	
 	@Override
 	public void onTestFailure(ITestResult result) {
+		init(result);
 		String slash = Constants.DIR_SEPARATOR;
 		File directory = new File(".");
-		Object currentClass = result.getInstance();
-		WebDriver driver = ((TestEnvironment) currentClass).getDriver();
-		String runLocation = ((TestEnvironment) currentClass).getRunLocation()
-				.toLowerCase();		
 		
 		String destDir = null;
 		try {
@@ -35,8 +41,9 @@ public class Screenshot extends TestListenerAdapter implements IReporter{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		WebDriver augmentDriver= null;
 		if (runLocation == "remote"){
-			driver = new Augmenter().augment(driver);
+			augmentDriver = new Augmenter().augment(driver.getWebDriver());
 		}
 		Reporter.setCurrentTestResult(result);
 
@@ -49,17 +56,22 @@ public class Screenshot extends TestListenerAdapter implements IReporter{
 		//TestReporter.logScreenshot(driver, destDir + slash + destFile, slash, runLocation);
 		
 		//Capture a screenshot for Allure reporting
-		FailedScreenshot(driver);
+	//	FailedScreenshot(augmentDriver);
+		if(reportToMustard) Mustard.postResultsToMustard(driver, result, runLocation );
 	}
 
 	@Override
 	public void onTestSkipped(ITestResult result) {
 		// will be called after test will be skipped
+		init(result);
+		if(reportToMustard) Mustard.postResultsToMustard(driver, result, runLocation );
 	}
 
 	@Override
 	public void onTestSuccess(ITestResult result) {
 		// will be called after test will pass
+		init(result);
+		if(reportToMustard) Mustard.postResultsToMustard(driver, result, runLocation );
 	}
 
 	@Attachment(type = "image/png")

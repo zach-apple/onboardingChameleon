@@ -5,9 +5,11 @@ package com.orasi.api.restServices.core;
  */
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.util.List;
 
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
@@ -125,7 +127,68 @@ public class RestService {
 		return responseAsString;
 	}
 	
+	public String sendPostRequest(URI URL, HttpEntity entity){
+		
+		 HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead 
+		 HttpPost httppost = new HttpPost(URL);
+		
+		httppost.setEntity(entity);
+		//httppost.addHeader("content-type","application/json");
+		//httppost.addHeader("content-type","application/json");
+		HttpResponse httpResponse = null;
+		try {
+			httpResponse = httpClient.execute(httppost);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		setStatusCode(httpResponse);		
+		setResponseFormat(httpResponse);
+		
+		try {
+			responseAsString = EntityUtils.toString(httpResponse.getEntity());
+		} catch (ParseException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	//	System.out.println("String response: " + responseAsString);		
+		
+		return responseAsString;
+	}
 	
+	public String sendPostRequest(String URL, List<NameValuePair> params, HttpEntity contentBody){
+		
+		 HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead 
+		 HttpPost httppost = new HttpPost(URL);
+		
+		try {
+		    httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+		} catch (UnsupportedEncodingException e1) {
+		    // TODO Auto-generated catch block
+		    e1.printStackTrace();
+		}
+		httppost.setEntity(contentBody);
+		
+		HttpResponse httpResponse = null;
+		try {
+			httpResponse = httpClient.execute(httppost);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		setStatusCode(httpResponse);		
+		setResponseFormat(httpResponse);
+		
+		try {
+			responseAsString = EntityUtils.toString(httpResponse.getEntity());
+		} catch (ParseException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	//	System.out.println("String response: " + responseAsString);		
+		
+		return responseAsString;
+	}
 	/**
 	 * Sends a put (create) request, pass in the parameters for the json arguments to create
 	 * 

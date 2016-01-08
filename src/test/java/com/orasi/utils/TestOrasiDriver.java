@@ -37,7 +37,8 @@ import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestOrasiDriver{
+public class TestOrasiDriver extends TestEnvironment{
+    
     protected ResourceBundle appURLRepository = ResourceBundle
 	    .getBundle(Constants.ENVIRONMENT_URL_PATH);
     protected SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(
@@ -59,6 +60,8 @@ public class TestOrasiDriver{
 	    "operatingSystem", "environment" })
     public void setup(@Optional String runLocation, String browserUnderTest,
 	    String browserVersion, String operatingSystem, String environment) {
+	//setReportToMustard(false);
+	    
 	if (browserUnderTest.equalsIgnoreCase("jenkinsParameter")) {
 	    this.browserUnderTest = System.getProperty("jenkinsBrowser").trim();
 	} else{
@@ -91,6 +94,7 @@ public class TestOrasiDriver{
 	caps.setCapability(CapabilityType.PLATFORM,operatingSystem);
 	caps.setCapability("enablePersistentHover", false);
 	caps.setCapability("name", "TestOrasiDriver");
+	setRunLocation(runLocation);
 	if(runLocation.toLowerCase().equals("local")) {
 		if (browserUnderTest.equalsIgnoreCase("IE") || browserUnderTest.replace(" ", "").equalsIgnoreCase("internetexplorer")) {
 			file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "IEDriverServer.exe").getPath());
@@ -114,6 +118,7 @@ public class TestOrasiDriver{
 				e.printStackTrace();
 			}
 	}
+	setDriver(driver);
 	driver.get("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/testsite.html");
 	
 	//testStart("TestOrasiDriver");
@@ -201,7 +206,7 @@ public class TestOrasiDriver{
 	@Stories("OrasiDriver")
 	@Title("getDriver")
     @Test(groups={"regression", "utils", "orasidriver"})
-    public void getDriver(){
+    public void testGetDriver(){
 	Assert.assertNotNull(driver.getWebDriver());
     }
 
@@ -219,7 +224,7 @@ public class TestOrasiDriver{
 	@Features("Utilities")
 	@Stories("OrasiDriver")
 	@Title("findButton")
-    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="getDriver")
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="testGetDriver")
     public void findButton(){
 	Button button = driver.findButton(By.id("Add"));
 	Assert.assertNotNull(button);

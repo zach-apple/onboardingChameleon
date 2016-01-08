@@ -86,7 +86,7 @@ public class TestEnvironment {
 
 	protected String sauceLabsURL = "http://" + authentication.getUsername() + ":" + authentication.getAccessKey()
 			+ "@ondemand.saucelabs.com:80/wd/hub";
-
+	protected boolean reportToMustard = true;
 	/*
 	 * Constructors for TestEnvironment class
 	 */
@@ -237,6 +237,14 @@ public class TestEnvironment {
 		return Integer.parseInt(System.getProperty(Constants.TEST_DRIVER_TIMEOUT));
 	}
 
+	public boolean isReportingToMustard() {
+	    return reportToMustard;
+	}
+
+	public void setReportToMustard(boolean reportToMustard) {
+	    this.reportToMustard = reportToMustard;
+	}
+
 	/*
 	 * Getter and setter for the Selenium Hub URL
 	 */
@@ -264,7 +272,7 @@ public class TestEnvironment {
 	/*
 	 * Getter and setter for the actual WebDriver
 	 */
-	private void setDriver(OrasiDriver driverSession) {
+	protected void setDriver(OrasiDriver driverSession) {
 		if (isThreadedDriver())
 			threadedDriver.set(driverSession);
 		else

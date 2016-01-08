@@ -3,6 +3,7 @@ package com.orasi.utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.orasi.core.interfaces.Element;
@@ -10,7 +11,7 @@ import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestTestEnvironment {
+public class TestTestEnvironment extends TestEnvironment{
 	private String application = "application";
 	private String browserUnderTest = "html";
 	private String browserVersion = "1";
@@ -19,7 +20,10 @@ public class TestTestEnvironment {
 	private String testingEnvironment = "stage";
 	private String testingName = "TestEnvironment";
 	private String pageURL = "http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/element.html";
-
+	@BeforeTest
+	    public void setup(){
+		setReportToMustard(false);
+	    }
 
 	@Features("Utilities")
 	@Stories("TestEnvironment")
@@ -135,7 +139,7 @@ public class TestTestEnvironment {
 	@Stories("TestEnvironment")
 	@Title("testStart")
 	@Test(groups = "regression")
-	public void testStart() {
+	public void testTestStart() {
 		TestEnvironment te = new TestEnvironment(application, browserUnderTest, browserVersion, operatingSystem,
 				runLocation, testingEnvironment);
 		te.setPageURL(pageURL);
@@ -146,8 +150,8 @@ public class TestTestEnvironment {
 	@Features("Utilities")
 	@Stories("TestEnvironment")
 	@Title("pageLoaded")
-	@Test(groups = "regression", dependsOnMethods = "testStart")
-	public void pageLoaded() {
+	@Test(groups = "regression", dependsOnMethods = "testTestStart")
+	public void testPageLoaded() {
 		TestEnvironment te = new TestEnvironment(application, browserUnderTest, browserVersion, operatingSystem,
 				runLocation, testingEnvironment);
 		te.setPageURL(pageURL);
@@ -158,7 +162,7 @@ public class TestTestEnvironment {
 	@Features("Utilities")
 	@Stories("TestEnvironment")
 	@Title("pageLoadedWithElement")
-	@Test(groups = "regression", dependsOnMethods = "testStart")
+	@Test(groups = "regression", dependsOnMethods = "testTestStart")
 	public void pageLoadedWithElement() {
 		TestEnvironment te = new TestEnvironment(application, browserUnderTest, browserVersion, operatingSystem,
 				runLocation, testingEnvironment);

@@ -9,6 +9,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -811,6 +812,11 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 			return ((RemoteWebDriver) driver).getCapabilities().getPlatform().name() + " "
 					+ ((RemoteWebDriver) driver).getCapabilities().getPlatform().getMajorVersion() + "."
 					+ ((RemoteWebDriver) driver).getCapabilities().getPlatform().getMinorVersion();
+		}
+		public Platform platform() {
+			if(driver instanceof HtmlUnitDriver) return ((HtmlUnitDriver) driver).getCapabilities().getPlatform();
+			
+			return ((RemoteWebDriver) driver).getCapabilities().getPlatform() ;
 		}
 
 	}
