@@ -41,7 +41,7 @@ public class TestListbox extends TestEnvironment{
     
     @AfterTest(groups ={"regression", "interfaces", "listbox", "dev"})
     public void close(ITestContext testResults){
-	endTest("TestAlert", testResults);
+	endTest("TestListbox", testResults);
     }
 
     @Features("Element Interfaces")
