@@ -30,6 +30,7 @@ public class TestElementInternalHandlers extends TestEnvironment{
     public void setup(@Optional String runLocation, String browserUnderTest,
 	    String browserVersion, String operatingSystem, String environment) {
 	setApplicationUnderTest("Test App");
+	setReportToMustard(false);
 	setBrowserUnderTest(browserUnderTest);
 	setBrowserVersion(browserVersion);
 	setOperatingSystem(operatingSystem);
