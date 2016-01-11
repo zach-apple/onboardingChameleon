@@ -127,7 +127,7 @@ public class RestService {
 		return responseAsString;
 	}
 	
-	public String sendPostRequest(URI URL, HttpEntity entity){
+	public String sendPostRequest(String URL, HttpEntity entity){
 		
 		 HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead 
 		 HttpPost httppost = new HttpPost(URL);

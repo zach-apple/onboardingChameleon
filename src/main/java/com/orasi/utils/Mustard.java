@@ -15,7 +15,7 @@ import com.saucelabs.common.SauceOnDemandAuthentication;
 
 public class Mustard {
 	private static String mustardURL = "http://mustard.orasi.com/results";
-    	private static String mustardKey = "da8f8779749cfb27bbba1fb9f136c1cf"; //prod key c73fbfed815904a032a5cec113bfe85f
+    	private static String mustardKey = "c73fbfed815904a032a5cec113bfe85f"; //dev key da8f8779749cfb27bbba1fb9f136c1cf
 	protected static ResourceBundle appURLRepository = ResourceBundle.getBundle(Constants.ENVIRONMENT_URL_PATH);
 	protected static SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(
 			Base64Coder.decodeString(appURLRepository.getString("SAUCELABS_USERNAME")),
@@ -62,7 +62,7 @@ public class Mustard {
 		}
 	
 		
-		request.sendPostRequest(addy, multipartEntity.build());
+		request.sendPostRequest(mustardURL, multipartEntity.build());
 		
 	}
 }
