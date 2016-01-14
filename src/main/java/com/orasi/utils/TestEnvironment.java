@@ -653,12 +653,16 @@ public class TestEnvironment {
 			return Platform.WIN8;
 		case "win8.1":
 			return Platform.WIN8_1;
+		case "win10":
+			return Platform.WIN10;
 		case "xp":
 			return Platform.XP;
 		case "linux":
 			return Platform.LINUX;
 		case "mac":
 			return Platform.MAC;
+		case "el_capitan":
+			return Platform.EL_CAPITAN;
 		case "mavericks":
 			return Platform.MAVERICKS;
 		case "mountain_lion":
