@@ -86,7 +86,7 @@ public class TestEnvironment {
 
 	protected String sauceLabsURL = "http://" + authentication.getUsername() + ":" + authentication.getAccessKey()
 			+ "@ondemand.saucelabs.com:80/wd/hub";
-	protected boolean reportToMustard = true;
+	protected boolean reportToMustard = false;
 	/*
 	 * Constructors for TestEnvironment class
 	 */
