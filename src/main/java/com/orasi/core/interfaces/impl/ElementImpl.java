@@ -9,7 +9,6 @@ import org.openqa.selenium.By.ByClassName;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
-import org.openqa.selenium.Rectangle;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -639,13 +638,5 @@ public class ElementImpl implements Element {
 	 */
 	public boolean syncTextInElement(String text, int timeout, boolean returnError) {
 		return PageLoaded.syncTextInElement(getWrappedDriver(), text, timeout, returnError, new ElementImpl(getWrappedElement()));
-	}
-
-
-
-	@Override
-	public Rectangle getRect() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

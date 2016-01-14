@@ -425,6 +425,8 @@ public class TestEnvironment {
 
 			switch (getOperatingSystem().toLowerCase().trim().replace(" ", "")) {
 			case "windows":
+			case "win10":
+			case "windows10":
 				if (getBrowserUnderTest().equalsIgnoreCase("Firefox") || getBrowserUnderTest().equalsIgnoreCase("FF")) {
 					caps = DesiredCapabilities.firefox();
 				}
