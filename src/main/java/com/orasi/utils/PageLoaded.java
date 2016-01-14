@@ -110,11 +110,13 @@ public class PageLoaded {
 			    }
 			}
 			
-		} catch (NullPointerException | NoSuchElementException | StaleElementReferenceException | PageInitialization e) {}
-
-		// set the timeout for looking for an element back to the default timeout
-		oDriver.setElementTimeout(driverTimeout, TimeUnit.SECONDS);
-
+		} catch (NullPointerException | NoSuchElementException | StaleElementReferenceException | PageInitialization e){
+		    return false;
+		} finally{
+    			// set the timeout for looking for an element back to the default timeout
+    			oDriver.setElementTimeout(driverTimeout, TimeUnit.SECONDS);
+		}
+		
 		if (count < timeout) {
 			return true;
 		} else {
@@ -258,23 +260,22 @@ public class PageLoaded {
 	 *          page object WebElements to allow for the state of a page to
 	 *          change and not fail a test
 	 * @return N/A
-	 * @param clazz
-	 *            - page class that is calling this method for which to
-	 *            initialize elements
+	 * @param clazz - page class that is calling this method for which to initialize elements
+	 * 
+	 * @param oDriver - The webDriver
 	 */
 	public static void initializePage(Class<?> clazz, OrasiDriver oDriver) {
 		try {
 			ElementFactory.initElements(oDriver, clazz.getConstructor(TestEnvironment.class));
 		} catch (NoSuchMethodException | SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new PageInitialization("Unable to initialize page", oDriver);
 		}
 	}
 
 	/**
-	 * Used in conjunction with WebObjectPresent to determine if the desired
+	 * Used in conjunction with WebElementPresent to determine if the desired
 	 * element is present in the DOM Will loop for the time out listed in
-	 * com.orasi.utils.Constants If object is not present within the time, throw
+	 * OrasiDriver.getElementTimeout If object is not present within the time, throw
 	 * an error
 	 * 
 	 * @author Justin
@@ -284,7 +285,7 @@ public class PageLoaded {
 	}
 
 	/**
-	 * Used in conjunction with WebObjectPresent to determine if the desired
+	 * Used in conjunction with WebElementPresent to determine if the desired
 	 * element is present in the DOM Will loop for the time out passed in
 	 * parameter timeout If object is not present within the time, throw an
 	 * error
@@ -296,7 +297,7 @@ public class PageLoaded {
 	}
 
 	/**
-	 * Used in conjunction with WebObjectPresent to determine if the desired
+	 * Used in conjunction with WebElementPresent to determine if the desired
 	 * element is present in the DOM Will loop for the time out passed in
 	 * parameter timeout If object is not present within the time, handle error
 	 * based on returnError
@@ -771,7 +772,7 @@ public class PageLoaded {
 		try {
 
 			if (wait.until(ExpectedConditions.textToBePresentInElement(element, text)) != null) return true;
-            else if (wait.until(ExpectedConditions.textToBePresentInElementValue(element, text)) != null) {
+			else if (wait.until(ExpectedConditions.textToBePresentInElementValue(element, text)) != null) {
 				return true;
 			} else {
 				return false;
@@ -792,7 +793,5 @@ public class PageLoaded {
 			}
 
 		}
-	}
-
-	
+	}	
 }
