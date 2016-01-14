@@ -28,79 +28,31 @@ import com.orasi.exception.automation.PageInitialization;
  * 
  */
 public class PageLoaded {
-
-	private static OrasiDriver driver = null;
-	@SuppressWarnings("rawtypes")
-	private static Class clazz = null;
-	private int timeout = 0;
 	private static boolean defaultSyncHandler = true;
-	
-	public PageLoaded() {
-		this.timeout = Constants.ELEMENT_TIMEOUT;
-	}
 
-	/*public PageLoaded(OrasiDriver oDriver) {
-		driver = oDriver;
-		this.timeout = driver.getElementTimeout();
-	}*/
+	/**
+	 * Show what the current sync handler is. True will cause the sync to throw an exception  while false will just have the element sync return a boolean
+	 * 
+	 * @version 1/14/2016
+	 * @author Justin Phlegar
+	 * @return boolean
+	 */
 
-	@SuppressWarnings("unchecked")
-
-    @Deprecated
-	private static void initialize() {
-		ElementFactory.initElements(driver, clazz);
+	public static boolean getSyncToFailTest() {
+	    return defaultSyncHandler;
 	}
 
 	/**
-	 * This waits for a specified element on the page to be found on the page by
-	 * the driver Uses the default test time out set by WebDriverSetup
+	 * Set on how to handle element sync failures. True will cause the sync to throw an exception  while false will just have the element sync return a boolean
 	 * 
-	 * @param clazz
-	 *            the class calling this method - used so can initialize the
-	 *            page class repeatedly
-	 * @param obj
-	 *            The element you are waiting to display on the page
-	 * @version 10/16/2014
+	 * @param defaultSyncHandler True/False 
+	 * @version 1/14/2016
 	 * @author Justin Phlegar
-	 * @return False if the element is not found after the timeout, true if is
-	 *         found
 	 */
-	@SuppressWarnings("rawtypes")
-	@Deprecated
-	public boolean isElementLoaded(Class clazz, Element obj) {
-		this.clazz = clazz;
-		int count = 0;
-
-		// set the timeout for looking for an element to 1 second as we are
-		// doing a loop and then refreshing the elements
-		driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-
-		try {
-
-			while (!obj.elementWired()) {
-				if (count == this.timeout) {
-					break;
-				} else {
-					count++;
-					initialize();
-				}
-			}
-		} catch (NullPointerException | NoSuchElementException | StaleElementReferenceException | PageInitialization e) {
-			// do nothing
-		}
-
-		// set the timeout for looking for an element back to the default
-		// timeout
-		driver.manage().timeouts().implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
-
-		if (count < this.timeout) {
-			return true;
-		} else {
-			return false;
-		}
-
+	public static void setSyncToFailTest(boolean defaultSyncHandler) {
+	    PageLoaded.defaultSyncHandler = defaultSyncHandler;
 	}
-
+	
 	/**
 	 * This waits for a specified element on the page to be found on the page by
 	 * the driver Uses the default test time out set by WebDriverSetup
@@ -118,11 +70,8 @@ public class PageLoaded {
 	 *         found
 	 */
 	@SuppressWarnings("rawtypes")
-	@Deprecated
-	public boolean isElementLoaded(Class clazz, OrasiDriver oDriver, Element obj) {
-		driver = oDriver;
-		this.clazz = clazz;
-		return isElementLoaded(clazz, obj);
+	public static boolean isElementLoaded(Class clazz, OrasiDriver oDriver, Element obj) {		
+		return isElementLoaded(clazz, oDriver, obj, oDriver.getElementTimeout());
 	}
 
 	/**
@@ -143,10 +92,34 @@ public class PageLoaded {
 	 *         found
 	 */
 	@SuppressWarnings("rawtypes")
-	@Deprecated
-	public boolean isElementLoaded(Class clazz, OrasiDriver oDriver, Element obj, int timeout) {
-		this.timeout = timeout;
-		return isElementLoaded(clazz, oDriver, obj);
+	public static boolean isElementLoaded(Class clazz, OrasiDriver oDriver, Element obj, int timeout) {
+	   	int count = 0;
+		int driverTimeout = oDriver.getElementTimeout();
+		// set the timeout for looking for an element to 1 second as we are
+		// doing a loop and then refreshing the elements
+		oDriver.setElementTimeout(1, TimeUnit.MILLISECONDS);
+
+		try {
+
+			while (!obj.elementWired()) {
+			    if (count == timeout) {
+				break;
+			    } else {
+				count++;
+				initializePage(clazz, oDriver);
+			    }
+			}
+			
+		} catch (NullPointerException | NoSuchElementException | StaleElementReferenceException | PageInitialization e) {}
+
+		// set the timeout for looking for an element back to the default timeout
+		oDriver.setElementTimeout(driverTimeout, TimeUnit.SECONDS);
+
+		if (count < timeout) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -159,42 +132,8 @@ public class PageLoaded {
 	 * @return False if the element is not found after the timeout, true if is
 	 *         found
 	 */
-	/*public boolean isDomInteractive() {
-		int count = 0;
-		Object obj = null;
-
-		do {
-			// this returns a boolean
-			obj = driver.executeJavaScript(
-					"var result = document.readyState; return (result == 'complete' || result == 'interactive');");
-			if (count == this.timeout)
-				break;
-			else {
-				Sleeper.sleep(500);
-				count++;
-
-			}
-		} while (obj.equals(false));
-
-		if (count < this.timeout * 2) {
-			return true;
-		} else {
-			return false;
-		}
-	}*/
-
-	/**
-	 * This uses the HTML DOM readyState property to wait until a page is
-	 * finished loading. It will wait for the ready state to be either
-	 * 'interactive' or 'complete'.
-	 *
-	 * @version 12/16/2014
-	 * @author Jessica Marshall
-	 * @return False if the element is not found after the timeout, true if is
-	 *         found
-	 */
 	public static boolean isDomInteractive(OrasiDriver oDriver) {
-		return isDomInteractive(oDriver, driver.getPageTimeout());
+		return isDomInteractive(oDriver, oDriver.getPageTimeout());
 	}
 
 	/**
@@ -256,38 +195,6 @@ public class PageLoaded {
 
 	}
 
-	/**
-	 * A more strict version of isDomInteractive. This uses the HTML DOM
-	 * readyState property to wait until a page is finished loading. It will
-	 * wait for the ready state to be 'complete'.
-	 *
-	 * @version 12/16/2014
-	 * @author Jessica Marshall
-	 * @return False if the element is not found after the timeout, true if is
-	 *         found
-	 */
-	/*public static boolean isDomComplete() {
-		int count = 0;
-		Object obj = null;
-
-		do {
-			// this returns a boolean
-			obj = driver.executeJavaScript("var result = document.readyState; return (result == 'complete');");
-			if (count == this.timeout)
-				break;
-			else {
-				Sleeper.sleep(500);
-				count++;
-
-			}
-		} while (obj.equals(false));
-
-		if (count < this.timeout * 2) {
-			return true;
-		} else {
-			return false;
-		}
-	}*/
 
 	/**
 	 * A more strict version of isDomInteractive. This uses the HTML DOM
@@ -324,24 +231,44 @@ public class PageLoaded {
 	public static boolean isDomComplete(OrasiDriver oDriver, int timeout) {
         int count = 0;
         Object obj = null;
-
-        do {
-            // this returns a boolean
-            obj = oDriver.executeJavaScript("var result = document.readyState; return (result == 'complete');");
-			if (count == timeout)
-                break;
-            else {
-                Sleeper.sleep(500);
-                count++;
-
+    
+            do {
+                // this returns a boolean
+                obj = oDriver.executeJavaScript("var result = document.readyState; return (result == 'complete');");
+                
+                if (count == timeout)
+                    break;
+                else {
+                    Sleeper.sleep(500);
+                    count++;    
+                }
+                
+            } while (obj.equals(false));
+    
+            if (count < timeout * 2) {
+                return true;
+            } else {
+                return false;
             }
-        } while (obj.equals(false));
+	}
 
-        if (count < timeout * 2) {
-            return true;
-        } else {
-            return false;
-        }
+	/**
+	 * @summary Used to create all page objects WebElements as proxies (not
+	 *          actual objects, but rather placeholders) or to reinitialize all
+	 *          page object WebElements to allow for the state of a page to
+	 *          change and not fail a test
+	 * @return N/A
+	 * @param clazz
+	 *            - page class that is calling this method for which to
+	 *            initialize elements
+	 */
+	public static void initializePage(Class<?> clazz, OrasiDriver oDriver) {
+		try {
+			ElementFactory.initElements(oDriver, clazz.getConstructor(TestEnvironment.class));
+		} catch (NoSuchMethodException | SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -861,60 +788,11 @@ public class PageLoaded {
 					| TimeoutException e2) {
 				return false;
 			} catch (WebDriverException wde) {
-				/*
-				 * if(driver instanceof EdgeDriver){ TestReporter.logFailure(
-				 * "ExpectedConditions.textToBePresentInElementValue has not been implemented by Edge Driver"
-				 * ); }
-				 */
 				return false;
 			}
 
 		}
 	}
-	
-	/**
-	 * @summary Used to create all page objects WebElements as proxies (not
-	 *          actual objects, but rather placeholders) or to reinitialize all
-	 *          page object WebElements to allow for the state of a page to
-	 *          change and not fail a test
-	 * @return N/A
-	 * @param clazz
-	 *            - page class that is calling this method for which to
-	 *            initialize elements
-	 */
-	public static void initializePage(Class<?> clazz) {
-		try {
-			ElementFactory.initElements(driver, clazz.getConstructor(TestEnvironment.class));
-		} catch (NoSuchMethodException | SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * @summary Used to create all page objects WebElements as proxies (not
-	 *          actual objects, but rather placeholders) or to reinitialize all
-	 *          page object WebElements to allow for the state of a page to
-	 *          change and not fail a test
-	 * @return N/A
-	 * @param clazz
-	 *            - page class that is calling this method for which to
-	 *            initialize elements
-	 */
-	public static void initializePage(Class<?> clazz, OrasiDriver oDriver) {
-		try {
-			ElementFactory.initElements(oDriver, clazz.getConstructor(TestEnvironment.class));
-		} catch (NoSuchMethodException | SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
-	public static boolean getSyncToFailTest() {
-	    return defaultSyncHandler;
-	}
-
-	public static void setSyncToFailTest(boolean defaultSyncHandler) {
-	    PageLoaded.defaultSyncHandler = defaultSyncHandler;
-	}
+	
 }
