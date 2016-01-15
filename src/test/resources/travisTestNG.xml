@@ -114,4 +114,10 @@
 			<class name="com.orasi.utils.TestOrasiDriver" />
 		</classes>
 	</test>
+	
+	<test name="TestWindowHandler">
+		<classes>
+			<class name="com.orasi.utils.TestWindowHandler" />
+		</classes>
+	</test>
 </suite> <!-- Suite -->
