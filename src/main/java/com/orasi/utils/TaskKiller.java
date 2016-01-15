@@ -7,10 +7,10 @@ import org.openqa.selenium.Platform;
 import com.orasi.exception.automation.NoSuchTaskException;
 
 public class TaskKiller {
-    final static String WINDOWS_KILL_BY_PROCESS = "taskkill /f /IM ";
-    final static String WINDOWS_KILL_BY_PID = "taskkill /pid ";
-    final static String NONWINDOWS_KILL_BY_PROCESS = "killall ";
-    final static String NONWINDOWS_KILL_BY_PID = "kill ";
+    private final static String WINDOWS_KILL_BY_PROCESS = "taskkill /f /IM ";
+    private final static String WINDOWS_KILL_BY_PID = "taskkill /pid ";
+    private final static String NONWINDOWS_KILL_BY_PROCESS = "killall ";
+    private final static String NONWINDOWS_KILL_BY_PID = "kill ";
 	
 	public static void windowsTaskByName(String process) 
 	{	  
@@ -52,12 +52,12 @@ public class TaskKiller {
 	  Sleeper.sleep(2000); //Allow OS to kill the process
 	} 
 	
-	public static void killTaskByNameUsingPlatform(String process, Platform platform ){	 
+	public static void killTaskByNameUsingCurrentPlatform(String process, Platform platform ){	 
 	    if(platform.name().toLowerCase().contains("windows")) windowsTaskByName(process);
 	    else nonWindowsTaskByName(process);		
 	}
 	
-	public static void killTaskByNameUsingPid(String pid, Platform platform ){	 
+	public static void killTaskByPidUsingCurrentPlatform(String pid, Platform platform ){	 
 	    if(platform.name().toLowerCase().contains("windows")) windowsTaskByPid(pid);
 	    else nonWindowsTaskByPid(pid);		
 	}
