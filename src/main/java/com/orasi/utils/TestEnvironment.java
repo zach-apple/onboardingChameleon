@@ -86,7 +86,7 @@ public class TestEnvironment {
 
 	protected String sauceLabsURL = "http://" + authentication.getUsername() + ":" + authentication.getAccessKey()
 			+ "@ondemand.saucelabs.com:80/wd/hub";
-	protected boolean reportToMustard = true;
+	protected boolean reportToMustard = false;
 	/*
 	 * Constructors for TestEnvironment class
 	 */
@@ -425,6 +425,8 @@ public class TestEnvironment {
 
 			switch (getOperatingSystem().toLowerCase().trim().replace(" ", "")) {
 			case "windows":
+			case "win10":
+			case "windows10":
 				if (getBrowserUnderTest().equalsIgnoreCase("Firefox") || getBrowserUnderTest().equalsIgnoreCase("FF")) {
 					caps = DesiredCapabilities.firefox();
 				}

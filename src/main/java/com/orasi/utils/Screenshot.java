@@ -22,15 +22,19 @@ public class Screenshot extends TestListenerAdapter implements IReporter{
 	private String runLocation = "";
 	private boolean reportToMustard = true;
 	private void init(ITestResult result){
+	    try{
 		Object currentClass = result.getInstance();
 		driver = ((TestEnvironment) currentClass).getDriver();
 		runLocation = ((TestEnvironment) currentClass).getRunLocation().toLowerCase();		
 		reportToMustard = ((TestEnvironment) currentClass).isReportingToMustard();
+	    }catch (Exception e){}
+	    
 	}
 	
 	@Override
 	public void onTestFailure(ITestResult result) {
 		init(result);
+		if (driver == null) return;
 		String slash = Constants.DIR_SEPARATOR;
 		File directory = new File(".");
 		
@@ -64,6 +68,7 @@ public class Screenshot extends TestListenerAdapter implements IReporter{
 	public void onTestSkipped(ITestResult result) {
 		// will be called after test will be skipped
 		init(result);
+		if (driver == null) return;
 		if(reportToMustard) Mustard.postResultsToMustard(driver, result, runLocation );
 	}
 
@@ -71,6 +76,7 @@ public class Screenshot extends TestListenerAdapter implements IReporter{
 	public void onTestSuccess(ITestResult result) {
 		// will be called after test will pass
 		init(result);
+		if (driver == null) return;
 		if(reportToMustard) Mustard.postResultsToMustard(driver, result, runLocation );
 	}
 
