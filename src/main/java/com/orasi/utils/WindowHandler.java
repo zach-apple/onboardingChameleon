@@ -1,78 +1,80 @@
 package com.orasi.utils;
 
-import org.openqa.selenium.NoSuchWindowException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.internal.Nullable;
-
-import com.google.common.base.Function;
 
 public class WindowHandler {
 
-	public static void waitUntilWindowExistsWithTitle(OrasiDriver driver, String windowNameOrHandle){
+	/**
+	 * @summary Use FluentWait to halt the script until the window with the desired text in the title is active
+	 * to return true. If the window is not found in the default timeout, return false. 
+	 * @version Created 01/15/2016
+	 * @author 	Justin Phlegar
+	 * @param 	driver, title
+	 * @return 	true/false
+	 */
+	public static boolean waitUntilWindowExistsWithTitle(OrasiDriver driver, String windowNameOrHandle){
 	    try{
-		WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), driver.getPageTimeout());
-		wait.until(ExtendedExpectedConditions.windowExistsWithTitleAndSwitchToIt(windowNameOrHandle));
-	    }catch(NoSuchWindowException | NullPointerException e){}
+	    	WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), driver.getPageTimeout());
+			wait.until(ExtendedExpectedConditions.findWindowWithTitleAndSwitchToIt(windowNameOrHandle));
+	    }catch(TimeoutException e){
+	    	return false;
+	    }
+	    return true;
 	}
 
 	/**
-	 * @summary Swaps to a window with a specified title after waiting a specified number of
-	 * 			seconds for the window to display.  Pass in a number of seconds (1,2 etc), and
-	 * 			the title of the window you wish to switch to.  Do not need to pass in the whole title,
-	 * 			can be a part of it such as "Lilo".  Can also pass in a null value ("") if the window
-	 * 			does not have a title.  Returns a true if the window was found & switched to and false if not
-	 * @version Created 10/29/2014
-	 * @author 	Jessica Marshall
-	 * @param 	driver, title, numOfWaitSeconds
-	 * @throws 	NA
+	 * @summary Use FluentWait to halt the script until the window with the desired text is contained in the title and 
+	 * active to return true. If the window is not found in the default timeout, return false. 
+	 * @version Created 01/15/2016
+	 * @author 	Justin Phlegar
+	 * @param 	driver, title
 	 * @return 	true/false
 	 */
-	public static boolean swapToWindowWithTimeout(WebDriver driver, String title, int numOfWaitSeconds){
-		int count = 0;
-		//wait for the window count to be greater than 1
-		while (driver.getWindowHandles().size()==1){
-			Sleeper.sleep(1000);
-			
-			if (count > numOfWaitSeconds)
-				return false;
-			count++;
-		}
-		
-		for (String winHandle : driver.getWindowHandles()) {
-			
-			driver.switchTo().window(winHandle);
-			//code to handle if the title of the window you expect to switch to is null
-			if (title.equals("")){
-				if (driver.getTitle().toUpperCase().equals(""))
-					return true;
-			}
-			//code to handle a non null tile of the winodw you wish to switch to	
-			if (driver.getTitle().toUpperCase().contains(title.toUpperCase())){
-				return true;
-			}
-		}
-		
-		return false;
+	public static boolean waitUntilWindowExistsTitleContains(OrasiDriver driver, String windowNameOrHandle){
+	    try{
+			WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), driver.getPageTimeout());
+			wait.until(ExtendedExpectedConditions.findWindowContainsTitleAndSwitchToIt(windowNameOrHandle));
+	    }catch(TimeoutException e){
+	    	return false;
+	    }
+	    return true;
 	}
-	
-	static class WindowTitleIs implements ExpectedCondition<Boolean> {
-	    private String title;
-	    
-	    public WindowTitleIs(String title){
-		this.title = title;
+
+	/**
+	 * @summary Use FluentWait to halt the script until the window with the desired regex pattern is matched in the 
+	 * title and the window is active to return true. If the window is not found in the default timeout, return false. 
+	 * @version Created 01/15/2016
+	 * @author 	Justin Phlegar
+	 * @param 	driver, title
+	 * @return 	true/false
+	 */
+	public static boolean waitUntilWindowExistsTitleMatches(OrasiDriver driver, String regex){
+	    try{
+	    	WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), driver.getPageTimeout());
+	    	wait.until(ExtendedExpectedConditions.findWindowMatchesTitleAndSwitchToIt(regex));
+	    }catch( TimeoutException e){
+	    	return false;
 	    }
-	    
-	    @Override
-	    public Boolean apply(final WebDriver driver) {
-		for(String handle : driver.getWindowHandles()){
-		    driver.switchTo().window(handle);
-		    if(driver.getTitle().contains(title)) return true;
+	    return true;
+	}
+
+
+	/**
+	 * @summary Use FluentWait to halt the script until the specified number of windows are found
+	 * @version Created 01/15/2016
+	 * @author 	Justin Phlegar
+	 * @param 	driver, title
+	 * @return 	true/false
+	 */
+	public static boolean waitUntilNumberOfWindowsAre(OrasiDriver driver, int expectedNumberOfWindows){
+		try{
+			WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), driver.getPageTimeout());
+			wait.until(ExpectedConditions.numberOfWindowsToBe(expectedNumberOfWindows));
+		}catch(TimeoutException e){
+			return false;
 		}
-		return false;
-	    }
-	    
+		return true;
 	}
 }
