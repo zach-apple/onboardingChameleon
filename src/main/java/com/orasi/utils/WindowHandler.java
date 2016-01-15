@@ -2,54 +2,22 @@ package com.orasi.utils;
 
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.internal.Nullable;
+
+import com.google.common.base.Function;
 
 public class WindowHandler {
-	private String currentWindow;	
-	
 
-	public void setCurrentWindow(WebDriver driver){
-		currentWindow = driver.getWindowHandle(); // get the current window handle	
+	public static void waitUntilWindowExistsWithTitle(OrasiDriver driver, String windowNameOrHandle){
+	    try{
+		WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), driver.getPageTimeout());
+		wait.until(ExtendedExpectedConditions.windowExistsWithTitleAndSwitchToIt(windowNameOrHandle));
+	    }catch(NoSuchWindowException | NullPointerException e){}
 	}
-	
-		
-	public void waitUntilWindowExists(WebDriver driver, String window){
-		int time = 0 ;
-		boolean found = false;
-		while(!found)
-			for (String winHandle : driver.getWindowHandles()) {
-				try{
-						driver.switchTo().window(winHandle); // switch focus of WebDriver to the next found window handle (that's your newly opened window)
-						if (driver.getTitle().toUpperCase().contains(window.toUpperCase())){
-							found = true;
-							break;
-						}
-			       }catch(NoSuchWindowException | NullPointerException e){
-			    	   
-			       }
-			}		
-			time++;
-			
-			if (time == TestEnvironment.getDefaultTestTimeout()) found = true;
-		
-	}
-	
 
-	
-	public WebDriver swapToParentWindow(WebDriver driver){
-		driver.switchTo().window(currentWindow); // switch back to the original window
-		   return driver;
-	}
-	
-	
-	
-	public static void ieKiller() throws Exception
-	{
-	  final String KILL = "taskkill /IM ";
-	  String processName = "IEDriverServer.exe"; //IE process
-	  Runtime.getRuntime().exec(KILL + processName); 
-	  Thread.sleep(3000); //Allow OS to kill the process
-	} 	
-	
 	/**
 	 * @summary Swaps to a window with a specified title after waiting a specified number of
 	 * 			seconds for the window to display.  Pass in a number of seconds (1,2 etc), and
@@ -88,5 +56,23 @@ public class WindowHandler {
 		}
 		
 		return false;
+	}
+	
+	static class WindowTitleIs implements ExpectedCondition<Boolean> {
+	    private String title;
+	    
+	    public WindowTitleIs(String title){
+		this.title = title;
+	    }
+	    
+	    @Override
+	    public Boolean apply(final WebDriver driver) {
+		for(String handle : driver.getWindowHandles()){
+		    driver.switchTo().window(handle);
+		    if(driver.getTitle().contains(title)) return true;
+		}
+		return false;
+	    }
+	    
 	}
 }

@@ -20,25 +20,15 @@ public class Sandbox2 extends TestEnvironment{
 	setOperatingSystem("windows");
 	setRunLocation("local");
 	setTestEnvironment("");
-	setPageURL("http://bluesourcestaging.herokuapp.com");
+	setPageURL("http://google.com");
 	testStart("TestAlert");
     }
     @Test
     public void test(){
-	TestReporter.setPrintToConsole(true);
-	System.out.println(driver.getDriverCapability().browserName());
-	System.out.println(driver.getDriverCapability().browserVersion());
-	System.out.println(driver.getDriverCapability().platformOS());
-	
-	Textbox username = driver.findTextbox(By.id("employee_username"));
-	username.set("company.admin");
-	
-	//new ElementImpl(getDriver().findElement(By.id("employee_username"))).sendKeys("TESTING");
-	PageLoaded.syncEnabled(driver, driver.findTextbox(By.name("employee[password]")));
-	driver.findTextbox(By.name("employee[password]")).set("test");
-	
-	driver.findButton(ByNG.buttonText("Login")).click();
-	
+	driver.executeJavaScript("window.open('http://bluesourcestaging.herokuapp.com', 'BlueSource', 'height=800,width=800');");
+	WindowHandler.waitUntilWindowExistsWithTitle(driver, "BlueSource");
+	System.out.println(driver.getTitle());
+	driver.close();
 	driver.quit();
     }
 }

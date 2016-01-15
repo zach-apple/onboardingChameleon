@@ -22,14 +22,6 @@ public class Mustard {
 			Base64Coder.decodeString(appURLRepository.getString("SAUCELABS_KEY")));
 	
 	public static void postResultsToMustard(OrasiDriver driver, ITestResult result, String runLocation){
-	    	URI addy = null;
-		try {
-		    addy =new URI( "http", null,"10.238.242.61", 3000,"/results", null, null) ;
-
-		} catch (URISyntaxException e) {
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
-		}
 		
 		RestService request = new RestService();
 		
