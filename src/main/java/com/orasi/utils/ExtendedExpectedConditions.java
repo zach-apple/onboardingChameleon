@@ -12,7 +12,7 @@ public class ExtendedExpectedConditions {
     * @param title - Exact title of the Window to find
     * @return true once a window is found with exact title
     */
-   public static ExpectedCondition<Boolean> findWindowWithTitleAndSwitchToIt(String title){
+   public static ExpectedCondition<Boolean> findWindowWithTitleAndSwitchToIt(final String title){
 	   return new ExpectedCondition<Boolean>() {
 		      @Override
 		      public Boolean apply(WebDriver driver) {
@@ -40,7 +40,7 @@ public class ExtendedExpectedConditions {
     * @param title - Partial title of the Window to find
     * @return WindowExistsWithTitle - Expected Condition to find window with title part
     */
-   public static ExpectedCondition<Boolean> findWindowContainsTitleAndSwitchToIt(String title){
+   public static ExpectedCondition<Boolean> findWindowContainsTitleAndSwitchToIt(final String title){
 	   return new ExpectedCondition<Boolean>() {
 		      @Override
 		      public Boolean apply(WebDriver driver) {
@@ -68,7 +68,7 @@ public class ExtendedExpectedConditions {
    * @param regex - Regex of title of the Window to find
    * @return WindowExistsWithTitle - Expected Condition to find window with title regex
    */
-  public static ExpectedCondition<Boolean> findWindowMatchesTitleAndSwitchToIt(String regex){
+  public static ExpectedCondition<Boolean> findWindowMatchesTitleAndSwitchToIt(final String regex){
 	  return new ExpectedCondition<Boolean>() {
 	      @Override
 	      public Boolean apply(WebDriver driver) {
@@ -160,7 +160,7 @@ public class ExtendedExpectedConditions {
    * @param text to be present in the attribute found by the locator
    * @return true once the regex matches given text in element attribute
    */
-  public static ExpectedCondition<Boolean> textToBeMatchInElementAttribute(
+  public static ExpectedCondition<Boolean> textToMatchInElementAttribute(
 	      final WebElement element, final String attribute, final String regex) {
 
 	    return new ExpectedCondition<Boolean>() {
