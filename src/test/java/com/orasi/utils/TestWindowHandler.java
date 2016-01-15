@@ -2,6 +2,7 @@ package com.orasi.utils;
 
 import org.testng.Assert;
 import org.testng.ITestContext;
+import org.testng.SkipException;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
@@ -25,6 +26,7 @@ public class TestWindowHandler extends TestEnvironment{
 		setOperatingSystem(operatingSystem);
 		setRunLocation(runLocation);
 		setTestEnvironment(environment);
+		
 		setPageURL("http://google.com");
 		testStart("TestWindowHandler");
     }
@@ -33,40 +35,41 @@ public class TestWindowHandler extends TestEnvironment{
     public void close(ITestContext testResults){
 	endTest("TestWindowHandler", testResults);
     }
-    
-    @Features("Utilities")
-    @Stories("WindowHandler")
-    @Title("waitUntilWindowExistsWithTitle")
-    @Test(groups={"regression", "smoke"})
-    public void waitUntilWindowExistsWithTitle(){
-		driver.executeJavaScript("window.open('http://bluesourcestaging.herokuapp.com', 'BLUESource', 'height=800,width=800');");
-		Assert.assertTrue(WindowHandler.waitUntilWindowExistsWithTitle(driver, "BlueSource"));
-    }
-    
-    @Features("Utilities")
-    @Stories("WindowHandler")
-    @Title("waitUntilWindowExistsTitleContains")
-    @Test(groups={"regression", "smoke"})
-    public void waitUntilWindowExistsTitleContains(){
-		driver.executeJavaScript("window.open('http://bluesourcestaging.herokuapp.com', 'BlueSource', 'height=800,width=800');");
-			Assert.assertTrue(WindowHandler.waitUntilWindowExistsTitleContains(driver, "Blue"));
-    }
-    
-    @Features("Utilities")
-    @Stories("WindowHandler")
-    @Title("waitUntilWindowExistsTitleMatches")
-    @Test(groups={"regression", "smoke"})
-    public void waitUntilWindowExistsTitleMatches(){
-		driver.executeJavaScript("window.open('http://bluesourcestaging.herokuapp.com', 'blueSource', 'height=800,width=800');");
-		Assert.assertTrue(WindowHandler.waitUntilWindowExistsTitleMatches(driver, "(?i:.*source)"));
-    }
-    
+
     @Features("Utilities")
     @Stories("WindowHandler")
     @Title("waitUntilNumberOfWindowsAre")
     @Test(groups={"regression", "smoke"})
     public void waitUntilNumberOfWindowsAre(){
 		driver.executeJavaScript("window.open('http://bluesourcestaging.herokuapp.com', 'BLAH', 'height=800,width=800');");
-		Assert.assertTrue(WindowHandler.waitUntilNumberOfWindowsAre(driver, 5));
+		Assert.assertTrue(WindowHandler.waitUntilNumberOfWindowsAre(driver, 2));
     }
+    
+    @Features("Utilities")
+    @Stories("WindowHandler")
+    @Title("waitUntilWindowExistsWithTitle")
+    @Test(groups={"regression", "smoke"},
+    		dependsOnMethods="waitUntilNumberOfWindowsAre")
+    public void waitUntilWindowExistsWithTitle(){
+		Assert.assertTrue(WindowHandler.waitUntilWindowExistsWithTitle(driver, "BlueSource"));
+    }
+    
+    @Features("Utilities")
+    @Stories("WindowHandler")
+    @Title("waitUntilWindowExistsTitleContains")
+    @Test(groups={"regression", "smoke"},
+    		dependsOnMethods="waitUntilNumberOfWindowsAre")
+    public void waitUntilWindowExistsTitleContains(){
+			Assert.assertTrue(WindowHandler.waitUntilWindowExistsTitleContains(driver, "Blue"));
+    }
+    
+    @Features("Utilities")
+    @Stories("WindowHandler")
+    @Title("waitUntilWindowExistsTitleMatches")
+    @Test(groups={"regression", "smoke"},
+    		dependsOnMethods="waitUntilNumberOfWindowsAre")
+    public void waitUntilWindowExistsTitleMatches(){
+		Assert.assertTrue(WindowHandler.waitUntilWindowExistsTitleMatches(driver, "(?i:.*source)"));
+    }
+    
 }
