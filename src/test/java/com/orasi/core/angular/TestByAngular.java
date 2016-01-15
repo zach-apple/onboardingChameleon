@@ -29,7 +29,8 @@ public class TestByAngular extends TestEnvironment{
 	    "operatingSystem", "environment" })
     public void setup(@Optional String runLocation, String browserUnderTest,
 	    String browserVersion, String operatingSystem, String environment) {
-	    if(getBrowserUnderTest().toLowerCase().equals("html")) setReportToMustard(false); 
+	    
+	    if(getBrowserUnderTest().toLowerCase().equals("html")) setReportToMustard(false);
 		setApplicationUnderTest("Test App");
 		setBrowserUnderTest(browserUnderTest);
 		setBrowserVersion(browserVersion);
