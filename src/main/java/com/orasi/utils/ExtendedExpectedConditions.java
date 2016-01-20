@@ -30,7 +30,7 @@ public class ExtendedExpectedConditions {
 
 		      @Override
 		      public String toString() {
-		    	  return String.format("text ('%s') to be present in window %s", title);
+		    	  return String.format("text ('%s') to be present in window", title);
 		      }
 		  };
    }
@@ -57,7 +57,7 @@ public class ExtendedExpectedConditions {
 
 		      @Override
 		      public String toString() {
-		    	  return String.format("text ('%s') to be present in window %s", title);
+		    	  return String.format("text ('%s') to be present in window", title);
 		      }
 		  };
    }
@@ -85,7 +85,7 @@ public class ExtendedExpectedConditions {
 
 	      @Override
 	      public String toString() {
-	    	  return String.format("regex ('%s') to be in window %s", regex);
+	    	  return String.format("regex ('%s') to be in window", regex);
 	      }
 	  };
   }
