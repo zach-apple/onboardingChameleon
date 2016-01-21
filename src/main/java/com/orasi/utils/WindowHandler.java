@@ -16,23 +16,34 @@ public class WindowHandler {
 	 * @return 	true/false
 	 */
 	public static boolean waitUntilWindowExistsWithTitle(WebDriver driver, String windowNameOrHandle){
-		int timeout = Constants.PAGE_TIMEOUT;
+	    return waitUntilWindowExistsWithTitle(driver, windowNameOrHandle, Constants.PAGE_TIMEOUT);
+	}
+	
+	/**
+	 * Use FluentWait to halt the script until the window with the desired text in the title is active
+	 * to return true. If the window is not found in the default timeout, return false. 
+	 * @version Created 01/15/2016
+	 * @author 	Justin Phlegar
+	 * @param 	driver, title
+	 * @return 	true/false
+	 */
+	public static boolean waitUntilWindowExistsWithTitle(WebDriver driver, String windowNameOrHandle, int timeoutInSeconds){
 		
 		//Adding for backwards compatibility for WebDriver
 		if(driver instanceof OrasiDriver){
-			timeout = ((OrasiDriver)driver).getPageTimeout();
+			timeoutInSeconds = ((OrasiDriver)driver).getPageTimeout();
 			driver = ((OrasiDriver)driver).getWebDriver();
 		}
 		
 	    try{
-	    	WebDriverWait wait = new WebDriverWait(driver, timeout);
+	    	WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
 			wait.until(ExtendedExpectedConditions.findWindowWithTitleAndSwitchToIt(windowNameOrHandle));
 	    }catch(TimeoutException e){
 	    	return false;
 	    }
 	    return true;
 	}
-
+	
 	/**
 	 * Use FluentWait to halt the script until the window with the desired text is contained in the title and 
 	 * active to return true. If the window is not found in the default timeout, return false. 
@@ -42,16 +53,27 @@ public class WindowHandler {
 	 * @return 	true/false
 	 */
 	public static boolean waitUntilWindowExistsTitleContains(WebDriver driver, String windowNameOrHandle){
-		int timeout = Constants.PAGE_TIMEOUT;
-		
+		return waitUntilWindowExistsTitleContains(driver, windowNameOrHandle, Constants.PAGE_TIMEOUT);
+	}
+	
+	/**
+	 * Use FluentWait to halt the script until the window with the desired text is contained in the title and 
+	 * active to return true. If the window is not found in the default timeout, return false. 
+	 * @version Created 01/15/2016
+	 * @author 	Justin Phlegar
+	 * @param 	driver, title, timeout
+	 * @return 	true/false
+	 */
+	public static boolean waitUntilWindowExistsTitleContains(WebDriver driver, String windowNameOrHandle, int timeoutInSeconds){
+	
 		//Adding for backwards compatibility for WebDriver
 		if(driver instanceof OrasiDriver){
-			timeout = ((OrasiDriver)driver).getPageTimeout();
+			timeoutInSeconds = ((OrasiDriver)driver).getPageTimeout();
 			driver = ((OrasiDriver)driver).getWebDriver();
 		}
 		
 	    try{
-			WebDriverWait wait = new WebDriverWait(driver, timeout);
+			WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
 			wait.until(ExtendedExpectedConditions.findWindowContainsTitleAndSwitchToIt(windowNameOrHandle));
 	    }catch(TimeoutException e){
 	    	return false;
@@ -68,23 +90,33 @@ public class WindowHandler {
 	 * @return 	true/false
 	 */
 	public static boolean waitUntilWindowExistsTitleMatches(WebDriver driver, String regex){
-		int timeout = Constants.PAGE_TIMEOUT;
-		
+		return waitUntilWindowExistsTitleMatches(driver, regex, Constants.PAGE_TIMEOUT);
+	}
+	
+	/**
+	 * Use FluentWait to halt the script until the window with the desired regex pattern is matched in the 
+	 * title and the window is active to return true. If the window is not found in the default timeout, return false. 
+	 * @version Created 01/15/2016
+	 * @author 	Justin Phlegar
+	 * @param 	driver, title, timeout
+	 * @return 	true/false
+	 */
+	public static boolean waitUntilWindowExistsTitleMatches(WebDriver driver, String regex, int timeoutInSeconds){
+			
 		//Adding for backwards compatibility for WebDriver
 		if(driver instanceof OrasiDriver){
-			timeout = ((OrasiDriver)driver).getPageTimeout();
+			timeoutInSeconds = ((OrasiDriver)driver).getPageTimeout();
 			driver = ((OrasiDriver)driver).getWebDriver();
 		}
 		
 	    try{
-	    	WebDriverWait wait = new WebDriverWait(driver, timeout);
+	    	WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
 	    	wait.until(ExtendedExpectedConditions.findWindowMatchesTitleAndSwitchToIt(regex));
 	    }catch( TimeoutException e){
 	    	return false;
 	    }
 	    return true;
 	}
-
 
 	/**
 	 * Use FluentWait to halt the script until the specified number of windows are found
@@ -94,16 +126,25 @@ public class WindowHandler {
 	 * @return 	true/false
 	 */
 	public static boolean waitUntilNumberOfWindowsAre(WebDriver driver, int expectedNumberOfWindows){
-		int timeout = Constants.PAGE_TIMEOUT;
-		
+		return waitUntilNumberOfWindowsAre(driver, expectedNumberOfWindows, Constants.PAGE_TIMEOUT);
+	}
+	
+	/**
+	 * Use FluentWait to halt the script until the specified number of windows are found
+	 * @version Created 01/15/2016
+	 * @author 	Justin Phlegar
+	 * @param 	driver, expectedNumberOfWindows
+	 * @return 	true/false
+	 */
+	public static boolean waitUntilNumberOfWindowsAre(WebDriver driver, int expectedNumberOfWindows, int timeoutInSeconds){	
 		//Adding for backwards compatibility for WebDriver
 		if(driver instanceof OrasiDriver){
-			timeout = ((OrasiDriver)driver).getPageTimeout();
+			timeoutInSeconds = ((OrasiDriver)driver).getPageTimeout();
 			driver = ((OrasiDriver)driver).getWebDriver();
 		}
 		
 		try{
-			WebDriverWait wait = new WebDriverWait(driver, timeout);
+			WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
 			wait.until(ExpectedConditions.numberOfWindowsToBe(expectedNumberOfWindows));
 		}catch(TimeoutException e){
 			return false;
