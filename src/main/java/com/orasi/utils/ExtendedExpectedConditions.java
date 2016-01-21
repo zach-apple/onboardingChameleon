@@ -1,5 +1,7 @@
 package com.orasi.utils;
 
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -181,6 +183,40 @@ public class ExtendedExpectedConditions {
 	      @Override
 	      public String toString() {
 	        return String.format("attribute ('%s') to  match regex pattern ('%s') in element %s", attribute, regex, element);
+	      }
+	    };
+	  }
+  
+  public static ExpectedCondition<Boolean> elementToBeVisible(
+	      final WebElement element) {
+
+	    return new ExpectedCondition<Boolean>() {
+	      @Override
+	      public Boolean apply(WebDriver driver) {
+	    	  try {
+	  			Point location = element.getLocation();
+
+	  			Dimension size = element.getSize();
+	  			if ((location.getX() > 0 & location.getY() > 0) | (size.getHeight() > 0 & size.getWidth() > 0)) {
+	  				if (element.getAttribute("hidden") != null)
+	                      if (element.getAttribute("hidden").toLowerCase().equals("true")) return false;
+	  				if (element.getAttribute("type") != null) {
+	  					if (element.getAttribute("type").equals("hidden"))
+	  						return false;
+	  				}
+	  				return true;
+	  			} else {
+	  				return false;
+	  			}
+
+	  		} catch (WebDriverException | ClassCastException e) {
+	  			return false;
+	  		}
+	      }
+
+	      @Override
+	      public String toString() {
+	        return String.format("element ('%s') to be visible", element);
 	      }
 	    };
 	  }
