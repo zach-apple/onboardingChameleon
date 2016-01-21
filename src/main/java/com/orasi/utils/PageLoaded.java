@@ -15,6 +15,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.orasi.core.Beta;
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.exception.automation.PageInitialization;
@@ -651,7 +652,7 @@ public class PageLoaded {
 		driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
 		stopwatch.start();
 		do {
-			if (webElementTextPresent(driver, element, text)) {
+			if (webElementTextMatches(driver, element, text)) {
 				found = true;
 				break;
 			}
@@ -742,6 +743,8 @@ public class PageLoaded {
 	/**
 	 * Use WebDriver Wait to determine if object contains the expected text
 	 * 
+	 * @deprecated - Migrated to webElementTextMatches
+	 * 
 	 * @author Justin
 	 * @param driver
 	 *            Main WebDriver
@@ -752,7 +755,7 @@ public class PageLoaded {
 	 * @return TRUE if element is currently visible on the screen, FALSE if the
 	 *         element is not visible on the screen
 	 */
-
+	@Deprecated
 	private static boolean webElementTextPresent(OrasiDriver driver, WebElement element, String text) {
 		WebDriverWait wait = new WebDriverWait(driver, 0);
 		try {
@@ -763,7 +766,6 @@ public class PageLoaded {
 			} else {
 				return false;
 			}
-
 		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException e) {
 			try {
 				if (wait.until(ExpectedConditions.textToBePresentInElementValue(element, text)) != null) {
@@ -777,7 +779,69 @@ public class PageLoaded {
 			} catch (WebDriverException wde) {
 				return false;
 			}
-
 		}
 	}	
+
+	/**
+	 * Use WebDriver Wait to determine if text matches in element
+	 * 
+	 * @author Justin
+	 * @param driver
+	 *            Main WebDriver
+	 * @param element
+	 *            Element to search for
+	 * @param regex
+	 * 			  Regular expression of pattern to match           
+	 * @return TRUE if element is currently enabled on the screen, FALSE if the
+	 *         element is not enabled on the screen
+	 */
+	private static boolean webElementTextMatches(OrasiDriver driver, WebElement element, String regex) {
+		WebDriverWait wait = new WebDriverWait(driver, 0);
+		try {
+
+			if (wait.until(ExtendedExpectedConditions.textToMatchInElement(element, regex)) != null) return true;
+			else if (wait.until(ExtendedExpectedConditions.textToMatchInElementAttribute(element, "value", regex)) != null) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException e) {
+			try {
+				if (wait.until(ExtendedExpectedConditions.textToMatchInElementAttribute(element, "value", regex)) != null) {
+					return true;
+				} else {
+					return false;
+				}
+			} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException
+					| TimeoutException e2) {
+				return false;
+			} catch (WebDriverException wde) {
+				return false;
+			}
+		}
+	}
+
+	/**
+	 * Use WebDriver Wait to determine if text matches in element attribute
+	 * 
+	 * @author Justin
+	 * @param driver
+	 *            Main WebDriver
+	 * @param element
+	 *            Element to search for
+	 * @param regex
+	 * 			  Regular expression of pattern to match           
+	 * @return TRUE if element is currently enabled on the screen, FALSE if the
+	 *         element is not enabled on the screen
+	 */
+	@Beta
+	private static boolean webElementAttributeMatches(OrasiDriver driver, WebElement element, String attribute, String regex) {
+		WebDriverWait wait = new WebDriverWait(driver, 0);
+
+		try {
+			return wait.until(ExtendedExpectedConditions.textToMatchInElementAttribute(element, attribute, regex));
+		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException e) {
+			return false;
+		}
+	}
 }

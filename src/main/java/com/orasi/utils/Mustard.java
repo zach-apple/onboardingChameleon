@@ -11,8 +11,11 @@ import org.openqa.selenium.OutputType;
 import org.testng.ITestResult;
 
 import com.orasi.api.restServices.core.RestService;
+import com.orasi.core.Beta;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 
+
+@Beta
 public class Mustard {
 	private static String mustardURL = "http://mustard.orasi.com/results";
     	private static String mustardKey = "c73fbfed815904a032a5cec113bfe85f"; //dev key da8f8779749cfb27bbba1fb9f136c1cf
@@ -21,6 +24,8 @@ public class Mustard {
 			Base64Coder.decodeString(appURLRepository.getString("SAUCELABS_USERNAME")),
 			Base64Coder.decodeString(appURLRepository.getString("SAUCELABS_KEY")));
 	
+
+    @Beta
 	public static void postResultsToMustard(OrasiDriver driver, ITestResult result, String runLocation){
 		
 		RestService request = new RestService();
