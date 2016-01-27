@@ -16,6 +16,7 @@ import org.openqa.selenium.support.FindBy;
 
 import com.orasi.core.Beta;
 import com.orasi.core.interfaces.impl.ElementImpl;
+import com.orasi.core.interfaces.impl.ElementImpl.Sync;
 import com.orasi.core.interfaces.impl.internal.ImplementedBy;
 
 /**
@@ -409,7 +410,7 @@ public interface Element extends WebElement, WrapsElement, Locatable {
 	 * 
 	 * @author Justin
 	 */
-	public boolean syncTextInElement(String text);
+	//public boolean syncTextInElement(String text);
 
 	/**
 	 * 
@@ -421,7 +422,7 @@ public interface Element extends WebElement, WrapsElement, Locatable {
 	 * @author Justin
 	 * 
 	 */
-	public boolean syncTextInElement(String text, int timeout);
+	//public boolean syncTextInElement(String text, int timeout);
 
 	/**
 	 * Used in conjunction with WebObjectText Present to determine if the
@@ -432,5 +433,8 @@ public interface Element extends WebElement, WrapsElement, Locatable {
 	 * @author Justin
 	 *
 	 */
-	public boolean syncTextInElement(String text, int timeout, boolean returnError);
+	//public boolean syncTextInElement(String text, int timeout, boolean returnError);
+	public boolean syncTextInElement(String text, Object... args);
+	
+	public Sync sync();
 }

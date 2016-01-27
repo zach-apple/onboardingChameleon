@@ -609,9 +609,9 @@ public class ElementImpl implements Element {
 	 * 
 	 * @author Justin
 	 */
-	public boolean syncTextInElement(String text) {
+	/*public boolean syncTextInElement(String text) {
 		return PageLoaded.syncTextInElement(getWrappedDriver(), text, getWrappedDriver().getElementTimeout(), PageLoaded.getSyncToFailTest(), new ElementImpl(getWrappedElement()));
-	}
+	}*/
 
 	/**
 	 * 
@@ -623,9 +623,9 @@ public class ElementImpl implements Element {
 	 * @author Justin
 	 * 
 	 */
-	public boolean syncTextInElement(String text, int timeout) {
+	/*public boolean syncTextInElement(String text, int timeout) {
 		return PageLoaded.syncTextInElement(getWrappedDriver(), text, timeout, PageLoaded.getSyncToFailTest(), new ElementImpl(getWrappedElement()));
-	}
+	}*/
 
 	/**
 	 * Used in conjunction with WebObjectText Present to determine if the
@@ -636,7 +636,36 @@ public class ElementImpl implements Element {
 	 * @author Justin
 	 *
 	 */
-	public boolean syncTextInElement(String text, int timeout, boolean returnError) {
+	/*public boolean syncTextInElement(String text, int timeout, boolean returnError) {
 		return PageLoaded.syncTextInElement(getWrappedDriver(), text, timeout, returnError, new ElementImpl(getWrappedElement()));
+	}*/
+	
+	/**
+	 * Sync for the Element's text or it's value attribute contains the desired text.
+	 * Additional parameters can be added to override the default timeout and if the 
+	 * test should fail if the sync fails
+	 * 
+	 * @param text
+	 *  		(Required) The text the element should contain in either its text or value attribute
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncTextInElement("text", 10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncTextInElement("text", 10, false)
+	 */
+	public boolean syncTextInElement(String text, Object... args) {
+	    int timeout = getWrappedDriver().getElementTimeout();
+	    boolean failTestOnSync = PageLoaded.getSyncToFailTest();
+	    try{
+        	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
+        	    if(args[1] != null) failTestOnSync = Boolean.getBoolean(args[1].toString());
+	    }catch(ArrayIndexOutOfBoundsException aiobe){}
+	    
+		return PageLoaded.syncTextInElement(getWrappedDriver(), text, timeout, failTestOnSync, new ElementImpl(getWrappedElement()));
 	}
+	
 }

@@ -684,9 +684,8 @@ public class PageLoaded {
 	 * @return TRUE if element is currently present in the DOM, FALSE if the
 	 *         element is not present in the DOM
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static boolean webElementPresent(OrasiDriver driver, By locator) {
-		Wait wait = new WebDriverWait(driver, 0);
+	    WebDriverWait wait = new WebDriverWait(driver, 0);
 
 		try {
 			return wait.until(ExpectedConditions.presenceOfElementLocated(locator)) != null;
@@ -740,9 +739,8 @@ public class PageLoaded {
 	 * @return TRUE if element is currently enabled on the screen, FALSE if the
 	 *         element is not enabled on the screen
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static boolean webElementEnabled(OrasiDriver driver, WebElement element) {
-		Wait wait = new WebDriverWait(driver, 0);
+	    WebDriverWait wait = new WebDriverWait(driver, 0);
 
 		try {
 			return wait.until(ExpectedConditions.elementToBeClickable(element)) != null;
@@ -766,9 +764,8 @@ public class PageLoaded {
 	 * @return TRUE if element is currently visible on the screen, FALSE if the
 	 *         element is not visible on the screen
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static boolean webElementTextPresent(OrasiDriver driver, WebElement element, String text) {
-		Wait wait = new WebDriverWait(driver, 0);
+	    WebDriverWait wait = new WebDriverWait(driver, 0);
 		try {
 
 			if (wait.until(ExpectedConditions.textToBePresentInElement(element, text)) != null) return true;
@@ -794,4 +791,135 @@ public class PageLoaded {
 
 		}
 	}	
+	/**
+	 * Use WebDriver Wait to determine if object contains the expected text
+	 * 
+	 * @author Justin
+	 * @param driver
+	 *            Main WebDriver
+	 * @param element
+	 *            Element to search for
+	 * @param regex
+	 *            The regex to match in element text
+	 * @return TRUE if element text or value matches the regex
+	 */
+	private static boolean webElementTextMatches(OrasiDriver driver, WebElement element, String regex) {
+	    WebDriverWait wait = new WebDriverWait(driver, 0);
+		try {
+		    if(wait.until(ExtendedExpectedConditions.textToMatchInElement(element, regex)) != null) return true;
+		    else if (wait.until(ExtendedExpectedConditions.textToMatchInElementAttribute(element, "value", regex)) != null) {
+			return true;
+		    }else{
+			return false;
+		    }
+		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException e) {
+		    try {
+			if (wait.until(ExtendedExpectedConditions.textToMatchInElementAttribute(element, "value", regex)) != null) {
+				return true;
+			} else {
+				return false;
+			}
+		    } catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException e2) {
+        		return false;
+        	    } catch (WebDriverException wde) {
+        		return false;
+        	    }
+		}
+	}
+	
+	/**
+	 * Use WebDriverWait and custom ExpectedConditions to determine if Element attribute equals expected value
+	 * 
+	 * @author Justin
+	 * @param driver
+	 *            Main WebDriver
+	 * @param element
+	 * 		Element to search for
+	 * @param attribute
+	 * 		Element attribute to validate
+	 * @param value
+	 * 		Value of attribute to validate
+	 * @return TRUE if element attribute equals expected value
+	 */
+	private static boolean webElementAttributePresent(OrasiDriver driver, WebElement element, String attribute, String value) {
+	    WebDriverWait wait = new WebDriverWait(driver, 0);
+
+	    try {
+		return wait.until(ExtendedExpectedConditions.textToBePresentInElementAttribute(element, attribute, value));
+	    } catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException e) {
+		return false;
+	    }
+	}
+
+	/**
+	 * Use WebDriverWait and custom ExpectedConditions to determine if Element attribute matches expected value
+	 * 
+	 * @author Justin
+	 * @param driver
+	 *            Main WebDriver
+	 * @param element
+	 * 		Element to search for
+	 * @param attribute
+	 * 		Element attribute to validate
+	 * @param regex
+	 * 		Regular expression of attribute to validate
+	 * @return TRUE if element attribute matches regular expression of expected value
+	 */
+	private static boolean webElementAttributeMatches(OrasiDriver driver, WebElement element, String attribute, String regex) {
+	    WebDriverWait wait = new WebDriverWait(driver, 0);
+
+	    try {
+		return wait.until(ExtendedExpectedConditions.textToMatchInElementAttribute(element, attribute, regex));
+	    } catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException e) {
+		return false;
+	    }
+	}
+
+	/**
+	 * Use WebDriverWait and custom ExpectedConditions to determine if Element CssProperty equals expected value
+	 * 
+	 * @author Justin
+	 * @param driver
+	 *            Main WebDriver
+	 * @param element
+	 * 		Element to search for
+	 * @param CssProperty
+	 * 		Element CssProperty to validate
+	 * @param value
+	 * 		Value of CssProperty to validate
+	 * @return TRUE if element CssProperty equals expected value
+	 */
+	private static boolean webElementCssPropertyPresent(OrasiDriver driver, WebElement element, String cssProperty, String value) {
+	    WebDriverWait wait = new WebDriverWait(driver, 0);
+
+	    try {
+		return wait.until(ExtendedExpectedConditions.textToMatchInElementCssProperty(element, cssProperty, value));
+	    } catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException e) {
+		return false;
+	    }
+	}
+
+	/**
+	 * Use WebDriverWait and custom ExpectedConditions to determine if Element CssProperty matches expected value
+	 * 
+	 * @author Justin
+	 * @param driver
+	 *            Main WebDriver
+	 * @param element
+	 * 		Element to search for
+	 * @param CssProperty
+	 * 		Element CssProperty to validate
+	 * @param regex
+	 * 		Regular expression of CssProperty to validate
+	 * @return TRUE if element CssProperty matches regular expression of expected value
+	 */
+	private static boolean webElementCssPropertyMatches(OrasiDriver driver, WebElement element, String cssProperty, String regex) {
+	    WebDriverWait wait = new WebDriverWait(driver, 0);
+
+	    try {
+		return wait.until(ExtendedExpectedConditions.textToMatchInElementCssProperty(element, cssProperty, regex));
+	    } catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException e) {
+		return false;
+	    }
+	}
 }

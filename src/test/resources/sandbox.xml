@@ -6,12 +6,12 @@
 	</listeners>
 	<parameter name="browserUnderTest" value="firefox" />
 	<parameter name="environment" value="staging" />
-	<parameter name="runLocation" value="local" />
+	<parameter name="runLocation" value="remote" />
 	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="windows" />
  	<test name="TestEnvironment">
 		<classes>
-			<class name="com.orasi.utils.Sandbox2" />
+			<class name="com.orasi.core.interfaces.TestElement" />
 		</classes>
 	</test> 
 </suite> <!-- Suite -->
