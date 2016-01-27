@@ -152,6 +152,7 @@ public class ExtendedExpectedConditions {
       }
     };
   }
+  
   /**
    * An expectation for checking if the given regex matches the given element attribute.
    *
@@ -184,4 +185,72 @@ public class ExtendedExpectedConditions {
 	      }
 	    };
 	  }
+
+  /**
+   * An expectation for checking if the given text is present in CSS property the specified
+   * elements value attribute.
+   *
+   * @param element the WebElement
+   * @param CSS property to search in
+   * @param text to be present in the element's CSS property value
+   * @return true once the element's value CSS property contains the given text
+   */
+  public static ExpectedCondition<Boolean> textToBePresentInElementCssProperty(
+      final WebElement element, final String cssProperty, final String text) {
+
+    return new ExpectedCondition<Boolean>() {
+      @Override
+      public Boolean apply(WebDriver driver) {
+        try {
+          String elementText = element.getCssValue(cssProperty);
+          if (elementText != null) {
+            return elementText.contains(text);
+          } else {
+            return false;
+          }
+        } catch (StaleElementReferenceException e) {
+          return null;
+        }
+      }
+
+      @Override
+      public String toString() {
+        return String.format("value ('%s') to be the value CSS Property ('%s') in element %s", text, cssProperty, element);
+      }
+    };
+  }
+  
+  /**
+   * An expectation for checking if the given regex matches the given element CSS Property.
+   *
+   * @param webelement to retrieve CSS property
+   * @param cssProperty to retrieve
+   * @param text to be present in the CSS property value found by the locator
+   * @return true once the regex matches given text in element CSS Property
+   */
+  public static ExpectedCondition<Boolean> textToMatchInElementCssProperty(
+	      final WebElement element, final String cssProperty, final String regex) {
+
+	    return new ExpectedCondition<Boolean>() {
+	      @Override
+	      public Boolean apply(WebDriver driver) {
+	        try {
+	          String elementText = element.getCssValue(cssProperty);
+	          if (elementText != null) {
+	            return elementText.matches(regex);
+	          } else {
+	            return false;
+	          }
+	        } catch (StaleElementReferenceException e) {
+	          return null;
+	        }
+	      }
+
+	      @Override
+	      public String toString() {
+		  return String.format("value ('%s') to match regex pattern of value CSS Property ('%s') in element %s", regex, cssProperty, element);
+	      }
+	    };
+	  }
+  
 }
