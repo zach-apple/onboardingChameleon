@@ -368,7 +368,7 @@ public class PageLoaded {
 
 		stopwatch.start();
 		do {
-			if (webElementVisible(driver, element)) {
+			if (webElementVisible(driver, element, timeout)) {
 				found = true;
 				break;
 			}
@@ -426,7 +426,7 @@ public class PageLoaded {
 		driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
 		stopwatch.start();
 		do {
-			if (!webElementVisible(driver, element)) {
+			if (!webElementVisible(driver, element, timeout)) {
 				found = true;
 				break;
 			}
@@ -949,24 +949,12 @@ public class PageLoaded {
 	 * @return TRUE if element is currently visible on the screen, FALSE if the
 	 *         element is not visible on the screen
 	 */
-	private static boolean webElementVisible(OrasiDriver driver, WebElement element) {
+	private static boolean webElementVisible(OrasiDriver driver, WebElement element, int timeout) {
+		WebDriverWait wait = new WebDriverWait(driver, timeout);
+
 		try {
-			Point location = element.getLocation();
-
-			Dimension size = element.getSize();
-			if ((location.getX() > 0 & location.getY() > 0) | (size.getHeight() > 0 & size.getWidth() > 0)) {
-				if (element.getAttribute("hidden") != null)
-                    if (element.getAttribute("hidden").toLowerCase().equals("true")) return false;
-				if (element.getAttribute("type") != null) {
-					if (element.getAttribute("type").equals("hidden"))
-						return false;
-				}
-				return true;
-			} else {
-				return false;
-			}
-
-		} catch (WebDriverException | ClassCastException e) {
+			return wait.until(ExtendedExpectedConditions.elementToBeVisible(element));
+		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException e) {
 			return false;
 		}
 	}

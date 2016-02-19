@@ -6,7 +6,7 @@
 	</listeners>
 	<parameter name="browserUnderTest" value="firefox" />
 	<parameter name="environment" value="staging" />
-	<parameter name="runLocation" value="remote" />
+	<parameter name="runLocation" value="sauce" />
 	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="windows" />
  	<test name="TestEnvironment">
