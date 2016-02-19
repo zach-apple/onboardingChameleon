@@ -31,6 +31,8 @@ import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.RadioGroup;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.Webtable;
+import com.orasi.exception.automation.KeyExistsException;
+import com.orasi.exception.automation.NoKeyFoundException;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.saucerest.SauceREST;
 import ru.yandex.qatools.allure.annotations.Features;
@@ -353,5 +355,41 @@ public class TestOrasiDriver extends TestEnvironment{
     public void findNGRepeater(){
     	Assert.assertNotNull(driver.findElement(ByNG.repeater("employee in employees")));  	
     }
+	
+    @Test(groups={"regression", "utils", "orasidriver"})
+    public void getDataWarehouse(){
+	Assert.assertNotNull(driver.data());
+    }
+	    
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="getDataWarehouse")
+    public void addData() {
+	driver.data().add("username", "Admin");
+	Assert.assertNotNull(driver.data().get("username"));
+    }
+	    
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="addData")
+    public void getValidData() {
+	Assert.assertNotNull(driver.data().get("username"));
+    }
+	    
+    @Test(groups={"regression", "utils", "orasidriver"}, expectedExceptions = NoKeyFoundException.class)
+    public void getInvalidData() {
+	driver.data().get("password");
+    }   
     
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="addData", expectedExceptions = KeyExistsException.class)
+    public void addToExistingKey() {
+	driver.data().add("username", "Employee");
+    }
+    
+    @Test(groups={"regression", "utils", "orasidriver"}, dependsOnMethods="addData")
+    public void updateExistingKey() {
+	driver.data().update("username", "Manager");
+	Assert.assertEquals("Manager", driver.data().get("username"));
+    }
+    
+    @Test(groups={"regression", "utils", "orasidriver"}, expectedExceptions = NoKeyFoundException.class)
+    public void updateNoKeyFound() {
+	driver.data().update("password", "Orasi123");
+    }
 }
