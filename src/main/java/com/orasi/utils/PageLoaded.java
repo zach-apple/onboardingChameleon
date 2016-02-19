@@ -274,37 +274,30 @@ public class PageLoaded {
 
 	/**
 	 * Used in conjunction with WebElementPresent to determine if the desired
-	 * element is present in the DOM Will loop for the time out listed in
-	 * OrasiDriver.getElementTimeout If object is not present within the time, throw
-	 * an error
-	 * 
-	 * @author Justin
-	 */
-	public static boolean syncPresent(OrasiDriver driver, Element element) {
-		return syncPresent(driver, driver.getElementTimeout(),getSyncToFailTest(), element);
-	}
-
-	/**
-	 * Used in conjunction with WebElementPresent to determine if the desired
-	 * element is present in the DOM Will loop for the time out passed in
-	 * parameter timeout If object is not present within the time, throw an
-	 * error
-	 * 
-	 * @author Justin
-	 */
-	public static boolean syncPresent(OrasiDriver driver, int timeout, Element element) {
-		return syncPresent(driver, timeout, getSyncToFailTest(), element);
-	}
-
-	/**
-	 * Used in conjunction with WebElementPresent to determine if the desired
 	 * element is present in the DOM Will loop for the time out passed in
 	 * parameter timeout If object is not present within the time, handle error
 	 * based on returnError
 	 * 
 	 * @author Justin
+	 * @param driver - instance of the OrasiDriver
+	 * @param element - Element to sync too
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncTextInElement("text", 10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncTextInElement("text", 10, false)
 	 */
-	public static boolean syncPresent(OrasiDriver driver, int timeout, boolean returnError, Element element) {
+	public static boolean syncPresent(OrasiDriver driver, Element element,  Object... args) {
+	    int timeout = driver.getElementTimeout();
+	    boolean failTestOnSync = PageLoaded.getSyncToFailTest();
+	    try{
+    	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
+    	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
+	    }catch(ArrayIndexOutOfBoundsException aiobe){}
 		boolean found = false;
 		long timeLapse;
 		StopWatch stopwatch = new StopWatch();
@@ -328,7 +321,7 @@ public class PageLoaded {
 
 		driver.setElementTimeout(currentTimeout);
 
-		if (!found && returnError) {
+		if (!found && failTestOnSync) {
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: " + element.getElementLocatorInfo()
 					+ " </b>] is not <b>PRESENT</b> on the page after [ "
 					+ (timeLapse) / 1000.0 + " ] seconds.</i>");
@@ -340,41 +333,32 @@ public class PageLoaded {
 	}
 
 	/**
-	 *
-	 * Used in conjunction with WebObjectVisible to determine if the desired
-	 * element is visible on the screen Will loop for the time out listed in
-	 * org.orasi.chameleon.CONSTANT.TIMEOUT If object is not visible within the
-	 * time, throw an error
-	 * 
-	 * @author Justin
-	 */
-	public static boolean syncVisible(OrasiDriver driver, Element element) {
-		return syncVisible(driver, driver.getElementTimeout(),getSyncToFailTest(),  element);
-	}
-
-	/**
-	 * Used in conjunction with WebObjectVisible to determine if the desired
-	 * element is visible on the screen Will loop for the time out passed in the
-	 * variable timeout If object is not visible within the time, throw an error
-	 * 
-	 * @author Justin
-	 * 
-	 */
-	public static boolean syncVisible(OrasiDriver driver, int timeout, Element element) {
-		return syncVisible(driver, timeout, getSyncToFailTest(), element);
-	}
-
-	/**
 	 * Used in conjunction with WebObjectVisible to determine if the desired
 	 * element is visible on the screen Will loop for the time out passed in the
 	 * variable timeout If object is not visible within the time, handle the
 	 * error based on the boolean
 	 *
 	 * @author Justin
-	 *
+	 * @param driver - instance of the OrasiDriver
+	 * @param element - Element to sync too
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncTextInElement("text", 10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncTextInElement("text", 10, false)
 	 */
-	public static boolean syncVisible(OrasiDriver driver, int timeout, boolean returnError, Element element) {
-		boolean found = false;
+	public static boolean syncVisible(OrasiDriver driver, Element element,  Object... args) {
+	    int timeout = driver.getElementTimeout();
+	    boolean failTestOnSync = PageLoaded.getSyncToFailTest();
+	    try{
+    	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
+    	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
+	    }catch(ArrayIndexOutOfBoundsException aiobe){}
+	    boolean found = false;
 		long timeLapse;
 		StopWatch stopwatch = new StopWatch();
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: " + element.getElementLocatorInfo()
@@ -395,7 +379,7 @@ public class PageLoaded {
 		stopwatch.reset();
 
 		driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
-		if (!found && returnError) {
+		if (!found && failTestOnSync) {
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: " + element.getElementLocatorInfo()
 					+ " </b>] is not <b>VISIBLE</b> on the page after [ "
 					+ (timeLapse) / 1000.0 + " ] seconds.</i>");
@@ -406,29 +390,6 @@ public class PageLoaded {
 		return found;
 	}
 
-	/**
-	 * Used in conjunction with WebObjectVisible to determine if the desired
-	 * element is hidden from the screen Will loop for the time out listed in
-	 * org.orasi.chameleon.CONSTANT.TIMEOUT If object is not visible within the
-	 * time, throw an error
-	 * 
-	 * @author Justin
-	 */
-	public static boolean syncHidden(OrasiDriver driver, Element element) {
-		return syncHidden(driver, driver.getElementTimeout(),getSyncToFailTest(),  element);
-	}
-
-	/**
-	 * Used in conjunction with WebObjectVisible to determine if the desired
-	 * element is hidden from the screen Will loop for the time out listed in
-	 * org.orasi.chameleon.CONSTANT.TIMEOUT If object is not visible within the
-	 * time, throw an error
-	 * 
-	 * @author Justin
-	 */
-	public static boolean syncHidden(OrasiDriver driver, int timeout, Element element) {
-		return syncHidden(driver, timeout, getSyncToFailTest(), element);
-	}
 
 	/**
 	 * Used in conjunction with WebObjectVisible to determine if the desired
@@ -437,9 +398,26 @@ public class PageLoaded {
 	 * error based on the boolean
 	 * 
 	 * @author Justin
+	 * @param driver - instance of the OrasiDriver
+	 * @param element - Element to sync too
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncTextInElement("text", 10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncTextInElement("text", 10, false)
 	 */
-	public static boolean syncHidden(OrasiDriver driver, int timeout, boolean returnError, Element element) {
-		boolean found = false;
+	public static boolean syncHidden(OrasiDriver driver, Element element,  Object... args) {
+	    int timeout = driver.getElementTimeout();
+	    boolean failTestOnSync = PageLoaded.getSyncToFailTest();
+	    try{
+    	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
+    	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
+	    }catch(ArrayIndexOutOfBoundsException aiobe){}
+	    boolean found = false;
 		long timeLapse;
 		StopWatch stopwatch = new StopWatch();
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: " + element.getElementLocatorInfo()
@@ -458,7 +436,7 @@ public class PageLoaded {
 		stopwatch.reset();
 
 		driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
-		if (!found && returnError) {
+		if (!found && failTestOnSync) {
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: " + element.getElementLocatorInfo()
 					+ " </b>] is not <b>HIDDEN</b> on the page after [ "
 					+ (timeLapse) / 1000.0 + " ] seconds.</i>");
@@ -470,42 +448,32 @@ public class PageLoaded {
 	}
 
 	/**
-	 *
-	 * Used in conjunction with WebObjectEnabled to determine if the desired
-	 * element is enabled on the screen Will loop for the time out listed in
-	 * org.orasi.chameleon.CONSTANT.TIMEOUT If object is not enabled within the
-	 * time, throw an error
-	 * 
-	 * @author Justin
-	 */
-	public static boolean syncEnabled(OrasiDriver driver, Element element) {
-		return syncEnabled(driver, driver.getElementTimeout(),getSyncToFailTest(),  element);
-	}
-
-	/**
-	 * 
-	 * Used in conjunction with WebObjectEnabled to determine if the desired
-	 * element is enabled on the screen Will loop for the time out passed in the
-	 * variable timeout If object is not enabled within the time, throw an error
-	 * 
-	 * @author Justin
-	 * 
-	 */
-	public static boolean syncEnabled(OrasiDriver driver, int timeout, Element element) {
-		return syncEnabled(driver, timeout, getSyncToFailTest(), element);
-	}
-
-	/**
 	 * Used in conjunction with WebObjectEnabled to determine if the desired
 	 * element is enabled on the screen Will loop for the time out passed in the
 	 * variable timeout If object is not enabled within the time, handle the
 	 * error based on the boolean
 	 *
 	 * @author Justin
-	 *
+	 * @param driver - instance of the OrasiDriver
+	 * @param element - Element to sync too
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncTextInElement("text", 10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncTextInElement("text", 10, false)
 	 */
-	public static boolean syncEnabled(OrasiDriver driver, int timeout, boolean returnError, Element element) {
-		boolean found = false;
+	public static boolean syncEnabled(OrasiDriver driver, Element element,  Object... args) {
+	    int timeout = driver.getElementTimeout();
+	    boolean failTestOnSync = PageLoaded.getSyncToFailTest();
+	    try{
+    	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
+    	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
+	    }catch(ArrayIndexOutOfBoundsException aiobe){}
+	    boolean found = false;
 		long timeLapse;
 		StopWatch stopwatch = new StopWatch();
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: " + element.getElementLocatorInfo()
@@ -526,7 +494,7 @@ public class PageLoaded {
 		stopwatch.reset();
 
 		driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
-		if (!found && returnError) {
+		if (!found && failTestOnSync) {
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: " + element.getElementLocatorInfo()
 					+ " </b>] is not <b>ENABLED</b> on the page after [ "
 					+ (timeLapse) / 1000.0 + " ] seconds.</i>");
@@ -537,32 +505,7 @@ public class PageLoaded {
 		return found;
 	}
 
-	/**
-	 *
-	 * Used in conjunction with WebObjectEnabled to determine if the desired
-	 * element is disabled on the screen Will loop for the time out listed in
-	 * org.orasi.chameleon.CONSTANT.TIMEOUT If object is not disabled within the
-	 * time, throw an error
-	 * 
-	 * @author Justin
-	 */
-	public static boolean syncDisabled(OrasiDriver driver, Element element) {
-		return syncDisabled(driver, driver.getElementTimeout(), getSyncToFailTest(),  element);
-	}
-
-	/**
-	 * 
-	 * Used in conjunction with WebObjectDisabled to determine if the desired
-	 * element is disabled on the screen Will loop for the time out passed in
-	 * the variable timeout If object is not disabled within the time, throw an
-	 * error
-	 * 
-	 * @author Justin
-	 * 
-	 */
-	public static boolean syncDisabled(OrasiDriver driver, int timeout, Element element) {
-		return syncDisabled(driver, timeout, getSyncToFailTest(), element);
-	}
+	
 
 	/**
 	 * Used in conjunction with WebObjectDisabled to determine if the desired
@@ -571,9 +514,25 @@ public class PageLoaded {
 	 * the error based on the boolean
 	 *
 	 * @author Justin
-	 *
+	 * @param driver - instance of the OrasiDriver
+	 * @param element - Element to sync too
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncTextInElement("text", 10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncTextInElement("text", 10, false)
 	 */
-	public static boolean syncDisabled(OrasiDriver driver, int timeout, boolean returnError, Element element) {
+	public static boolean syncDisabled(OrasiDriver driver, Element element, Object... args) {
+	    int timeout = driver.getElementTimeout();
+	    boolean failTestOnSync = PageLoaded.getSyncToFailTest();
+	    try{
+    	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
+    	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
+	    }catch(ArrayIndexOutOfBoundsException aiobe){}
 		boolean found = false;
 		long timeLapse;
 		StopWatch stopwatch = new StopWatch();
@@ -594,7 +553,7 @@ public class PageLoaded {
 		stopwatch.reset();
 
 		driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
-		if (!found && returnError) {
+		if (!found && failTestOnSync) {
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: " + element.getElementLocatorInfo()
 					+ " </b>] is not <b>DISABLED</b> on the page after [ "
 					+ (timeLapse) / 1000.0 + " ] seconds.</i>");
@@ -606,42 +565,32 @@ public class PageLoaded {
 	}
 
 	/**
-	 *
-	 * Used in conjunction with WebObjectText Present to determine if the
-	 * desired text is present in the desired element Will loop for the time out
-	 * listed in org.orasi.chameleon.CONSTANT.TIMEOUT If text is not present
-	 * within the time, throw an error
-	 * 
-	 * @author Justin
-	 */
-	public static boolean syncTextInElement(OrasiDriver driver, String text, Element element) {
-		return syncTextInElement(driver, text, driver.getElementTimeout(), getSyncToFailTest(), element);
-	}
-
-	/**
-	 * 
-	 * Used in conjunction with WebObjectText Present to determine if the
-	 * desired text is present in the desired element Will loop for the time out
-	 * passed in the variable timeout If text is not present within the time,
-	 * throw an error
-	 * 
-	 * @author Justin
-	 * 
-	 */
-	public static boolean syncTextInElement(OrasiDriver driver, String text, int timeout, Element element) {
-		return syncTextInElement(driver, text, timeout, getSyncToFailTest(), element);
-	}
-
-	/**
 	 * Used in conjunction with WebObjectText Present to determine if the
 	 * desired text is present in the desired element Will loop for the time out
 	 * passed in the variable timeout If text is not present within the time,
 	 * handle the error based on the boolean
 	 *
 	 * @author Justin
-	 *
+	 * @param driver - instance of the OrasiDriver
+	 * @param element - Element to sync too
+	 * @param text	(Required) The text the element should contain in either its text or value attribute
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncTextInElement("text", 10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncTextInElement("text", 10, false)
 	 */
-	public static boolean syncTextInElement(OrasiDriver driver, String text, int timeout, boolean returnError, Element element) {
+	public static boolean syncTextInElement(OrasiDriver driver, String text, Element element, Object... args) {
+	    int timeout = driver.getElementTimeout();
+	    boolean failTestOnSync = PageLoaded.getSyncToFailTest();
+	    try{
+    	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
+    	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
+	    }catch(ArrayIndexOutOfBoundsException aiobe){}
 		boolean found = false;
 		long timeLapse;
 		StopWatch stopwatch = new StopWatch();
@@ -662,7 +611,7 @@ public class PageLoaded {
 		stopwatch.reset();
 
 		driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
-		if (!found && returnError) {
+		if (!found && failTestOnSync) {
 			TestReporter.interfaceLog(
 					"<i>Element [<b>@FindBy: " + element.getElementLocatorInfo() + " </b>] did not contain the text [ " + text
 							+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
@@ -673,6 +622,300 @@ public class PageLoaded {
 		return found;
 	}
 
+
+	/**
+	 * Used in conjunction with WebObjectText Present to determine if the
+	 * desired text is present in the desired element Will loop for the time out
+	 * passed in the variable timeout If text is not present within the time,
+	 * handle the error based on the boolean
+	 *
+	 * @author Justin
+	 * @param driver - instance of the OrasiDriver
+	 * @param element - Element to sync too
+	 * @param regex (Required) The regular expression that should match to text the element should contain in either its text or 'value' attribute
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncTextInElement("text", 10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncTextInElement("text", 10, false)
+	 */
+	public static boolean syncTextMatchesInElement(OrasiDriver driver, String regex, Element element, Object... args) {
+	    int timeout = driver.getElementTimeout();
+	    boolean failTestOnSync = PageLoaded.getSyncToFailTest();
+	    try{
+    	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
+    	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
+	    }catch(ArrayIndexOutOfBoundsException aiobe){}
+		boolean found = false;
+		long timeLapse;
+		StopWatch stopwatch = new StopWatch();
+		TestReporter.interfaceLog("<i>Syncing to text regular expression [<b>" + regex + "</b> ] in element [<b>@FindBy: "
+				+ element.getElementLocatorInfo() + "</b> ] to be displayed within [ <b>" + timeout + "</b> ] seconds.</i>");
+		int currentTimeout = driver.getElementTimeout();
+		driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
+		stopwatch.start();
+		do {
+			if (webElementTextMatches(driver, element, regex)) {
+				found = true;
+				break;
+			}
+
+		} while (stopwatch.getTime() / 1000.0 < (long) timeout);
+		stopwatch.stop();
+		timeLapse = stopwatch.getTime();
+		stopwatch.reset();
+
+		driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
+		if (!found && failTestOnSync) {
+			TestReporter.interfaceLog(
+					"<i>Element [<b>@FindBy: " + element.getElementLocatorInfo() + " </b>] did not contain the text [ " + regex
+							+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
+			throw new RuntimeException(
+					"Element [ @FindBy: " + element.getElementLocatorInfo() + " ] did not contain the text [ " + regex
+							+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.");
+		}
+		return found;
+	}
+
+	/**
+	 * Used in conjunction with WebObjectText Present to determine if the
+	 * desired text is present in the desired element Will loop for the time out
+	 * passed in the variable timeout If text is not present within the time,
+	 * handle the error based on the boolean
+	 *
+	 * @author Justin
+	 * @param driver - instance of the OrasiDriver
+	 * @param element - Element to sync too
+	 * @param attribute - Element attribute to view
+	 * @param value	(Required) The text the element attribute should contain in either its text or value attribute
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncTextInElement("text", 10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncTextInElement("text", 10, false)
+	 */
+	public static boolean syncAttributeContainsValue(OrasiDriver driver, String attribute, String value, Element element, Object... args) {
+	    int timeout = driver.getElementTimeout();
+	    boolean failTestOnSync = PageLoaded.getSyncToFailTest();
+	    try{
+    	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
+    	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
+	    }catch(ArrayIndexOutOfBoundsException aiobe){}
+		boolean found = false;
+		long timeLapse;
+		StopWatch stopwatch = new StopWatch();
+		TestReporter.interfaceLog("<i>Syncing to attribute [<b>" + attribute + "</b> ] to contain [<b>" + value + "</b> ] in element [<b>@FindBy: "
+				+ element.getElementLocatorInfo() + "</b> ] to be displayed within [ <b>" + timeout + "</b> ] seconds.</i>");
+		int currentTimeout = driver.getElementTimeout();
+		driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
+		stopwatch.start();
+		do {
+			if (webElementAttributePresent(driver, element, attribute, value)) {
+				found = true;
+				break;
+			}
+
+		} while (stopwatch.getTime() / 1000.0 < (long) timeout);
+		stopwatch.stop();
+		timeLapse = stopwatch.getTime();
+		stopwatch.reset();
+
+		driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
+		if (!found && failTestOnSync) {
+			TestReporter.interfaceLog(
+					"<i>Element [<b>@FindBy: " + element.getElementLocatorInfo() + " </b>] attribute [<b>" + attribute + "</b> ] did not contain the text [ " + value
+							+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
+			throw new RuntimeException(
+					"Element [ @FindBy: " + element.getElementLocatorInfo() + " ]attribute [" + attribute + "] did not contain the text [ " + value
+							+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.");
+		}
+		return found;
+	}
+	
+	/**
+	 * Used in conjunction with WebObjectText Present to determine if the
+	 * desired text is present in the desired element Will loop for the time out
+	 * passed in the variable timeout If text is not present within the time,
+	 * handle the error based on the boolean
+	 *
+	 * @author Justin
+	 * @param driver - instance of the OrasiDriver
+	 * @param element - Element to sync too
+	 * @param attribute - Element attribute to view
+	 * @param regex	(Required) The regular expression that should match the text of the element attribute 
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncTextInElement("text", 10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncTextInElement("text", 10, false)
+	 */
+	public static boolean syncAttributeMatchesValue(OrasiDriver driver, String attribute, String regex, Element element, Object... args) {
+	    int timeout = driver.getElementTimeout();
+	    boolean failTestOnSync = PageLoaded.getSyncToFailTest();
+	    try{
+    	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
+    	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
+	    }catch(ArrayIndexOutOfBoundsException aiobe){}
+		boolean found = false;
+		long timeLapse;
+		StopWatch stopwatch = new StopWatch();
+		TestReporter.interfaceLog("<i>Syncing to attribute [<b>" + attribute + "</b> ] to match the regular expression of [<b>" + regex + "</b> ] in element [<b>@FindBy: "
+				+ element.getElementLocatorInfo() + "</b> ] to be displayed within [ <b>" + timeout + "</b> ] seconds.</i>");
+		int currentTimeout = driver.getElementTimeout();
+		driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
+		stopwatch.start();
+		do {
+			if (webElementAttributeMatches(driver, element, attribute, regex)) {
+				found = true;
+				break;
+			}
+
+		} while (stopwatch.getTime() / 1000.0 < (long) timeout);
+		stopwatch.stop();
+		timeLapse = stopwatch.getTime();
+		stopwatch.reset();
+
+		driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
+		if (!found && failTestOnSync) {
+			TestReporter.interfaceLog(
+					"<i>Element [<b>@FindBy: " + element.getElementLocatorInfo() + " </b>] attribute [<b>" + attribute + "</b> ] did not match the regular expression of [ " + regex
+							+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
+			throw new RuntimeException(
+					"Element [ @FindBy: " + element.getElementLocatorInfo() + " ]attribute [" + attribute + "] did not match the regular expression of [ " + regex
+							+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.");
+		}
+		return found;
+	}
+
+	/**
+	 * Used in conjunction with WebObjectText Present to determine if the
+	 * desired text is present in the desired element Will loop for the time out
+	 * passed in the variable timeout If text is not present within the time,
+	 * handle the error based on the boolean
+	 *
+	 * @author Justin
+	 * @param driver - instance of the OrasiDriver
+	 * @param element - Element to sync too
+	 * @param cssProperty - Element CSS Property to view
+	 * @param value	(Required) The text the element attribute should contain in either its text or value attribute
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncTextInElement("text", 10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncTextInElement("text", 10, false)
+	 */
+	public static boolean syncCssContainsValue(OrasiDriver driver, String cssProperty, String value, Element element, Object... args) {
+	    int timeout = driver.getElementTimeout();
+	    boolean failTestOnSync = PageLoaded.getSyncToFailTest();
+	    try{
+    	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
+    	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
+	    }catch(ArrayIndexOutOfBoundsException aiobe){}
+		boolean found = false;
+		long timeLapse;
+		StopWatch stopwatch = new StopWatch();
+		TestReporter.interfaceLog("<i>Syncing to CSS Property [<b>" + cssProperty + "</b> ] to contain [<b>" + value + "</b> ] in element [<b>@FindBy: "
+				+ element.getElementLocatorInfo() + "</b> ] to be displayed within [ <b>" + timeout + "</b> ] seconds.</i>");
+		int currentTimeout = driver.getElementTimeout();
+		driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
+		stopwatch.start();
+		do {
+			if (webElementCssPropertyPresent(driver, element, cssProperty, value)) {
+				found = true;
+				break;
+			}
+
+		} while (stopwatch.getTime() / 1000.0 < (long) timeout);
+		stopwatch.stop();
+		timeLapse = stopwatch.getTime();
+		stopwatch.reset();
+
+		driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
+		if (!found && failTestOnSync) {
+			TestReporter.interfaceLog(
+					"<i>Element [<b>@FindBy: " + element.getElementLocatorInfo() + " </b>] CSS Property [<b>" + cssProperty  + "</b> ] did not contain the text [ " + value
+							+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
+			throw new RuntimeException( "Element [ @FindBy: " + element.getElementLocatorInfo() + " ] CSS Property [" + cssProperty  + " ] did not contain the text [ " + value
+							+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.");
+		}
+		return found;
+	}
+	
+	/**
+	 * Used in conjunction with WebObjectText Present to determine if the
+	 * desired text is present in the desired element Will loop for the time out
+	 * passed in the variable timeout If text is not present within the time,
+	 * handle the error based on the boolean
+	 *
+	 * @author Justin
+	 * @param driver - instance of the OrasiDriver
+	 * @param element - Element to sync too
+	 * @param cssProperty - Element CSS Property to match
+	 * @param regex	(Required) The regular expression that should match the text of the element CSS Property 
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncTextInElement("text", 10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncTextInElement("text", 10, false)
+	 */
+	public static boolean syncCssMatchesValue(OrasiDriver driver, String cssProperty, String regex, Element element, Object... args) {
+	    int timeout = driver.getElementTimeout();
+	    boolean failTestOnSync = PageLoaded.getSyncToFailTest();
+	    try{
+    	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
+    	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
+	    }catch(ArrayIndexOutOfBoundsException aiobe){}
+		boolean found = false;
+		long timeLapse;
+		StopWatch stopwatch = new StopWatch();
+		TestReporter.interfaceLog("<i>Syncing to CSS Property [<b>" + cssProperty + "</b> ] to contain [<b>" + regex + "</b> ] in element [<b>@FindBy: "
+				+ element.getElementLocatorInfo() + "</b> ] to be displayed within [ <b>" + timeout + "</b> ] seconds.</i>");
+		int currentTimeout = driver.getElementTimeout();
+		driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
+		stopwatch.start();
+		do {
+			if (webElementCssPropertyMatches(driver, element, cssProperty, regex)) {
+				found = true;
+				break;
+			}
+
+		} while (stopwatch.getTime() / 1000.0 < (long) timeout);
+		stopwatch.stop();
+		timeLapse = stopwatch.getTime();
+		stopwatch.reset();
+
+		driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
+		if (!found && failTestOnSync) {
+			TestReporter.interfaceLog(
+					"<i>Element [<b>@FindBy: " + element.getElementLocatorInfo() + " </b>] CSS Property [<b>" + cssProperty  + "</b> ] did not match the regular expression of [ " + regex
+							+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
+			throw new RuntimeException(
+					"Element [ @FindBy: " + element.getElementLocatorInfo() + " ] CSS Property [" + cssProperty  + "] did not match the regular expression of [ " + regex
+							+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.");
+		}
+		return found;
+	}
+	
 	/**
 	 * Use WebDriver Wait to determine if object is present in the DOM or not
 	 * 

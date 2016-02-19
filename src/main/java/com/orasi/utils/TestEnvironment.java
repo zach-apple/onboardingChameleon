@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.ITestContext;
@@ -436,10 +437,12 @@ public class TestEnvironment {
 					caps = DesiredCapabilities.internetExplorer();
 					caps.setCapability("ignoreZoomSetting", true);
 					caps.setCapability("enablePersistentHover", false);
+					caps.setCapability(InternetExplorerDriver.FORCE_CREATE_PROCESS, true);
+					caps.setCapability(InternetExplorerDriver.IE_SWITCHES, "-private");
 					file = new File(
 							this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "IEDriverServer.exe").getPath());
 					System.setProperty("webdriver.ie.driver", file.getAbsolutePath());
-					caps = DesiredCapabilities.internetExplorer();
+					//caps = DesiredCapabilities.internetExplorer();
 
 				}
 				// Chrome
