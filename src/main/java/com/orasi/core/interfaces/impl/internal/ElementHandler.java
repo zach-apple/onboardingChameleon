@@ -1,6 +1,8 @@
 package com.orasi.core.interfaces.impl.internal;
 
 import com.orasi.core.interfaces.Element;
+import com.orasi.utils.Constants;
+import com.orasi.utils.OrasiDriver;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -11,6 +13,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
 
 import static com.orasi.core.interfaces.impl.internal.ImplementedByProcessor.getWrapperClass;
 
@@ -53,14 +56,24 @@ public class ElementHandler  implements InvocationHandler {
 	@Override
     public Object invoke(Object object, Method method, Object[] objects) throws Throwable {
     	WebElement element = null;
-    	//WebDriver driver = getDriver();
-    	//driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+    
+    	if(driver != null){
+    	    driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+    	}
     	try{        	        
         	element = locator.findElement();
         }catch(WebDriverException | ClassCastException e){
         	return false;
         }
-    //	driver.manage().timeouts().implicitlyWait(getDefaultTestTimeout(), TimeUnit.SECONDS);
+    	
+    	if(driver != null){
+    	    if(driver instanceof OrasiDriver){
+    		driver.manage().timeouts().implicitlyWait(((OrasiDriver)driver).getElementTimeout(), TimeUnit.SECONDS);
+    	    }else{
+    		driver.manage().timeouts().implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
+    	    }
+    	}
+    	
         if ("getWrappedElement".equals(method.getName())) {
             return element;
         }
@@ -68,6 +81,7 @@ public class ElementHandler  implements InvocationHandler {
         if ("getWrappedDriver".equals(method.getName())) {
             return driver;
         }
+        
         Constructor cons = wrappingType.getConstructor(WebElement.class);
         Object thing = cons.newInstance(element);
         try {

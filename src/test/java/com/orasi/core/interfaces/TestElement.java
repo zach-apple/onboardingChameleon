@@ -254,17 +254,10 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncPresentNegative")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", expectedExceptions=RuntimeException.class)
 	public void syncPresentNegative() {
-		boolean pass = false;
-		try {
-			Element element = getDriver().findElement(By.id("NoElement"));
-			element.syncPresent();
-		} catch (RuntimeException rte) {
-			pass = true;
-		}
-
-		Assert.assertTrue(pass);
+		Element element = getDriver().findElement(By.id("NoElement"));
+		element.syncPresent();		
 	}
 
 	@Features("Element Interfaces")
@@ -288,17 +281,10 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncDisabledBasicNegative")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = { "syncDisabledBasic" })
+	@Test(groups = { "regression", "element" }, dependsOnMethods = { "syncDisabledBasic" }, expectedExceptions=RuntimeException.class)
 	public void syncDisabledBasicNegative() {
-		boolean pass = false;
-		try {
-			Element element = getDriver().findElement(By.id("text1"));
-			element.syncDisabled();
-		} catch (RuntimeException rte) {
-			pass = true;
-		}
-
-		Assert.assertTrue(pass);
+		Element element = getDriver().findElement(By.id("text1"));
+		element.syncDisabled();
 	}
 
 	@Features("Element Interfaces")
@@ -331,17 +317,10 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncHiddenBasicNegative")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", expectedExceptions=RuntimeException.class)
 	public void syncHiddenBasicNegative() {
-		boolean pass = false;
-		try {
-			Element element = getDriver().findElement(By.id("text1"));
-			element.syncHidden();
-		} catch (RuntimeException rte) {
-			pass = true;
-		}
-
-		Assert.assertTrue(pass);
+		Element element = getDriver().findElement(By.id("text1"));
+		element.syncHidden();
 	}
 
 	@Features("Element Interfaces")
@@ -374,17 +353,10 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncVisibleBasicNegative")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", expectedExceptions=RuntimeException.class)
 	public void syncVisibleBasicNegative() {
-		boolean pass = false;
-		try {
-			Element element = getDriver().findElement(By.id("hidden"));
-			element.syncVisible();
-		} catch (RuntimeException rte) {
-			pass = true;
-		}
-
-		Assert.assertTrue(pass);
+		Element element = getDriver().findElement(By.id("hidden"));
+		element.syncVisible();
 	}
 
 	@Features("Element Interfaces")
@@ -417,17 +389,10 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncEnabledBasicNegative")
-	@Test(groups = { "regression", "element" })
+	@Test(groups = { "regression", "element" }, expectedExceptions=RuntimeException.class)
 	public void syncEnabledBasicNegative() {
-		boolean pass = false;
-		try {
-			Element element = getDriver().findElement(By.id("disable"));
-			element.syncEnabled();
-		} catch (RuntimeException rte) {
-			pass = true;
-		}
-
-		Assert.assertTrue(pass);
+	    Element element = getDriver().findElement(By.id("disable"));
+	    element.syncEnabled();
 	}
 
 	@Features("Element Interfaces")
@@ -460,17 +425,10 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncTextInElementBasicNegative")
-	@Test(groups = { "regression", "interfaces", "element" })
+	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=RuntimeException.class)
 	public void syncTextInElementBasicNegative() {
-		boolean pass = false;
-		try {
-			Element element = getDriver().findElement(By.id("pageheader"));
-			element.syncTextInElement("Loading");
-		} catch (RuntimeException rte) {
-			pass = true;
-		}
-
-		Assert.assertTrue(pass);
+		Element element = getDriver().findElement(By.id("pageheader"));
+		element.syncTextInElement("Loading");
 	}
 
 	@Features("Element Interfaces")
@@ -490,4 +448,223 @@ public class TestElement extends TestEnvironment {
 		Element element = getDriver().findElement(By.id("pageheader"));
 		Assert.assertFalse(element.syncTextInElement("negative", 2, false));
 	}
+	
+
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("syncTextMatchesInElementBasic")
+	@Test(groups = { "regression", "interfaces", "element" })
+	public void syncTextMatchesInElementBasic() {
+		Element element = getDriver().findElement(By.id("pageheader"));
+		Assert.assertTrue(element.syncTextMatchesInElement("(.*test page)"));
+	}
+
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("syncTextMatchesInElementBasicNegative")
+	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=RuntimeException.class)
+	public void syncTextMatchesInElementBasicNegative() {
+		Element element = getDriver().findElement(By.id("pageheader"));
+		element.syncTextMatchesInElement("(.*tst pge)");
+	}
+
+	
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("syncTextMatchesInElementAdvanced")
+	@Test(groups = { "regression", "element" })
+	public void syncTextMatchesInElementAdvanced() {
+		Element element = getDriver().findElement(By.id("pageheader"));
+		Assert.assertTrue(element.syncTextMatchesInElement("(.*test page)", 5, false));
+	}
+
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("syncTextMatchesInElementAdvancedNegative")
+	@Test(groups = { "regression", "element" })
+	public void syncTextMatchesInElementAdvancedNegative() {
+		Element element = getDriver().findElement(By.id("pageheader"));
+		Assert.assertFalse(element.syncTextMatchesInElement("(.*tst pge)", 2, false));
+	}
+	
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("syncAttributeContainsValueBasic")
+	@Test(groups = { "regression", "interfaces", "element" })
+	public void syncAttributeContainsValueBasic() {
+		Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
+		Assert.assertTrue(element.syncAttributeContainsValue("type","radio"));
+	}
+
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("syncAttributeContainsValueBasicNegative")
+	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=RuntimeException.class)
+	public void syncAttributeContainsValueBasicNegative() {
+		Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
+		element.syncAttributeContainsValue("type","Radio");
+	}
+
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("syncAttributeContainsValueAdvanced")
+	@Test(groups = { "regression", "element" })
+	public void syncAttributeContainsValueAdvanced() {
+		Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
+		Assert.assertTrue(element.syncAttributeContainsValue("type","radio", 5, false));
+	}
+
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("syncAttributeContainsValueAdvancedNegative")
+	@Test(groups = { "regression", "element" })
+	public void syncAttributeContainsValueAdvancedNegative() {
+		Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
+		Assert.assertFalse(element.syncAttributeContainsValue("type","Rao", 2, false));
+	}
+	
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("syncAttributeMatchesValueBasic")
+	@Test(groups = { "regression", "interfaces", "element" })
+	public void syncAttributeMatchesValueBasic() {
+		Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
+		Assert.assertTrue(element.syncAttributeMatchesValue("type","(.*adi.*)"));
+	}
+
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("syncAttributeMatchesValueBasicNegative")
+	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=RuntimeException.class)
+	public void syncAttributeMatchesValueBasicNegative() {
+		Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
+		element.syncAttributeMatchesValue("type","(.*adi)");
+	}
+
+	
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("syncAttributeMatchesValueAdvanced")
+	@Test(groups = { "regression", "element" })
+	public void syncAttributeMatchesValueAdvanced() {
+		Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
+		Assert.assertTrue(element.syncAttributeMatchesValue("type","(.*adi.*)"));
+	}
+	
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("syncAttributeMatchesValueAdvancedNegative")
+	@Test(groups = { "regression", "element" })
+	public void syncAttributeMatchesValueAdvancedNegative() {
+		Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
+		Assert.assertFalse(element.syncAttributeMatchesValue("type","(.*adi)", 2, false));
+	}
+	
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("syncCssPropertyContainsValueBasic")
+	@Test(groups = { "regression", "interfaces", "element" })
+	public void syncCssPropertyContainsValueBasic() {
+		Element element = getDriver().findElement(By.id("buttonForText1"));
+		if (getBrowserUnderTest().equalsIgnoreCase("html")){
+		    Assert.assertTrue(element.syncCssPropertyContainsValue("type","transparent"));
+		}else{
+		    Assert.assertTrue(element.syncCssPropertyContainsValue("display","inline"));
+		}
+	}
+
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("syncCssPropertyContainsValueBasicNegative")
+	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=RuntimeException.class)
+	public void syncCssPropertyContainsValueBasicNegative() {
+		Element element = getDriver().findElement(By.id("buttonForText1"));
+		if (getBrowserUnderTest().equalsIgnoreCase("html")){
+		    element.syncCssPropertyContainsValue("type","transpar");
+		}else{
+		    element.syncCssPropertyContainsValue("display","Inline");
+		}
+	}
+
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("syncCssPropertyContainsValueAdvanced")
+	@Test(groups = { "regression", "element" })
+	public void syncCssPropertyContainsValueAdvanced() {
+		Element element = getDriver().findElement(By.id("buttonForText1"));
+		if (getBrowserUnderTest().equalsIgnoreCase("html")){
+		    Assert.assertTrue(element.syncCssPropertyContainsValue("type","transparent", 5, false));
+		}else{
+		    Assert.assertTrue(element.syncCssPropertyContainsValue("display","inline", 5, false));
+		}
+	}
+
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("syncCssPropertyContainsValueAdvancedNegative")
+	@Test(groups = { "regression", "element" })
+	public void syncCssPropertyContainsValueAdvancedNegative() {
+		Element element = getDriver().findElement(By.id("buttonForText1"));
+		if (getBrowserUnderTest().equalsIgnoreCase("html")){
+		    Assert.assertFalse(element.syncCssPropertyContainsValue("type","transpar", 2, false));
+		}else{
+		    Assert.assertFalse(element.syncCssPropertyContainsValue("display","Inline", 2, false));
+		}
+	}
+	
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("syncCssPropertyMatchesValueBasic")
+	@Test(groups = { "regression", "interfaces", "element" })
+	public void syncCssPropertyMatchesValueBasic() {
+	    
+		Element element = getDriver().findElement(By.id("buttonForText1"));
+		if (getBrowserUnderTest().equalsIgnoreCase("html")){
+		    Assert.assertTrue(element.syncCssPropertyMatchesValue("type","(.*trans.*)"));
+		}else{
+		    Assert.assertTrue(element.syncCssPropertyMatchesValue("display","(.*inline.*)"));
+		}
+	}
+
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("syncCssPropertyMatchesValueBasicNegative")
+	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=RuntimeException.class)
+	public void syncCssPropertyMatchesValueBasicNegative() {
+		Element element = getDriver().findElement(By.id("buttonForText1"));
+		if (getBrowserUnderTest().equalsIgnoreCase("html")){
+		    element.syncCssPropertyMatchesValue("type","(.*trans)");
+		}else{
+		    element.syncCssPropertyMatchesValue("display","(.*Inline.*)");
+		}
+	}
+
+	
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("syncCssPropertyMatchesValueAdvanced")
+	@Test(groups = { "regression", "element" })
+	public void syncCssPropertyMatchesValueAdvanced() {
+		Element element = getDriver().findElement(By.id("buttonForText1"));
+		if (getBrowserUnderTest().equalsIgnoreCase("html")){
+		    Assert.assertTrue(element.syncCssPropertyMatchesValue("type","(.*trans.*)", 2, false));
+		}else{
+		    Assert.assertTrue(element.syncCssPropertyMatchesValue("display","(.*inline.*)", 2, false));
+		}
+	}
+	
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("syncCssPropertyMatchesValueAdvancedNegative")
+	@Test(groups = { "regression", "element" })
+	public void syncCssPropertyMatchesValueAdvancedNegative() {
+		Element element = getDriver().findElement(By.id("buttonForText1"));
+		if (getBrowserUnderTest().equalsIgnoreCase("html")){
+		    Assert.assertFalse(element.syncCssPropertyMatchesValue("type","(.*Trans.*)", 2, false));
+		}else{
+		    Assert.assertFalse(element.syncCssPropertyMatchesValue("display","(.*Inline-Block.*)", 2, false));
+		}
+	}
+	
+	
 }
