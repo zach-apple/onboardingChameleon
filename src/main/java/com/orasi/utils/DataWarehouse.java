@@ -17,7 +17,7 @@ public class DataWarehouse {
 	}
 
 	/*
-	 * Method for adding data to the HashMap
+	 * Method for adding a new key and data to the HashMap.
 	 * @key Unique Identifier for the data
 	 * @value The value of data to be stored
 	 */
@@ -28,6 +28,9 @@ public class DataWarehouse {
 	    dataMap.put(key, value);
 	}
 	
+	/*
+	 * Method for updating an existing key in the map.
+	 */
 	public void update(String key, Object value) {
 	    if (!dataMap.containsKey(key)) {
 		throw new NoKeyFoundException("Failed to update " + key + " because the key doesn't exist.");
@@ -48,7 +51,7 @@ public class DataWarehouse {
 	}
 
 	/*
-	 * Method for retrieving the enter HashMap
+	 * Method for retrieving the HashMap
 	 */
 	public HashMap<String, Object> getDataHashMap() {
 	    return dataMap;
