@@ -58,6 +58,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	private static final long serialVersionUID = -657563735440878909L;
 	private WebDriver driver;
+	private DataWarehouse dataWarehouse;
 	private int currentPageTimeout = Constants.PAGE_TIMEOUT;
 	private int currentElementTimeout = Constants.ELEMENT_TIMEOUT;
 	private int currentScriptTimeout = Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT;
@@ -849,6 +850,16 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	public Page page() {
 		return new Page();
+	}
+	
+	/*
+	 * Method that returns the instance of the DataWarehouse
+	 */
+	public DataWarehouse data() {
+	    if (dataWarehouse == null) {
+		dataWarehouse = new DataWarehouse();
+	    }
+	    return dataWarehouse;
 	}
 
 	/**
