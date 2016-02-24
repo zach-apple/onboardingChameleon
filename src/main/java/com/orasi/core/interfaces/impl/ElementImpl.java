@@ -382,7 +382,7 @@ public class ElementImpl implements Element {
 	@Override
 	public void scrollIntoView() {
 
-		driver.executeJavaScript("arguments[0].scrollIntoView(true);", element);
+	    getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);", element);
 	}
 
 	@SuppressWarnings("rawtypes")
