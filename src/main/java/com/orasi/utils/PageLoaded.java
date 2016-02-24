@@ -1124,7 +1124,7 @@ public class PageLoaded {
 	    WebDriverWait wait = new WebDriverWait(driver, 0);
 
 	    try {
-		return wait.until(ExtendedExpectedConditions.textToMatchInElementCssProperty(element, cssProperty, value));
+		return wait.until(ExtendedExpectedConditions.textToBePresentInElementCssProperty(element, cssProperty, value));
 	    } catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException e) {
 		return false;
 	    }
