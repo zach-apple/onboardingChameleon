@@ -230,7 +230,7 @@ public class ExtendedExpectedConditions {
         } catch (StaleElementReferenceException e) {
             String elementText = driver.findElement(new ElementImpl(element).getElementLocator()).getCssValue(cssProperty);
             if (elementText != null) {
-	            return elementText.matches(text);
+	            return elementText.contains(text);
 	          } else {
 	            return false;
 	          }

@@ -580,7 +580,7 @@ public class TestElement extends TestEnvironment {
 	public void syncCssPropertyContainsValueBasicNegative() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
 		if (getBrowserUnderTest().equalsIgnoreCase("html")){
-		    element.syncCssPropertyContainsValue("type","transpar");
+		    element.syncCssPropertyContainsValue("type","transasdfpar");
 		}else{
 		    element.syncCssPropertyContainsValue("display","Inline");
 		}
@@ -606,7 +606,7 @@ public class TestElement extends TestEnvironment {
 	public void syncCssPropertyContainsValueAdvancedNegative() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
 		if (getBrowserUnderTest().equalsIgnoreCase("html")){
-		    Assert.assertFalse(element.syncCssPropertyContainsValue("type","transpar", 2, false));
+		    Assert.assertFalse(element.syncCssPropertyContainsValue("type","transasdfpar", 2, false));
 		}else{
 		    Assert.assertFalse(element.syncCssPropertyContainsValue("display","Inline", 2, false));
 		}
