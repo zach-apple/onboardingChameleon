@@ -8,8 +8,10 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
+import com.orasi.core.interfaces.impl.ElementImpl;
+
 public class ExtendedExpectedConditions {
-	/**
+    /**
     * Loop through windows for duration to see if it finds a title with exact queried text
     * @param title - Exact title of the Window to find
     * @return true once a window is found with exact title
@@ -109,7 +111,12 @@ public class ExtendedExpectedConditions {
           String elementText = element.getText();
           return elementText.matches(regex);
         } catch (StaleElementReferenceException e) {
-          return null;
+            String elementText = driver.findElement(new ElementImpl(element).getElementLocator()).getAttribute(regex);
+            if (elementText != null) {
+	            return elementText.matches(regex);
+	          } else {
+	            return false;
+	          }
         }
       }
 
@@ -144,7 +151,12 @@ public class ExtendedExpectedConditions {
             return false;
           }
         } catch (StaleElementReferenceException e) {
-          return null;
+            String elementText = driver.findElement(new ElementImpl(element).getElementLocator()).getAttribute(attribute);
+            if (elementText != null) {
+	            return elementText.matches(text);
+	          } else {
+	            return false;
+	          }
         }
       }
 
@@ -177,7 +189,12 @@ public class ExtendedExpectedConditions {
 	            return false;
 	          }
 	        } catch (StaleElementReferenceException e) {
-	          return null;
+	            String elementText = driver.findElement(new ElementImpl(element).getElementLocator()).getAttribute(attribute);
+	            if (elementText != null) {
+		            return elementText.matches(regex);
+		          } else {
+		            return false;
+		          }
 	        }
 	      }
 
@@ -211,7 +228,12 @@ public class ExtendedExpectedConditions {
             return false;
           }
         } catch (StaleElementReferenceException e) {
-          return null;
+            String elementText = driver.findElement(new ElementImpl(element).getElementLocator()).getCssValue(cssProperty);
+            if (elementText != null) {
+	            return elementText.matches(text);
+	          } else {
+	            return false;
+	          }
         }
       }
 
@@ -244,7 +266,12 @@ public class ExtendedExpectedConditions {
 	            return false;
 	          }
 	        } catch (StaleElementReferenceException e) {
-	          return null;
+	            String elementText = driver.findElement(new ElementImpl(element).getElementLocator()).getCssValue(cssProperty);
+	            if (elementText != null) {
+		            return elementText.matches(regex);
+		          } else {
+		            return false;
+		          }
 	        }
 	      }
 
@@ -275,8 +302,23 @@ public class ExtendedExpectedConditions {
 	  			} else {
 	  				return false;
 	  			}
+	    	  	}catch (StaleElementReferenceException sere){
+	    	  	WebElement refreshedElement =driver.findElement(new ElementImpl(element).getElementLocator());
+	    	  	Point location = refreshedElement.getLocation();
 
-	  		} catch (WebDriverException | ClassCastException e) {
+  			Dimension size = refreshedElement.getSize();
+  			if ((location.getX() > 0 & location.getY() > 0) | (size.getHeight() > 0 & size.getWidth() > 0)) {
+  				if (refreshedElement.getAttribute("hidden") != null)
+  				    if (refreshedElement.getAttribute("hidden").toLowerCase().equals("true")) return false;
+  				if (refreshedElement.getAttribute("type") != null) {
+  					if (refreshedElement.getAttribute("type").equals("hidden"))
+  						return false;
+  				}
+  				return true;
+  			} else {
+  				return false;
+  			}
+	  		} catch (WebDriverException | ClassCastException | NullPointerException e) {
 	  			return false;
 	  		}
 	      }
