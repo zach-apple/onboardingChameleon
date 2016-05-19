@@ -335,7 +335,7 @@ public class PageLoaded {
 		    "Element [ @FindBy: " + element.getElementLocatorInfo() + " ] is not PRESENT on the page after [ "
 			    + (timeLapse) / 1000.0 + " ] seconds.");
 	}
-	if(Highlight.getHighlightOnSuccess()) Highlight.highlightSuccess(driver, element);
+	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
 	return found;
     }
 
@@ -394,7 +394,7 @@ public class PageLoaded {
 		    "Element [ @FindBy: " + element.getElementLocatorInfo() + " ] is not VISIBLE on the page after [ "
 			    + (timeLapse) / 1000.0 + " ] seconds.", driver);
 	}
-	if(Highlight.getHighlightOnSuccess()) Highlight.highlightSuccess(driver, element);
+	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
 	return found;
     }
 
@@ -512,7 +512,7 @@ public class PageLoaded {
 		    "Element [ @FindBy: " + element.getElementLocatorInfo() + " ] is not ENABLED on the page after [ "
 			    + (timeLapse) / 1000.0 + " ] seconds.", driver);
 	}
-	if(Highlight.getHighlightOnSuccess()) Highlight.highlightSuccess(driver, element);
+	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
 	return found;
     }
 
@@ -573,7 +573,7 @@ public class PageLoaded {
 		    "Element [ @FindBy: " + element.getElementLocatorInfo() + " ] is not DISABLED on the page after [ "
 			    + (timeLapse) / 1000.0 + " ] seconds.", driver);
 	}
-	if(Highlight.getHighlightOnSuccess()) Highlight.highlightSuccess(driver, element);
+	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
 	return found;
     }
 
@@ -634,7 +634,7 @@ public class PageLoaded {
 		    + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.", driver);
 	}
 
-	if(Highlight.getHighlightOnSuccess()) Highlight.highlightSuccess(driver, element);
+	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
 	return found;
     }
 
@@ -695,7 +695,7 @@ public class PageLoaded {
 		    "Element [ @FindBy: " + element.getElementLocatorInfo() + " ] did not contain the text [ " + regex
 		    + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.", driver);
 	}
-	if(Highlight.getHighlightOnSuccess()) Highlight.highlightSuccess(driver, element);
+	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
 	return found;
     }
 
@@ -756,7 +756,7 @@ public class PageLoaded {
 		    "Element [ @FindBy: " + element.getElementLocatorInfo() + " ]attribute [" + attribute + "] did not contain the text [ " + value
 		    + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.", driver);
 	}
-	if(Highlight.getHighlightOnSuccess()) Highlight.highlightSuccess(driver, element);
+	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
 	return found;
     }
 
@@ -817,7 +817,7 @@ public class PageLoaded {
 		    "Element [ @FindBy: " + element.getElementLocatorInfo() + " ]attribute [" + attribute + "] did not match the regular expression of [ " + regex
 		    + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.", driver);
 	}
-	if(Highlight.getHighlightOnSuccess()) Highlight.highlightSuccess(driver, element);
+	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
 	return found;
     }
 
@@ -877,7 +877,7 @@ public class PageLoaded {
 	    throw new ElementCssValueNotMatchingException( "Element [ @FindBy: " + element.getElementLocatorInfo() + " ] CSS Property [" + cssProperty  + " ] did not contain the text [ " + value
 		    + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.", driver);
 	}
-	if(Highlight.getHighlightOnSuccess()) Highlight.highlightSuccess(driver, element);
+	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
 	return found;
     }
 
@@ -938,7 +938,7 @@ public class PageLoaded {
 		    "Element [ @FindBy: " + element.getElementLocatorInfo() + " ] CSS Property [" + cssProperty  + "] did not match the regular expression of [ " + regex
 		    + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.", driver);
 	}
-	if(Highlight.getHighlightOnSuccess()) Highlight.highlightSuccess(driver, element);
+	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
 	return found;
     }
 
