@@ -34,6 +34,10 @@ public class AutomationException extends RuntimeException{
 	    super("Automation Error: " + message);
 	    this.driver = driver;
 	}
+	public AutomationException(String message, OrasiDriver driver){
+	    super("Automation Error: " + message);
+	    this.driver = driver.getWebDriver();
+	}
 	
 	public AutomationException(String message, Throwable cause){
 		super("Automation Error: " + message, cause);
@@ -136,26 +140,26 @@ public class AutomationException extends RuntimeException{
 	  
 
 	private String browserName(WebDriver driver) {
-		if(driver instanceof HtmlUnitDriver) return ((HtmlUnitDriver) driver).getCapabilities().getBrowserName();
+	//	if(driver instanceof HtmlUnitDriver) return ((HtmlUnitDriver) driver).getCapabilities().getBrowserName();
 		return ((RemoteWebDriver) driver).getCapabilities().getBrowserName();
 	}
 
 	private String browserVersion(WebDriver driver) {
-		if(driver instanceof HtmlUnitDriver) return ((HtmlUnitDriver) driver).getCapabilities().getVersion();
+		//if(driver instanceof HtmlUnitDriver) return ((HtmlUnitDriver) driver).getCapabilities().getVersion();
 		return ((RemoteWebDriver) driver).getCapabilities().getVersion();
 	}
 	
 	private String sessionId(WebDriver driver) {
-		if(driver instanceof HtmlUnitDriver) return "N/A";
+		//if(driver instanceof HtmlUnitDriver) return "N/A";
 		return ((RemoteWebDriver) driver).getSessionId().toString().trim();
 	}
 
 	private String platformOS(WebDriver driver) {
-		if(driver instanceof HtmlUnitDriver) {
+		/*if(driver instanceof HtmlUnitDriver) {
 			return ((HtmlUnitDriver) driver).getCapabilities().getPlatform().name() + " "
 					+ ((HtmlUnitDriver) driver).getCapabilities().getPlatform().getMajorVersion() + "."
 					+ ((HtmlUnitDriver) driver).getCapabilities().getPlatform().getMinorVersion();
-		}
+		}*/
 		return ((RemoteWebDriver) driver).getCapabilities().getPlatform().name() + " "
 				+ ((RemoteWebDriver) driver).getCapabilities().getPlatform().getMajorVersion() + "."
 				+ ((RemoteWebDriver) driver).getCapabilities().getPlatform().getMinorVersion();
