@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.By.ByClassName;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -20,9 +21,11 @@ import org.openqa.selenium.internal.Locatable;
 
 import com.orasi.core.Beta;
 import com.orasi.core.interfaces.Element;
+import com.orasi.exception.AutomationException;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.PageLoaded;
 import com.orasi.utils.TestReporter;
+import com.orasi.utils.debugging.Highlight;
 
 /**
  * An implementation of the Element interface. Delegates its work to an
@@ -53,18 +56,18 @@ public class ElementImpl implements Element {
 	}
 
 	public void jsClick() {
-		getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();", element);
+		getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();", getWrappedElement());
 		TestReporter.interfaceLog("Clicked [ <b>@FindBy: " + getElementLocatorInfo() + " </b>]");
 	}
 
 	@Override
 	public void focus() {
-		new Actions(getWrappedDriver()).moveToElement(element).click().perform();
+		new Actions(getWrappedDriver()).moveToElement(getWrappedElement()).click().perform();
 	}
 
 	@Override
 	public void focusClick() {
-		new Actions(getWrappedDriver()).moveToElement(element).click().perform();
+		new Actions(getWrappedDriver()).moveToElement(getWrappedElement()).click().perform();
 		TestReporter.interfaceLog("Focus Clicked [ <b>@FindBy: " + getElementLocatorInfo() + " </b>]");
 	}
 
@@ -73,7 +76,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public Point getLocation() {
-		return element.getLocation();
+		return getWrappedElement().getLocation();
 	}
 
 	/**
@@ -81,7 +84,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public void submit() {
-		element.submit();
+	    getWrappedElement().submit();
 	}
 
 	/**
@@ -89,7 +92,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public String getAttribute(String name) {
-		return element.getAttribute(name);
+		return getWrappedElement().getAttribute(name);
 	}
 
 	/**
@@ -97,7 +100,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public String getCssValue(String propertyName) {
-		return element.getCssValue(propertyName);
+		return getWrappedElement().getCssValue(propertyName);
 	}
 
 	/**
@@ -106,7 +109,7 @@ public class ElementImpl implements Element {
 	@Override
 	public Dimension getSize() {
 		try {
-			return element.getSize();
+			return getWrappedElement().getSize();
 		} catch (WebDriverException wde) {
 			if (wde.getMessage().toLowerCase().contains("not implemented")) {
 				TestReporter.logFailure("getSize has not been implemented by EdgeDriver");
@@ -120,7 +123,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public List<WebElement> findElements(By by) {
-		return element.findElements(by);
+		return getWrappedElement().findElements(by);
 	}
 
 	/**
@@ -128,7 +131,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public String getText() {
-		return element.getText();
+		return getWrappedElement().getText();
 	}
 
 	/**
@@ -136,7 +139,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public String getTagName() {
-		return element.getTagName();
+		return getWrappedElement().getTagName();
 	}
 
 	/**
@@ -144,7 +147,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public WebElement findElement(By by) {
-		return element.findElement(by);
+		return getWrappedElement().findElement(by);
 	}
 
 	/**
@@ -152,7 +155,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public boolean isEnabled() {
-		return element.isEnabled();
+		return getWrappedElement().isEnabled();
 	}
 
 	/**
@@ -160,7 +163,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public boolean isDisplayed() {
-		return element.isDisplayed();
+		return getWrappedElement().isDisplayed();
 	}
 
 	/**
@@ -169,7 +172,7 @@ public class ElementImpl implements Element {
 	@Override
 	public boolean isSelected() {
 		try {
-			return element.isSelected();
+			return getWrappedElement().isSelected();
 		} catch (WebDriverException wde) {
 			if (wde.getMessage().toLowerCase().contains("not implemented")) {
 				TestReporter.logFailure(" isSelected has not been implemented by EdgeDriver");
@@ -202,15 +205,38 @@ public class ElementImpl implements Element {
 
 	@Override
 	public WebElement getWrappedElement() {
+	    try{
+		element.isDisplayed();
 		return element;
+	    }catch(NoSuchElementException | StaleElementReferenceException e){
+		reload();
+		return element;
+	    }
 	}
 
 	@Override
 	public OrasiDriver getWrappedDriver() {
 
 		WebDriver ldriver = null;
+		Field elementField = null;
+		Field privateStringField = null;
 		if (driver == null) {
-			Field privateStringField = null;
+		   if (element instanceof ElementImpl) {
+			try {
+				elementField = element.getClass().getDeclaredField("element");
+				elementField.setAccessible(true);
+				WebElement webelement =  (WebElement)elementField.get(element);
+				privateStringField = webelement.getClass().getDeclaredField("parent");
+				privateStringField.setAccessible(true);
+				ldriver =  (WebDriver)privateStringField.get(webelement);
+				OrasiDriver oDriver = new OrasiDriver();
+				oDriver.setDriver(ldriver);
+				return oDriver;
+				
+			}catch(NoSuchFieldException | IllegalArgumentException | IllegalAccessException | SecurityException e){
+			}	    
+		}else{
+			
 			try {
 				privateStringField = element.getClass().getDeclaredField("parent");
 				privateStringField.setAccessible(true);
@@ -221,6 +247,7 @@ public class ElementImpl implements Element {
 			} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException | SecurityException e) {
 				e.printStackTrace();
 			}
+		   }
 		}
 		return driver;
 	}
@@ -230,12 +257,12 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public Coordinates getCoordinates() {
-		return ((Locatable) element).getCoordinates();
+		return ((Locatable) getWrappedElement()).getCoordinates();
 	}
 
 	@Override
 	public boolean elementWired() {
-		return (element != null);
+		return (getWrappedElement() != null);
 	}
 
 	/**
@@ -250,28 +277,30 @@ public class ElementImpl implements Element {
 		String locator = "";
 		try {
 			locator = getElementLocatorAsString();
-			switch (locator) {
-			case "className":
+			switch (locator.toLowerCase().replace(" ", "")) {
+			case "classname":
 				by = By.className(getElementIdentifier());
 				break;
-			case "cssSelector":
+			case "cssselector":
 				by = By.cssSelector(getElementIdentifier());
 				break;
 			case "id":
 				by = By.id(getElementIdentifier());
 				break;
-			case "linkText":
+			case "linktext":
 				by = By.linkText(getElementIdentifier());
 				break;
 			case "name":
 				by = By.name(getElementIdentifier());
 				break;
-			case "tagName":
+			case "tagname":
 				by = By.tagName(getElementIdentifier());
 				break;
 			case "xpath":
 				by = By.xpath(getElementIdentifier());
 				break;
+			default:
+			    throw new AutomationException("Unknown Element Locator sent in: " + locator, getWrappedDriver());
 			}
 			return by;
 		} catch (Exception e) {
@@ -375,8 +404,7 @@ public class ElementImpl implements Element {
 
 	@Override
 	public void highlight() {
-
-		getWrappedDriver().executeJavaScript("arguments[0].style.border='3px solid red'", this);
+	    Highlight.highlight(getWrappedDriver(), getWrappedElement());
 	}
 
 	@Override
@@ -486,8 +514,8 @@ public class ElementImpl implements Element {
 	    int timeout = getWrappedDriver().getElementTimeout();
 	    boolean failTestOnSync = PageLoaded.getSyncToFailTest();
 	    try{
-    	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
-    	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
+        	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
+        	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
 	    return PageLoaded.syncHidden(getWrappedDriver(), new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
 	}
@@ -713,5 +741,19 @@ public class ElementImpl implements Element {
 	    
 		return PageLoaded.syncCssMatchesValue(getWrappedDriver(), cssProperty, value,  new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
 	}
+
+
+/*
+	@Override
+	public Rectangle getRect() {
+	    // TODO Auto-generated method stub
+	    return null;
+	}*/
+	
+	@Beta
+	protected void reload(){
+	    element = getWrappedDriver().findWebElement(getElementLocator());
+	}
+	
 	
 }
