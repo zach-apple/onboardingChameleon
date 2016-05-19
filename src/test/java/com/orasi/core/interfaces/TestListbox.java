@@ -1,8 +1,7 @@
 package com.orasi.core.interfaces;
 
 import com.orasi.core.interfaces.impl.ListboxImpl;
-import com.orasi.exception.AutomationException;
-import com.orasi.exception.automation.ListboxOptionNotFoundException;
+import com.orasi.exception.automation.OptionNotInListboxException;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -93,16 +92,11 @@ public class TestListbox extends TestEnvironment{
     @Features("Element Interfaces")
     @Stories("Listbox")
     @Title("selectNegative")
-	@Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="select")
+	@Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="select", expectedExceptions=OptionNotInListboxException.class)
 	public void selectNegative(){
 		Listbox listbox= getDriver().findListbox(By.id("singleSelect"));
-		boolean valid = false;
-		try{
-			listbox.select("text");
-		}catch (ListboxOptionNotFoundException lonfe){
-			valid = true;
-		}
-		Assert.assertTrue(valid);
+		listbox.select("text");
+		Assert.assertTrue(false);
 	}
 
     @Features("Element Interfaces")
@@ -129,17 +123,12 @@ public class TestListbox extends TestEnvironment{
     @Features("Element Interfaces")
     @Stories("Listbox")
     @Title("selectValueNegative")
-    @Test(groups ={"regression", "interfaces", "listbox"}, dependsOnMethods="select")
+    @Test(groups ={"regression", "interfaces", "listbox"}, dependsOnMethods="select", expectedExceptions=OptionNotInListboxException.class)
     public void selectValueNegative(){
         if(getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty() ) throw new SkipException("Test not valid for HTMLUnitDriver");
         Listbox listbox= getDriver().findListbox(By.id("singleSelect"));
-        boolean valid = false;
-        try{
-            listbox.selectValue("text");
-        }catch (ListboxOptionNotFoundException lonfe){
-            valid = true;
-        }
-        Assert.assertTrue(valid);
+        listbox.selectValue("text");
+        Assert.assertTrue(false);
     }
 
     @Features("Element Interfaces")
