@@ -431,6 +431,14 @@ public class TestEnvironment {
 				if (getBrowserUnderTest().equalsIgnoreCase("Firefox") || getBrowserUnderTest().equalsIgnoreCase("FF")) {
 					caps = DesiredCapabilities.firefox();
 				}
+				else if (getBrowserUnderTest().equalsIgnoreCase("Marionette")) {
+					caps = DesiredCapabilities.firefox();
+					caps.setCapability("marionette", true);
+					file = new File(
+						this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "marionette.exe").getPath());
+				System.setProperty("webdriver.gecko.driver", file.getAbsolutePath());
+				
+				}
 				// Internet explorer
 				else if (getBrowserUnderTest().equalsIgnoreCase("IE")
 						|| getBrowserUnderTest().replace(" ", "").equalsIgnoreCase("internetexplorer")) {

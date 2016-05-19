@@ -10,6 +10,13 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import com.orasi.exception.automation.ElementAttributeValueNotMatchingException;
+import com.orasi.exception.automation.ElementCssValueNotMatchingException;
+import com.orasi.exception.automation.ElementNotDisabledException;
+import com.orasi.exception.automation.ElementNotEnabledException;
+import com.orasi.exception.automation.ElementNotHiddenException;
+import com.orasi.exception.automation.ElementNotVisibleException;
+import com.orasi.exception.automation.TextInElementNotPresentException;
 import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestEnvironment;
 import ru.yandex.qatools.allure.annotations.Features;
@@ -281,7 +288,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncDisabledBasicNegative")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = { "syncDisabledBasic" }, expectedExceptions=RuntimeException.class)
+	@Test(groups = { "regression", "element" }, dependsOnMethods = { "syncDisabledBasic" }, expectedExceptions=ElementNotDisabledException.class)
 	public void syncDisabledBasicNegative() {
 		Element element = getDriver().findElement(By.id("text1"));
 		element.syncDisabled();
@@ -317,7 +324,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncHiddenBasicNegative")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", expectedExceptions=RuntimeException.class)
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", expectedExceptions=ElementNotHiddenException.class)
 	public void syncHiddenBasicNegative() {
 		Element element = getDriver().findElement(By.id("text1"));
 		element.syncHidden();
@@ -353,7 +360,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncVisibleBasicNegative")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", expectedExceptions=RuntimeException.class)
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", expectedExceptions=ElementNotVisibleException.class)
 	public void syncVisibleBasicNegative() {
 		Element element = getDriver().findElement(By.id("hidden"));
 		element.syncVisible();
@@ -389,7 +396,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncEnabledBasicNegative")
-	@Test(groups = { "regression", "element" }, expectedExceptions=RuntimeException.class)
+	@Test(groups = { "regression", "element" }, expectedExceptions=ElementNotEnabledException.class)
 	public void syncEnabledBasicNegative() {
 	    Element element = getDriver().findElement(By.id("disable"));
 	    element.syncEnabled();
@@ -425,7 +432,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncTextInElementBasicNegative")
-	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=RuntimeException.class)
+	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=TextInElementNotPresentException.class)
 	public void syncTextInElementBasicNegative() {
 		Element element = getDriver().findElement(By.id("pageheader"));
 		element.syncTextInElement("Loading");
@@ -462,7 +469,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncTextMatchesInElementBasicNegative")
-	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=RuntimeException.class)
+	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=TextInElementNotPresentException.class)
 	public void syncTextMatchesInElementBasicNegative() {
 		Element element = getDriver().findElement(By.id("pageheader"));
 		element.syncTextMatchesInElement("(.*tst pge)");
@@ -499,7 +506,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncAttributeContainsValueBasicNegative")
-	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=RuntimeException.class)
+	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=ElementAttributeValueNotMatchingException.class)
 	public void syncAttributeContainsValueBasicNegative() {
 		Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
 		element.syncAttributeContainsValue("type","Radio");
@@ -535,7 +542,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncAttributeMatchesValueBasicNegative")
-	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=RuntimeException.class)
+	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=ElementAttributeValueNotMatchingException.class)
 	public void syncAttributeMatchesValueBasicNegative() {
 		Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
 		element.syncAttributeMatchesValue("type","(.*adi)");
@@ -576,7 +583,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncCssPropertyContainsValueBasicNegative")
-	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=RuntimeException.class)
+	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=ElementCssValueNotMatchingException.class)
 	public void syncCssPropertyContainsValueBasicNegative() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
 		if (getBrowserUnderTest().equalsIgnoreCase("html")){
@@ -629,7 +636,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncCssPropertyMatchesValueBasicNegative")
-	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=RuntimeException.class)
+	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=ElementCssValueNotMatchingException.class)
 	public void syncCssPropertyMatchesValueBasicNegative() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
 		if (getBrowserUnderTest().equalsIgnoreCase("html")){

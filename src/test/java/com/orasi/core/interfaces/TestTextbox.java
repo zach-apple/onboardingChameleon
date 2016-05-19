@@ -237,6 +237,7 @@ public class TestTextbox extends TestEnvironment{
     @Test(groups ={"regression", "interfaces", "textbox"}, dependsOnMethods="setSecure")
     public void safeSetSecure(){
         Textbox textbox= getDriver().findTextbox(By.id("text1"));
+        textbox.clear();
         textbox.safeSetSecure("c2V0U2VjdXJl");
         Assert.assertTrue(textbox.getAttribute("value").contains("setSecure"));
         textbox.clear();

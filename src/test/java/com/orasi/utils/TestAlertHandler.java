@@ -48,7 +48,7 @@ public class TestAlertHandler extends TestEnvironment {
 	@Title("isAlertPresent")
 	@Test(groups = { "regression", "utils", "dev", "alertHandler" })
 	public void isAlertPresent() {
-		Assert.assertTrue("Alert was not present", AlertHandler.isAlertPresent(driver,3));
+		Assert.assertTrue("Alert was not present", AlertHandler.isAlertPresent(driver,1));
 	}
 
 	@Features("Utilities")
@@ -57,8 +57,8 @@ public class TestAlertHandler extends TestEnvironment {
 	@Test(groups = { "regression", "utils", "dev", "alertHandler" },
 		  dependsOnMethods = "isAlertPresent")
 	public void handleAllAlerts() {
-		AlertHandler.handleAllAlerts(driver,3);
-		Assert.assertFalse("Alert was not handled", AlertHandler.isAlertPresent(driver,3));
+		AlertHandler.handleAllAlerts(driver,1);
+		Assert.assertFalse("Alert was not handled", AlertHandler.isAlertPresent(driver,1));
 	}
 
 	@Features("Utilities")
@@ -68,8 +68,8 @@ public class TestAlertHandler extends TestEnvironment {
 			dependsOnMethods = "handleAllAlerts")
 	public void handleAlert() {
 		driver.findElement(By.id("button")).click();
-		AlertHandler.handleAlert(driver,3);
-		Assert.assertFalse("Alert was not handled", AlertHandler.isAlertPresent(driver,3));
+		AlertHandler.handleAlert(driver,1);
+		Assert.assertFalse("Alert was not handled", AlertHandler.isAlertPresent(driver,1));
 	}
 
 

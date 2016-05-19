@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Core-Regression" parallel="methods" thread-count="10">
+<suite name="Core-Regression" parallel="methods" thread-count="50">
 	<listeners>
-		<listener class-name="com.orasi.utils.Screenshot" />
+		<listener class-name="com.orasi.utils.debugging.Screenshot" />
 	</listeners>
 	<parameter name="browserUnderTest" value="firefox" />
 	<parameter name="environment" value="staging" />
-	<parameter name="runLocation" value="sauce" />
+	<parameter name="runLocation" value="local" />
 	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="windows" />
  	<test name="TestEnvironment">

@@ -3,7 +3,7 @@
 
 <suite name="Core-Regression" parallel="tests" thread-count="20">
 	<listeners>
-		<listener class-name="com.orasi.utils.Screenshot" />
+		<listener class-name="com.orasi.utils.debugging.Screenshot" />
 	</listeners>
 	<parameter name="browserUnderTest" value="jenkinsParameter" />
 	<parameter name="environment" value="jenkinsParameter" />
