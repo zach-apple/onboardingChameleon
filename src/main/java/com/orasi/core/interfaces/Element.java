@@ -75,7 +75,15 @@ public interface Element extends WebElement, WrapsElement, Locatable {
 	 * @summary - sends the char sequence to the element if the sequnce is not
 	 *          an empty string
 	 */
-	@Override
+	
+	/**
+	 * @author Justin
+	 * @see main.java.com.orasi.core.interfaces.impl.ElementImpl#onBlur()
+	 * @summary - triggers the onBlure FireEvent in the DOM
+	 */
+
+	void onBlur();
+	
 	void sendKeys(CharSequence... keysToSend);
 
 	/**
@@ -465,4 +473,5 @@ public interface Element extends WebElement, WrapsElement, Locatable {
 	 *  					syncTextInElement("text", 10, false)
 	 */
 	public boolean syncCssPropertyMatchesValue(String cssProperty, String regex, Object... args);
+	
 }
