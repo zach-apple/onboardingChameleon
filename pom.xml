@@ -184,6 +184,17 @@
 		<!-- End Sauce Labs requirements -->
 
 		<!-- Start HTML Unit Driver requirements: Up-to-date as of 10-20-2015 -->
+		
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+			<version>4.4.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.1</version>
+		</dependency>
 		<dependency>
 			<groupId>net.sourceforge.htmlunit</groupId>
 			<artifactId>htmlunit-core-js</artifactId>
@@ -198,16 +209,6 @@
 			<groupId>net.sourceforge.htmlunit</groupId>
 			<artifactId>htmlunit</artifactId>
 			<version>2.19</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpcore</artifactId>
-			<version>4.4.4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.5.1</version>
 		</dependency>
 		
 		<!-- End HTML Unit Driver requirements: Up-to-date as of 6-11-2015 -->
@@ -240,11 +241,6 @@
 
 		<!-- Start Database drivers requirements -->
 
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.35</version>
-		</dependency>
 
 		<!-- End Database drivers requirements -->
 
