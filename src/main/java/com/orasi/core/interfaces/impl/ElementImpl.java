@@ -18,6 +18,7 @@ import org.openqa.selenium.htmlunit.HtmlUnitWebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.internal.Locatable;
+import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import com.orasi.core.Beta;
 import com.orasi.core.interfaces.Element;
@@ -34,10 +35,20 @@ import com.orasi.utils.debugging.Highlight;
 public class ElementImpl implements Element {
 
 	protected WebElement element;
+	protected By by;
 	protected OrasiDriver driver;
 
 	public ElementImpl(final WebElement element) {
 		this.element = element;
+	}
+
+	public ElementImpl(final By by) {
+		this.by= by;
+	}
+
+	public ElementImpl(final By by, final OrasiDriver driver) {
+		this.by= by;
+		this.driver = driver;
 	}
 
 
@@ -218,10 +229,14 @@ public class ElementImpl implements Element {
 
 	@Override
 	public WebElement getWrappedElement() {
+	   
 	    try{
+		 if(element == null){
+			reload();
+		    }
 		element.isDisplayed();
 		return element;
-	    }catch(NoSuchElementException | StaleElementReferenceException e){
+	    }catch(NoSuchElementException | StaleElementReferenceException | NullPointerException e){
 		reload();
 		return element;
 	    }
@@ -229,10 +244,11 @@ public class ElementImpl implements Element {
 
 	@Override
 	public OrasiDriver getWrappedDriver() {
-
+	    if(driver != null) return driver;
 		WebDriver ldriver = null;
 		Field elementField = null;
 		Field privateStringField = null;
+		if(element == null) getWrappedElement();
 		if (driver == null) {
 		   if (element instanceof ElementImpl) {
 			try {
@@ -286,6 +302,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public By getElementLocator() {
+	    if(by != null) return this.by;
 		By by = null;
 		String locator = "";
 		try {
@@ -328,38 +345,43 @@ public class ElementImpl implements Element {
 		String locator = "";
 		int startPosition = 0;
 		int endPosition = 0;
-		if (element instanceof HtmlUnitWebElement) {
-			startPosition = element.toString().indexOf("=\"") + 2;
-			endPosition = element.toString().indexOf("\"", element.toString().indexOf("=\"") + 3);
-			if (startPosition == -1 | endPosition == -1)
-				locator = element.toString();
-			else
-				locator = element.toString().substring(startPosition, endPosition);
-		} else if (element instanceof ElementImpl) {
-			Field elementField = null;
-			try {
-				elementField = element.getClass().getDeclaredField("element");
-				elementField.setAccessible(true);
-
-				startPosition = elementField.get(element).toString().lastIndexOf(": ") + 2;
-				if(startPosition==1){
-					startPosition = elementField.get(element).toString().indexOf("=\"") + 2;
-					endPosition = elementField.get(element).toString().indexOf("\"", elementField.get(element).toString().indexOf("=\"") + 3);
-					if (startPosition == -1 | endPosition == -1)
-						locator = elementField.get(element).toString();
-					else
-						locator = elementField.get(element).toString().substring(startPosition, endPosition);
-				}else{
-					locator = elementField.get(element).toString().substring(startPosition,elementField.get(element).toString().lastIndexOf("]"));
-				}
-			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-				e.printStackTrace();
-			}
-
-		} else {
-			startPosition = element.toString().lastIndexOf(": ") + 2;
-			locator = element.toString().substring(startPosition, element.toString().lastIndexOf("]"));
+		if(by == null){
+        		if (element instanceof HtmlUnitWebElement) {
+        			startPosition = element.toString().indexOf("=\"") + 2;
+        			endPosition = element.toString().indexOf("\"", element.toString().indexOf("=\"") + 3);
+        			if (startPosition == -1 | endPosition == -1)
+        				locator = element.toString();
+        			else
+        				locator = element.toString().substring(startPosition, endPosition);
+        		} else if (element instanceof ElementImpl) {
+        			Field elementField = null;
+        			try {
+        				elementField = element.getClass().getDeclaredField("element");
+        				elementField.setAccessible(true);
+        
+        				startPosition = elementField.get(element).toString().lastIndexOf(": ") + 2;
+        				if(startPosition==1){
+        					startPosition = elementField.get(element).toString().indexOf("=\"") + 2;
+        					endPosition = elementField.get(element).toString().indexOf("\"", elementField.get(element).toString().indexOf("=\"") + 3);
+        					if (startPosition == -1 | endPosition == -1)
+        						locator = elementField.get(element).toString();
+        					else
+        						locator = elementField.get(element).toString().substring(startPosition, endPosition);
+        				}else{
+        					locator = elementField.get(element).toString().substring(startPosition,elementField.get(element).toString().lastIndexOf("]"));
+        				}
+        			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+        				e.printStackTrace();
+        			}
+        
+        		} else {
+        			startPosition = element.toString().lastIndexOf(": ") + 2;
+        			locator = element.toString().substring(startPosition, element.toString().lastIndexOf("]"));
+        		}
+		}else{
+		    return by.toString();
 		}
+		    
 		return locator.trim();
 	}
 
@@ -372,37 +394,40 @@ public class ElementImpl implements Element {
 	private String getElementLocatorAsString() {
 		int startPosition = 0;
 		String locator = "";
-
-		if (element instanceof HtmlUnitWebElement) {
-			startPosition = element.toString().indexOf(" ");
-			if (startPosition == -1)locator = element.toString();
-			else locator = element.toString().substring(startPosition, element.toString().indexOf("="));
-		} else if (element instanceof ElementImpl) {
-			Field elementField = null;
-			try {
-				elementField = element.getClass().getDeclaredField("element");
-				elementField.setAccessible(true);
-
-				startPosition = elementField.get(element).toString().lastIndexOf("->") + 3;
-				if(startPosition==2){
-					startPosition = elementField.get(element).toString().indexOf(" ");
-					if (startPosition == -1)
-						locator = elementField.get(element).toString();
-					else
-						locator = elementField.get(element).toString().substring(startPosition, elementField.get(element).toString().indexOf("="));
-				}else{
-				locator = elementField.get(element).toString().substring(startPosition,
-						elementField.get(element).toString().lastIndexOf(":"));
-				}
-			} catch (IllegalAccessException | NoSuchFieldException | SecurityException e) {
-				e.printStackTrace();
-			}
-
-		} else {
-
-			// if (element instanceof HtmlUnitWebElement)
-			startPosition = element.toString().lastIndexOf("->") + 3;
-			locator = element.toString().substring(startPosition, element.toString().lastIndexOf(":"));
+		if (by ==  null){
+        		if (element instanceof HtmlUnitWebElement) {
+        			startPosition = element.toString().indexOf(" ");
+        			if (startPosition == -1)locator = element.toString();
+        			else locator = element.toString().substring(startPosition, element.toString().indexOf("="));
+        		} else if (element instanceof ElementImpl) {
+        			Field elementField = null;
+        			try {
+        				elementField = element.getClass().getDeclaredField("element");
+        				elementField.setAccessible(true);
+        
+        				startPosition = elementField.get(element).toString().lastIndexOf("->") + 3;
+        				if(startPosition==2){
+        					startPosition = elementField.get(element).toString().indexOf(" ");
+        					if (startPosition == -1)
+        						locator = elementField.get(element).toString();
+        					else
+        						locator = elementField.get(element).toString().substring(startPosition, elementField.get(element).toString().indexOf("="));
+        				}else{
+        				locator = elementField.get(element).toString().substring(startPosition,
+        						elementField.get(element).toString().lastIndexOf(":"));
+        				}
+        			} catch (IllegalAccessException | NoSuchFieldException | SecurityException e) {
+        				e.printStackTrace();
+        			}
+        
+        		} else {
+        
+        			// if (element instanceof HtmlUnitWebElement)
+        			startPosition = getWrappedElement().toString().lastIndexOf("->") + 3;
+        			locator = element.toString().substring(startPosition, element.toString().lastIndexOf(":"));
+        		}
+		}else{
+		    return by.toString();
 		}
 		locator = locator.trim();
 		return locator;
@@ -765,7 +790,7 @@ public class ElementImpl implements Element {
 	
 	@Beta
 	protected void reload(){
-	    element = getWrappedDriver().findWebElement(getElementLocator());
+	    element = getWrappedDriver().findWebElement(by);
 	}
 	
 	

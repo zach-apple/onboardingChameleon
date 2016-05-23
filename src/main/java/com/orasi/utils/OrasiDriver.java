@@ -288,7 +288,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	public Textbox findTextbox(By by) {
 		try {
-			return new TextboxImpl(driver.findElement(by));
+			return new TextboxImpl(by, this);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Textbox with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());

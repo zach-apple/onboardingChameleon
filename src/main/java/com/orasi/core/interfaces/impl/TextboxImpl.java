@@ -1,8 +1,11 @@
 package com.orasi.core.interfaces.impl;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.utils.Base64Coder;
@@ -22,7 +25,10 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 	public TextboxImpl(WebElement element) {
 		super(element);
 	}
-
+	
+	public TextboxImpl(By locator, OrasiDriver driver) {
+		super(locator, driver);
+	}
 
 
 	/**
@@ -142,9 +148,8 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 	public void safeSet(String text) {
 		if (!text.isEmpty()) {
 			try {
-				char ctrl_a = '\u0001';
-				getWrappedElement().click();
-				getWrappedElement().sendKeys(String.valueOf(ctrl_a));
+
+			    getWrappedDriver().executeJavaScript("arguments[0].setAttribute('value', arguments[1])", getWrappedElement(), "");
 				getWrappedElement().sendKeys(text);
 				getWrappedElement().sendKeys(Keys.TAB);
 				TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [  <b>@FindBy: "
@@ -201,9 +206,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 	public void safeSetSecure(String text) {
 		if (!text.isEmpty()) {
 			try {
-				char ctrl_a = '\u0001';
-				getWrappedElement().click();
-				getWrappedElement().sendKeys(String.valueOf(ctrl_a));
+			    getWrappedDriver().executeJavaScript("arguments[0].setAttribute('value', arguments[1])", getWrappedElement(), "");
 				getWrappedElement().sendKeys(Base64Coder.decodeString(text).toString());
 				getWrappedElement().sendKeys(Keys.TAB);
 				TestReporter.log(" Send encoded text [ <b>" + text.toString() + "</b> ] to Textbox [  <b>@FindBy: "
