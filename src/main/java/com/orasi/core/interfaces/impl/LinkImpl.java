@@ -1,5 +1,6 @@
 package com.orasi.core.interfaces.impl;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import com.orasi.core.interfaces.Link;
@@ -19,7 +20,11 @@ public class LinkImpl extends ElementImpl implements Link {
 	public LinkImpl(WebElement element) {
 		super(element);
 	}
-
+	
+	public LinkImpl(OrasiDriver driver, By by) {
+		super(driver, by);
+		//element = driver.findWebElement(by);
+	}
 
 	@Override
 	public void jsClick() {

@@ -256,7 +256,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	@Override
 	public Element findElement(By by) {
 		try {
-			return new ElementImpl(driver.findElement(by));
+			return new ElementImpl(this, by);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Element with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -288,7 +288,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	public Textbox findTextbox(By by) {
 		try {
-			return new TextboxImpl(by, this);
+			return new TextboxImpl(this, by);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Textbox with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());

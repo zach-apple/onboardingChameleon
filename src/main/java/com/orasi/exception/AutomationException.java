@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.internal.BuildInfo;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.SessionId;
 
 import com.orasi.utils.OrasiDriver;
 
@@ -140,26 +141,25 @@ public class AutomationException extends RuntimeException{
 	  
 
 	private String browserName(WebDriver driver) {
-	//	if(driver instanceof HtmlUnitDriver) return ((HtmlUnitDriver) driver).getCapabilities().getBrowserName();
+		if(driver instanceof HtmlUnitDriver) return "Html Unit";
 		return ((RemoteWebDriver) driver).getCapabilities().getBrowserName();
 	}
 
 	private String browserVersion(WebDriver driver) {
-		//if(driver instanceof HtmlUnitDriver) return ((HtmlUnitDriver) driver).getCapabilities().getVersion();
+		if(driver instanceof HtmlUnitDriver) return "N/A";
 		return ((RemoteWebDriver) driver).getCapabilities().getVersion();
 	}
 	
 	private String sessionId(WebDriver driver) {
-		//if(driver instanceof HtmlUnitDriver) return "N/A";
-		return ((RemoteWebDriver) driver).getSessionId().toString().trim();
+		if(driver instanceof HtmlUnitDriver) return "N/A";
+		String sessionId = ((RemoteWebDriver) driver).getSessionId() != null ? ((RemoteWebDriver) driver).getSessionId().toString().trim(): "N/A";
+		return sessionId;
 	}
 
 	private String platformOS(WebDriver driver) {
-		/*if(driver instanceof HtmlUnitDriver) {
-			return ((HtmlUnitDriver) driver).getCapabilities().getPlatform().name() + " "
-					+ ((HtmlUnitDriver) driver).getCapabilities().getPlatform().getMajorVersion() + "."
-					+ ((HtmlUnitDriver) driver).getCapabilities().getPlatform().getMinorVersion();
-		}*/
+		if(driver instanceof HtmlUnitDriver) {
+			return "N/A";
+		}
 		return ((RemoteWebDriver) driver).getCapabilities().getPlatform().name() + " "
 				+ ((RemoteWebDriver) driver).getCapabilities().getPlatform().getMajorVersion() + "."
 				+ ((RemoteWebDriver) driver).getCapabilities().getPlatform().getMinorVersion();

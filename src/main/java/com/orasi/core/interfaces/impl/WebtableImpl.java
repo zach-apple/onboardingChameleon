@@ -24,6 +24,10 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 		super(element);
 	}
 
+	public WebtableImpl(OrasiDriver driver, By by) {
+		super(driver, by);
+	//	element = driver.findWebElement(by);
+	}
 
 
 	private List<WebElement> getRowCollection() {
@@ -85,8 +89,8 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	public Element getCell(int row, int column) {
 		getWrappedDriver().setElementTimeout(1, TimeUnit.SECONDS);
 		Element cell = new ElementImpl(getWrappedElement()
-				.findElement(By.xpath("tbody/tr[" + row + "]/td[" + column + "]|tbody/tr[" + row + "]/th[" + column
-						+ "]|tr[" + row + "]/td[" + column + "]|tr[" + row + "]/th[" + column + "]")));
+				.findElement(By.xpath(getElementIdentifier() + "/tbody/tr[" + row + "]/td[" + column + "]|" + getElementIdentifier() + "/tbody/tr[" + row + "]/th[" + column
+						+ "]|" + getElementIdentifier() + "/tr[" + row + "]/td[" + column + "]|" + getElementIdentifier() + "/tr[" + row + "]/th[" + column + "]")));
 		getWrappedDriver().setElementTimeout(getWrappedDriver().getElementTimeout(), TimeUnit.SECONDS);
 		return cell;
 	}

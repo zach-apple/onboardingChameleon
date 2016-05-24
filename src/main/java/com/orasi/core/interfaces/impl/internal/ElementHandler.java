@@ -91,8 +91,8 @@ public class ElementHandler  implements InvocationHandler {
 	by=(By)elementField.get(locator);
 	
         
-        Constructor cons = wrappingType.getConstructor(By.class, OrasiDriver.class);
-        Object thing = cons.newInstance(by, driver);
+        Constructor cons = wrappingType.getConstructor(OrasiDriver.class, By.class);
+        Object thing = cons.newInstance(driver, by);
         try {
             return method.invoke(wrappingType.cast(thing), objects);
         } catch (InvocationTargetException e) {

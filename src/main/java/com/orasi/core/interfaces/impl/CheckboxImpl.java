@@ -1,5 +1,6 @@
 package com.orasi.core.interfaces.impl;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import com.orasi.core.interfaces.Checkbox;
@@ -20,6 +21,10 @@ public class CheckboxImpl extends ElementImpl implements Checkbox {
         super(element);
     }
 
+    public CheckboxImpl(OrasiDriver driver, By by) {
+		super(driver, by);
+	//	element = driver.findWebElement(by);
+	}
     
     @Override
     public void toggle() {

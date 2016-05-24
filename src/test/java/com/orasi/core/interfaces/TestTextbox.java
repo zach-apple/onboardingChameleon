@@ -50,7 +50,7 @@ public class TestTextbox extends TestEnvironment{
     @Title("constructorWithElement")
 	@Test(groups ={"regression", "interfaces", "textbox"})
 	public void constructorWithElementAndDriver(){
-		Assert.assertNotNull(new TextboxImpl(By.id("text1"),getDriver()));
+		Assert.assertNotNull(new TextboxImpl(getDriver(), By.id("text1")));
 	}
 
     @Features("Element Interfaces")

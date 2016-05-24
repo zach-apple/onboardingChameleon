@@ -1,5 +1,6 @@
 package com.orasi.core.interfaces.impl;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import com.orasi.core.interfaces.Button;
@@ -21,7 +22,10 @@ public class ButtonImpl extends ElementImpl implements Button {
 		super(element);
 	}
 
-
+	public ButtonImpl(OrasiDriver driver, By by) {
+		super(driver, by);
+		//element = driver.findWebElement(by);
+	}
 
 	@Override
 	public void click() {

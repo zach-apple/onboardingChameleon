@@ -18,9 +18,11 @@ import org.openqa.selenium.htmlunit.HtmlUnitWebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.internal.Locatable;
+import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import com.orasi.core.Beta;
+import com.orasi.core.by.angular.ByNG;
 import com.orasi.core.interfaces.Element;
 import com.orasi.exception.AutomationException;
 import com.orasi.utils.OrasiDriver;
@@ -36,19 +38,22 @@ public class ElementImpl implements Element {
 
 	protected WebElement element;
 	protected By by;
+	protected ByNG byNG;
 	protected OrasiDriver driver;
 
 	public ElementImpl(final WebElement element) {
 		this.element = element;
+		driver = getWrappedDriver();
+		by = getElementLocator();
+		
 	}
 
-	public ElementImpl(final By by) {
-		this.by= by;
-	}
-
-	public ElementImpl(final By by, final OrasiDriver driver) {
+	public ElementImpl( final OrasiDriver driver, final By by) {
 		this.by= by;
 		this.driver = driver;
+		try{
+			element = driver.getWebDriver().findElement(by);
+		}catch(NoSuchElementException throwAway){}
 	}
 
 
@@ -60,7 +65,7 @@ public class ElementImpl implements Element {
 		try {
 			getWrappedElement().click();
 		} catch (RuntimeException rte) {
-			TestReporter.interfaceLog("Clicked [ <font size = 2 color=\"red\"><b>@FindBy: " + getElementLocatorInfo() + " </font></b>]");
+			TestReporter.interfaceLog("Clicked [ <font size = 2 color=\"red\"><b> @FindBy: " + getElementLocatorInfo() + " </font></b>]");
 			throw rte;
 		}
 		TestReporter.interfaceLog("Clicked [ <b>@FindBy: " + getElementLocatorInfo() + " </b>]");
@@ -222,23 +227,27 @@ public class ElementImpl implements Element {
 	public void sendKeys(CharSequence... keysToSend) {
 		if (keysToSend.toString() != "") {
 			getWrappedElement().sendKeys(keysToSend);
-			TestReporter.interfaceLog(" Send Keys [ <b>" + keysToSend[0].toString() + "</b> ] to Textbox [ <b>@FindBy: "
-					+ getElementLocatorInfo() + " </b> ]");
+			TestReporter.interfaceLog(" Send Keys [ <b>" + keysToSend[0].toString() + "</b> ] to Textbox [ <b>"
+					+ getElementIdentifier() + " </b> ]");
 		}
 	}
 
 	@Override
 	public WebElement getWrappedElement() {
-	   
+	    WebElement tempElement = null;
 	    try{
-		 if(element == null){
-			reload();
-		    }
-		element.isDisplayed();
-		return element;
-	    }catch(NoSuchElementException | StaleElementReferenceException | NullPointerException e){
-		reload();
-		return element;
+			if(element == null) tempElement = reload();
+			else tempElement = element;
+			tempElement.isDisplayed();
+			return tempElement;
+	    }catch(NoSuchElementException |  StaleElementReferenceException| NullPointerException e){
+
+			try{
+				tempElement=reload();
+				return tempElement;
+			 }catch(NullPointerException sere){
+				 return element;
+			 }
 	    }
 	}
 
@@ -246,18 +255,16 @@ public class ElementImpl implements Element {
 	public OrasiDriver getWrappedDriver() {
 	    if(driver != null) return driver;
 		WebDriver ldriver = null;
-		Field elementField = null;
 		Field privateStringField = null;
 		if(element == null) getWrappedElement();
 		if (driver == null) {
 		   if (element instanceof ElementImpl) {
 			try {
-				elementField = element.getClass().getDeclaredField("element");
-				elementField.setAccessible(true);
-				WebElement webelement =  (WebElement)elementField.get(element);
-				privateStringField = webelement.getClass().getDeclaredField("parent");
+				WebElement wrappedElement = ((WrapsElement) element).getWrappedElement();
+				
+				privateStringField = wrappedElement.getClass().getDeclaredField("parent");
 				privateStringField.setAccessible(true);
-				ldriver =  (WebDriver)privateStringField.get(webelement);
+				ldriver =  (WebDriver)privateStringField.get(wrappedElement);
 				OrasiDriver oDriver = new OrasiDriver();
 				oDriver.setDriver(ldriver);
 				return oDriver;
@@ -329,6 +336,11 @@ public class ElementImpl implements Element {
 			case "xpath":
 				by = By.xpath(getElementIdentifier());
 				break;
+			case "ng-modal":
+			case "buttontext":	
+			case "ng-controller":	
+			case "ng-repeater":
+				return null;
 			default:
 			    throw new AutomationException("Unknown Element Locator sent in: " + locator, getWrappedDriver());
 			}
@@ -354,32 +366,30 @@ public class ElementImpl implements Element {
         			else
         				locator = element.toString().substring(startPosition, endPosition);
         		} else if (element instanceof ElementImpl) {
-        			Field elementField = null;
-        			try {
-        				elementField = element.getClass().getDeclaredField("element");
-        				elementField.setAccessible(true);
-        
-        				startPosition = elementField.get(element).toString().lastIndexOf(": ") + 2;
+        			
+        		
+        				WebElement wrappedElement = ((WrapsElement) element).getWrappedElement(); 
+        				startPosition = wrappedElement.toString().lastIndexOf(": ") + 2;
         				if(startPosition==1){
-        					startPosition = elementField.get(element).toString().indexOf("=\"") + 2;
-        					endPosition = elementField.get(element).toString().indexOf("\"", elementField.get(element).toString().indexOf("=\"") + 3);
+        					startPosition = wrappedElement.toString().indexOf("=\"") + 2;
+        					endPosition = wrappedElement.toString().indexOf("\"", wrappedElement.toString().indexOf("=\"") + 3);
         					if (startPosition == -1 | endPosition == -1)
-        						locator = elementField.get(element).toString();
+        						locator = wrappedElement.toString();
         					else
-        						locator = elementField.get(element).toString().substring(startPosition, endPosition);
+        						locator = wrappedElement.toString().substring(startPosition, endPosition);
         				}else{
-        					locator = elementField.get(element).toString().substring(startPosition,elementField.get(element).toString().lastIndexOf("]"));
+        					locator = wrappedElement.toString().substring(startPosition,wrappedElement.toString().lastIndexOf("]"));
         				}
-        			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-        				e.printStackTrace();
-        			}
+        			
         
         		} else {
         			startPosition = element.toString().lastIndexOf(": ") + 2;
         			locator = element.toString().substring(startPosition, element.toString().lastIndexOf("]"));
         		}
 		}else{
-		    return by.toString();
+			startPosition = by.toString().lastIndexOf(": ") + 2;
+			locator = by.toString().substring(startPosition, by.toString().length());
+		    return locator.trim();
 		}
 		    
 		return locator.trim();
@@ -400,25 +410,24 @@ public class ElementImpl implements Element {
         			if (startPosition == -1)locator = element.toString();
         			else locator = element.toString().substring(startPosition, element.toString().indexOf("="));
         		} else if (element instanceof ElementImpl) {
-        			Field elementField = null;
-        			try {
-        				elementField = element.getClass().getDeclaredField("element");
-        				elementField.setAccessible(true);
+        			//Field elementField = null;
+        			//try {
+        				WebElement wrappedElement = ((WrapsElement) element).getWrappedElement(); 
         
-        				startPosition = elementField.get(element).toString().lastIndexOf("->") + 3;
+        				startPosition = wrappedElement.toString().lastIndexOf("->") + 3;
         				if(startPosition==2){
-        					startPosition = elementField.get(element).toString().indexOf(" ");
+        					startPosition = wrappedElement.toString().indexOf(" ");
         					if (startPosition == -1)
-        						locator = elementField.get(element).toString();
+        						locator = wrappedElement.toString();
         					else
-        						locator = elementField.get(element).toString().substring(startPosition, elementField.get(element).toString().indexOf("="));
+        						locator = wrappedElement.toString().substring(startPosition, wrappedElement.toString().indexOf("="));
         				}else{
-        				locator = elementField.get(element).toString().substring(startPosition,
-        						elementField.get(element).toString().lastIndexOf(":"));
+        				locator = wrappedElement.toString().substring(startPosition,
+        						wrappedElement.toString().lastIndexOf(":"));
         				}
-        			} catch (IllegalAccessException | NoSuchFieldException | SecurityException e) {
-        				e.printStackTrace();
-        			}
+        			//} catch (IllegalAccessException |  SecurityException e) {
+        			//	e.printStackTrace();
+        			//}
         
         		} else {
         
@@ -427,7 +436,8 @@ public class ElementImpl implements Element {
         			locator = element.toString().substring(startPosition, element.toString().lastIndexOf(":"));
         		}
 		}else{
-		    return by.toString();
+			locator = by.toString().substring(3, by.toString().lastIndexOf(":"));
+		    return locator.trim();
 		}
 		locator = locator.trim();
 		return locator;
@@ -437,6 +447,8 @@ public class ElementImpl implements Element {
 
 	@Override
 	public String getElementLocatorInfo() {
+		//if (by != null) return by.toString();
+		//else return getElementLocatorAsString() + " = " + getElementIdentifier();
 		return getElementLocatorAsString() + " = " + getElementIdentifier();
 	}
 
@@ -789,8 +801,8 @@ public class ElementImpl implements Element {
 	}*/
 	
 	@Beta
-	protected void reload(){
-	    element = getWrappedDriver().findWebElement(by);
+	protected WebElement reload(){
+	    return getWrappedDriver().findWebElement(by);
 	}
 	
 	

@@ -26,8 +26,10 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 		super(element);
 	}
 	
-	public TextboxImpl(By locator, OrasiDriver driver) {
-		super(locator, driver);
+
+	public TextboxImpl(OrasiDriver driver, By by) {
+		super(driver, by);
+	//	element = driver.findWebElement(by);
 	}
 
 
