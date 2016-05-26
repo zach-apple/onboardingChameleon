@@ -15,7 +15,6 @@ public class Highlight {
     private static Colors defaultSuccessColor = Colors.GREEN;
 
     private static boolean debugMode = false;
-    private static boolean successMode = false;
     
     
     private static String jsHighlight = "arguments[0].style.border='3px solid <COLOR>'";

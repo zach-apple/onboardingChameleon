@@ -8,6 +8,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
 
 import com.orasi.exception.automation.PageInitialization;
+import com.orasi.utils.OrasiDriver;
 
 /**
  * Element factory for wrapped elements. Similar to {@link org.openqa.selenium.support.PageFactory}
@@ -17,9 +18,9 @@ public class ElementFactory {
     /**
      *  See {@link org.openqa.selenium.support.PageFactory#initElements(org.openqa.selenium.WebDriver driver, Class)}
      */
-    public static <T> T initElements(WebDriver driver, Class<T> pageClassToProxy) {
+    public static <T> T initElements(OrasiDriver driver, Class<T> pageClassToProxy) {
         T page = instantiatePage(driver, pageClassToProxy);
-        final WebDriver driverRef = driver;
+        final OrasiDriver driverRef = driver;
         PageFactory.initElements(new ElementDecorator(new CustomElementLocatorFactory(driverRef)), page);
         return page;
     }
@@ -27,9 +28,9 @@ public class ElementFactory {
     /**
      *  See {@link org.openqa.selenium.support.PageFactory#initElements(org.openqa.selenium.support.pagefactory.FieldDecorator, Object)}
      */
-    public static void initElements(WebDriver driver, Object page) {
-        final WebDriver driverRef = driver;
-        PageFactory.initElements(new ElementDecorator(new CustomElementLocatorFactory(driverRef)), page);
+    public static void initElements(OrasiDriver driver, Object page) {
+        final OrasiDriver driverRef = driver;
+        PageFactory.initElements(new ElementDecorator(new CustomElementLocatorFactory(driverRef), driverRef), page);
     }
 
     /**

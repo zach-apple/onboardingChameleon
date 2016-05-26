@@ -13,7 +13,7 @@ import org.testng.Reporter;
 import com.orasi.utils.date.SimpleDate;
 
 public class TestReporter {
-    private static boolean printToConsole = false;
+    private static boolean printToConsole = true;
     
     private static String getTimestamp(){
    	return SimpleDate.getTimestamp().toString() + " :: ";

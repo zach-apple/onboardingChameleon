@@ -17,7 +17,6 @@ import com.orasi.core.by.angular.internal.ByAngularButtonText;
 import com.orasi.core.by.angular.internal.ByAngularController;
 import com.orasi.core.by.angular.internal.ByAngularModel;
 import com.orasi.core.by.angular.internal.ByAngularRepeater;
-import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestEnvironment;
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;

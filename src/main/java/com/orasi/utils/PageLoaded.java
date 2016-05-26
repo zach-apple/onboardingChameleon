@@ -13,7 +13,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.orasi.core.interfaces.Element;
-import com.orasi.core.interfaces.impl.ElementImpl;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.exception.automation.ElementAttributeValueNotMatchingException;
 import com.orasi.exception.automation.ElementCssValueNotMatchingException;
@@ -308,7 +307,7 @@ public class PageLoaded {
 	long timeLapse;
 	StopWatch stopwatch = new StopWatch();
 	By locator = element.getElementLocator();
-	TestReporter.interfaceLog("<i> Syncing to element [ <b>@FindBy: " + element.getElementLocatorInfo()
+	TestReporter.interfaceLog("<i> Syncing to element [ <b>" + element.getElementLocatorInfo()
 	+ "</b> ] to be <b>PRESENT</b> in DOM within [ " + timeout + " ] seconds.</i>");
 	int currentTimeout = driver.getElementTimeout();
 	driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
@@ -328,11 +327,11 @@ public class PageLoaded {
 	driver.setElementTimeout(currentTimeout);
 
 	if (!found && failTestOnSync) {
-	    TestReporter.interfaceLog("<i>Element [<b>@FindBy: " + element.getElementLocatorInfo()
+	    TestReporter.interfaceLog("<i>Element [<b>" + element.getElementLocatorInfo()
 	    + " </b>] is not <b>PRESENT</b> on the page after [ "
 	    + (timeLapse) / 1000.0 + " ] seconds.</i>");
 	    throw new RuntimeException(
-		    "Element [ @FindBy: " + element.getElementLocatorInfo() + " ] is not PRESENT on the page after [ "
+		    "Element [ " + element.getElementLocatorInfo() + " ] is not PRESENT on the page after [ "
 			    + (timeLapse) / 1000.0 + " ] seconds.");
 	}
 	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
@@ -368,7 +367,7 @@ public class PageLoaded {
 	boolean found = false;
 	long timeLapse;
 	StopWatch stopwatch = new StopWatch();
-	TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: " + element.getElementLocatorInfo()
+	TestReporter.interfaceLog("<i>Syncing to element [<b>" + element.getElementLocatorInfo()
 	+ "</b> ] to be <b>VISIBLE<b> within [ " + timeout + " ] seconds.</i>");
 	int currentTimeout = driver.getElementTimeout();
 	driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
@@ -387,11 +386,11 @@ public class PageLoaded {
 
 	driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
 	if (!found && failTestOnSync) {
-	    TestReporter.interfaceLog("<i>Element [<b>@FindBy: " + element.getElementLocatorInfo()
+	    TestReporter.interfaceLog("<i>Element [<b>" + element.getElementLocatorInfo()
 	    + " </b>] is not <b>VISIBLE</b> on the page after [ "
 	    + (timeLapse) / 1000.0 + " ] seconds.</i>");
 	    throw new ElementNotVisibleException(
-		    "Element [ @FindBy: " + element.getElementLocatorInfo() + " ] is not VISIBLE on the page after [ "
+		    "Element [ " + element.getElementLocatorInfo() + " ] is not VISIBLE on the page after [ "
 			    + (timeLapse) / 1000.0 + " ] seconds.", driver);
 	}
 	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
@@ -428,7 +427,7 @@ public class PageLoaded {
 	boolean found = false;
 	long timeLapse;
 	StopWatch stopwatch = new StopWatch();
-	TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: " + element.getElementLocatorInfo()
+	TestReporter.interfaceLog("<i>Syncing to element [<b>" + element.getElementLocatorInfo()
 	+ "</b> ] to be <b>HIDDEN</b> within [ <b>" + timeout + "</b> ] seconds.</i>");
 	int currentTimeout = driver.getElementTimeout();
 	driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
@@ -446,11 +445,11 @@ public class PageLoaded {
 	driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
 	if (!found && failTestOnSync) {
 	    Highlight.highlightError(driver, element);
-	    TestReporter.interfaceLog("<i>Element [<b>@FindBy: " + element.getElementLocatorInfo()
+	    TestReporter.interfaceLog("<i>Element [<b>" + element.getElementLocatorInfo()
 	    + " </b>] is not <b>HIDDEN</b> on the page after [ "
 	    + (timeLapse) / 1000.0 + " ] seconds.</i>");
 	    throw new ElementNotHiddenException(
-		    "Element [ @FindBy: " + element.getElementLocatorInfo() + " ] is not HIDDEN on the page after [ "
+		    "Element [ " + element.getElementLocatorInfo() + " ] is not HIDDEN on the page after [ "
 			    + (timeLapse) / 1000.0 + " ] seconds.", driver);
 	}
 	return found;
@@ -485,7 +484,7 @@ public class PageLoaded {
 	boolean found = false;
 	long timeLapse;
 	StopWatch stopwatch = new StopWatch();
-	TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: " + element.getElementLocatorInfo()
+	TestReporter.interfaceLog("<i>Syncing to element [<b>" + element.getElementLocatorInfo()
 	+ "</b> ] to be <b>ENABLED</b> within [ <b>" + timeout + "</b> ] seconds.</i>");
 	int currentTimeout = driver.getElementTimeout();
 	driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
@@ -505,11 +504,11 @@ public class PageLoaded {
 	driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
 	if (!found && failTestOnSync) {
 	    Highlight.highlightError(driver, element);
-	    TestReporter.interfaceLog("<i>Element [<b>@FindBy: " + element.getElementLocatorInfo()
+	    TestReporter.interfaceLog("<i>Element [<b>" + element.getElementLocatorInfo()
 	    + " </b>] is not <b>ENABLED</b> on the page after [ "
 	    + (timeLapse) / 1000.0 + " ] seconds.</i>");
 	    throw new ElementNotEnabledException(
-		    "Element [ @FindBy: " + element.getElementLocatorInfo() + " ] is not ENABLED on the page after [ "
+		    "Element [ " + element.getElementLocatorInfo() + " ] is not ENABLED on the page after [ "
 			    + (timeLapse) / 1000.0 + " ] seconds.", driver);
 	}
 	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
@@ -547,7 +546,7 @@ public class PageLoaded {
 	boolean found = false;
 	long timeLapse;
 	StopWatch stopwatch = new StopWatch();
-	TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: " + element.getElementLocatorInfo()
+	TestReporter.interfaceLog("<i>Syncing to element [<b>" + element.getElementLocatorInfo()
 	+ "</b> ] to be <b>DISABLED</b> within [ <b>" + timeout + "</b> ] seconds.</i>");
 	int currentTimeout = driver.getElementTimeout();
 	driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
@@ -566,11 +565,11 @@ public class PageLoaded {
 	driver.setElementTimeout(currentTimeout, TimeUnit.SECONDS);
 	if (!found && failTestOnSync) {
 	    Highlight.highlightError(driver, element);
-	    TestReporter.interfaceLog("<i>Element [<b>@FindBy: " + element.getElementLocatorInfo()
+	    TestReporter.interfaceLog("<i>Element [<b>" + element.getElementLocatorInfo()
 	    + " </b>] is not <b>DISABLED</b> on the page after [ "
 	    + (timeLapse) / 1000.0 + " ] seconds.</i>");
 	    throw new ElementNotDisabledException(
-		    "Element [ @FindBy: " + element.getElementLocatorInfo() + " ] is not DISABLED on the page after [ "
+		    "Element [ " + element.getElementLocatorInfo() + " ] is not DISABLED on the page after [ "
 			    + (timeLapse) / 1000.0 + " ] seconds.", driver);
 	}
 	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
@@ -607,7 +606,7 @@ public class PageLoaded {
 	boolean found = false;
 	long timeLapse;
 	StopWatch stopwatch = new StopWatch();
-	TestReporter.interfaceLog("<i>Syncing to text [<b>" + text + "</b> ] in element [<b>@FindBy: "
+	TestReporter.interfaceLog("<i>Syncing to text [<b>" + text + "</b> ] in element [<b>"
 		+ element.getElementLocatorInfo() + "</b> ] to be displayed within [ <b>" + timeout + "</b> ] seconds.</i>");
 	int currentTimeout = driver.getElementTimeout();
 	driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
@@ -627,10 +626,10 @@ public class PageLoaded {
 	if (!found && failTestOnSync) {
 	    Highlight.highlightError(driver, element);
 	    TestReporter.interfaceLog(
-		    "<i>Element [<b>@FindBy: " + element.getElementLocatorInfo() + " </b>] did not contain the text [ " + text
+		    "<i>Element [<b>" + element.getElementLocatorInfo() + " </b>] did not contain the text [ " + text
 		    + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
 	    throw new TextInElementNotPresentException(
-		    "Element [ @FindBy: " + element.getElementLocatorInfo() + " ] did not contain the text [ " + text
+		    "Element [ " + element.getElementLocatorInfo() + " ] did not contain the text [ " + text
 		    + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.", driver);
 	}
 
@@ -669,7 +668,7 @@ public class PageLoaded {
 	boolean found = false;
 	long timeLapse;
 	StopWatch stopwatch = new StopWatch();
-	TestReporter.interfaceLog("<i>Syncing to text regular expression [<b>" + regex + "</b> ] in element [<b>@FindBy: "
+	TestReporter.interfaceLog("<i>Syncing to text regular expression [<b>" + regex + "</b> ] in element [<b>"
 		+ element.getElementLocatorInfo() + "</b> ] to be displayed within [ <b>" + timeout + "</b> ] seconds.</i>");
 	int currentTimeout = driver.getElementTimeout();
 	driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
@@ -689,10 +688,10 @@ public class PageLoaded {
 	if (!found && failTestOnSync) {
 	    Highlight.highlightError(driver, element);
 	    TestReporter.interfaceLog(
-		    "<i>Element [<b>@FindBy: " + element.getElementLocatorInfo() + " </b>] did not contain the text [ " + regex
+		    "<i>Element [<b>" + element.getElementLocatorInfo() + " </b>] did not contain the text [ " + regex
 		    + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
 	    throw new TextInElementNotPresentException(
-		    "Element [ @FindBy: " + element.getElementLocatorInfo() + " ] did not contain the text [ " + regex
+		    "Element [ " + element.getElementLocatorInfo() + " ] did not contain the text [ " + regex
 		    + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.", driver);
 	}
 	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
@@ -730,8 +729,8 @@ public class PageLoaded {
 	boolean found = false;
 	long timeLapse;
 	StopWatch stopwatch = new StopWatch();
-	TestReporter.interfaceLog("<i>Syncing to attribute [<b>" + attribute + "</b> ] to contain [<b>" + value + "</b> ] in element [<b>@FindBy: "
-		+ element.getElementLocatorInfo() + "</b> ] to be displayed within [ <b>" + timeout + "</b> ] seconds.</i>");
+	TestReporter.interfaceLog("<i>Syncing to attribute [<b> " + attribute + "</b> ] to contain [<b> " + value + "</b> ] in element [<b>"
+		+ element.getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + timeout + "</b> ] seconds.</i>");
 	int currentTimeout = driver.getElementTimeout();
 	driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
 	stopwatch.start();
@@ -750,10 +749,10 @@ public class PageLoaded {
 	if (!found && failTestOnSync) {
 	    Highlight.highlightError(driver, element);
 	    TestReporter.interfaceLog(
-		    "<i>Element [<b>@FindBy: " + element.getElementLocatorInfo() + " </b>] attribute [<b>" + attribute + "</b> ] did not contain the text [ " + value
+		    "<i>Element [<b>" + element.getElementLocatorInfo() + " </b>] attribute [<b>" + attribute + "</b> ] did not contain the text [ " + value
 		    + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
 	    throw new ElementAttributeValueNotMatchingException(
-		    "Element [ @FindBy: " + element.getElementLocatorInfo() + " ]attribute [" + attribute + "] did not contain the text [ " + value
+		    "Element [ " + element.getElementLocatorInfo() + " ]attribute [" + attribute + "] did not contain the text [ " + value
 		    + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.", driver);
 	}
 	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
@@ -791,8 +790,8 @@ public class PageLoaded {
 	boolean found = false;
 	long timeLapse;
 	StopWatch stopwatch = new StopWatch();
-	TestReporter.interfaceLog("<i>Syncing to attribute [<b>" + attribute + "</b> ] to match the regular expression of [<b>" + regex + "</b> ] in element [<b>@FindBy: "
-		+ element.getElementLocatorInfo() + "</b> ] to be displayed within [ <b>" + timeout + "</b> ] seconds.</i>");
+	TestReporter.interfaceLog("<i>Syncing to attribute [<b> " + attribute + "</b> ] to match the regular expression of [<b> " + regex + "</b> ] in element [<b>"
+		+ element.getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + timeout + "</b> ] seconds.</i>");
 	int currentTimeout = driver.getElementTimeout();
 	driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
 	stopwatch.start();
@@ -811,10 +810,10 @@ public class PageLoaded {
 	if (!found && failTestOnSync) {
 	    Highlight.highlightError(driver, element);
 	    TestReporter.interfaceLog(
-		    "<i>Element [<b>@FindBy: " + element.getElementLocatorInfo() + " </b>] attribute [<b>" + attribute + "</b> ] did not match the regular expression of [ " + regex
+		    "<i>Element [<b>" + element.getElementLocatorInfo() + " </b>] attribute [<b>" + attribute + "</b> ] did not match the regular expression of [ " + regex
 		    + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
 	    throw new ElementAttributeValueNotMatchingException(
-		    "Element [ @FindBy: " + element.getElementLocatorInfo() + " ]attribute [" + attribute + "] did not match the regular expression of [ " + regex
+		    "Element [ " + element.getElementLocatorInfo() + " ]attribute [" + attribute + "] did not match the regular expression of [ " + regex
 		    + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.", driver);
 	}
 	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
@@ -852,8 +851,8 @@ public class PageLoaded {
 	boolean found = false;
 	long timeLapse;
 	StopWatch stopwatch = new StopWatch();
-	TestReporter.interfaceLog("<i>Syncing to CSS Property [<b>" + cssProperty + "</b> ] to contain [<b>" + value + "</b> ] in element [<b>@FindBy: "
-		+ element.getElementLocatorInfo() + "</b> ] to be displayed within [ <b>" + timeout + "</b> ] seconds.</i>");
+	TestReporter.interfaceLog("<i>Syncing to CSS Property [<b> " + cssProperty + "</b> ] to contain [<b> " + value + "</b> ] in element [<b>"
+		+ element.getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + timeout + "</b> ] seconds.</i>");
 	int currentTimeout = driver.getElementTimeout();
 	driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
 	stopwatch.start();
@@ -872,9 +871,9 @@ public class PageLoaded {
 	if (!found && failTestOnSync) {
 	    Highlight.highlightError(driver, element);
 	    TestReporter.interfaceLog(
-		    "<i>Element [<b>@FindBy: " + element.getElementLocatorInfo() + " </b>] CSS Property [<b>" + cssProperty  + "</b> ] did not contain the text [ " + value
+		    "<i>Element [<b>" + element.getElementLocatorInfo() + " </b>] CSS Property [<b>" + cssProperty  + "</b> ] did not contain the text [ " + value
 		    + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
-	    throw new ElementCssValueNotMatchingException( "Element [ @FindBy: " + element.getElementLocatorInfo() + " ] CSS Property [" + cssProperty  + " ] did not contain the text [ " + value
+	    throw new ElementCssValueNotMatchingException( "Element [ " + element.getElementLocatorInfo() + " ] CSS Property [" + cssProperty  + " ] did not contain the text [ " + value
 		    + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.", driver);
 	}
 	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
@@ -912,8 +911,8 @@ public class PageLoaded {
 	boolean found = false;
 	long timeLapse;
 	StopWatch stopwatch = new StopWatch();
-	TestReporter.interfaceLog("<i>Syncing to CSS Property [<b>" + cssProperty + "</b> ] to contain [<b>" + regex + "</b> ] in element [<b>@FindBy: "
-		+ element.getElementLocatorInfo() + "</b> ] to be displayed within [ <b>" + timeout + "</b> ] seconds.</i>");
+	TestReporter.interfaceLog("<i>Syncing to CSS Property [<b> " + cssProperty + "</b> ] to contain [<b> " + regex + "</b> ] in element [<b>"
+		+ element.getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + timeout + "</b> ] seconds.</i>");
 	int currentTimeout = driver.getElementTimeout();
 	driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
 	stopwatch.start();
@@ -932,10 +931,10 @@ public class PageLoaded {
 	if (!found && failTestOnSync) {
 	    Highlight.highlightError(driver, element);
 	    TestReporter.interfaceLog(
-		    "<i>Element [<b>@FindBy: " + element.getElementLocatorInfo() + " </b>] CSS Property [<b>" + cssProperty  + "</b> ] did not match the regular expression of [ " + regex
+		    "<i>Element [<b>" + element.getElementLocatorInfo() + " </b>] CSS Property [<b>" + cssProperty  + "</b> ] did not match the regular expression of [ " + regex
 		    + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
 	    throw new ElementCssValueNotMatchingException(
-		    "Element [ @FindBy: " + element.getElementLocatorInfo() + " ] CSS Property [" + cssProperty  + "] did not match the regular expression of [ " + regex
+		    "Element [ " + element.getElementLocatorInfo() + " ] CSS Property [" + cssProperty  + "] did not match the regular expression of [ " + regex
 		    + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.", driver);
 	}
 	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
@@ -980,9 +979,9 @@ public class PageLoaded {
 
 	try {
 	    return wait.until(ExtendedExpectedConditions.elementToBeVisible(element));
-	} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException e) {
+	/*} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException e) {
 	    Element newElement = driver.findElement(new ElementImpl(element).getElementLocator());
-	    return wait.until(ExtendedExpectedConditions.elementToBeVisible(newElement));
+	    return wait.until(ExtendedExpectedConditions.elementToBeVisible(newElement));*/
 	} catch (TimeoutException te){
 	    return false;
 	}
@@ -1006,9 +1005,9 @@ public class PageLoaded {
 	    if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, element);
 	    return wait.until(ExpectedConditions.elementToBeClickable(element)) != null;
 	    // return element.isEnabled();
-	} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException e) {
+/*	} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException e) {
 	    Element newElement = driver.findElement(new ElementImpl(element).getElementLocator());
-	    return wait.until(ExpectedConditions.elementToBeClickable(newElement)) != null;
+	    return wait.until(ExpectedConditions.elementToBeClickable(newElement)) != null;*/
 	} catch (TimeoutException te){
 	    return false;
 	}
@@ -1040,7 +1039,7 @@ public class PageLoaded {
 		return false;
 	    }
 
-	} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException  e) {
+	/*} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException  e) {
 	    try {
 		if (wait.until(ExpectedConditions.textToBePresentInElementValue(element, text)) != null) {
 		    return true;
@@ -1058,7 +1057,7 @@ public class PageLoaded {
 	    } catch (WebDriverException wde) {
 		return false;
 	    } 
-
+*/
 	} catch (TimeoutException te){
 	    return false;
 	}
@@ -1086,17 +1085,17 @@ public class PageLoaded {
 		return false;
 	    }
 	} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException e) {
-	    try {
+	  /*  try {
 		if (wait.until(ExtendedExpectedConditions.textToMatchInElementAttribute(element, "value", regex)) != null) {
 		    return true;
 		} else {
 		    return false;
 		}
-	    } catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException e2) {
+	    } catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException e2) {*/
 		return false;
-	    } catch (WebDriverException wde) {
+	   /* } catch (WebDriverException wde) {
 		return false;
-	    }
+	    }*/
 	}
     }
 
@@ -1120,9 +1119,9 @@ public class PageLoaded {
 	try {
 	    if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, element);
 	    return wait.until(ExtendedExpectedConditions.textToBePresentInElementAttribute(element, attribute, value));
-	} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException e) {
+	/*} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException e) {
 	    Element newElement = driver.findElement(new ElementImpl(element).getElementLocator());
-	    return wait.until(ExtendedExpectedConditions.textToBePresentInElementAttribute(newElement, attribute, value));
+	    return wait.until(ExtendedExpectedConditions.textToBePresentInElementAttribute(newElement, attribute, value));*/
 	} catch (TimeoutException te){
 	    return false;
 	}
@@ -1148,9 +1147,9 @@ public class PageLoaded {
 	try {
 	    if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, element);
 	    return wait.until(ExtendedExpectedConditions.textToMatchInElementAttribute(element, attribute, regex));
-	} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException e) {
+/*	} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException e) {
 	    Element newElement = driver.findElement(new ElementImpl(element).getElementLocator());
-	    return wait.until(ExtendedExpectedConditions.textToMatchInElementAttribute(newElement, attribute, regex));
+	    return wait.until(ExtendedExpectedConditions.textToMatchInElementAttribute(newElement, attribute, regex));*/
 	} catch (TimeoutException te){
 	    return false;
 	}
@@ -1176,9 +1175,9 @@ public class PageLoaded {
 	try {
 	    if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, element);
 	    return wait.until(ExtendedExpectedConditions.textToBePresentInElementCssProperty(element, cssProperty, value));
-	} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException e) {
+	/*} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException e) {
 	    Element newElement = driver.findElement(new ElementImpl(element).getElementLocator());
-	    return wait.until(ExtendedExpectedConditions.textToBePresentInElementCssProperty(newElement,  cssProperty, value));
+	    return wait.until(ExtendedExpectedConditions.textToBePresentInElementCssProperty(newElement,  cssProperty, value));*/
 	} catch (TimeoutException te){
 	    return false;
 	}
@@ -1204,9 +1203,9 @@ public class PageLoaded {
 	try {
 	    if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, element);
 	    return wait.until(ExtendedExpectedConditions.textToMatchInElementCssProperty(element, cssProperty, regex));
-	} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException e) {
+/*	} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException e) {
 	    Element newElement = driver.findElement(new ElementImpl(element).getElementLocator());
-	    return wait.until(ExtendedExpectedConditions.textToMatchInElementCssProperty(newElement,  cssProperty, regex));
+	    return wait.until(ExtendedExpectedConditions.textToMatchInElementCssProperty(newElement,  cssProperty, regex));*/
 	} catch (TimeoutException te){
 	    return false;
 	}

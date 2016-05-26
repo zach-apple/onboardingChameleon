@@ -4,12 +4,13 @@ import com.orasi.core.interfaces.Element;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -24,7 +25,7 @@ import static com.orasi.core.interfaces.impl.internal.ImplementedByProcessor.get
 public class ElementHandler  implements InvocationHandler {
     private final ElementLocator locator;
     private final Class<?> wrappingType;
-    private WebDriver driver;
+    private OrasiDriver driver;
 
     /**
      * Generates a handler to retrieve the WebElement from a locator for a given WebElement interface descendant.
@@ -33,7 +34,7 @@ public class ElementHandler  implements InvocationHandler {
      * @param locator       Element locator that finds the element on a page.
      * @param <T>           type of the interface
      */
-    public <T> ElementHandler(Class<T> interfaceType, ElementLocator locator, WebDriver driver) {
+    public <T> ElementHandler(Class<T> interfaceType, ElementLocator locator, OrasiDriver driver) {
         this.locator = locator;
         this.driver = driver;
         if (!Element.class.isAssignableFrom(interfaceType)) {
@@ -58,12 +59,12 @@ public class ElementHandler  implements InvocationHandler {
     	WebElement element = null;
     
     	if(driver != null){
-    	    driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+    	    driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
     	}
     	try{        	        
         	element = locator.findElement();
         }catch(WebDriverException | ClassCastException e){
-        	return false;
+        	element = null;
         }
     	
     	if(driver != null){
@@ -82,8 +83,15 @@ public class ElementHandler  implements InvocationHandler {
             return driver;
         }
         
-        Constructor cons = wrappingType.getConstructor(WebElement.class);
-        Object thing = cons.newInstance(element);
+        By by= null;
+	Field elementField = null;
+	elementField = locator.getClass().getDeclaredField("by");
+	elementField.setAccessible(true);
+	by=(By)elementField.get(locator);
+	
+        
+        Constructor cons = wrappingType.getConstructor(OrasiDriver.class, By.class);
+        Object thing = cons.newInstance(driver, by);
         try {
             return method.invoke(wrappingType.cast(thing), objects);
         } catch (InvocationTargetException e) {

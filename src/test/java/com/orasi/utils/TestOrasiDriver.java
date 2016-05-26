@@ -336,8 +336,10 @@ public class TestOrasiDriver extends TestEnvironment {
     @Title("findNGButtonText")
     @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "findNGModel")
     public void findNGButtonText() {
+
+    PageLoaded.isAngularComplete(driver);
 	Assert.assertNotNull(driver.findButton(ByNG.buttonText("Login")));
-	driver.findButton(ByNG.buttonText("Login")).click();
+	driver.findButton(ByNG.buttonText("Login")).jsClick();
 	PageLoaded.isAngularComplete(driver);
     }
 

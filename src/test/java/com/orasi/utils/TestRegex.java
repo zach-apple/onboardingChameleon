@@ -1,9 +1,6 @@
 package com.orasi.utils;
 
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.testng.ITestContext;
-import org.testng.SkipException;
 import org.testng.annotations.*;
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;

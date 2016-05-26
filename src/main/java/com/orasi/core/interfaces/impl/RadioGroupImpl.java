@@ -46,7 +46,20 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 		currentIndex = getCurrentIndex();
 	}
 
-
+	public RadioGroupImpl(OrasiDriver driver, By by) {
+		super(driver, by);
+	//	element = driver.findWebElement(by);
+		int timeout = driver.getElementTimeout();
+		driver.setElementTimeout(0);
+		this.radioButtons = element.findElements(By.tagName("input"));
+		if(radioButtons.size() == 0) radioButtons = driver.findElements(getElementLocator());
+		driver.setElementTimeout(timeout);
+		getNumberOfRadioButtons();
+		getAllOptions();
+		Assert.assertNotEquals(radioButtons.size(), 0,
+				"No radio buttons were found for the element [" + element + "].");
+		currentIndex = getCurrentIndex();
+	}
 
 	/**
 	 * @summary - Defines the number of radio buttons in the group by the number
@@ -74,13 +87,13 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	public void selectByIndex(int index) {
 		currentIndex = index;
 		try {
-			new ElementImpl(radioButtons.get(currentIndex)).click();
+			radioButtons.get(currentIndex).click();
 		} catch (RuntimeException rte) {
 			TestReporter.interfaceLog("Select option <b> [ " + currentIndex
-					+ " ] </b> from the radio group [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]", true);
+					+ " ] </b> from the radio group [ <b>" + getElementLocatorInfo() + " </b> ]", true);
 			throw rte;
 		}
-		TestReporter.interfaceLog("Select option <b> [ " + currentIndex + " ] </b> from the radio group [ <b>@FindBy: "
+		TestReporter.interfaceLog("Select option <b> [ " + currentIndex + " ] </b> from the radio group [ <b>"
 				+ getElementLocatorInfo() + " </b> ]", true);
 
 		setSelectedOption();
@@ -136,15 +149,15 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 				currentIndex = loopCounter;
 
 				try {
-					new ElementImpl(radioButtons.get(currentIndex)).click();
+					new ElementImpl(getWrappedDriver(), By.xpath( "//input[" +(currentIndex +1)+ "]")).click();
 				} catch (RuntimeException rte) {
 					TestReporter.interfaceLog("Select option <b> [ " + option
-							+ " ] </b> from the radio group [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]",
+							+ " ] </b> from the radio group [ <b>" + getElementLocatorInfo() + " </b> ]",
 							true);
 					throw rte;
 				}
 				TestReporter.interfaceLog("Select option <b> [ " + option
-						+ " ] </b> from the radio group [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+						+ " ] </b> from the radio group [ <b>" + getElementLocatorInfo() + " </b> ]");
 
 				getSelectedOption();
 				break;

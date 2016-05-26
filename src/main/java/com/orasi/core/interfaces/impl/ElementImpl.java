@@ -18,8 +18,10 @@ import org.openqa.selenium.htmlunit.HtmlUnitWebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.internal.Locatable;
+import org.openqa.selenium.internal.WrapsElement;
 
 import com.orasi.core.Beta;
+import com.orasi.core.by.angular.ByNG;
 import com.orasi.core.interfaces.Element;
 import com.orasi.exception.AutomationException;
 import com.orasi.utils.OrasiDriver;
@@ -34,10 +36,23 @@ import com.orasi.utils.debugging.Highlight;
 public class ElementImpl implements Element {
 
 	protected WebElement element;
+	protected By by;
+	protected ByNG byNG;
 	protected OrasiDriver driver;
 
 	public ElementImpl(final WebElement element) {
 		this.element = element;
+		driver = getWrappedDriver();
+		by = getElementLocator();
+		
+	}
+
+	public ElementImpl( final OrasiDriver driver, final By by) {
+		this.by= by;
+		this.driver = driver;
+		try{
+			element = driver.getWebDriver().findElement(by);
+		}catch(NoSuchElementException throwAway){}
 	}
 
 
@@ -49,15 +64,15 @@ public class ElementImpl implements Element {
 		try {
 			getWrappedElement().click();
 		} catch (RuntimeException rte) {
-			TestReporter.interfaceLog("Clicked [ <font size = 2 color=\"red\"><b>@FindBy: " + getElementLocatorInfo() + " </font></b>]");
+			TestReporter.interfaceLog("Clicked [ <font size = 2 color=\"red\"><b> " + getElementLocatorInfo() + " </font></b>]");
 			throw rte;
 		}
-		TestReporter.interfaceLog("Clicked [ <b>@FindBy: " + getElementLocatorInfo() + " </b>]");
+		TestReporter.interfaceLog("Clicked [ <b>" + getElementLocatorInfo() + " </b>]");
 	}
 
 	public void jsClick() {
 		getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();", getWrappedElement());
-		TestReporter.interfaceLog("Clicked [ <b>@FindBy: " + getElementLocatorInfo() + " </b>]");
+		TestReporter.interfaceLog("Clicked [ <b>" + getElementLocatorInfo() + " </b>]");
 	}
 
 	@Override
@@ -68,7 +83,7 @@ public class ElementImpl implements Element {
 	@Override
 	public void focusClick() {
 		new Actions(getWrappedDriver()).moveToElement(getWrappedElement()).click().perform();
-		TestReporter.interfaceLog("Focus Clicked [ <b>@FindBy: " + getElementLocatorInfo() + " </b>]");
+		TestReporter.interfaceLog("Focus Clicked [ <b>" + getElementLocatorInfo() + " </b>]");
 	}
 
 	@Override
@@ -201,7 +216,7 @@ public class ElementImpl implements Element {
 	@Override
 	public void clear() {
 		getWrappedElement().clear();
-		TestReporter.interfaceLog(" Clear text from Element [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+		TestReporter.interfaceLog(" Clear text from Element [ <b>" + getElementLocatorInfo() + " </b> ]");
 	}
 
 	/**
@@ -211,37 +226,44 @@ public class ElementImpl implements Element {
 	public void sendKeys(CharSequence... keysToSend) {
 		if (keysToSend.toString() != "") {
 			getWrappedElement().sendKeys(keysToSend);
-			TestReporter.interfaceLog(" Send Keys [ <b>" + keysToSend[0].toString() + "</b> ] to Textbox [ <b>@FindBy: "
-					+ getElementLocatorInfo() + " </b> ]");
+			TestReporter.interfaceLog(" Send Keys [ <b>" + keysToSend[0].toString() + "</b> ] to Textbox [ <b>"
+					+ getElementIdentifier() + " </b> ]");
 		}
 	}
 
 	@Override
 	public WebElement getWrappedElement() {
+	    WebElement tempElement = null;
 	    try{
-		element.isDisplayed();
-		return element;
-	    }catch(NoSuchElementException | StaleElementReferenceException e){
-		reload();
-		return element;
+			if(element == null) tempElement = reload();
+			else tempElement = element;
+			tempElement.isEnabled();
+			return tempElement;
+	    }catch(NoSuchElementException |  StaleElementReferenceException| NullPointerException e){
+
+			try{
+				tempElement=reload();
+				return tempElement;
+			 }catch(NullPointerException sere){
+				 return element;
+			 }
 	    }
 	}
 
 	@Override
 	public OrasiDriver getWrappedDriver() {
-
+	    if(driver != null) return driver;
 		WebDriver ldriver = null;
-		Field elementField = null;
 		Field privateStringField = null;
+		if(element == null) getWrappedElement();
 		if (driver == null) {
 		   if (element instanceof ElementImpl) {
 			try {
-				elementField = element.getClass().getDeclaredField("element");
-				elementField.setAccessible(true);
-				WebElement webelement =  (WebElement)elementField.get(element);
-				privateStringField = webelement.getClass().getDeclaredField("parent");
+				WebElement wrappedElement = ((WrapsElement) element).getWrappedElement();
+				
+				privateStringField = wrappedElement.getClass().getDeclaredField("parent");
 				privateStringField.setAccessible(true);
-				ldriver =  (WebDriver)privateStringField.get(webelement);
+				ldriver =  (WebDriver)privateStringField.get(wrappedElement);
 				OrasiDriver oDriver = new OrasiDriver();
 				oDriver.setDriver(ldriver);
 				return oDriver;
@@ -286,6 +308,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public By getElementLocator() {
+	    if(by != null) return this.by;
 		By by = null;
 		String locator = "";
 		try {
@@ -312,6 +335,11 @@ public class ElementImpl implements Element {
 			case "xpath":
 				by = By.xpath(getElementIdentifier());
 				break;
+			case "ng-modal":
+			case "buttontext":	
+			case "ng-controller":	
+			case "ng-repeater":
+				return null;
 			default:
 			    throw new AutomationException("Unknown Element Locator sent in: " + locator, getWrappedDriver());
 			}
@@ -328,38 +356,41 @@ public class ElementImpl implements Element {
 		String locator = "";
 		int startPosition = 0;
 		int endPosition = 0;
-		if (element instanceof HtmlUnitWebElement) {
-			startPosition = element.toString().indexOf("=\"") + 2;
-			endPosition = element.toString().indexOf("\"", element.toString().indexOf("=\"") + 3);
-			if (startPosition == -1 | endPosition == -1)
-				locator = element.toString();
-			else
-				locator = element.toString().substring(startPosition, endPosition);
-		} else if (element instanceof ElementImpl) {
-			Field elementField = null;
-			try {
-				elementField = element.getClass().getDeclaredField("element");
-				elementField.setAccessible(true);
-
-				startPosition = elementField.get(element).toString().lastIndexOf(": ") + 2;
-				if(startPosition==1){
-					startPosition = elementField.get(element).toString().indexOf("=\"") + 2;
-					endPosition = elementField.get(element).toString().indexOf("\"", elementField.get(element).toString().indexOf("=\"") + 3);
-					if (startPosition == -1 | endPosition == -1)
-						locator = elementField.get(element).toString();
-					else
-						locator = elementField.get(element).toString().substring(startPosition, endPosition);
-				}else{
-					locator = elementField.get(element).toString().substring(startPosition,elementField.get(element).toString().lastIndexOf("]"));
-				}
-			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-				e.printStackTrace();
-			}
-
-		} else {
-			startPosition = element.toString().lastIndexOf(": ") + 2;
-			locator = element.toString().substring(startPosition, element.toString().lastIndexOf("]"));
+		if(by == null){
+        		if (element instanceof HtmlUnitWebElement) {
+        			startPosition = element.toString().indexOf("=\"") + 2;
+        			endPosition = element.toString().indexOf("\"", element.toString().indexOf("=\"") + 3);
+        			if (startPosition == -1 | endPosition == -1)
+        				locator = element.toString();
+        			else
+        				locator = element.toString().substring(startPosition, endPosition);
+        		} else if (element instanceof ElementImpl) {
+        			
+        		
+        				WebElement wrappedElement = ((WrapsElement) element).getWrappedElement(); 
+        				startPosition = wrappedElement.toString().lastIndexOf(": ") + 2;
+        				if(startPosition==1){
+        					startPosition = wrappedElement.toString().indexOf("=\"") + 2;
+        					endPosition = wrappedElement.toString().indexOf("\"", wrappedElement.toString().indexOf("=\"") + 3);
+        					if (startPosition == -1 | endPosition == -1)
+        						locator = wrappedElement.toString();
+        					else
+        						locator = wrappedElement.toString().substring(startPosition, endPosition);
+        				}else{
+        					locator = wrappedElement.toString().substring(startPosition,wrappedElement.toString().lastIndexOf("]"));
+        				}
+        			
+        
+        		} else {
+        			startPosition = element.toString().lastIndexOf(": ") + 2;
+        			locator = element.toString().substring(startPosition, element.toString().lastIndexOf("]"));
+        		}
+		}else{
+			startPosition = by.toString().lastIndexOf(": ") + 2;
+			locator = by.toString().substring(startPosition, by.toString().length());
+		    return locator.trim();
 		}
+		    
 		return locator.trim();
 	}
 
@@ -372,37 +403,40 @@ public class ElementImpl implements Element {
 	private String getElementLocatorAsString() {
 		int startPosition = 0;
 		String locator = "";
-
-		if (element instanceof HtmlUnitWebElement) {
-			startPosition = element.toString().indexOf(" ");
-			if (startPosition == -1)locator = element.toString();
-			else locator = element.toString().substring(startPosition, element.toString().indexOf("="));
-		} else if (element instanceof ElementImpl) {
-			Field elementField = null;
-			try {
-				elementField = element.getClass().getDeclaredField("element");
-				elementField.setAccessible(true);
-
-				startPosition = elementField.get(element).toString().lastIndexOf("->") + 3;
-				if(startPosition==2){
-					startPosition = elementField.get(element).toString().indexOf(" ");
-					if (startPosition == -1)
-						locator = elementField.get(element).toString();
-					else
-						locator = elementField.get(element).toString().substring(startPosition, elementField.get(element).toString().indexOf("="));
-				}else{
-				locator = elementField.get(element).toString().substring(startPosition,
-						elementField.get(element).toString().lastIndexOf(":"));
-				}
-			} catch (IllegalAccessException | NoSuchFieldException | SecurityException e) {
-				e.printStackTrace();
-			}
-
-		} else {
-
-			// if (element instanceof HtmlUnitWebElement)
-			startPosition = element.toString().lastIndexOf("->") + 3;
-			locator = element.toString().substring(startPosition, element.toString().lastIndexOf(":"));
+		if (by ==  null){
+        		if (element instanceof HtmlUnitWebElement) {
+        			startPosition = element.toString().indexOf(" ");
+        			if (startPosition == -1)locator = element.toString();
+        			else locator = element.toString().substring(startPosition, element.toString().indexOf("="));
+        		} else if (element instanceof ElementImpl) {
+        			//Field elementField = null;
+        			//try {
+        				WebElement wrappedElement = ((WrapsElement) element).getWrappedElement(); 
+        
+        				startPosition = wrappedElement.toString().lastIndexOf("->") + 3;
+        				if(startPosition==2){
+        					startPosition = wrappedElement.toString().indexOf(" ");
+        					if (startPosition == -1)
+        						locator = wrappedElement.toString();
+        					else
+        						locator = wrappedElement.toString().substring(startPosition, wrappedElement.toString().indexOf("="));
+        				}else{
+        				locator = wrappedElement.toString().substring(startPosition,
+        						wrappedElement.toString().lastIndexOf(":"));
+        				}
+        			//} catch (IllegalAccessException |  SecurityException e) {
+        			//	e.printStackTrace();
+        			//}
+        
+        		} else {
+        
+        			// if (element instanceof HtmlUnitWebElement)
+        			startPosition = getWrappedElement().toString().lastIndexOf("->") + 3;
+        			locator = element.toString().substring(startPosition, element.toString().lastIndexOf(":"));
+        		}
+		}else{
+			locator = by.toString().substring(3, by.toString().lastIndexOf(":"));
+		    return locator.trim();
 		}
 		locator = locator.trim();
 		return locator;
@@ -412,6 +446,8 @@ public class ElementImpl implements Element {
 
 	@Override
 	public String getElementLocatorInfo() {
+		if (by != null) return by.toString();
+		//else return getElementLocatorAsString() + " = " + getElementIdentifier();
 		return getElementLocatorAsString() + " = " + getElementIdentifier();
 	}
 
@@ -476,7 +512,7 @@ public class ElementImpl implements Element {
     	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
     	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
-	    return PageLoaded.syncPresent(getWrappedDriver(), new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
+	    return PageLoaded.syncPresent(getWrappedDriver(), new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
 	}
 
 	/**
@@ -503,7 +539,7 @@ public class ElementImpl implements Element {
     	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
     	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
-		return PageLoaded.syncVisible(getWrappedDriver(), new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
+		return PageLoaded.syncVisible(getWrappedDriver(), new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
 	}
 
 	/**
@@ -530,7 +566,7 @@ public class ElementImpl implements Element {
         	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
         	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
-	    return PageLoaded.syncHidden(getWrappedDriver(), new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
+	    return PageLoaded.syncHidden(getWrappedDriver(), new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
 	}
 
 	/**
@@ -557,7 +593,7 @@ public class ElementImpl implements Element {
     	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
     	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
-		return PageLoaded.syncEnabled(getWrappedDriver(), new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
+		return PageLoaded.syncEnabled(getWrappedDriver(), new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
 	}
 	/**
 	 * Used in conjunction with WebObjectDisabled to determine if the desired
@@ -583,7 +619,7 @@ public class ElementImpl implements Element {
     	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
     	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
-		return PageLoaded.syncDisabled(getWrappedDriver(), new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
+		return PageLoaded.syncDisabled(getWrappedDriver(), new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
 	}
 	 
 	    
@@ -612,7 +648,7 @@ public class ElementImpl implements Element {
         	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
 	    
-		return PageLoaded.syncTextInElement(getWrappedDriver(), text,  new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
+		return PageLoaded.syncTextInElement(getWrappedDriver(), text,  new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
 	}    
 	
 	/**
@@ -669,7 +705,7 @@ public class ElementImpl implements Element {
         	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
 	    
-		return PageLoaded.syncAttributeContainsValue(getWrappedDriver(), attribute, value,  new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
+		return PageLoaded.syncAttributeContainsValue(getWrappedDriver(), attribute, value,  new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
 	}
 
 	/**
@@ -697,7 +733,7 @@ public class ElementImpl implements Element {
         	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
 	    
-		return PageLoaded.syncAttributeMatchesValue(getWrappedDriver(), attribute, value,  new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
+		return PageLoaded.syncAttributeMatchesValue(getWrappedDriver(), attribute, value,  new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
 	}
 	
 	/**
@@ -725,7 +761,7 @@ public class ElementImpl implements Element {
         	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
 	    
-		return PageLoaded.syncCssContainsValue(getWrappedDriver(), cssProperty, value,  new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
+		return PageLoaded.syncCssContainsValue(getWrappedDriver(), cssProperty, value,  new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
 	}
 
 	/**
@@ -752,7 +788,7 @@ public class ElementImpl implements Element {
         	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
 	    
-		return PageLoaded.syncCssMatchesValue(getWrappedDriver(), cssProperty, value,  new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
+		return PageLoaded.syncCssMatchesValue(getWrappedDriver(), cssProperty, value,  new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
 	}
 
 
@@ -764,8 +800,8 @@ public class ElementImpl implements Element {
 	}*/
 	
 	@Beta
-	protected void reload(){
-	    element = getWrappedDriver().findWebElement(getElementLocator());
+	protected WebElement reload(){
+	    return getWrappedDriver().findWebElement(by);
 	}
 	
 	
