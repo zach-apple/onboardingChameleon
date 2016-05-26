@@ -65,15 +65,15 @@ public class ElementImpl implements Element {
 		try {
 			getWrappedElement().click();
 		} catch (RuntimeException rte) {
-			TestReporter.interfaceLog("Clicked [ <font size = 2 color=\"red\"><b> @FindBy: " + getElementLocatorInfo() + " </font></b>]");
+			TestReporter.interfaceLog("Clicked [ <font size = 2 color=\"red\"><b> " + getElementLocatorInfo() + " </font></b>]");
 			throw rte;
 		}
-		TestReporter.interfaceLog("Clicked [ <b>@FindBy: " + getElementLocatorInfo() + " </b>]");
+		TestReporter.interfaceLog("Clicked [ <b>" + getElementLocatorInfo() + " </b>]");
 	}
 
 	public void jsClick() {
 		getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();", getWrappedElement());
-		TestReporter.interfaceLog("Clicked [ <b>@FindBy: " + getElementLocatorInfo() + " </b>]");
+		TestReporter.interfaceLog("Clicked [ <b>" + getElementLocatorInfo() + " </b>]");
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class ElementImpl implements Element {
 	@Override
 	public void focusClick() {
 		new Actions(getWrappedDriver()).moveToElement(getWrappedElement()).click().perform();
-		TestReporter.interfaceLog("Focus Clicked [ <b>@FindBy: " + getElementLocatorInfo() + " </b>]");
+		TestReporter.interfaceLog("Focus Clicked [ <b>" + getElementLocatorInfo() + " </b>]");
 	}
 
 	@Override
@@ -217,7 +217,7 @@ public class ElementImpl implements Element {
 	@Override
 	public void clear() {
 		getWrappedElement().clear();
-		TestReporter.interfaceLog(" Clear text from Element [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+		TestReporter.interfaceLog(" Clear text from Element [ <b>" + getElementLocatorInfo() + " </b> ]");
 	}
 
 	/**
@@ -238,7 +238,7 @@ public class ElementImpl implements Element {
 	    try{
 			if(element == null) tempElement = reload();
 			else tempElement = element;
-			tempElement.isDisplayed();
+			tempElement.isEnabled();
 			return tempElement;
 	    }catch(NoSuchElementException |  StaleElementReferenceException| NullPointerException e){
 
@@ -447,7 +447,7 @@ public class ElementImpl implements Element {
 
 	@Override
 	public String getElementLocatorInfo() {
-		//if (by != null) return by.toString();
+		if (by != null) return by.toString();
 		//else return getElementLocatorAsString() + " = " + getElementIdentifier();
 		return getElementLocatorAsString() + " = " + getElementIdentifier();
 	}
@@ -513,7 +513,7 @@ public class ElementImpl implements Element {
     	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
     	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
-	    return PageLoaded.syncPresent(getWrappedDriver(), new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
+	    return PageLoaded.syncPresent(getWrappedDriver(), new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
 	}
 
 	/**
@@ -540,7 +540,7 @@ public class ElementImpl implements Element {
     	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
     	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
-		return PageLoaded.syncVisible(getWrappedDriver(), new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
+		return PageLoaded.syncVisible(getWrappedDriver(), new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
 	}
 
 	/**
@@ -567,7 +567,7 @@ public class ElementImpl implements Element {
         	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
         	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
-	    return PageLoaded.syncHidden(getWrappedDriver(), new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
+	    return PageLoaded.syncHidden(getWrappedDriver(), new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
 	}
 
 	/**
@@ -594,7 +594,7 @@ public class ElementImpl implements Element {
     	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
     	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
-		return PageLoaded.syncEnabled(getWrappedDriver(), new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
+		return PageLoaded.syncEnabled(getWrappedDriver(), new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
 	}
 	/**
 	 * Used in conjunction with WebObjectDisabled to determine if the desired
@@ -620,7 +620,7 @@ public class ElementImpl implements Element {
     	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
     	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
-		return PageLoaded.syncDisabled(getWrappedDriver(), new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
+		return PageLoaded.syncDisabled(getWrappedDriver(), new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
 	}
 	 
 	    
@@ -649,7 +649,7 @@ public class ElementImpl implements Element {
         	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
 	    
-		return PageLoaded.syncTextInElement(getWrappedDriver(), text,  new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
+		return PageLoaded.syncTextInElement(getWrappedDriver(), text,  new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
 	}    
 	
 	/**
@@ -706,7 +706,7 @@ public class ElementImpl implements Element {
         	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
 	    
-		return PageLoaded.syncAttributeContainsValue(getWrappedDriver(), attribute, value,  new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
+		return PageLoaded.syncAttributeContainsValue(getWrappedDriver(), attribute, value,  new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
 	}
 
 	/**
@@ -734,7 +734,7 @@ public class ElementImpl implements Element {
         	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
 	    
-		return PageLoaded.syncAttributeMatchesValue(getWrappedDriver(), attribute, value,  new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
+		return PageLoaded.syncAttributeMatchesValue(getWrappedDriver(), attribute, value,  new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
 	}
 	
 	/**
@@ -762,7 +762,7 @@ public class ElementImpl implements Element {
         	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
 	    
-		return PageLoaded.syncCssContainsValue(getWrappedDriver(), cssProperty, value,  new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
+		return PageLoaded.syncCssContainsValue(getWrappedDriver(), cssProperty, value,  new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
 	}
 
 	/**
@@ -789,7 +789,7 @@ public class ElementImpl implements Element {
         	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
 	    
-		return PageLoaded.syncCssMatchesValue(getWrappedDriver(), cssProperty, value,  new ElementImpl(getWrappedElement()), timeout, failTestOnSync);
+		return PageLoaded.syncCssMatchesValue(getWrappedDriver(), cssProperty, value,  new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
 	}
 
 

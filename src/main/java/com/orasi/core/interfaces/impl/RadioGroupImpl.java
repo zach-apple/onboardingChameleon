@@ -87,13 +87,13 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	public void selectByIndex(int index) {
 		currentIndex = index;
 		try {
-			new ElementImpl(radioButtons.get(currentIndex)).click();
+			radioButtons.get(currentIndex).click();
 		} catch (RuntimeException rte) {
 			TestReporter.interfaceLog("Select option <b> [ " + currentIndex
-					+ " ] </b> from the radio group [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]", true);
+					+ " ] </b> from the radio group [ <b>" + getElementLocatorInfo() + " </b> ]", true);
 			throw rte;
 		}
-		TestReporter.interfaceLog("Select option <b> [ " + currentIndex + " ] </b> from the radio group [ <b>@FindBy: "
+		TestReporter.interfaceLog("Select option <b> [ " + currentIndex + " ] </b> from the radio group [ <b>"
 				+ getElementLocatorInfo() + " </b> ]", true);
 
 		setSelectedOption();
@@ -149,15 +149,15 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 				currentIndex = loopCounter;
 
 				try {
-					new ElementImpl(element.findElement(By.xpath( "//input[" +(currentIndex +1)+ "]"))).click();
+					new ElementImpl(getWrappedDriver(), By.xpath( "//input[" +(currentIndex +1)+ "]")).click();
 				} catch (RuntimeException rte) {
 					TestReporter.interfaceLog("Select option <b> [ " + option
-							+ " ] </b> from the radio group [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]",
+							+ " ] </b> from the radio group [ <b>" + getElementLocatorInfo() + " </b> ]",
 							true);
 					throw rte;
 				}
 				TestReporter.interfaceLog("Select option <b> [ " + option
-						+ " ] </b> from the radio group [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+						+ " ] </b> from the radio group [ <b>" + getElementLocatorInfo() + " </b> ]");
 
 				getSelectedOption();
 				break;

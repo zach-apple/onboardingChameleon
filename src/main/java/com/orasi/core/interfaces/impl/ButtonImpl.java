@@ -33,11 +33,11 @@ public class ButtonImpl extends ElementImpl implements Button {
 		try {
 			getWrappedElement().click();
 		} catch (RuntimeException rte) {
-			TestReporter.interfaceLog("Clicked Button [ <b>@FindBy: " + getElementLocatorInfo() + "</b>]", true);
+			TestReporter.interfaceLog("Clicked Button [ <b>" + getElementLocatorInfo() + "</b>]", true);
 			throw rte;
 		}
 
-		TestReporter.interfaceLog("Clicked Button [ <b>@FindBy: " + getElementLocatorInfo() + "</b>]");
+		TestReporter.interfaceLog("Clicked Button [ <b>" + getElementLocatorInfo() + "</b>]");
 
 	}
 
@@ -47,10 +47,10 @@ public class ButtonImpl extends ElementImpl implements Button {
 		try {
 			getWrappedDriver().executeJavaScript("arguments[0].click();", element);
 		} catch (RuntimeException rte) {
-			TestReporter.interfaceLog("Clicked Button [ <b>@FindBy: " + getElementLocatorInfo() + "</b>]", true);
+			TestReporter.interfaceLog("Clicked Button [ <b>" + getElementLocatorInfo() + "</b>]", true);
 			throw rte;
 		}
-		TestReporter.interfaceLog("Clicked Button [ <b>@FindBy: " + getElementLocatorInfo() + "</b>]");
+		TestReporter.interfaceLog("Clicked Button [ <b>" + getElementLocatorInfo() + "</b>]");
 
 	}
 }

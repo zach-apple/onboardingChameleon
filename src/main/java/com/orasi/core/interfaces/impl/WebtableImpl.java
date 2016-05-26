@@ -88,9 +88,8 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	@Override
 	public Element getCell(int row, int column) {
 		getWrappedDriver().setElementTimeout(1, TimeUnit.SECONDS);
-		Element cell = new ElementImpl(getWrappedElement()
-				.findElement(By.xpath(getElementIdentifier() + "/tbody/tr[" + row + "]/td[" + column + "]|" + getElementIdentifier() + "/tbody/tr[" + row + "]/th[" + column
-						+ "]|" + getElementIdentifier() + "/tr[" + row + "]/td[" + column + "]|" + getElementIdentifier() + "/tr[" + row + "]/th[" + column + "]")));
+		Element cell = new ElementImpl(getWrappedDriver(),By.xpath(getElementIdentifier() + "/tbody/tr[" + row + "]/td[" + column + "]|" + getElementIdentifier() + "/tbody/tr[" + row + "]/th[" + column
+						+ "]|" + getElementIdentifier() + "/tr[" + row + "]/td[" + column + "]|" + getElementIdentifier() + "/tr[" + row + "]/th[" + column + "]"));
 		getWrappedDriver().setElementTimeout(getWrappedDriver().getElementTimeout(), TimeUnit.SECONDS);
 		return cell;
 	}

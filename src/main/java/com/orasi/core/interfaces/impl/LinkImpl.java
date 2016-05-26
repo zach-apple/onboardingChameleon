@@ -35,10 +35,10 @@ public class LinkImpl extends ElementImpl implements Link {
 							+ ";arguments[0].dispatchEvent(click_ev);} else { arguments[0].click();}",
 					element);
 		} catch (RuntimeException rte) {
-			TestReporter.interfaceLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]", true);
+			TestReporter.interfaceLog(" Click Link [ <b>" + getElementLocatorInfo() + " </b> ]", true);
 			throw rte;
 		}
-		TestReporter.interfaceLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+		TestReporter.interfaceLog(" Click Link [ <b>" + getElementLocatorInfo() + " </b> ]");
 
 	}
 
@@ -47,10 +47,10 @@ public class LinkImpl extends ElementImpl implements Link {
 		try {
 			getWrappedElement().click();
 		} catch (RuntimeException rte) {
-			TestReporter.interfaceLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]", true);
+			TestReporter.interfaceLog(" Click Link [ <b>" + getElementLocatorInfo() + " </b> ]", true);
 			throw rte;
 		}
-		TestReporter.interfaceLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+		TestReporter.interfaceLog(" Click Link [ <b>" + getElementLocatorInfo() + " </b> ]");
 	}
 
 	@Override

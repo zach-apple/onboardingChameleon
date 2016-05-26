@@ -42,10 +42,10 @@ public class CheckboxImpl extends ElementImpl implements Checkbox {
             try{
         	toggle();
             }catch(RuntimeException rte){
-        	TestReporter.interfaceLog(" Checking the Checkbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]", true);
+        	TestReporter.interfaceLog(" Checking the Checkbox [ <b>" + getElementLocatorInfo()  + " </b>]", true);
          	throw rte;
             }
-            	TestReporter.interfaceLog(" Checking the Checkbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
+            	TestReporter.interfaceLog(" Checking the Checkbox [ <b>" + getElementLocatorInfo()  + " </b>]");
         }
     }
 
@@ -55,11 +55,11 @@ public class CheckboxImpl extends ElementImpl implements Checkbox {
             try{
         	toggle();
             }catch(RuntimeException rte){
-                TestReporter.interfaceLog(" Unchecking the Checkbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]", true);
+                TestReporter.interfaceLog(" Unchecking the Checkbox [ <b>" + getElementLocatorInfo()  + " </b>]", true);
                 throw rte;
             }
       	
-            TestReporter.interfaceLog(" Unchecking the Checkbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
+            TestReporter.interfaceLog(" Unchecking the Checkbox [ <b>" + getElementLocatorInfo()  + " </b>]");
           
         }
     }
