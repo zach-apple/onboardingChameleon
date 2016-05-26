@@ -1,6 +1,5 @@
 package com.orasi.exception;
 
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
@@ -10,7 +9,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.internal.BuildInfo;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.SessionId;
 
 import com.orasi.utils.OrasiDriver;
 

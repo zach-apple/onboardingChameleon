@@ -13,7 +13,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.orasi.core.interfaces.Element;
-import com.orasi.core.interfaces.impl.ElementImpl;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.exception.automation.ElementAttributeValueNotMatchingException;
 import com.orasi.exception.automation.ElementCssValueNotMatchingException;

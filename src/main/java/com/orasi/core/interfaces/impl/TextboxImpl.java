@@ -2,10 +2,8 @@ package com.orasi.core.interfaces.impl;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.utils.Base64Coder;

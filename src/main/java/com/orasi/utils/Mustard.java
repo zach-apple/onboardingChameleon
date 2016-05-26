@@ -1,7 +1,5 @@
 package com.orasi.utils;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ResourceBundle;
 
 import org.apache.commons.lang.exception.ExceptionUtils;

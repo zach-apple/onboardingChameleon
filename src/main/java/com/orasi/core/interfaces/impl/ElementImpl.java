@@ -19,7 +19,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.internal.WrapsElement;
-import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import com.orasi.core.Beta;
 import com.orasi.core.by.angular.ByNG;

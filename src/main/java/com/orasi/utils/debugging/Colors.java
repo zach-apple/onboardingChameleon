@@ -9,7 +9,8 @@ public enum Colors {
     GREEN ("green"),
     BLACK ("black");
     
-    private String color;
+    @SuppressWarnings("unused")
+	private String color;
      Colors(String color){
 	this.color = color;
     }

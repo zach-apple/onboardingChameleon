@@ -5,7 +5,6 @@ import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
