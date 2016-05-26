@@ -1,13 +1,10 @@
 package com.orasi.utils;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.orasi.core.by.angular.ByNG;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 

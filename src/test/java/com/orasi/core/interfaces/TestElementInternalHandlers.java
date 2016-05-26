@@ -4,11 +4,9 @@ import com.orasi.core.by.angular.FindByNG;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.TestEnvironment;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
-import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.SkipException;
 import org.testng.annotations.*;

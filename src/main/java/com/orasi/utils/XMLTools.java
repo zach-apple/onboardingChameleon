@@ -398,7 +398,8 @@ public class XMLTools extends SoapService {
      *            to be "abc"
      * 
      */
-    public static boolean validateNodeValueByXPath(Document doc, String xpath,
+    @SuppressWarnings("static-access")
+	public static boolean validateNodeValueByXPath(Document doc, String xpath,
 	    String regexValue) {
 	XPathFactory xPathFactory = XPathFactory.newInstance();
 	XPath xPath = xPathFactory.newXPath();

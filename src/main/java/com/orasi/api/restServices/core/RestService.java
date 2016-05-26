@@ -5,7 +5,6 @@ package com.orasi.api.restServices.core;
  */
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.util.List;
 
 import org.apache.http.Header;

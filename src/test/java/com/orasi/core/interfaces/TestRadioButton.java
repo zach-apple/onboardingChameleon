@@ -2,8 +2,6 @@ package com.orasi.core.interfaces;
 
 import java.util.List;
 
-import com.orasi.core.interfaces.impl.RadioGroupImpl;
-
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.ITestContext;

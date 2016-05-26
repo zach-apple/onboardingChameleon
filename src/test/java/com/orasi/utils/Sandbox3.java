@@ -6,8 +6,8 @@ package com.orasi.utils;
 public class Sandbox3 {
 
     public static void main(String[] args) {
-        Excel MyExcel = new Excel("C:\\Temp\\MyExcel.xlsx");
-        String res = MyExcel.GetCellString(0, 0);
-        int i = 0;
+       // Excel MyExcel = new Excel("C:\\Temp\\MyExcel.xlsx");
+       // String res = MyExcel.GetCellString(0, 0);
+      //  int i = 0;
     }
 }
