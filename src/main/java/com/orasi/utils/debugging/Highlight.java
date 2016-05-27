@@ -1,6 +1,8 @@
 package com.orasi.utils.debugging;
 
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -66,13 +68,14 @@ public class Highlight {
     }
     
     private static void highlight(WebDriver driver, WebElement element, String js, Colors color){
-	if(color != Colors.NONE) js = js.replace("<COLOR>", color.toString());
-	
-	if(driver instanceof OrasiDriver){
-	    ((OrasiDriver)driver).executeJavaScript(js, element);
-	}else{
-	    ((JavascriptExecutor)driver).executeScript(js, element);
-	}
+		if(color != Colors.NONE) js = js.replace("<COLOR>", color.toString());
+		try{
+			if(driver instanceof OrasiDriver){
+			    ((OrasiDriver)driver).executeJavaScript(js, element);
+			}else{
+			    ((JavascriptExecutor)driver).executeScript(js, element);
+			}
+		}catch(StaleElementReferenceException | NoSuchElementException throwAway){}
     }
     
 }
