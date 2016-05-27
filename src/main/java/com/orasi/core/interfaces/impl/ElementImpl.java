@@ -77,7 +77,8 @@ public class ElementImpl implements Element {
 
 	@Override
 	public void focus() {
-		new Actions(getWrappedDriver()).moveToElement(getWrappedElement()).click().perform();
+		new Actions(getWrappedDriver()).moveToElement(getWrappedElement()).perform();
+		TestReporter.interfaceLog("Focus on  [ <b>" + getElementLocatorInfo() + " </b>]");
 	}
 
 	@Override
