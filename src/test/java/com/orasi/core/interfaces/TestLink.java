@@ -45,6 +45,7 @@ public class TestLink extends TestEnvironment {
 	@Title("constructor")
 	@Test(groups ={"regression", "interfaces", "link"})
 	public void constructorWithElement(){
+		Assert.assertNotNull((new LinkImpl(getDriver().findWebElement(By.xpath("//a[@href='testLinks.html']")))));
 		Assert.assertNotNull((new LinkImpl(getDriver().findLink(By.xpath("//a[@href='testLinks.html']")))));
 	}
 

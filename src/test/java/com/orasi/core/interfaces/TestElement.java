@@ -17,14 +17,13 @@ import com.orasi.exception.automation.ElementNotEnabledException;
 import com.orasi.exception.automation.ElementNotHiddenException;
 import com.orasi.exception.automation.ElementNotVisibleException;
 import com.orasi.exception.automation.TextInElementNotPresentException;
-import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestEnvironment;
+
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestElement extends TestEnvironment {
-
 	@BeforeTest(groups = { "regression", "interfaces", "element", "dev" })
 	@Parameters({ "runLocation", "browserUnderTest", "browserVersion", "operatingSystem", "environment" })
 	public void setup(@Optional String runLocation, String browserUnderTest, String browserVersion,

@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.ITestContext;
@@ -275,10 +274,12 @@ public class TestEnvironment {
 	 * Getter and setter for the actual WebDriver
 	 */
 	protected void setDriver(OrasiDriver driverSession) {
-		if (isThreadedDriver())
+		if (isThreadedDriver()){
 			threadedDriver.set(driverSession);
-		else
+		}
+		else{
 			this.driver = driverSession;
+			}
 	}
 
 	public OrasiDriver getDriver() {
@@ -447,8 +448,8 @@ public class TestEnvironment {
 					caps = DesiredCapabilities.internetExplorer();
 					caps.setCapability("ignoreZoomSetting", true);
 					caps.setCapability("enablePersistentHover", false);
-					caps.setCapability(InternetExplorerDriver.FORCE_CREATE_PROCESS, true);
-					caps.setCapability(InternetExplorerDriver.IE_SWITCHES, "-private");
+					//caps.setCapability(InternetExplorerDriver.FORCE_CREATE_PROCESS, true);
+					//caps.setCapability(InternetExplorerDriver.IE_SWITCHES, "-private");
 					file = new File(
 							this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "IEDriverServer.exe").getPath());
 					System.setProperty("webdriver.ie.driver", file.getAbsolutePath());
@@ -629,7 +630,7 @@ public class TestEnvironment {
 	 *            /A
 	 */
 	public boolean pageLoaded() {
-		return new PageLoaded().isDomComplete(getDriver());
+		return PageLoaded.isDomComplete(getDriver());
 	}
 
 	/**
@@ -644,7 +645,7 @@ public class TestEnvironment {
 	 */
 	@Deprecated
 	public boolean pageLoaded(Class<?> clazz, Element element) {
-		return new PageLoaded().isElementLoaded(clazz, getDriver(), element);
+		return PageLoaded.isElementLoaded(clazz, getDriver(), element);
 	}
 	
 	/**

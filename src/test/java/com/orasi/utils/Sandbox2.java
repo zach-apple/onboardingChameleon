@@ -1,34 +1,35 @@
 package com.orasi.utils;
 
-import org.openqa.selenium.By;
+import org.openqa.selenium.support.FindBy;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.orasi.core.by.angular.ByNG;
 import com.orasi.core.interfaces.Textbox;
+import com.orasi.core.interfaces.impl.internal.ElementFactory;
 
 public class Sandbox2 extends TestEnvironment{
-
-    @BeforeTest(groups ={"regression", "utils", "dev"})
-    @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
-	    "operatingSystem", "environment" })
+@FindBy(id="disable-enable")
+private Textbox text;
+    @BeforeTest
     public void setup() {
 	setApplicationUnderTest("Test Site");
-	setBrowserUnderTest("firefox");
+	setBrowserUnderTest("html");
 	setBrowserVersion("");
 	setOperatingSystem("windows");
 	setRunLocation("local");
 	setTestEnvironment("");
-	setPageURL("http://google.com");
+	setPageURL("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/element.html");
 	testStart("TestAlert");
     }
     @Test
     public void test(){
-	driver.executeJavaScript("window.open('http://bluesourcestaging.herokuapp.com', 'BlueSource', 'height=800,width=800');");
-	WindowHandler.waitUntilWindowExistsWithTitle(driver, "BlueSource");
-	System.out.println(driver.getTitle());
-	driver.close();
-	driver.quit();
+	ElementFactory.initElements(driver, this);
+	text.syncEnabled(5);
+    }
+    
+    @AfterTest
+    public void clean(){
+	getDriver().close();
     }
 }

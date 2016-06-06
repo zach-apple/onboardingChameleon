@@ -256,7 +256,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	@Override
 	public Element findElement(By by) {
 		try {
-			return new ElementImpl(driver.findElement(by));
+			return new ElementImpl(this, by);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Element with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -272,7 +272,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	public Element findElement(ByNG by) {
 		try {
-			return new ElementImpl(driver.findElement(getByNGType(by)));
+			return new ElementImpl(this, getByNGType(by));
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Element with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -288,7 +288,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	public Textbox findTextbox(By by) {
 		try {
-			return new TextboxImpl(driver.findElement(by));
+			return new TextboxImpl(this, by);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Textbox with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -304,7 +304,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	public Textbox findTextbox(ByNG by) {
 		try {
-			return new TextboxImpl(driver.findElement(getByNGType(by)));
+			return new TextboxImpl(this, getByNGType(by));
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Textbox with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -320,7 +320,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	public Button findButton(By by) {
 		try {
-			return new ButtonImpl(driver.findElement(by));
+			return new ButtonImpl(this, by);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Button with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -336,7 +336,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	public Button findButton(ByNG by) {
 		try {
-			return new ButtonImpl(driver.findElement(getByNGType(by)));
+			return new ButtonImpl(this, getByNGType(by));
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Button with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -352,7 +352,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	public Checkbox findCheckbox(By by) {
 		try {
-			return new CheckboxImpl(driver.findElement(by));
+			return new CheckboxImpl(this, by);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Checkbox with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -368,7 +368,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	public Checkbox findCheckbox(ByNG by) {
 		try {
-			return new CheckboxImpl(driver.findElement(getByNGType(by)));
+			return new CheckboxImpl(this, getByNGType(by));
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Checkbox with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -384,7 +384,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	public Label findLabel(By by) {
 		try {
-			return new LabelImpl(driver.findElement(by));
+			return new LabelImpl(this, by);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Label with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -400,7 +400,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	public Label findLabel(ByNG by) {
 		try {
-			return new LabelImpl(driver.findElement(getByNGType(by)));
+			return new LabelImpl(this, getByNGType(by));
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Label with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -416,7 +416,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	public Link findLink(By by) {
 		try {
-			return new LinkImpl(driver.findElement(by));
+			return new LinkImpl(this, by);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Link with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -432,7 +432,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	public Link findLink(ByNG by) {
 		try {
-			return new LinkImpl(driver.findElement(getByNGType(by)));
+			return new LinkImpl(this, getByNGType(by));
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Link with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -448,7 +448,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	public Listbox findListbox(By by) {
 		try {
-			return new ListboxImpl(driver.findElement(by));
+			return new ListboxImpl(this, by);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Listbox with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -464,7 +464,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	public Listbox findListbox(ByNG by) {
 		try {
-			return new ListboxImpl(driver.findElement(getByNGType(by)));
+			return new ListboxImpl(this, getByNGType(by));
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Listbox with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -480,7 +480,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	public RadioGroup findRadioGroup(By by) {
 		try {
-			return new RadioGroupImpl(driver.findElement(by));
+			return new RadioGroupImpl(this, by);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such RadioGroup with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -496,7 +496,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	public RadioGroup findRadioGroup(ByNG by) {
 		try {
-			return new RadioGroupImpl(driver.findElement(getByNGType(by)));
+			return new RadioGroupImpl(this, getByNGType(by));
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such RadioGroup with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -512,7 +512,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	public Webtable findWebtable(By by) {
 		try {
-			return new WebtableImpl(driver.findElement(by));
+			return new WebtableImpl(this, by);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Webtable with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -528,7 +528,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	public Webtable findWebtable(ByNG by) {
 		try {
-			return new WebtableImpl(driver.findElement(getByNGType(by)));
+			return new WebtableImpl(this, getByNGType(by));
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Webtable with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -753,6 +753,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		case "internet explorer":
 		case "ie":
 			driver = new InternetExplorerDriver(caps);
+			//driver = new SynchronizedInternetExplorerDriver(caps);			
 			break;
 		case "chrome":
 			driver = new ChromeDriver(caps);
