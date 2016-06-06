@@ -9,6 +9,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
+import org.openqa.selenium.Rectangle;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -766,6 +767,14 @@ public class ElementImpl implements Element {
 	@Beta
 	protected void reload(){
 	    element = getWrappedDriver().findWebElement(getElementLocator());
+	}
+
+
+
+	@Override
+	public Rectangle getRect() {
+	    // TODO Auto-generated method stub
+	    return null;
 	}
 	
 	
