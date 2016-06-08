@@ -10,6 +10,7 @@ import java.util.List;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.remote.Augmenter;
 import org.testng.IReporter;
 import org.testng.ISuite;
@@ -54,20 +55,22 @@ public class Screenshot extends TestListenerAdapter implements IReporter{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		WebDriver augmentDriver= null;
-		if (runLocation == "remote"){
-			augmentDriver = new Augmenter().augment(driver.getWebDriver());
-		}
 		Reporter.setCurrentTestResult(result);
-
-		new File(destDir).mkdirs();
-		DateFormat dateFormat = new SimpleDateFormat("dd_MMM_yyyy_hh_mm_ssaa");
-
-		String destFile = dateFormat.format(new Date()) + ".png";
-
-		//Capture a screenshot for TestNG reporting
-		TestReporter.logScreenshot(augmentDriver, destDir + slash + destFile, slash, runLocation);
 		
+		WebDriver augmentDriver= driver.getWebDriver();
+		if(!(augmentDriver instanceof HtmlUnitDriver)){
+			if (runLocation == "remote" ){
+				augmentDriver = new Augmenter().augment(driver.getWebDriver());
+			}
+		
+			new File(destDir).mkdirs();
+			DateFormat dateFormat = new SimpleDateFormat("dd_MMM_yyyy_hh_mm_ssaa");
+	
+			String destFile = dateFormat.format(new Date()) + ".png";
+	
+			//Capture a screenshot for TestNG reporting
+			TestReporter.logScreenshot(augmentDriver, destDir + slash + destFile, slash, runLocation);
+		}		
 		//Capture a screenshot for Allure reporting
 	//	FailedScreenshot(augmentDriver);
 		if(reportToMustard) Mustard.postResultsToMustard(driver, result, runLocation );
