@@ -334,7 +334,7 @@ public class PageLoaded {
 		    "Element [ " + element.getElementLocatorInfo() + " ] is not PRESENT on the page after [ "
 			    + (timeLapse) / 1000.0 + " ] seconds.");
 	}
-	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
+	if(Highlight.getDebugMode() && found) Highlight.highlightSuccess(driver, element);
 	return found;
     }
 
@@ -953,14 +953,16 @@ public class PageLoaded {
      *         element is not present in the DOM
      */
     private static boolean webElementPresent(OrasiDriver driver, By locator) {
-	WebDriverWait wait = new WebDriverWait(driver, 0);
-
+	int timeout = ((OrasiDriver)driver).getElementTimeout();
 	try {
-	    return wait.until(ExpectedConditions.presenceOfElementLocated(locator)) != null;
+		
+		((OrasiDriver)driver).setElementTimeout(0);
+	    return ((OrasiDriver)driver).findWebElement(locator)!= null;
 	} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException e) {
 	    return false;
+	}finally{
+		((OrasiDriver)driver).setElementTimeout(timeout);
 	}
-
     }
 
     /**
