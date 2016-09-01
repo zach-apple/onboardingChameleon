@@ -24,6 +24,11 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import jxl.Cell;
 import jxl.Sheet;
@@ -33,6 +38,8 @@ import jxl.read.biff.BiffException;
 import org.apache.xmlbeans.XmlException;
 import org.testng.Reporter;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.eviware.soapui.impl.wsdl.WsdlInterface;
@@ -40,11 +47,17 @@ import com.eviware.soapui.impl.wsdl.WsdlOperation;
 import com.eviware.soapui.impl.wsdl.WsdlProject;
 import com.eviware.soapui.impl.wsdl.support.wsdl.WsdlImporter;
 import com.eviware.soapui.support.SoapUIException;
+import com.orasi.api.soapServices.core.exceptions.XPathNotFoundException;
+import com.orasi.api.soapServices.core.exceptions.XPathNullNodeValueException;
+import com.orasi.utils.Randomness;
+import com.orasi.utils.Regex;
 import com.orasi.utils.XMLTools;
 
 public abstract class SoapService{
 
 	private String strEnvironment = null;
+	private String strServiceName;
+	private String strOperationName;
 	private String strServiceURL = null;
 	private String strResponseURI = null;
 	private String intResponseStatusCode = null;
@@ -164,7 +177,26 @@ public abstract class SoapService{
 	public String getServiceURL() {
 		return strServiceURL;
 	}
+	
+	/**
+	 * @summary Return the Service Name of the service under test
+	 * @author Justin Phlegar
+	 * @version Created: 08/28/2014
+	 * @return Returns the Service Name as a String
+	 */
+	public String getServiceName() {
+		return strServiceName;
+	}
 
+	/**
+	 * @summary Return the Service Operation Name of the service under test
+	 * @author Justin Phlegar
+	 * @version Created: 08/28/2014
+	 * @return Returns the Service Operation Name as a String
+	 */
+	public String getOperationName() {
+		return strOperationName;
+	}
 	/**
 	 * @summary This is used to retrieve the current XML Document as it is in
 	 *          memory.
@@ -312,6 +344,45 @@ public abstract class SoapService{
 		strServiceURL = url;
 	}
 
+	/**
+	 * @summary Used to store Service Name Under Test in memory. Can be
+	 *          retrieved using {@link #getServiceName())}
+	 * @author Justin Phlegar
+	 * @version Created: 08/28/2014
+	 * @param url
+	 *            String: Service Name of the Service Under Test
+	 */
+	protected void setServiceName(String name) {
+		strServiceName = name;
+	}
+
+	/**
+	 * @summary Used to store the Service Operation Name Under Test in memory. Can be
+	 *          retrieved using {@link #getOperationName())}
+	 * @author Justin Phlegar
+	 * @version Created: 08/28/2014
+	 * @param url
+	 *            String: Operation Name of the Service Under Test
+	 */
+	protected void setOperationName(String name) {
+		strOperationName = name;
+	}
+
+	public int getNumberOfRequestNodesByXPath(String xpath){
+		try{
+			return XMLTools.getNodeList(getRequestDocument(), xpath).getLength();
+		}catch(XPathNotFoundException e){
+			return 0;
+		}
+	}
+
+	public int getNumberOfResponseNodesByXPath(String xpath){
+		try{
+			return XMLTools.getNodeList(getResponseDocument(), xpath).getLength();
+		}catch(XPathNotFoundException e){
+			return 0;
+		}
+	}
 	/***************************
 	 **** End Gets and Sets ****
 	 ***************************/
@@ -448,7 +519,7 @@ public abstract class SoapService{
 
 		try {
 			messageFactory = MessageFactory
-					.newInstance(SOAPConstants.SOAP_1_1_PROTOCOL);
+					.newInstance(SOAPConstants.SOAP_1_2_PROTOCOL);
 			// Convert XML Request to SoapMessage
 			InputStream in = new ByteArrayInputStream(getRequest().getBytes(Charset.defaultCharset()));
 			request = messageFactory.createMessage(new MimeHeaders(),in);	
@@ -505,6 +576,145 @@ public abstract class SoapService{
 		return response;
 	}	
 	
+	/**
+	 * @summary Update an XPath node or attribute based on the value. The value
+	 *          is not limited to simple values, but may also call various
+	 *          functions by adding "fx:" as a prefix. Please see
+	 *          {@link #handleValueFunction} for more information
+	 * @author Justin Phlegar
+	 * @version Created: 08/28/2014
+	 * @param xpath
+	 *            String: xpath to evaluate
+	 * @param value
+	 *            String: Depending on value given, will update the xpath value,
+	 *            attribute, or call a separate function. 
+	 *            <br><br><b>Value syntax expressions:</b>
+	 *            <br><b>value="abc"</b>  -- Indirectly states that the node value will be set as "abc"
+	 *            <br><b>value="value:abc"</b>  -- Directly states that the node value will be set as "abc"
+	 *            <br><b>value="attribute:attrName,abc"</b>  -- Directly states that the node attribute "attrName" will be set as "abc"
+	 *            <br><b>value="fx:funcName"</b> -- Will call the function "funcName" to be handled in {@link #handleValueFunction}  
+	 * @throws XPathExpressionException
+	 *             Could not match evaluate xPath
+	 * @throws RuntimeException
+	 *             Could not match xPath to a node, element or attribute
+	 */
+	protected  void setRequestNodeValueByXPath(Document doc, String xpath, String value) {
+		XPathFactory xPathFactory = XPathFactory.newInstance();
+		XPath xPath = xPathFactory.newXPath();
+		XPathExpression expr;
+		NodeList nList = null;
+		//Document doc = getRequestDocument();
+	//	Element element = (Element) doc.getElementsByTagName("pmtInfo");
+		//Find the node based on xpath expression
+		try {
+			expr = xPath.compile(xpath);
+			nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+		}catch (XPathExpressionException xpe) {		
+			throw new RuntimeException("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
+		}
+		
+		//Ensure an element was found, if not then throw error and fail
+		if (nList.item(0) == null){	
+			throw new XPathNotFoundException(xpath);
+		}
+		
+		//System.out.println("XPATH: " + xpath + " || VALUE: " +value);
+		
+		if( value == null || value.isEmpty()){
+			throw new XPathNullNodeValueException(xpath);
+		}
+		
+		//Handle prefix types
+		if (value.trim().toLowerCase().contains("value:")) {
+			
+			//Node value was specifically stated. Update node value
+			value = value.substring(value.indexOf(":") + 1, value.length())
+					.trim();
+			
+			//Handle function if necessary
+			if (value.contains("fx:")) {
+				value = handleValueFunction(doc, value, xpath);
+			}
+			
+			//If a prior function call previous updated the XML, nothing more is needed.
+			if (!value.equalsIgnoreCase("XMLUpdated")) {
+				nList.item(0).setTextContent(value);
+			}
+
+		} else if (value.trim().toLowerCase().contains("addattribute")) {
+
+			//Node attribute was specifically stated. Determine the attribute to find, then update the attribute 
+			//value = value.substring(value.indexOf(":") + 1,value.length()).trim();
+			//String[] attributeParams = value.split(";");
+
+			//Handle function if necessary
+			if (value.contains("fx:")) {
+				value = handleValueFunction(doc, value, xpath);
+			}
+			
+			//If a prior function call previous updated the XML, nothing more is needed.			
+			if (value.equalsIgnoreCase("XMLUpdated")) {
+				//Find the attribute and set for editting
+				NamedNodeMap attr = nList.item(0).getAttributes();
+				Node nodeAttr = attr.getNamedItem(value);
+				
+				if (!value.equalsIgnoreCase("XMLUpdated")) {
+				//Update attribute
+					nodeAttr.setTextContent(value);
+				}
+			}
+		} else {
+			//Default path. Update node value based on xpath
+			//Handle function if necessary
+			if (value.contains("fx:")) {
+				value = handleValueFunction(doc, value, xpath);
+			}
+			
+			//If a prior function call previous updated the XML, nothing more is needed.
+			if (!value.equalsIgnoreCase("XMLUpdated")) {
+				if(value.equalsIgnoreCase("true")) value = "true";
+				else if(value.equalsIgnoreCase("false")) value = "false";
+				else if(xpath.replace(" ", "").equalsIgnoreCase("groupcode")){
+					if (value.equals("1825") || value.equals("1905") || value.equals("4250") || value.equals("4268") ) value = "0" + value;
+				}
+				nList.item(0).setTextContent(value);
+			}
+		}
+		
+		//Store changes
+		setRequestDocument(doc);		
+	}
+
+protected static boolean validateNodeContainsValueByXPath(Document doc, String xpath, String testValue) {
+     XPathFactory xPathFactory = XPathFactory.newInstance();
+     XPath xPath = xPathFactory.newXPath();
+     XPathExpression expr;
+     NodeList nList = null;
+     int element = 0;
+     boolean isContained = false;
+
+     try{
+         expr = xPath.compile(xpath);
+         nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+     }catch(XPathExpressionException e1){
+     	throw new RuntimeException("Xpath expression '" + xpath + "' did not exist." );
+     }
+     
+     //Iterate through all nodes in the list
+     do{
+     		//Test to see if the test value is found in the same node structure as the locatro value
+     		if(nList.item(element).getTextContent().toLowerCase().contains(testValue.toLowerCase())){
+     			isContained = true;      			
+     		}
+     	element++;
+ 		if(element == nList.getLength() - 1 && !isContained){
+ 			Reporter.log("The test value [" +testValue+ "] was not contained in any nodes", true);
+ 			throw new RuntimeException("The test value [" +testValue+ "] was not contained in any nodes");
+ 		}
+     }while(element < nList.getLength() && !isContained);
+         
+     return isContained;
+}
 
 	/**
 	 * @summary Update multiple XPath nodes or attributes based on the value. The value
@@ -525,7 +735,7 @@ public abstract class SoapService{
 	 *            <br><b>value="fx:funcName"</b> -- Will call the function "funcName" to be handled in {@link #handleValueFunction}
 	 */
 	public void setRequestNodeValueByXPath(String xpath, String value) {
-			XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath,value);
+			setRequestNodeValueByXPath(getRequestDocument(),xpath,value);
 	}
 
 	/**
@@ -548,7 +758,7 @@ public abstract class SoapService{
 	 */
 	public void setRequestNodeValueByXPath(Object[][] scenarios) {
 		for (int x = 0; x < scenarios.length; x++) {
-			XMLTools.setRequestNodeValueByXPath(getRequestDocument(),scenarios[x][0].toString(),
+			setRequestNodeValueByXPath(getRequestDocument(),scenarios[x][0].toString(),
 					scenarios[x][1].toString());
 		}
 	}
@@ -575,7 +785,7 @@ public abstract class SoapService{
 		buffer.append("<td style='width: 100px; color: black; text-align: center;'><b>Value</b></td>");
 		buffer.append("<td style='width: 100px; color: black; text-align: center;'><b>Status</b></td></tr>");
 		for (int x = 0; x < scenarios.length; x++) {
-			if (!XMLTools.validateNodeValueByXPath(doc, scenarios[x][0].toString(),
+			if (!validateNodeValueByXPath(doc, scenarios[x][0].toString(),
 					scenarios[x][1].toString())) {
 				status = false;
 			}
@@ -583,6 +793,95 @@ public abstract class SoapService{
 		buffer.append("</table>");
 		Reporter.log(buffer.toString()+ "<br/>");
 		return status;
+	}
+	/**
+	 * @summary Main validation function that validates and reports findings
+	 * @author Justin Phlegar
+	 * @version Created: 08/28/2014
+	 * @param doc Document: XML Document to evalute
+	 * @param xpath String: xpath to evaluate
+	 * @param value String: Depending on value given, will validate the xpath node or attribute value,
+	 *  		  	<br><br><b>Value syntax expressions:</b>
+	 *	            <br><b>value="abc"</b>  -- Indirectly states that the node value will be validated and expected to be "abc"
+	 *  	        <br><b>value="value:abc"</b>  -- Directly states that the node value will be validated and expected to be "abc"
+	 *      	    <br><b>value="attribute:attrName,abc"</b>  -- Directly states that the node attribute "attrName" will be validated and expected to be "abc"
+	 *            
+	 */
+	protected boolean validateNodeValueByXPath(Document doc, String xpath, String regexValue) {
+		XPathFactory xPathFactory = XPathFactory.newInstance();
+		XPath xPath = xPathFactory.newXPath();
+		XPathExpression expr;
+		NodeList nList = null;
+		String xPathValue = "";
+		String errorMessage = "";
+		
+		//Find the node based on xpath expression
+		try {
+			expr = xPath.compile(xpath);
+			nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+		}catch (XPathExpressionException xpe) {
+			errorMessage = "Failed to build xpath [ " + xpath + " ]. Please check format.";
+			//throw new RuntimeException("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
+		}
+		
+		//Ensure an element was found, if not then throw error and fail
+		if (nList.item(0) == null && errorMessage.isEmpty()) {
+			errorMessage = "No xpath was found with the path [ " + xpath + " ] ";
+			//throw new RuntimeException("No xpath was found with the path [ " + xpath + " ] ");
+		}
+		
+		if (errorMessage.isEmpty()){
+			//Handle prefix types
+			if (regexValue.trim().toLowerCase().contains("value:")) {
+				
+				//Node value was specifically stated. Find value of node to validate based on xpath
+				regexValue = regexValue.substring(regexValue.indexOf(":") + 1,
+						regexValue.length()).trim();
+				xPathValue = nList.item(0).getTextContent();
+			} else if (regexValue.trim().toLowerCase().contains("attribute")) {
+				//Node attribute was specifically stated. Find attribute of node to validate based on xpath and attribute name
+				regexValue = regexValue.substring(0,
+						regexValue.indexOf(":") + 1).trim();
+				String[] attributeParams = regexValue.split(",");
+				NamedNodeMap attr = nList.item(0).getAttributes();
+				Node nodeAttr = attr.getNamedItem(attributeParams[0]);
+				xPathValue = nodeAttr.getTextContent();
+			} else {
+				//Default path. Get node value based on xpath
+				xPathValue = nList.item(0).getTextContent();
+			}
+		}
+
+		Regex regex = new Regex();
+
+		//Validate expected value with actual value and report in html table 
+		if(!errorMessage.isEmpty()){
+			buffer.append("<tr><td style='width: 100px; color: black; text-align: left;'>"
+					+ xpath + "</td>");
+			buffer.append("<td style='width: 100px; color: black; text-align: center;'>"
+					+ regexValue + "</td>");
+			buffer.append("<td style='width: 100px; color: black; text-align: center;'>"
+					+ errorMessage + "</td>");
+			buffer.append("<td style='width: 100px; color: red; text-align: center;'><b>Fail</b></td></tr>");
+		}else if (regex.match(regexValue, xPathValue)) {		
+			buffer.append("<tr><td style='width: 100px; color: black; text-align: left;'>"
+					+ xpath + "</td>");
+			buffer.append("<td style='width: 100px; color: black; text-align: center;'>"
+					+ regexValue + "</td>");
+			buffer.append("<td style='width: 100px; color: black; text-align: center;'>"
+					+ xPathValue + "</td>");
+			buffer.append("<td style='width: 100px; color: green; text-align: center;'><b>Pass</b></td></tr>");
+		} else {
+			buffer.append("<tr><td style='width: 100px; color: black; text-align: left;'>"
+					+ xpath + "</td>");
+			buffer.append("<td style='width: 100px; color: black; text-align: center;'>"
+					+ regexValue + "</td>");
+			buffer.append("<td style='width: 100px; color: black; text-align: center;'>"
+					+ xPathValue + "</td>");
+			buffer.append("<td style='width: 100px; color: red; text-align: center;'><b>Fail</b></td></tr>");
+		}
+		//return boolean
+		return regex.match(regexValue, xPathValue);
 	}
 
 	/**
@@ -597,19 +896,15 @@ public abstract class SoapService{
 				getTestScenario(resourcePath, scenario));
 	}
 
-	/**
+/*	*//**
 	 * @summary Set the WSDL Endpoint for the class to use
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
 	 * @param endpoint String: Endpoint location of WSDL file. This can be a web location or local. 
-	 */	
+	 *//*	
 	protected void setEnvironmentServiceURL(String endpoint) {
-		if (endpoint.contains("http")){
-			setServiceURL(endpoint + "?wsdl");
-		}else{
-			setServiceURL(endpoint + ".wsdl");
-		}
-	}
+	    setServiceURL(endpoint);		
+	}*/
 
 	/**
 	 * @summary Opens the WSDL file that was loaded with the {@link setEnvironmentServiceURL} and load a XML Template for selected operation
@@ -650,16 +945,126 @@ public abstract class SoapService{
 		setRequestDocument(XMLTools.removeWhiteSpace(getRequestDocument()));
 	}
 
-	public boolean validateRepsonseXML() {
-		Document doc = getResponseDocument();
-		String uri = getResponseBaseURI();
+	/**
+	 * @summary Call functions during setting of the xpath
+	 * @author Justin Phlegar
+	 * @version Created: 08/28/2014
+	 * @param xpath String: Xpath to run the function on 
+	 * @param function String: function to call
+	 * 					<br><br><b>Supported Functions:</b>
+	 * 					<br><b>value="fx:addnode"</b>  -- Add a new node at Xpath position. Expects "Node:nodeName" where nodeName will be the name given to the node
+	 * 		            <br><b>value="fx:getdatetime"</b>  -- Set date and time in a format accepted by XML. Expects "DaysOut:x" where x is the number of days out
+	 * 					<br><b>value="fx:getdate"</b>  -- Set date in a format accepted by XML. Expects "DaysOut:x" where x is the number of days out 					
+	 *  				<br><b>value="fx:removenode"</b>  -- Remove a node at Xpath position.
+	 *   				<br><b>value="fx:randomnumber"</b>  -- Set a string of random numbers. Expects "Node:x" where x is the length of the string to output
+	 *    				<br><b>value="fx:randomstring"</b>  -- Set a string of random characters. Expects "Node:x" where x is the length of the string to output
+	 *        			<br><b>value="fx:randomalphanumeric"</b>  -- Set a string of random numbers and characters. Expects "Node:x" where x is the length of the string to output 		  	
+	 */
+	private String handleValueFunction(Document doc, String function, String xpath) {
+		String[] params = function.split(";");
+		String command = params[0];
+		String[] length = new String[2];
+		String[] tagName = new String[2];
+		String[] daysOut = new String[2];
 
-		if (doc == null) {
-			throw new RuntimeException("Reponse document was null.");
-		} else if (uri.isEmpty()) {
-			throw new RuntimeException("URI was null.");
+		switch (command.toLowerCase()) {
+		case "fx:getdatetime":
+			daysOut = params[1].split(":");
+			if (daysOut[0].trim().equalsIgnoreCase("DaysOut")) {
+				return Randomness.generateCurrentXMLDatetime(Integer.parseInt(daysOut[1]));
+			} else {
+				// report error
+			}
+			
+		case "fx:getdate":
+			daysOut = params[1].split(":");
+			if (daysOut[0].trim().equalsIgnoreCase("DaysOut")) {
+				return Randomness.generateCurrentXMLDate(Integer.parseInt(daysOut[1]));
+			} else{
+				// report error 
+			}
+		case "fx:addnode":
+			String tag = params[1].replace("node:", "").replace("Node:", "");
+			setRequestDocument(XMLTools.addNode(doc,tag.trim(), xpath));
+			return "XMLUpdated";
+			
+		case "fx:addnodes":
+			tagName = params[1].split(":");
+			if (tagName[0].toLowerCase().trim().contains("node")) {
+				String[] nodes = tagName[1].split("/");
+				String appendedXpath = xpath;
+				for(String node : nodes){
+					setRequestDocument(XMLTools.addNode(doc,node.replaceAll("\\[(.*?)\\]",""), appendedXpath));
+					appendedXpath += "/"+node;
+				}
+			} else {
+				// report error
+			}
+			return "XMLUpdated";
+
+		case "fx:addattribute":
+			tagName = params[1].split(":",2);
+			if (tagName[0].trim().equalsIgnoreCase("attribute")) {
+				setRequestDocument(XMLTools.addAttribute(doc,tagName[1].trim(), xpath));
+			} else {
+				// report error
+			}
+			return "XMLUpdated";
+			
+		case "fx:addnamespace":
+			tagName = params[1].split(":",2);
+			if (tagName[0].trim().equalsIgnoreCase("namespace")) {
+				setRequestDocument(XMLTools.addNamespace(doc,tagName[1].trim(), xpath));
+			} else {
+				// report error
+			}
+			return "XMLUpdated";
+
+
+		case "fx:removenode":
+			setRequestDocument(XMLTools.removeNode(doc, xpath));
+			return "XMLUpdated";
+			
+		case "fx:removeattribute":
+			String attribute = xpath.substring(xpath.lastIndexOf("@") + 1, xpath.length());
+			xpath = xpath.substring(0,xpath.lastIndexOf("@") -1);
+			setRequestDocument(XMLTools.removeAttribute(doc,attribute, xpath));
+			return "XMLUpdated";
+/*
+		case "fx:dbquery":
+			break;
+
+		case "fx:dbresult":
+			break;
+*/
+
+		case "fx:randomnumber":
+			length = params[1].split(":");
+			if (length[0].trim().equalsIgnoreCase("Node")) {
+				return Randomness.randomNumber(Integer.parseInt(length[1]));
+			} else {
+				// report error
+			}
+
+		case "fx:randomstring":
+			length = params[1].split(":");
+			if (length[0].trim().equalsIgnoreCase("Node")) {
+				return Randomness.randomString(Integer.parseInt(length[1]));
+			} else {
+				return Randomness.randomString(Integer.parseInt(length[0]));
 		}
 
-		return XMLTools.validateXMLSchema(uri, doc);
+		case "fx:randomalphanumeric":
+			length = params[1].split(":");
+			if (length[0].trim().equalsIgnoreCase("Node")) {
+				return Randomness.randomAlphaNumeric(Integer.parseInt(length[1]));
+			} else {
+				// report error
+			}
+		
+		default:
+			throw new RuntimeException("The command [" + command + " ] is not a valid command");
+		}
 	}
+
 }
