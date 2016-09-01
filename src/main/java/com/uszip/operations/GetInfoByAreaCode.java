@@ -1,9 +1,9 @@
-package com.api.uszip.operations;
+package com.uszip.operations;
 
-import com.api.uszip.UsZipService;
 import com.orasi.utils.XMLTools;
+import com.uszip.USZip;
 
-public class GetInfoByAreaCode extends UsZipService{
+public class GetInfoByAreaCode extends USZip{
 	public GetInfoByAreaCode() {
 		
 		//Generate a request from a project xml file

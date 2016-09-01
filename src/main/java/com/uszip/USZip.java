@@ -1,10 +1,10 @@
-package com.api.uszip;
+package com.uszip;
 
 import com.orasi.api.soapServices.core.SoapService;
 
-public class UsZipService extends SoapService{
+public class USZip extends SoapService{
 
-	public UsZipService() {
+	public USZip() {
 	    setServiceName("UsZipService");
 	    setServiceURL("http://www.webservicex.net/uszip.asmx?wsdl");
 	}

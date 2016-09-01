@@ -3,9 +3,9 @@ package com.orasi.api;
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
-import com.api.uszip.operations.GetInfoByAreaCode;
 import com.orasi.utils.AlertHandler;
 import com.orasi.utils.TestReporter;
+import com.uszip.operations.GetInfoByAreaCode;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
@@ -16,11 +16,9 @@ public class TestSoapService {
     @Stories("SoapService")
     @Test(groups ={"regression", "interfaces", "textbox"})
     public void sandbox(){
-	GetInfoByAreaCode getInfo = new GetInfoByAreaCode();
-	getInfo.setAreaCode("336");
-	System.out.println(getInfo.getRequest());
-	getInfo.sendRequest();
-	System.out.println(getInfo.getResponse());
-	TestReporter.logAPI(getInfo.getNumberOfResults() == 0, "No records returned", getInfo);
-;    }
+		GetInfoByAreaCode getInfo = new GetInfoByAreaCode();
+		getInfo.setAreaCode("901");
+		getInfo.sendRequest();
+		TestReporter.logAPI(getInfo.getNumberOfResults() == 0, "No records returned", getInfo);
+    }
 }
