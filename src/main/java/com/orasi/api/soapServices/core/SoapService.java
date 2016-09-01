@@ -525,7 +525,6 @@ public abstract class SoapService{
 			request = messageFactory.createMessage(new MimeHeaders(),in);	
 
 			request.writeTo(System.out);
-			System.out.println();
 
 			// Send out Soap Request to the endopoint
 			connectionFactory = SOAPConnectionFactory.newInstance();
@@ -551,8 +550,7 @@ public abstract class SoapService{
 		if (responseBody.hasFault()) {
 			SOAPFault newFault = responseBody.getFault();
 			setRepsonseStatusCode(newFault.getFaultCode());
-			System.out
-					.println("sendSoapReq FAULT:  " + newFault.getFaultCode());
+			System.out.println("sendSoapReq FAULT:  " + newFault.getFaultCode());
 		} else {
 			setRepsonseStatusCode("200");
 		}
@@ -569,10 +567,6 @@ public abstract class SoapService{
 		doc.normalize();
 		setResponseDocument(doc);
 		setResponseBaseURI(responseBody.getNamespaceURI());
-		System.out.println();
-		System.out.println();
-		System.out.println("Response");
-		System.out.println(getResponse());
 		return response;
 	}	
 	
