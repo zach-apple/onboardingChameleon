@@ -197,7 +197,41 @@ public class XMLTools{
 		TestReporter.logDebug("Exiting XMLTools#addNode");
 		return doc;
 	}
-	
+
+	 /**  Takes an xpath and removes a node to the location of the xpath 
+	 * @author Justin Phlegar
+	 * @version Created: 08/28/2014
+	 * @param doc Document: XML Document that will be updated
+	 * @param xpath String: Path in the XML to add the node
+	 * @return Document xml with removed Node
+	 */
+	public static Document removeNode(Document doc, String xpath) {
+		TestReporter.logDebug("Entering XMLTools#removeNode");
+		XPathFactory xPathFactory = XPathFactory.newInstance();
+		XPath xPath = xPathFactory.newXPath();
+		XPathExpression expr;
+		NodeList nList = null;
+		
+		TestReporter.logInfo("Remove node from xpath [ " + xpath + " ]");
+		try {
+			TestReporter.logDebug("Checking validity of xpath");
+			expr = xPath.compile(xpath);
+			nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+		} catch (XPathExpressionException e1) {
+			throw new XPathNotFoundException("Xpath evaluation failed with xpath [ " + xpath + " ] ");	
+		}
+
+		TestReporter.logDebug("XPath is valid. Removing node");
+		Element element = (Element) nList.item(0);
+		element.getParentNode().removeChild(element);
+
+		TestReporter.logDebug("Node removal successful. Normalizing document");
+		doc.normalize();
+		
+		TestReporter.logDebug("Exiting XMLTools#removeNode");
+		return doc;
+	}
+	 
 	/**
 	 *  Takes an xpath and return the value found
 	 * @author Justin Phlegar
@@ -376,34 +410,14 @@ public class XMLTools{
 		TestReporter.logDebug("Exiting XMLTools#transformXmlToString");
 		return sw.toString();
 	}
-	
-	public static Document removeNode(Document doc, String xpath) {
-		TestReporter.logDebug("Entering XMLTools#removeNode");
-		XPathFactory xPathFactory = XPathFactory.newInstance();
-		XPath xPath = xPathFactory.newXPath();
-		XPathExpression expr;
-		NodeList nList = null;
-		
-		TestReporter.logInfo("Remove node from xpath [ " + xpath + " ]");
-		try {
-			TestReporter.logDebug("Checking validity of xpath");
-			expr = xPath.compile(xpath);
-			nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-		} catch (XPathExpressionException e1) {
-			throw new XPathNotFoundException("Xpath evaluation failed with xpath [ " + xpath + " ] ");	
-		}
 
-		TestReporter.logDebug("XPath is valid. Removing node");
-		Element element = (Element) nList.item(0);
-		element.getParentNode().removeChild(element);
-
-		TestReporter.logDebug("Node removal successful. Normalizing document");
-		doc.normalize();
-		
-		TestReporter.logDebug("Exiting XMLTools#removeNode");
-		return doc;
-	}
-	
+	/**
+	 * A recursive method that will iterate through all nodes and delete Comment nodes
+	 * @author Justin Phlegar
+	 * @version Created: 08/28/2014
+	 * @param node XML document
+	 * @return self
+	 */
 	public static Node removeComments(Node  node) {
 		if (node.getNodeType() == Node.COMMENT_NODE) {
 			node.getParentNode().removeChild(node);
@@ -418,6 +432,13 @@ public class XMLTools{
 		return node;
 	}
 	
+	/**
+	 * Iterate through all nodes and remove white space lines
+	 * @author Justin Phlegar
+	 * @version Created: 08/28/2014
+	 * @param doc XML Document
+	 * @return xml Document after updates
+	 */
 	public static Document removeWhiteSpace(Document doc) {
 		TestReporter.logDebug("Entering XMLTools#removeWhiteSpace");
 		XPath xp = XPathFactory.newInstance().newXPath();
@@ -440,7 +461,15 @@ public class XMLTools{
 		TestReporter.logDebug("Exiting XMLTools#removeWhiteSpace");
 		return doc;
 	}
-	
+
+	/**
+	 * Transform a XML Document to String
+	 * @author Waightstill Avery
+	 * @version Created: 08/28/2016
+	 * @param doc XML Document 
+	 * @param xpath Xpath to search and return all nodes found
+	 * @return Nodelist of all nodes found on xpath
+	 */
 	public static NodeList getNodeList(Document doc, String xpath) {
 		TestReporter.logDebug("Entering XMLTools#getNodeList");
 		XPathFactory xPathFactory = XPathFactory.newInstance();
@@ -465,6 +494,14 @@ public class XMLTools{
 		return nList;
 	}
 	
+	/**
+	 * Transform a XML Document to String
+	 * @author Waightstill Avery
+	 * @version Created: 08/28/2016
+	 * @param nodeList Nodelist to look in
+	 * @param xpath Xpath to search and return all nodes found
+	 * @return Nodelist of all nodes found on xpath
+	 */
 	public static NodeList getNodeList(Node nodeList, String xpath) {
 		TestReporter.logDebug("Entering XMLTools#getNodeList");
 		XPathFactory xPathFactory = XPathFactory.newInstance();
@@ -488,6 +525,14 @@ public class XMLTools{
 		return nList;
 	}
 	
+	/**
+	 * Transform a XML Document to String
+	 * @author Waightstill Avery
+	 * @version Created: 08/28/2016
+	 * @param nodeList Nodelist to look in
+	 * @param xpath Xpath to search and return all nodes found
+	 * @return Node found on xpath
+	 */
 	public static Node getNode(Node nodeList, String xpath) {
 		TestReporter.logDebug("Entering XMLTools#getNode");
 		XPathFactory xPathFactory = XPathFactory.newInstance();
