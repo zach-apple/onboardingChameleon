@@ -65,6 +65,7 @@ public abstract class SoapService{
 	private static Document requestDocument = null;
 	private static Document responseDocument = null;
 	protected static StringBuffer buffer = new StringBuffer();
+	private String soapVersion = SOAPConstants.SOAP_1_2_PROTOCOL;
 
 	/*****************************
 	 **** Start Gets and Sets ****
@@ -367,7 +368,18 @@ public abstract class SoapService{
 	protected void setOperationName(String name) {
 		strOperationName = name;
 	}
-
+	
+	/**
+	 * Used to define Soap Version to use. Default is 1.2
+	 * Can by changed using SOAPConstants.SOAP_1_1_PROTOCOL or SOAPConstants.SOAP_1_2_PROTOCOL
+	 * @author Justin Phlegar
+	 * @version Created: 09/12/2016
+	 * @param url
+	 *            String: Operation Name of the Service Under Test
+	 */
+	protected void setSoapVersion(String version){
+		soapVersion = version;
+	}
 	public int getNumberOfRequestNodesByXPath(String xpath){
 		try{
 			return XMLTools.getNodeList(getRequestDocument(), xpath).getLength();
@@ -519,7 +531,7 @@ public abstract class SoapService{
 
 		try {
 			messageFactory = MessageFactory
-					.newInstance(SOAPConstants.SOAP_1_2_PROTOCOL);
+					.newInstance(soapVersion);
 			// Convert XML Request to SoapMessage
 			InputStream in = new ByteArrayInputStream(getRequest().getBytes(Charset.defaultCharset()));
 			request = messageFactory.createMessage(new MimeHeaders(),in);	
