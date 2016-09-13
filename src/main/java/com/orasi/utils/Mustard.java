@@ -57,7 +57,7 @@ public class Mustard {
 		}
 	
 		
-		request.sendPostRequest(mustardURL, multipartEntity.build());
+		request.sendPostRequest(mustardURL , multipartEntity.build());
 		
 	}
 }
