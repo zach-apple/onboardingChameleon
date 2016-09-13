@@ -219,18 +219,6 @@ public abstract class SoapService{
 	}
 
 	/**
-	 *  Used to store the XML file as a Document object in memory. Can
-	 *          be retrieved using {@link #getRequestDocument()}
-	 * @author Justin Phlegar
-	 * @version Created: 08/28/2014
-	 * @param code
-	 *            String: Response error code
-	 */
-	protected void setRepsonseStatusCode(String code) {
-		intResponseStatusCode = code;
-	}
-
-	/**
 	 *  Set a Response XML Document to be stored in memory to be
 	 *          retrieved and edited easily. Retrieve XML Document using
 	 *          {@link #getResponseDocument()} or as a String using
@@ -483,9 +471,9 @@ public abstract class SoapService{
 		// Check for faults and report
 		if (responseBody.hasFault()) {
 			SOAPFault newFault = responseBody.getFault();
-			setRepsonseStatusCode(newFault.getFaultCode());
+			intResponseStatusCode = newFault.getFaultCode();
 		} else {
-			setRepsonseStatusCode("200");
+			intResponseStatusCode = "200";
 		}
 
 		try {
