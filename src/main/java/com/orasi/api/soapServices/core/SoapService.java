@@ -47,6 +47,7 @@ import com.eviware.soapui.impl.wsdl.WsdlOperation;
 import com.eviware.soapui.impl.wsdl.WsdlProject;
 import com.eviware.soapui.impl.wsdl.support.wsdl.WsdlImporter;
 import com.eviware.soapui.support.SoapUIException;
+import com.orasi.api.soapServices.core.exceptions.SoapException;
 import com.orasi.api.soapServices.core.exceptions.XPathNotFoundException;
 import com.orasi.api.soapServices.core.exceptions.XPathNullNodeValueException;
 import com.orasi.utils.Randomness;
@@ -55,16 +56,13 @@ import com.orasi.utils.XMLTools;
 
 public abstract class SoapService{
 
-	private String strEnvironment = null;
 	private String strServiceName;
 	private String strOperationName;
 	private String strServiceURL = null;
-	private String strResponseURI = null;
 	private String intResponseStatusCode = null;
-	private String responseTemplate = null;
-	private static Document requestDocument = null;
-	private static Document responseDocument = null;
-	protected static StringBuffer buffer = new StringBuffer();
+	private Document requestDocument = null;
+	private Document responseDocument = null;
+	protected StringBuffer buffer = new StringBuffer();
 	private String soapVersion = SOAPConstants.SOAP_1_2_PROTOCOL;
 
 	/*****************************
@@ -72,7 +70,7 @@ public abstract class SoapService{
 	 *****************************/
 
 	/**
-	 * @summary Takes the current Request XML Document stored in memory and
+	 *  Takes the current Request XML Document stored in memory and
 	 *          return it as a string for simple output
 	 * @precondition Requires XML Document to be loaded by using
 	 *               {@link #setRequestDocument}
@@ -87,7 +85,7 @@ public abstract class SoapService{
 		try {
 			transformer = tf.newTransformer();
 		} catch (TransformerConfigurationException e) {
-			throw new RuntimeException("Failed to create XML Transformer");
+			throw new SoapException("Failed to create XML Transformer", e.getCause());
 		}
 		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
 		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
@@ -98,14 +96,14 @@ public abstract class SoapService{
 			transformer.transform(new DOMSource(getRequestDocument()),
 					new StreamResult(sw));
 		} catch (TransformerException e) {
-			throw new RuntimeException(
-					"Failed to transform Request XML Document. Ensure XML Document has been successfully loaded.");
+			throw new SoapException(
+					"Failed to transform Request XML Document. Ensure XML Document has been successfully loaded.", e.getCause());
 		}
 		return sw.toString();
 	}
 
 	/**
-	 * @summary Takes the current Response XML Document stored in memory and
+	 *  Takes the current Response XML Document stored in memory and
 	 *          return it as a string for simple output
 	 * @precondition Requires XML Document to be loaded by using
 	 *               {@link #setResponseDocument}
@@ -120,7 +118,7 @@ public abstract class SoapService{
 		try {
 			transformer = tf.newTransformer();
 		} catch (TransformerConfigurationException e) {
-			throw new RuntimeException("Failed to create XML Transformer");
+			throw new SoapException("Failed to create XML Transformer", e.getCause());
 		}
 		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
 		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
@@ -131,30 +129,14 @@ public abstract class SoapService{
 			transformer.transform(new DOMSource(getResponseDocument()),
 					new StreamResult(sw));
 		} catch (TransformerException e) {
-			throw new RuntimeException(
-					"Failed to transform Response XML Document. Ensure XML Document has been successfully loaded.");
+			throw new SoapException(
+					"Failed to transform Response XML Document. Ensure XML Document has been successfully loaded.", e.getCause());
 		}
 		return sw.toString();
 	}
 
 	/**
-	 * @summary Returns the environment under test. Current accepted
-	 *          environments are (examples): <br>
-	 *          Dev - Developer server or environment <br>
-	 *          Test - Integrated Testing Environment <br>
-	 *          Stage - Pre-Production Staging Environment
-	 * @precondition The environment under test needs to be set by
-	 *               {@link #setEnvironment(String)}
-	 * @author Justin Phlegar
-	 * @version Created: 08/28/2014
-	 * @return Returns the environment under test as a String
-	 */
-	public String getEnvironment() {
-		return strEnvironment;
-	}
-
-	/**
-	 * @summary After a service request has been sent, if the Status code of the
+	 *  After a service request has been sent, if the Status code of the
 	 *          response has been stored, then this function can be used to
 	 *          retrieve that status code
 	 * @precondition The Response Status Code needs to be set by
@@ -168,7 +150,7 @@ public abstract class SoapService{
 	}
 
 	/**
-	 * @summary Return the URL of the service under test
+	 *  Return the URL of the service under test
 	 * @precondition The Service URL needs to be set by
 	 *               {@link #setServiceURL(String)}
 	 * @author Justin Phlegar
@@ -180,7 +162,7 @@ public abstract class SoapService{
 	}
 	
 	/**
-	 * @summary Return the Service Name of the service under test
+	 *  Return the Service Name of the service under test
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
 	 * @return Returns the Service Name as a String
@@ -190,7 +172,7 @@ public abstract class SoapService{
 	}
 
 	/**
-	 * @summary Return the Service Operation Name of the service under test
+	 *  Return the Service Operation Name of the service under test
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
 	 * @return Returns the Service Operation Name as a String
@@ -199,7 +181,7 @@ public abstract class SoapService{
 		return strOperationName;
 	}
 	/**
-	 * @summary This is used to retrieve the current XML Document as it is in
+	 *  This is used to retrieve the current XML Document as it is in
 	 *          memory.
 	 * @precondition The XML Document needs to be set by
 	 *               {@link #setRequestDocument(Document)}
@@ -212,7 +194,7 @@ public abstract class SoapService{
 	}
 
 	/**
-	 * @summary This is used to retrieve the current Response Document as it is
+	 *  This is used to retrieve the current Response Document as it is
 	 *          in memory
 	 * @precondition The Response Document needs to be set by
 	 *               {@link #setResponseDocument(Document)}
@@ -220,69 +202,24 @@ public abstract class SoapService{
 	 * @version Created: 08/28/2014
 	 * @return Returns the stored Response XML as a Document object
 	 */
-	protected static Document getResponseDocument() {
+	protected Document getResponseDocument() {
 		return responseDocument;
 	}
 
 	/**
-	 * @summary This is used to retrieve the current Response URI string as it
-	 *          is in memory
-	 * @precondition Requires XML Document to be loaded by using
-	 *               {@link #setResponseBaseURI(String)}
-	 * @author Justin Phlegar
-	 * @version Created: 08/28/2014
-	 * @return Returns the stored Response URI as a String
-	 */
-	protected String getResponseBaseURI() {
-		return strResponseURI;
-	}
-
-	/**
-	 * @summary This is used to retrieve the current Response XML Template as it
-	 *          is in memory
-	 * @precondition Requires XML Document to be loaded by using
-	 *               {@link #setResponseTemplate(String)}
-	 * @author Justin Phlegar
-	 * @version Created: 08/28/2014
-	 * @return Will return the Response XML Template as a String
-	 */
-	protected String getResponseTemplate() {
-		return responseTemplate;
-	}
-
-	/**
-	 * @summary Sets the environment under test. Current accepted environments
-	 *          are(examples): <br>
-	 *          Dev - Developer server or environment <br>
-	 *          Test - Integrated Testing Environment <br>
-	 *          Stage - Pre-Production Staging Environment
-	 * <br>
-	 *          Can be retrieved by {@link #getEnvironment()}
-	 * @precondition The environment under test must be one of the environments
-	 *               listed above.
-	 * @author Justin Phlegar
-	 * @version Created 08/28/2014
-	 * @param environment
-	 *            String: Environment under test
-	 */
-	protected void setEnvironment(String environment) {
-		strEnvironment = environment;
-	}
-
-	/**
-	 * @summary Used to store the XML file as a Document object in memory. Can
+	 *  Used to store the XML file as a Document object in memory. Can
 	 *          be retrieved using {@link #getRequestDocument()}
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
 	 * @param doc
 	 *            Document XML file of the Request to be stored in memory
 	 */
-	protected static void setRequestDocument(Document doc) {
+	protected void setRequestDocument(Document doc) {
 		requestDocument = doc;
 	}
 
 	/**
-	 * @summary Used to store the XML file as a Document object in memory. Can
+	 *  Used to store the XML file as a Document object in memory. Can
 	 *          be retrieved using {@link #getRequestDocument()}
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
@@ -294,7 +231,7 @@ public abstract class SoapService{
 	}
 
 	/**
-	 * @summary Set a Response XML Document to be stored in memory to be
+	 *  Set a Response XML Document to be stored in memory to be
 	 *          retrieved and edited easily. Retrieve XML Document using
 	 *          {@link #getResponseDocument()} or as a String using
 	 *          {@link #getResponse()}
@@ -309,32 +246,7 @@ public abstract class SoapService{
 	}
 
 	/**
-	 * @summary Used to store the XML file of the base Soap Response file as a
-	 *          Document object in memory. Can be retrieved using
-	 *          {@link #getResponseTemplate()}
-	 * @author Justin Phlegar
-	 * @version Created: 08/28/2014
-	 * @param response
-	 *            String: Store the base XML response as a String
-	 */
-	protected void setResponseTemplate(String response) {
-		responseTemplate = response;
-	}
-
-	/**
-	 * @summary Used to store the main Namespace URI for a Response document.
-	 *          Can be retrieved using {@link #getRequestDocument()}
-	 * @author Justin Phlegar
-	 * @version Created: 08/28/2014
-	 * @param uri
-	 *            String: Main Namespace URI of a response.
-	 */
-	protected void setResponseBaseURI(String uri) {
-		strResponseURI = uri;
-	}
-
-	/**
-	 * @summary Used to store URL of the Service Under Test in memory. Can be
+	 *  Used to store URL of the Service Under Test in memory. Can be
 	 *          retrieved using {@link #getServiceURL())}
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
@@ -346,7 +258,7 @@ public abstract class SoapService{
 	}
 
 	/**
-	 * @summary Used to store Service Name Under Test in memory. Can be
+	 *  Used to store Service Name Under Test in memory. Can be
 	 *          retrieved using {@link #getServiceName())}
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
@@ -358,7 +270,7 @@ public abstract class SoapService{
 	}
 
 	/**
-	 * @summary Used to store the Service Operation Name Under Test in memory. Can be
+	 *  Used to store the Service Operation Name Under Test in memory. Can be
 	 *          retrieved using {@link #getOperationName())}
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
@@ -374,27 +286,12 @@ public abstract class SoapService{
 	 * Can by changed using SOAPConstants.SOAP_1_1_PROTOCOL or SOAPConstants.SOAP_1_2_PROTOCOL
 	 * @author Justin Phlegar
 	 * @version Created: 09/12/2016
-	 * @param url
-	 *            String: Operation Name of the Service Under Test
+	 * @param version SOAPConstants.SOAP_1_1_PROTOCOL or SOAPConstants.SOAP_1_2_PROTOCOL         
 	 */
 	protected void setSoapVersion(String version){
 		soapVersion = version;
 	}
-	public int getNumberOfRequestNodesByXPath(String xpath){
-		try{
-			return XMLTools.getNodeList(getRequestDocument(), xpath).getLength();
-		}catch(XPathNotFoundException e){
-			return 0;
-		}
-	}
-
-	public int getNumberOfResponseNodesByXPath(String xpath){
-		try{
-			return XMLTools.getNodeList(getResponseDocument(), xpath).getLength();
-		}catch(XPathNotFoundException e){
-			return 0;
-		}
-	}
+	
 	/***************************
 	 **** End Gets and Sets ****
 	 ***************************/
@@ -404,7 +301,7 @@ public abstract class SoapService{
 	 *************************************/
 
 	/**
-	 * @summary Lazily check the response and return the value of the first
+	 *  Lazily check the response and return the value of the first
 	 *          matching tag
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
@@ -419,7 +316,36 @@ public abstract class SoapService{
 	}
 
 	/**
-	 * @summary Takes an xpath and return the value if found in the request
+	 * Determine how many nodes exist using queried XPath in the Request
+	 * @author Justin Phlegar
+	 * @version Created: 09/12/2016
+	 * @param xpath Valid XPath to look for
+	 * @return Number of node found on XPath. If XPath is not found, return 0         
+	 */
+	public int getNumberOfRequestNodesByXPath(String xpath){
+		try{
+			return XMLTools.getNodeList(getRequestDocument(), xpath).getLength();
+		}catch(XPathNotFoundException e){
+			return 0;
+		}
+	}
+
+	/**
+	 * Determine how many nodes exist using queried XPath in the Response
+	 * @author Justin Phlegar
+	 * @version Created: 09/12/2016
+	 * @param xpath Valid XPath to look for
+	 * @return Number of node found on XPath. If XPath is not found, return 0         
+	 */
+	public int getNumberOfResponseNodesByXPath(String xpath){
+		try{
+			return XMLTools.getNodeList(getResponseDocument(), xpath).getLength();
+		}catch(XPathNotFoundException e){
+			return 0;
+		}
+	}
+	/**
+	 *  Takes an xpath and return the value if found in the request
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
 	 * @param xpath
@@ -430,18 +356,18 @@ public abstract class SoapService{
 	}
 
 	/**
-	 * @summary Takes an xpath and return the value if found in the response
+	 *  Takes an xpath and return the value if found in the response
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
 	 * @param xpath
 	 *            String: xpath to evaluate
 	 */
-	public static String getResponseNodeValueByXPath(String xpath) {
+	public String getResponseNodeValueByXPath(String xpath) {
 		return XMLTools.getValueByXpath(getResponseDocument(), xpath);
 	}
 
 	/**
-	 * @summary Find and open the excel file sent. If successful, look and find
+	 *  Find and open the excel file sent. If successful, look and find
 	 *          the matching scenario name then return its xpath and value data.
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
@@ -459,8 +385,7 @@ public abstract class SoapService{
 			// Get the file location from the project main/resources folder
 			String filePath = getClass().getResource(file).getPath();
 
-			// in case file path has a %20 for a whitespace, replace with actual
-			// whitespace
+			// in case file path has a %20 for a whitespace, replace with actual whitespace
 			filePath = filePath.replace("%20", " ");
 
 			// Open excel workbook to work and from file from the path
@@ -513,7 +438,7 @@ public abstract class SoapService{
 	}
 
 	/**
-	 * @summary Takes the pre-built Request XML in memory and sends to the
+	 *  Takes the pre-built Request XML in memory and sends to the
 	 *          service
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
@@ -530,8 +455,7 @@ public abstract class SoapService{
 		String url = getServiceURL();
 
 		try {
-			messageFactory = MessageFactory
-					.newInstance(soapVersion);
+			messageFactory = MessageFactory.newInstance(soapVersion);
 			// Convert XML Request to SoapMessage
 			InputStream in = new ByteArrayInputStream(getRequest().getBytes(Charset.defaultCharset()));
 			request = messageFactory.createMessage(new MimeHeaders(),in);	
@@ -548,13 +472,11 @@ public abstract class SoapService{
 			response.getSOAPBody().normalize();
 			responseBody = response.getSOAPBody();
 		} catch (UnsupportedOperationException uoe) {
-			throw new RuntimeException(
-					"Operation given did not match any operations in the service"
-							+ uoe.getCause());
+			throw new SoapException("Operation given did not match any operations in the service"+ uoe.getCause());
 		} catch (SOAPException soape) {
-			throw new RuntimeException(soape.getCause());
+			throw new SoapException("Soap Connection failure" , soape.getCause());
 		} catch (IOException ioe) {
-			throw new RuntimeException("Failed to read the request properly"
+			throw new SoapException("Failed to read the request properly"
 					+ ioe.getCause());
 		}
 
@@ -562,28 +484,25 @@ public abstract class SoapService{
 		if (responseBody.hasFault()) {
 			SOAPFault newFault = responseBody.getFault();
 			setRepsonseStatusCode(newFault.getFaultCode());
-			System.out.println("sendSoapReq FAULT:  " + newFault.getFaultCode());
 		} else {
 			setRepsonseStatusCode("200");
 		}
 
 		try {
 			connection.close();
-
 		} catch (SOAPException soape) {
-			throw new RuntimeException(soape.getCause());
+			throw new SoapException("Failed to close Soap Connection" , soape.getCause());
 		}
 
 		// Covert Soap Response to XML and set it as Response in memory
 		Document doc = XMLTools.makeXMLDocument(response);
 		doc.normalize();
 		setResponseDocument(doc);
-		setResponseBaseURI(responseBody.getNamespaceURI());
 		return response;
 	}	
 	
 	/**
-	 * @summary Update an XPath node or attribute based on the value. The value
+	 *  Update an XPath node or attribute based on the value. The value
 	 *          is not limited to simple values, but may also call various
 	 *          functions by adding "fx:" as a prefix. Please see
 	 *          {@link #handleValueFunction} for more information
@@ -679,10 +598,7 @@ public abstract class SoapService{
 			//If a prior function call previous updated the XML, nothing more is needed.
 			if (!value.equalsIgnoreCase("XMLUpdated")) {
 				if(value.equalsIgnoreCase("true")) value = "true";
-				else if(value.equalsIgnoreCase("false")) value = "false";
-				else if(xpath.replace(" ", "").equalsIgnoreCase("groupcode")){
-					if (value.equals("1825") || value.equals("1905") || value.equals("4250") || value.equals("4268") ) value = "0" + value;
-				}
+				else if(value.equalsIgnoreCase("false")) value = "false";				
 				nList.item(0).setTextContent(value);
 			}
 		}
@@ -723,7 +639,7 @@ protected static boolean validateNodeContainsValueByXPath(Document doc, String x
 }
 
 	/**
-	 * @summary Update multiple XPath nodes or attributes based on the value. The value
+	 *  Update multiple XPath nodes or attributes based on the value. The value
 	 *          is not limited to simple values, but may also call various
 	 *          functions by adding "fx:" as a prefix. Please see
 	 *          {@link #handleValueFunction} for more information
@@ -745,7 +661,7 @@ protected static boolean validateNodeContainsValueByXPath(Document doc, String x
 	}
 
 	/**
-	 * @summary Update multiple XPath nodes or attributes based on the value. The value
+	 *  Update multiple XPath nodes or attributes based on the value. The value
 	 *          is not limited to simple values, but may also call various
 	 *          functions by adding "fx:" as a prefix. Please see
 	 *          {@link #handleValueFunction} for more information
@@ -770,7 +686,7 @@ protected static boolean validateNodeContainsValueByXPath(Document doc, String x
 	}
 
 	/**
-	 * @summary Validate XML Response and reports findings
+	 *  Validate XML Response and reports findings
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
 	 * @param doc Document: XML Document to evaluate
@@ -801,7 +717,7 @@ protected static boolean validateNodeContainsValueByXPath(Document doc, String x
 		return status;
 	}
 	/**
-	 * @summary Main validation function that validates and reports findings
+	 *  Main validation function that validates and reports findings
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
 	 * @param doc Document: XML Document to evalute
@@ -827,13 +743,11 @@ protected static boolean validateNodeContainsValueByXPath(Document doc, String x
 			nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 		}catch (XPathExpressionException xpe) {
 			errorMessage = "Failed to build xpath [ " + xpath + " ]. Please check format.";
-			//throw new RuntimeException("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
 		}
 		
 		//Ensure an element was found, if not then throw error and fail
 		if (nList.item(0) == null && errorMessage.isEmpty()) {
 			errorMessage = "No xpath was found with the path [ " + xpath + " ] ";
-			//throw new RuntimeException("No xpath was found with the path [ " + xpath + " ] ");
 		}
 		
 		if (errorMessage.isEmpty()){
@@ -891,7 +805,7 @@ protected static boolean validateNodeContainsValueByXPath(Document doc, String x
 	}
 
 	/**
-	 * @summary Validate XML Response and reports findings
+	 *  Validate XML Response and reports findings
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
 	 * @param resourcePath: path of file to read
@@ -902,18 +816,8 @@ protected static boolean validateNodeContainsValueByXPath(Document doc, String x
 				getTestScenario(resourcePath, scenario));
 	}
 
-/*	*//**
-	 * @summary Set the WSDL Endpoint for the class to use
-	 * @author Justin Phlegar
-	 * @version Created: 08/28/2014
-	 * @param endpoint String: Endpoint location of WSDL file. This can be a web location or local. 
-	 *//*	
-	protected void setEnvironmentServiceURL(String endpoint) {
-	    setServiceURL(endpoint);		
-	}*/
-
 	/**
-	 * @summary Opens the WSDL file that was loaded with the {@link setEnvironmentServiceURL} and load a XML Template for selected operation
+	 *  Opens the WSDL file that was loaded with the {@link setEnvironmentServiceURL} and load a XML Template for selected operation
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
 	 * @param operation String: operation to load
@@ -929,22 +833,18 @@ protected static boolean validateNodeContainsValueByXPath(Document doc, String x
 		} catch (IOException ioe) {
 			throw new RuntimeException("Error reading WSDL file: " + ioe.getCause());		
 		} catch (SoapUIException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			throw new SoapException("Failed to start Soap Project", e1.getCause());
 		} catch (Exception e) {
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
+			throw new RuntimeException("Error reading WSDL file: " + e.getCause());
 		}
 		
 		WsdlInterface wsdl = wsdls[0];
 		WsdlOperation wsdlOperation = wsdl.getOperationByName(operation);
-		setResponseTemplate(wsdlOperation.createResponse(true));
 		return wsdlOperation.createRequest(true);
 	}
 
 	protected void removeComments() {
-		setRequestDocument((Document) XMLTools
-				.removeComments(getRequestDocument()));
+		setRequestDocument((Document) XMLTools.removeComments(getRequestDocument()));
 	}
 
 	protected void removeWhiteSpace() {
@@ -952,7 +852,7 @@ protected static boolean validateNodeContainsValueByXPath(Document doc, String x
 	}
 
 	/**
-	 * @summary Call functions during setting of the xpath
+	 *  Call functions during setting of the xpath
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
 	 * @param xpath String: Xpath to run the function on 
