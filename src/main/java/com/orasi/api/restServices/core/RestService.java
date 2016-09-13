@@ -14,7 +14,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpOptions;
 import org.apache.http.client.methods.HttpPatch;
@@ -283,7 +282,7 @@ public class RestService {
 		return sendRequest(httpOptions).getHeaders();
 	}
 
-	public String getJsonFromObject(Object request){
+	public static String getJsonFromObject(Object request){
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(request);
