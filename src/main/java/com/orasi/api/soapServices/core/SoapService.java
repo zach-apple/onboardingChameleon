@@ -52,6 +52,7 @@ import com.orasi.api.soapServices.core.exceptions.XPathNotFoundException;
 import com.orasi.api.soapServices.core.exceptions.XPathNullNodeValueException;
 import com.orasi.utils.Randomness;
 import com.orasi.utils.Regex;
+import com.orasi.utils.TestReporter;
 import com.orasi.utils.XMLTools;
 
 public abstract class SoapService{
@@ -78,28 +79,8 @@ public abstract class SoapService{
 	 * @version Created: 08/28/2014
 	 * @return Will return the current Request XML as a string
 	 */
-	public String getRequest() {
-		StringWriter sw = new StringWriter();
-		TransformerFactory tf = TransformerFactory.newInstance();
-		Transformer transformer = null;
-		try {
-			transformer = tf.newTransformer();
-		} catch (TransformerConfigurationException e) {
-			throw new SoapException("Failed to create XML Transformer", e.getCause());
-		}
-		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-
-		try {
-			transformer.transform(new DOMSource(getRequestDocument()),
-					new StreamResult(sw));
-		} catch (TransformerException e) {
-			throw new SoapException(
-					"Failed to transform Request XML Document. Ensure XML Document has been successfully loaded.", e.getCause());
-		}
-		return sw.toString();
+	public String getRequest() {		
+		return XMLTools.transformXmlToString(getRequestDocument());
 	}
 
 	/**
@@ -112,27 +93,7 @@ public abstract class SoapService{
 	 * @return Will return the current Response XML as a string
 	 */
 	public String getResponse() {
-		StringWriter sw = new StringWriter();
-		TransformerFactory tf = TransformerFactory.newInstance();
-		Transformer transformer = null;
-		try {
-			transformer = tf.newTransformer();
-		} catch (TransformerConfigurationException e) {
-			throw new SoapException("Failed to create XML Transformer", e.getCause());
-		}
-		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-
-		try {
-			transformer.transform(new DOMSource(getResponseDocument()),
-					new StreamResult(sw));
-		} catch (TransformerException e) {
-			throw new SoapException(
-					"Failed to transform Response XML Document. Ensure XML Document has been successfully loaded.", e.getCause());
-		}
-		return sw.toString();
+		return XMLTools.transformXmlToString(getResponseDocument());
 	}
 
 	/**
@@ -286,23 +247,7 @@ public abstract class SoapService{
 
 	/*************************************
 	 ********* Public Methods ************
-	 *************************************/
-
-	/**
-	 *  Lazily check the response and return the value of the first
-	 *          matching tag
-	 * @author Justin Phlegar
-	 * @version Created: 08/28/2014
-	 * @param tag
-	 *            String: Finds and returns the value of the first tag it finds
-	 *            with this tag name
-	 */
-	public String getFirstNodeValueByTagName(String tag) {
-		// Get the response document from memory
-		NodeList nList = getResponseDocument().getElementsByTagName(tag);
-		return nList.item(0).getTextContent();
-	}
-
+	 *************************************
 	/**
 	 * Determine how many nodes exist using queried XPath in the Request
 	 * @author Justin Phlegar
@@ -960,5 +905,4 @@ protected static boolean validateNodeContainsValueByXPath(Document doc, String x
 			throw new RuntimeException("The command [" + command + " ] is not a valid command");
 		}
 	}
-
 }

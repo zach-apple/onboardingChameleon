@@ -48,7 +48,6 @@ public class XMLTools{
 	 * @param doc Document: XML Document that will be updated
 	 * @param nodeName String: Name of the attribute to add to the node
 	 * @param xpath String: Path of the Node in the XML to add the Attribute
-	 * @return Document xml with added Attribute
 	 */
 	public static Document addAttribute(Document doc, String attributeName, String xpath) {
 		TestReporter.logDebug("Entering XMLTools#addAttribute");
@@ -86,7 +85,6 @@ public class XMLTools{
 	 * @param doc Document: XML Document that will be updated
 	 * @param nodeName String: Name of the attribute to remove to the node
 	 * @param xpath String: Path of the Node in the XML to add the Attribute
-	 * @return Document xml with remove Attribute
 	 */
 	public static Document removeAttribute(Document doc, String attributeName, String xpath) {
 		TestReporter.logDebug("Entering XMLTools#removeAttribute");
@@ -124,7 +122,6 @@ public class XMLTools{
 	 * @param doc Document: XML Document that will be updated
 	 * @param namespace String: Name of the namespace to add to the node
 	 * @param xpath String: Path of the Node in the XML to add the Namespace
-	 * @return Document xml with added Namespace
 	 */
 	public static Document addNamespace(Document doc, String namespace, String xpath) {
 		TestReporter.logDebug("Entering XMLTools#addNamespace");
@@ -159,13 +156,12 @@ public class XMLTools{
 	}
 	
 	/**
-	 *  Takes an xpath and adds a node to the location of the xpath 
+	 *  Takes an xpath and adds a node to the location of the xpath and name of tagName
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
 	 * @param doc Document: XML Document that will be updated
 	 * @param nodeName String: Name of the node to add to the XML Document
 	 * @param xpath String: Path in the XML to add the node
-	 * @return Document xml with added Node
 	 */
 	public static Document addNode(Document doc, String nodeName, String xpath) {
 		TestReporter.logDebug("Entering XMLTools#addNode");
@@ -201,41 +197,6 @@ public class XMLTools{
 		TestReporter.logDebug("Exiting XMLTools#addNode");
 		return doc;
 	}
-
-	/**
-	 *  Takes an xpath and removes a node to the location of the xpath 
-	 * @author Justin Phlegar
-	 * @version Created: 08/28/2014
-	 * @param doc Document: XML Document that will be updated
-	 * @param xpath String: Path in the XML to add the node
-	 * @return Document xml with removed Node
-	 */
-	public static Document removeNode(Document doc, String xpath) {
-		TestReporter.logDebug("Entering XMLTools#removeNode");
-		XPathFactory xPathFactory = XPathFactory.newInstance();
-		XPath xPath = xPathFactory.newXPath();
-		XPathExpression expr;
-		NodeList nList = null;
-		
-		TestReporter.logInfo("Remove node from xpath [ " + xpath + " ]");
-		try {
-			TestReporter.logDebug("Checking validity of xpath");
-			expr = xPath.compile(xpath);
-			nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-		} catch (XPathExpressionException e1) {
-			throw new XPathNotFoundException("Xpath evaluation failed with xpath [ " + xpath + " ] ");	
-		}
-
-		TestReporter.logDebug("XPath is valid. Removing node");
-		Element element = (Element) nList.item(0);
-		element.getParentNode().removeChild(element);
-
-		TestReporter.logDebug("Node removal successful. Normalizing document");
-		doc.normalize();
-		
-		TestReporter.logDebug("Exiting XMLTools#removeNode");
-		return doc;
-	}
 	
 	/**
 	 *  Takes an xpath and return the value found
@@ -243,7 +204,6 @@ public class XMLTools{
 	 * @version Created: 08/28/2014	 * 
 	 * @param doc Document: XML Document that will be queried
 	 * @param xpath String: xpath to evaluate
-	 * @return String of data of node found on XPath
 	 */
 	public static String getValueByXpath(Document doc, String xpath) {
 		TestReporter.logDebug("Entering XMLTools#getValueByXpath");
@@ -276,32 +236,29 @@ public class XMLTools{
 	 *  Load an XML file from an external location
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
-	 * @param xpath String: xpath to evaluate
+	 * @param xml XML as a string 
 	 * @return Document xml of input file
-	 */
-	public static Document loadXMLFromProject(String file) {
-		TestReporter.logDebug("Entering XMLTools#loadXMLFromProject");
+	 */	
+	public static Document loadXML(String xml) {
+		TestReporter.logDebug("Entering XMLTools#loadXML");
 		SOAPMessage soapMessage = null;
 		MessageFactory messageFactory = null;
-
 		try {
 			TestReporter.logDebug("Attempting to load XML from project");
-			URL fileURL = XMLTools.class.getResource(file);
-			messageFactory = MessageFactory
-					.newInstance(SOAPConstants.SOAP_1_1_PROTOCOL);
-			soapMessage = messageFactory.createMessage(new MimeHeaders(),
-					new FileInputStream(fileURL.getPath()));
+			messageFactory = MessageFactory.newInstance(SOAPConstants.SOAP_1_1_PROTOCOL);
+			
+			soapMessage = messageFactory.createMessage(new MimeHeaders(),new ByteArrayInputStream(xml.getBytes()));
 		} catch (SOAPException se) {
 			throw new RuntimeException("Failed to create a SOAP message", se.getCause());
 		} catch (IOException ioe) {
-			throw new RuntimeException("Could not find a file located at [ " + file + " ]", ioe.getCause());
+			throw new RuntimeException("Unable to transform XML [ " + xml + " ]", ioe.getCause());
 		}
 
-		TestReporter.logDebug("Successfully loaded XML from project. Transform to XML Document");
+		TestReporter.logDebug("Successfully loaded XML. Transform to XML Document");
 		Document doc = makeXMLDocument(soapMessage); 
 
 		TestReporter.logDebug("Successfully transformmed to XML Document");
-		TestReporter.logDebug("Exiting XMLTools#loadXMLFromProject");
+		TestReporter.logDebug("Exiting XMLTools#loadXML");
 		return doc;
 	}
 	
@@ -419,13 +376,34 @@ public class XMLTools{
 		TestReporter.logDebug("Exiting XMLTools#transformXmlToString");
 		return sw.toString();
 	}
-	/**
-	 * A recursive method that will iterate through all nodes and delete Comment nodes
-	 * @author Justin Phlegar
-	 * @version Created: 08/28/2014
-	 * @param node XML document
-	 * @return self
-	 */
+	
+	public static Document removeNode(Document doc, String xpath) {
+		TestReporter.logDebug("Entering XMLTools#removeNode");
+		XPathFactory xPathFactory = XPathFactory.newInstance();
+		XPath xPath = xPathFactory.newXPath();
+		XPathExpression expr;
+		NodeList nList = null;
+		
+		TestReporter.logInfo("Remove node from xpath [ " + xpath + " ]");
+		try {
+			TestReporter.logDebug("Checking validity of xpath");
+			expr = xPath.compile(xpath);
+			nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+		} catch (XPathExpressionException e1) {
+			throw new XPathNotFoundException("Xpath evaluation failed with xpath [ " + xpath + " ] ");	
+		}
+
+		TestReporter.logDebug("XPath is valid. Removing node");
+		Element element = (Element) nList.item(0);
+		element.getParentNode().removeChild(element);
+
+		TestReporter.logDebug("Node removal successful. Normalizing document");
+		doc.normalize();
+		
+		TestReporter.logDebug("Exiting XMLTools#removeNode");
+		return doc;
+	}
+	
 	public static Node removeComments(Node  node) {
 		if (node.getNodeType() == Node.COMMENT_NODE) {
 			node.getParentNode().removeChild(node);
@@ -440,13 +418,6 @@ public class XMLTools{
 		return node;
 	}
 	
-	/**
-	 * Iterate through all nodes and remove white space lines
-	 * @author Justin Phlegar
-	 * @version Created: 08/28/2014
-	 * @param doc XML Document
-	 * @return xml Document after updates
-	 */
 	public static Document removeWhiteSpace(Document doc) {
 		TestReporter.logDebug("Entering XMLTools#removeWhiteSpace");
 		XPath xp = XPathFactory.newInstance().newXPath();
@@ -469,15 +440,7 @@ public class XMLTools{
 		TestReporter.logDebug("Exiting XMLTools#removeWhiteSpace");
 		return doc;
 	}
-
-	/**
-	 * Transform a XML Document to String
-	 * @author Waightstill Avery
-	 * @version Created: 08/28/2016
-	 * @param doc XML Document 
-	 * @param xpath Xpath to search and return all nodes found
-	 * @return Nodelist of all nodes found on xpath
-	 */
+	
 	public static NodeList getNodeList(Document doc, String xpath) {
 		TestReporter.logDebug("Entering XMLTools#getNodeList");
 		XPathFactory xPathFactory = XPathFactory.newInstance();
@@ -501,15 +464,7 @@ public class XMLTools{
 		TestReporter.logDebug("Exiting XMLTools#getNodeList");
 		return nList;
 	}
-
-	/**
-	 * Transform a XML Document to String
-	 * @author Waightstill Avery
-	 * @version Created: 08/28/2016
-	 * @param nodeList Nodelist to look in
-	 * @param xpath Xpath to search and return all nodes found
-	 * @return Nodelist of all nodes found on xpath
-	 */
+	
 	public static NodeList getNodeList(Node nodeList, String xpath) {
 		TestReporter.logDebug("Entering XMLTools#getNodeList");
 		XPathFactory xPathFactory = XPathFactory.newInstance();
@@ -532,15 +487,7 @@ public class XMLTools{
 		TestReporter.logDebug("Exiting XMLTools#getNodeList");
 		return nList;
 	}
-
-	/**
-	 * Transform a XML Document to String
-	 * @author Waightstill Avery
-	 * @version Created: 08/28/2016
-	 * @param nodeList Nodelist to look in
-	 * @param xpath Xpath to search and return all nodes found
-	 * @return Node found on xpath
-	 */
+	
 	public static Node getNode(Node nodeList, String xpath) {
 		TestReporter.logDebug("Entering XMLTools#getNode");
 		XPathFactory xPathFactory = XPathFactory.newInstance();
