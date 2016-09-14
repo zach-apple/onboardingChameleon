@@ -50,16 +50,19 @@ import com.eviware.soapui.support.SoapUIException;
 import com.orasi.api.soapServices.core.exceptions.SoapException;
 import com.orasi.api.soapServices.core.exceptions.XPathNotFoundException;
 import com.orasi.api.soapServices.core.exceptions.XPathNullNodeValueException;
+import com.orasi.exception.AutomationException;
 import com.orasi.utils.Randomness;
 import com.orasi.utils.Regex;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.XMLTools;
 
+import groovy.util.logging.Log4j;
+
 public abstract class SoapService{
 
 	private String strServiceName;
 	private String strOperationName;
-	private String strServiceURL = null;
+	private String url = null;
 	private String intResponseStatusCode = null;
 	private Document requestDocument = null;
 	private Document responseDocument = null;
@@ -79,8 +82,11 @@ public abstract class SoapService{
 	 * @version Created: 08/28/2014
 	 * @return Will return the current Request XML as a string
 	 */
-	public String getRequest() {		
-		return XMLTools.transformXmlToString(getRequestDocument());
+	public String getRequest() {	
+		TestReporter.logTrace("Entering SoapService#getRequest");	
+		String request = XMLTools.transformXmlToString(getRequestDocument());
+		TestReporter.logTrace("Exiting SoapService#getRequest");	
+		return request;
 	}
 
 	/**
@@ -93,7 +99,10 @@ public abstract class SoapService{
 	 * @return Will return the current Response XML as a string
 	 */
 	public String getResponse() {
-		return XMLTools.transformXmlToString(getResponseDocument());
+		TestReporter.logTrace("Entering SoapService#getResponse");	
+		String response = XMLTools.transformXmlToString(getResponseDocument());		
+		TestReporter.logTrace("Exiting SoapService#getResponse");	
+		return response;
 	}
 
 	/**
@@ -119,7 +128,7 @@ public abstract class SoapService{
 	 * @return Returns the Service URL as a String
 	 */
 	public String getServiceURL() {
-		return strServiceURL;
+		return url;
 	}
 	
 	/**
@@ -203,7 +212,7 @@ public abstract class SoapService{
 	 *            String: URL Endpoint of the Service Under Test
 	 */
 	protected void setServiceURL(String url) {
-		strServiceURL = url;
+		this.url = url;
 	}
 
 	/**
@@ -256,11 +265,13 @@ public abstract class SoapService{
 	 * @return Number of node found on XPath. If XPath is not found, return 0         
 	 */
 	public int getNumberOfRequestNodesByXPath(String xpath){
+		TestReporter.logTrace("Entering SoapService#getNumberOfRequestNodesByXPath");
+		int count = 0;
 		try{
-			return XMLTools.getNodeList(getRequestDocument(), xpath).getLength();
-		}catch(XPathNotFoundException e){
-			return 0;
-		}
+			count = XMLTools.getNodeList(getRequestDocument(), xpath).getLength();
+		}catch(XPathNotFoundException e){}
+		TestReporter.logTrace("Exiting SoapService#getNumberOfRequestNodesByXPath");
+		return count;
 	}
 
 	/**
@@ -271,11 +282,13 @@ public abstract class SoapService{
 	 * @return Number of node found on XPath. If XPath is not found, return 0         
 	 */
 	public int getNumberOfResponseNodesByXPath(String xpath){
+		TestReporter.logTrace("Entering SoapService#getNumberOfResponseNodesByXPath");
+		int count = 0;
 		try{
-			return XMLTools.getNodeList(getResponseDocument(), xpath).getLength();
-		}catch(XPathNotFoundException e){
-			return 0;
-		}
+			count = XMLTools.getNodeList(getResponseDocument(), xpath).getLength();
+		}catch(XPathNotFoundException e){}
+		TestReporter.logTrace("Exiting SoapService#getNumberOfResponseNodesByXPath");
+		return count;
 	}
 	/**
 	 *  Takes an xpath and return the value if found in the request
@@ -285,7 +298,10 @@ public abstract class SoapService{
 	 *            String: xpath to evaluate
 	 */
 	public String getRequestNodeValueByXPath(String xpath) {
-		return XMLTools.getValueByXpath(getRequestDocument(), xpath);
+		TestReporter.logTrace("Entering SoapService#getRequestNodeValueByXPath");
+		String value = XMLTools.getValueByXpath(getRequestDocument(), xpath); 
+		TestReporter.logTrace("Exiting SoapService#getRequestNodeValueByXPath");
+		return value;
 	}
 
 	/**
@@ -296,7 +312,10 @@ public abstract class SoapService{
 	 *            String: xpath to evaluate
 	 */
 	public String getResponseNodeValueByXPath(String xpath) {
-		return XMLTools.getValueByXpath(getResponseDocument(), xpath);
+		TestReporter.logTrace("Entering SoapService#getResponseNodeValueByXPath");
+		String value = XMLTools.getValueByXpath(getResponseDocument(), xpath); 
+		TestReporter.logTrace("Exiting SoapService#getResponseNodeValueByXPath");
+		return value;
 	}
 
 	/**
@@ -311,28 +330,32 @@ public abstract class SoapService{
 	 *            String: Name of the scenario to poll data for
 	 */
 	protected Object[][] getTestScenario(String file, String scenario) {
-
+		TestReporter.logTrace("Entering SoapService#getTestScenario");
 		String[][] tabArray = null;
+		String filePath = "";
 		try {
+			TestReporter.logTrace("Getting file from Resources");
+			filePath = getClass().getResource(file).getPath();
 
-			// Get the file location from the project main/resources folder
-			String filePath = getClass().getResource(file).getPath();
-
-			// in case file path has a %20 for a whitespace, replace with actual whitespace
 			filePath = filePath.replace("%20", " ");
-
-			// Open excel workbook to work and from file from the path
+			TestReporter.logDebug("Full file path ["+filePath+"]");
+			
+			TestReporter.logTrace("Opening excel workbook with file");
 			Workbook workbook = Workbook.getWorkbook(new File(filePath));
+			
+			TestReporter.logTrace("Load default worksheet");
 			Sheet sheet = workbook.getSheet(0);
 			int startRow, startCol, endRow, endCol, ci, cj;
-
-			// Find the specific cell containing the scenario to run.
+			
+			TestReporter.logTrace("Searching for column containing scenario");
 			Cell tableStart = sheet.findCell(scenario);
+			
+			TestReporter.logTrace("Scenario found");
 			startRow = tableStart.getRow();
 			startCol = tableStart.getColumn();
 
-			// Loop through cell in Regex column to find the first blank cell.
-			// This is set as the last row
+			TestReporter.logTrace("Determining last row containing data");
+			
 			for (int i = startRow + 1;; i++) {
 				try {
 					if (sheet.getCell(startCol + 1, i).getContents().toString()
@@ -346,13 +369,17 @@ public abstract class SoapService{
 				}
 
 			}
+			
+			TestReporter.logDebug("Start Column ["+startCol+"]" );
+			TestReporter.logDebug("End Row ["+endRow+"]" );
 			endCol = startCol + 3;
 
-			// Create array based on size of columns and rows found
+			TestReporter.logTrace("Create an array based on end row");
 			tabArray = new String[endRow - startRow - 1][endCol - startCol - 1];
 			ci = 0;
 
-			// Feed results to the dual array
+
+			TestReporter.logTrace("Transfer data from excel sheet to array");
 			for (int i = startRow + 1; i < endRow; i++, ci++) {
 				cj = 0;
 				for (int j = startCol + 1; j < endCol; j++, cj++) {
@@ -360,13 +387,14 @@ public abstract class SoapService{
 				}
 			}
 		} catch (FileNotFoundException fnfe) {
-			throw new RuntimeException(fnfe.getCause());
+			throw new AutomationException("File not found in path ["+filePath+"]", fnfe.getCause());
 		} catch (BiffException be) {
-			throw new RuntimeException(be.getCause());
+			throw new AutomationException("Unable to read file. Ensure file is [xls] format and not [xlsx]", be.getCause());
 		} catch (IOException ioe) {
 			throw new RuntimeException("Unable to open file " + file + "\n"
 					+ ioe.getCause());
 		}
+		TestReporter.logTrace("Exiting SoapService#getTestScenario");
 		return (tabArray);
 	}
 
@@ -376,7 +404,8 @@ public abstract class SoapService{
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
 	 */
-	public SOAPMessage sendRequest() {
+	public void sendRequest() {
+		TestReporter.logTrace("Entering SoapService#sendRequest");
 		SOAPMessage request = null;
 		SOAPMessage response = null;
 		SOAPConnectionFactory connectionFactory = null;
@@ -384,24 +413,28 @@ public abstract class SoapService{
 		SOAPBody responseBody = null;
 		MessageFactory messageFactory = null;
 
-		// Get the service endpoint from previously stored URL
-		String url = getServiceURL();
-
 		try {
+			TestReporter.logTrace("Create Soap Message Factory");
 			messageFactory = MessageFactory.newInstance(soapVersion);
-			// Convert XML Request to SoapMessage
+			TestReporter.logTrace("Message Factory started");
+			
+			TestReporter.logTrace("Loading request XML into byte stream");
 			InputStream in = new ByteArrayInputStream(getRequest().getBytes(Charset.defaultCharset()));
+			TestReporter.logTrace("Successfully loaded XML into stream");
+			TestReporter.logTrace("Loading byte stream into Message Factory");
 			request = messageFactory.createMessage(new MimeHeaders(),in);	
+			TestReporter.logTrace("Successfully generated Soap Message");
 
-			request.writeTo(System.out);
-
-			// Send out Soap Request to the endopoint
+			TestReporter.logTrace("Create Soap Connection Factory");
 			connectionFactory = SOAPConnectionFactory.newInstance();
 
+			TestReporter.logTrace("Create Soap Connection");
 			connection = connectionFactory.createConnection();
+			
+			TestReporter.logTrace("Send request to service");
 			response = connection.call(request, url);
 
-			// Normalize Response and get the soap body
+			TestReporter.logTrace("Successfully sent Soap Message. Normalizing response");
 			response.getSOAPBody().normalize();
 			responseBody = response.getSOAPBody();
 		} catch (UnsupportedOperationException uoe) {
@@ -413,7 +446,7 @@ public abstract class SoapService{
 					+ ioe.getCause());
 		}
 
-		// Check for faults and report
+		TestReporter.logTrace("Checking for faults");
 		if (responseBody.hasFault()) {
 			SOAPFault newFault = responseBody.getFault();
 			intResponseStatusCode = newFault.getFaultCode();
@@ -422,16 +455,20 @@ public abstract class SoapService{
 		}
 
 		try {
+			TestReporter.logTrace("Closing Soap connection");
 			connection.close();
 		} catch (SOAPException soape) {
 			throw new SoapException("Failed to close Soap Connection" , soape.getCause());
 		}
 
-		// Covert Soap Response to XML and set it as Response in memory
+
+		TestReporter.logTrace("Convert response to XML document and store it");
 		Document doc = XMLTools.makeXMLDocument(response);
 		doc.normalize();
 		setResponseDocument(doc);
-		return response;
+		
+		TestReporter.logTrace("Successfully converted response to XML document");
+		TestReporter.logTrace("Exiting SoapService#sendRequest");
 	}	
 	
 	/**
@@ -447,9 +484,6 @@ public abstract class SoapService{
 	 *            String: Depending on value given, will update the xpath value,
 	 *            attribute, or call a separate function. 
 	 *            <br><br><b>Value syntax expressions:</b>
-	 *            <br><b>value="abc"</b>  -- Indirectly states that the node value will be set as "abc"
-	 *            <br><b>value="value:abc"</b>  -- Directly states that the node value will be set as "abc"
-	 *            <br><b>value="attribute:attrName,abc"</b>  -- Directly states that the node attribute "attrName" will be set as "abc"
 	 *            <br><b>value="fx:funcName"</b> -- Will call the function "funcName" to be handled in {@link #handleValueFunction}  
 	 * @throws XPathExpressionException
 	 *             Could not match evaluate xPath
@@ -457,119 +491,48 @@ public abstract class SoapService{
 	 *             Could not match xPath to a node, element or attribute
 	 */
 	protected  void setRequestNodeValueByXPath(Document doc, String xpath, String value) {
+		TestReporter.logTrace("Entering SoapService#setRequestNodeValueByXPath");
 		XPathFactory xPathFactory = XPathFactory.newInstance();
 		XPath xPath = xPathFactory.newXPath();
 		XPathExpression expr;
 		NodeList nList = null;
-		//Document doc = getRequestDocument();
-	//	Element element = (Element) doc.getElementsByTagName("pmtInfo");
-		//Find the node based on xpath expression
+		
 		try {
+			TestReporter.logTrace("Checking validity of xpath [ "+xpath+" ]");
 			expr = xPath.compile(xpath);
 			nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 		}catch (XPathExpressionException xpe) {		
 			throw new RuntimeException("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
 		}
-		
-		//Ensure an element was found, if not then throw error and fail
+
+		TestReporter.logTrace("XPath is valid. Checking for nodes with desired xpath");
 		if (nList.item(0) == null){	
 			throw new XPathNotFoundException(xpath);
 		}
 		
-		//System.out.println("XPATH: " + xpath + " || VALUE: " +value);
-		
 		if( value == null || value.isEmpty()){
 			throw new XPathNullNodeValueException(xpath);
+		}		
+	
+		if (value.contains("fx:")) {
+			TestReporter.logTrace("Executing runtime function [ " + value + " ]");
+			value = handleValueFunction(doc, value, xpath);
 		}
 		
-		//Handle prefix types
-		if (value.trim().toLowerCase().contains("value:")) {
-			
-			//Node value was specifically stated. Update node value
-			value = value.substring(value.indexOf(":") + 1, value.length())
-					.trim();
-			
-			//Handle function if necessary
-			if (value.contains("fx:")) {
-				value = handleValueFunction(doc, value, xpath);
-			}
-			
-			//If a prior function call previous updated the XML, nothing more is needed.
-			if (!value.equalsIgnoreCase("XMLUpdated")) {
-				nList.item(0).setTextContent(value);
-			}
-
-		} else if (value.trim().toLowerCase().contains("addattribute")) {
-
-			//Node attribute was specifically stated. Determine the attribute to find, then update the attribute 
-			//value = value.substring(value.indexOf(":") + 1,value.length()).trim();
-			//String[] attributeParams = value.split(";");
-
-			//Handle function if necessary
-			if (value.contains("fx:")) {
-				value = handleValueFunction(doc, value, xpath);
-			}
-			
-			//If a prior function call previous updated the XML, nothing more is needed.			
-			if (value.equalsIgnoreCase("XMLUpdated")) {
-				//Find the attribute and set for editting
-				NamedNodeMap attr = nList.item(0).getAttributes();
-				Node nodeAttr = attr.getNamedItem(value);
-				
-				if (!value.equalsIgnoreCase("XMLUpdated")) {
-				//Update attribute
-					nodeAttr.setTextContent(value);
-				}
-			}
-		} else {
-			//Default path. Update node value based on xpath
-			//Handle function if necessary
-			if (value.contains("fx:")) {
-				value = handleValueFunction(doc, value, xpath);
-			}
-			
-			//If a prior function call previous updated the XML, nothing more is needed.
-			if (!value.equalsIgnoreCase("XMLUpdated")) {
-				if(value.equalsIgnoreCase("true")) value = "true";
-				else if(value.equalsIgnoreCase("false")) value = "false";				
-				nList.item(0).setTextContent(value);
-			}
+		//If a prior function call previous updated the XML, nothing more is needed.
+		if (!value.equalsIgnoreCase("XMLUpdated")) {
+			if(value.equalsIgnoreCase("true")) value = "true";
+			else if(value.equalsIgnoreCase("false")) value = "false";
+			TestReporter.logTrace("Setting value [ "+value+" ] to xpath");
+			nList.item(0).setTextContent(value);
 		}
+	
 		
 		//Store changes
-		setRequestDocument(doc);		
+		setRequestDocument(doc);	
+
+		TestReporter.logTrace("Exiting SoapService#setRequestNodeValueByXPath");
 	}
-
-protected static boolean validateNodeContainsValueByXPath(Document doc, String xpath, String testValue) {
-     XPathFactory xPathFactory = XPathFactory.newInstance();
-     XPath xPath = xPathFactory.newXPath();
-     XPathExpression expr;
-     NodeList nList = null;
-     int element = 0;
-     boolean isContained = false;
-
-     try{
-         expr = xPath.compile(xpath);
-         nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-     }catch(XPathExpressionException e1){
-     	throw new RuntimeException("Xpath expression '" + xpath + "' did not exist." );
-     }
-     
-     //Iterate through all nodes in the list
-     do{
-     		//Test to see if the test value is found in the same node structure as the locatro value
-     		if(nList.item(element).getTextContent().toLowerCase().contains(testValue.toLowerCase())){
-     			isContained = true;      			
-     		}
-     	element++;
- 		if(element == nList.getLength() - 1 && !isContained){
- 			Reporter.log("The test value [" +testValue+ "] was not contained in any nodes", true);
- 			throw new RuntimeException("The test value [" +testValue+ "] was not contained in any nodes");
- 		}
-     }while(element < nList.getLength() && !isContained);
-         
-     return isContained;
-}
 
 	/**
 	 *  Update multiple XPath nodes or attributes based on the value. The value
@@ -613,6 +576,7 @@ protected static boolean validateNodeContainsValueByXPath(Document doc, String x
 	 */
 	public void setRequestNodeValueByXPath(Object[][] scenarios) {
 		for (int x = 0; x < scenarios.length; x++) {
+			TestReporter.logDebug("Set value [ " + scenarios[x][0].toString() + " ] to XPath [ " + scenarios[x][1].toString() + " ]");
 			setRequestNodeValueByXPath(getRequestDocument(),scenarios[x][0].toString(),
 					scenarios[x][1].toString());
 		}
@@ -705,8 +669,6 @@ protected static boolean validateNodeContainsValueByXPath(Document doc, String x
 			}
 		}
 
-		Regex regex = new Regex();
-
 		//Validate expected value with actual value and report in html table 
 		if(!errorMessage.isEmpty()){
 			buffer.append("<tr><td style='width: 100px; color: black; text-align: left;'>"
@@ -716,7 +678,7 @@ protected static boolean validateNodeContainsValueByXPath(Document doc, String x
 			buffer.append("<td style='width: 100px; color: black; text-align: center;'>"
 					+ errorMessage + "</td>");
 			buffer.append("<td style='width: 100px; color: red; text-align: center;'><b>Fail</b></td></tr>");
-		}else if (regex.match(regexValue, xPathValue)) {		
+		}else if (Regex.match(regexValue, xPathValue)) {		
 			buffer.append("<tr><td style='width: 100px; color: black; text-align: left;'>"
 					+ xpath + "</td>");
 			buffer.append("<td style='width: 100px; color: black; text-align: center;'>"
@@ -734,7 +696,7 @@ protected static boolean validateNodeContainsValueByXPath(Document doc, String x
 			buffer.append("<td style='width: 100px; color: red; text-align: center;'><b>Fail</b></td></tr>");
 		}
 		//return boolean
-		return regex.match(regexValue, xPathValue);
+		return Regex.match(regexValue, xPathValue);
 	}
 
 	/**
@@ -756,11 +718,17 @@ protected static boolean validateNodeContainsValueByXPath(Document doc, String x
 	 * @param operation String: operation to load
 	 */
 	protected String buildRequestFromWSDL(String operation) {
+		TestReporter.logTrace("Entering SoapService#buildRequestFromWSDL");
+		System.setProperty("soapui.log4j.config", this.getClass().getResource("/soapui-log4j.xml").getPath());
 		WsdlProject project = null;
 		WsdlInterface[] wsdls = null;
 		try {
+			TestReporter.logTrace("Starting empty SoapUI Project");
 			project = new WsdlProject();
-			wsdls = WsdlImporter.importWsdl(project, getServiceURL());
+			TestReporter.logTrace("Successfully started SoapUI Project");
+			TestReporter.logTrace("Import WSDL into project from URL [ " + url+" ]");
+			wsdls = WsdlImporter.importWsdl(project, url);
+			TestReporter.logTrace("Successfully loaded WSDL");
 		} catch (XmlException xmle) {
 			throw new RuntimeException("Error loading XML: " + xmle.getCause());
 		} catch (IOException ioe) {
@@ -771,9 +739,17 @@ protected static boolean validateNodeContainsValueByXPath(Document doc, String x
 			throw new RuntimeException("Error reading WSDL file: " + e.getCause());
 		}
 		
+		TestReporter.logTrace("Load Operation by name [ "+operation+" ]");
 		WsdlInterface wsdl = wsdls[0];
 		WsdlOperation wsdlOperation = wsdl.getOperationByName(operation);
-		return wsdlOperation.createRequest(true);
+		
+		TestReporter.logTrace("Successfully loaded operation");
+		TestReporter.logTrace("Generate raw request from operation");
+		String rawRequest = wsdlOperation.createRequest(true);
+		
+		TestReporter.logTrace("Successfully generated request");
+		TestReporter.logTrace("Exiting SoapService#buildRequestFromWSDL");
+		return rawRequest ;
 	}
 
 	protected void removeComments() {

@@ -16,9 +16,10 @@ public class TestSoapService {
     @Stories("SoapService")
     @Test(groups ={"regression", "interfaces", "textbox"})
     public void sandbox(){
+    	TestReporter.setDebugLevel(TestReporter.TRACE);
 		GetInfoByAreaCode getInfo = new GetInfoByAreaCode();
 		getInfo.setAreaCode("901");
 		getInfo.sendRequest();
-		TestReporter.logAPI(getInfo.getNumberOfResults() == 0, "No records returned", getInfo);
+		TestReporter.logAPI(getInfo.getNumberOfResults() != 0, "No records returned", getInfo);
     }
 }
