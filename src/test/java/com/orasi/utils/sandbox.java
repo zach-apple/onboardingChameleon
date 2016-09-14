@@ -1,5 +1,6 @@
 package com.orasi.utils;
 
+import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
@@ -24,8 +25,8 @@ public class sandbox extends TestEnvironment{
     }
     
     @AfterTest(groups ={"regression", "utils", "dev"})
-    public void close(){
-	endTest("TestAlert");
+    public void close(ITestContext testResults){
+	endTest("TestAlert", testResults);
     }
     
     @Test(groups ={"regression", "utils", "dev"})

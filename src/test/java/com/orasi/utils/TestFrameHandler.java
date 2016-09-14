@@ -21,22 +21,14 @@ public class TestFrameHandler extends TestEnvironment {
 		setOperatingSystem(operatingSystem);
 		setRunLocation(runLocation);
 		setTestEnvironment(environment);
-		setDefaultTestTimeout(3);
 		setPageURL("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/utils/frameHandler.html");
 		testStart("TestFrame");
+		getDriver().setElementTimeout(3);
 	}
 
 	@AfterTest(groups = { "regression", "utils", "dev" })
 	public void close(ITestContext testResults) {
 		endTest("TestFrame", testResults);
-	}
-
-	@SuppressWarnings("deprecation")
-	@Test(groups = { "regression", "utils", "dev", "framehandler" })
-	public void findAndSwitchToFrameFromOutsideFrame() {
-		FrameHandler.findAndSwitchToFrame(getDriver(), "menu_page");
-		Assert.assertTrue("Link was not found in 'menu_page'",
-				getDriver().findElement(By.id("googleLink")).isDisplayed());
 	}
 
 	@Test(groups = { "regression", "utils", "dev",

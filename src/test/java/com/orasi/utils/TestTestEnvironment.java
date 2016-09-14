@@ -1,11 +1,8 @@
 package com.orasi.utils;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.orasi.core.interfaces.Element;
 
 public class TestTestEnvironment {
 	private String application = "application";
@@ -31,13 +28,6 @@ public class TestTestEnvironment {
 		Assert.assertNotNull(te);
 	}
 
-	@Test(groups = "regression")
-	public void testEnviromentWithTestEnvironmentConstructor() {
-		TestEnvironment te = new TestEnvironment();
-		TestEnvironment te2 = new TestEnvironment(te);
-
-		Assert.assertNotNull(te2);
-	}
 
 	@Test(groups = "regression")
 	public void applicationUnderTest() {
@@ -104,23 +94,7 @@ public class TestTestEnvironment {
 		Assert.assertTrue(te.getDriver().getTitle().equals("Unit test site"));
 	}
 
-	@Test(groups = "regression", dependsOnMethods = "testStart")
-	public void pageLoaded() {
-		TestEnvironment te = new TestEnvironment(application, browserUnderTest, browserVersion, operatingSystem,
-				runLocation, testingEnvironment);
-		te.setPageURL(pageURL);
-		te.testStart(testingName);
-		Assert.assertTrue(te.pageLoaded());
-	}
 
-	@Test(groups = "regression", dependsOnMethods = "testStart")
-	public void pageLoadedWithElement() {
-		TestEnvironment te = new TestEnvironment(application, browserUnderTest, browserVersion, operatingSystem,
-				runLocation, testingEnvironment);
-		te.setPageURL(pageURL);
-		OrasiDriver driver = te.testStart(testingName);
-		Assert.assertTrue(new PageLoaded(driver).isDomComplete());
-		Assert.assertTrue(PageLoaded.syncPresent(driver, driver.findElement(By.id("text1"))));
-	}
+
 
 }

@@ -14,6 +14,10 @@ public class WindowHandler {
 		
 	public void waitUntilWindowExists(WebDriver driver, String window){
 		int time = 0 ;
+		int defaultTimeout = Constants.ELEMENT_TIMEOUT;
+		if (driver instanceof OrasiDriver) {
+			defaultTimeout = ((OrasiDriver) driver).getElementTimeout();
+		}
 		boolean found = false;
 		while(!found)
 			for (String winHandle : driver.getWindowHandles()) {
@@ -29,7 +33,7 @@ public class WindowHandler {
 			}		
 			time++;
 			
-			if (time == TestEnvironment.getDefaultTestTimeout()) found = true;
+			if (time == defaultTimeout) found = true;
 		
 	}
 	

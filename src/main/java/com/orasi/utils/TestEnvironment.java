@@ -59,7 +59,7 @@ public class TestEnvironment {
 	/*
 	 * Selenium Hub Field
 	 */
-	protected String seleniumHubURL = appURLRepository.getString("SELENIUMGRID_HUB_URL");
+	protected String defaultSeleniumHubURL = appURLRepository.getString("DEFAULT_SELENIUMGRID_HUB_URL");
 
 	/*
 	 * Sauce Labs Fields
@@ -90,27 +90,15 @@ public class TestEnvironment {
 	
 	public TestEnvironment(String application, String browserUnderTest, String browserVersion, String operatingSystem,
 			String runLocation, String environment) {
+		
+		
 		this.applicationUnderTest = application;
-		this.browserUnderTest = browserUnderTest;
-		this.browserVersion = browserVersion;
-		this.operatingSystem = operatingSystem;
-		this.runLocation = runLocation;
 		this.environment = environment;
-	}
-	
-	/**TODO
-	 * Ask Justin about this constructor - why would we instantiate the class this way?
-	 * */
-	
-	public TestEnvironment(TestEnvironment te) {
-		setApplicationUnderTest(te.getApplicationUnderTest());
-		setBrowserUnderTest(te.getBrowserUnderTest());
-		setBrowserVersion(te.getBrowserVersion());
-		setOperatingSystem(te.getOperatingSystem());
-		setRunLocation(te.getRunLocation());
-		setTestEnvironment(te.getTestEnvironment());
-		setTestName(te.getTestName());
-		setDriver(te.getDriver());
+		/*Use setter methods for these fields as the data may be coming from a jenkins parameter */
+		setBrowserUnderTest(browserUnderTest);
+		setBrowserUnderTest(browserVersion);
+		setOperatingSystem(operatingSystem);
+		setRunLocation(runLocation);
 	}
 	
 
@@ -190,30 +178,16 @@ public class TestEnvironment {
 		if (runLocation.equalsIgnoreCase("sauce"))
 			return sauceLabsURL;
 		else if (runLocation.equalsIgnoreCase("grid"))
-			return seleniumHubURL;
+			return defaultSeleniumHubURL;
 		else
 			return "";
 	}
 
-	/*TODO ask justin why we would set the this as a system property,
-	 * if so, need to add back adding this method in the constructors*/
-	protected void setSeleniumHubURL(String url) {
-		System.setProperty(Constants.SELENIUM_HUB_URL, url);
+
+	protected void setSeleniumHubURL(String newHubURLName ) {
+		defaultSeleniumHubURL = appURLRepository.getString(newHubURLName);;
 	}
 	
-	/*
-	 * Getter and setter for default test timeout
-	 * TODO Ask justin why these are set as property values.  And really what is a test timeout anyways?  
-	 * Is it just a value?
-	 
-	public void setDefaultTestTimeout(int timeout) {
-		System.setProperty(Constants.TEST_DRIVER_TIMEOUT, Integer.toString(timeout));
-	}
-
-	public static int getDefaultTestTimeout() {
-		return Integer.parseInt(System.getProperty(Constants.TEST_DRIVER_TIMEOUT));
-	}
-	*/
 
 	// ************************************
 	// ************************************
@@ -320,14 +294,36 @@ public class TestEnvironment {
 	protected void endTest(String testName, ITestResult testResults) {
 		//Sauce labs specific to end test
 		if (runLocation.equalsIgnoreCase("sauce")) {
-			endSauceTest(testResults.getStatus());
+			reportToSauceLabs(testResults.getStatus());
 		} 
 		//quit driver
 		if (getDriver() != null && getDriver().getWindowHandles().size() > 0) {
 			getDriver().quit();
 		}
 		
+		//if using SL, report the test results to SL
 		
+		
+	}
+	/**
+	 * Ends the test and grabs the test result (pass/fail) in case need to use that 
+	 * for additional reporting - such as to a sauce labs run.  Allows for different
+	 * ways of quiting the browser depending on r
+	 * Use ITestContext from @AfterTest or @AfterSuite to determine run status
+	 * before closing test if reporting to sauce labs
+	 */
+	protected void endTest(String testName, ITestContext testResults) {
+		if (runLocation.equalsIgnoreCase("sauce")) {
+			if (testResults.getFailedTests().size() == 0) {
+				reportToSauceLabs(ITestResult.SUCCESS);
+			} else {
+				reportToSauceLabs(ITestResult.FAILURE);
+			}
+		}
+		//quit driver
+		if (getDriver() != null && getDriver().getWindowHandles().size() > 0) {
+			getDriver().quit();
+		}
 	}
 
 
@@ -336,7 +332,7 @@ public class TestEnvironment {
 	 * and quits 
 	 * @param result
 	 */
-	private void endSauceTest(int result) {
+	private void reportToSauceLabs(int result) {
 		Map<String, Object> updates = new HashMap<String, Object>();
 		updates.put("name", getTestName());
 
@@ -531,52 +527,7 @@ public class TestEnvironment {
 		}
 	}
 
-	// ************************************
-	// ************************************
-	// ************************************
-	// PAGE OBJECT METHODS
-	// ************************************
-	// ************************************
-	// ************************************
-
-	/**
-	 * loops for a predetermined amount of time (defined by
-	 *          WebDriverSetup.getDefaultTestTimeout()) to determine if the DOM
-	 *          is in a ready-state
-	 * @return boolean: true is the DOM is completely loaded, false otherwise
-	 * @param N
-	 *            /A
-	 */
-	public boolean pageLoaded() {
-		return new PageLoaded().isDomComplete(getDriver());
-	}
-
-	/**
-	 * loops for a predetermined amount of time (defined by
-	 *          WebDriverSetup.getDefaultTestTimeout()) to determine if the
-	 *          Element is not null
-	 * @return boolean: true is the DOM is completely loaded, false otherwise
-	 * @param clazz
-	 *            - page class that is calling this method
-	 * @param element
-	 *            - element with which to determine if a page is loaded
-	 *            TODO - CAN WE REMOVE THIS?
-	 */
-	@Deprecated
-	public boolean pageLoaded(Class<?> clazz, Element element) {
-		return new PageLoaded().isElementLoaded(clazz, getDriver(), element);
-	}
 	
-	/**
-	 *  loops for a predetermined amount of time (defined by
-	 *          OrasiDriver.getElementTimeout()) to determine if the
-	 *          Element is present in the DOM
-	 * @param element - element with which to determine if a page is loaded
-	 * @return boolean: true if the element is present in the DOM, false otherwise
-	 */
-	public boolean pageLoaded(Element element) {
-		return PageLoaded.syncPresent(getDriver(), element);
-	}
 
 	
 
