@@ -28,15 +28,15 @@ public class RestResponse {
 	private String serviceURL = "";
 	
 	public RestResponse(HttpResponse httpResponse){
-		TestReporter.logDebug("Creating RestResponse based in HTTPResponse");
+		TestReporter.logTrace("Creating RestResponse based in HTTPResponse");
 		response  = httpResponse;
 		statusCode = response.getStatusLine().getStatusCode();
 		responseFormat = ContentType.getOrDefault(response.getEntity()).getMimeType().replace("application/", "");
 		try {
 			responseAsString = EntityUtils.toString(response.getEntity());
 
-			TestReporter.logInfo("Response Status returned [" + httpResponse.getStatusLine() +"]");
-			TestReporter.logInfo("Response returned: " +responseAsString);
+			TestReporter.logDebug("Response Status returned [" + httpResponse.getStatusLine() +"]");
+			TestReporter.logDebug("Response returned: " +responseAsString);
 		} catch (ParseException | IOException e) {
 			throw new AutomationException(e.getMessage(), e);
 		}

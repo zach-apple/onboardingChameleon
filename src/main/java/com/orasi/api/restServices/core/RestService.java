@@ -37,8 +37,8 @@ public class RestService {
 	
 	//constructor
 	public RestService() {
-		TestReporter.logDebug("Initializing RestService");
-		TestReporter.logDebug("Creating Http Client instance");
+		TestReporter.logTrace("Initializing RestService");
+		TestReporter.logTrace("Creating Http Client instance");
 	    httpClient = HttpClientBuilder.create().build();
 	}
 	
@@ -72,8 +72,8 @@ public class RestService {
 	 * @return 	response in string format
 	 */
 	public RestResponse sendGetRequest(String url, HeaderType type,  List<NameValuePair> params) {
-		TestReporter.logDebug("Preparing to send GET request");
-		TestReporter.logDebug("Creating Http GET instance with URL of ["+url+"]");
+		TestReporter.logTrace("Preparing to send GET request");
+		TestReporter.logTrace("Creating Http GET instance with URL of ["+url+"]");
 		HttpGet request = new HttpGet(url);
 		
 		try {
@@ -82,9 +82,9 @@ public class RestService {
 		    	for (NameValuePair param : params){
 		    		allParams += "[" +param.getName() + ": " + param.getValue()+"] ";
 		    	}
-				TestReporter.logInfo("Adding Parameters " + allParams);
+				TestReporter.logDebug("Adding Parameters " + allParams);
 				url = url+"?"+URLEncodedUtils.format(params, "utf-8");
-				TestReporter.logInfo("URL with params: " + url);
+				TestReporter.logDebug("URL with params: " + url);
 				request.setURI(new URI(url));
 		    }
 			
@@ -123,8 +123,8 @@ public class RestService {
 	}
 
 	public RestResponse sendPostRequest(String url, HttpEntity build) {
-		TestReporter.logDebug("Preparing to send POST request");
-		TestReporter.logDebug("Creating Http POST instance with URL of ["+url+"]");
+		TestReporter.logTrace("Preparing to send POST request");
+		TestReporter.logTrace("Creating Http POST instance with URL of ["+url+"]");
 		HttpPost httpPost = new HttpPost(url);
 		httpPost.setEntity(build);
 		return sendRequest(httpPost);
@@ -140,8 +140,8 @@ public class RestService {
 	 * @return 	response in string format
 	 */
 	public RestResponse sendPostRequest(String url, HeaderType type, List<NameValuePair> params, String json){
-		TestReporter.logDebug("Preparing to send POST request");
-		TestReporter.logDebug("Creating Http POST instance with URL of ["+url+"]");
+		TestReporter.logTrace("Preparing to send POST request");
+		TestReporter.logTrace("Creating Http POST instance with URL of ["+url+"]");
 		HttpPost httpPost = new HttpPost(url);
 		
 		if(type != null)httpPost.setHeaders(Headers.createHeader(type));		
@@ -185,8 +185,8 @@ public class RestService {
 	 * @return 	response in string format
 	 */
 	public RestResponse sendPutRequest(String url, HeaderType type, List<NameValuePair> params, String json){
-		TestReporter.logDebug("Preparing to send PUT request");
-		TestReporter.logDebug("Creating Http PUT instance with URL of ["+url+"]");
+		TestReporter.logTrace("Preparing to send PUT request");
+		TestReporter.logTrace("Creating Http PUT instance with URL of ["+url+"]");
 		HttpPut httpPut = new HttpPut(url);
 		
 		if(type != null)httpPut.setHeaders(Headers.createHeader(type));		
@@ -230,8 +230,8 @@ public class RestService {
 	 * @return 	response in string format
 	 */
 	public RestResponse sendPatchRequest(String url,HeaderType type,  List<NameValuePair> params, String json){
-		TestReporter.logDebug("Preparing to send PATCH request");
-		TestReporter.logDebug("Creating Http PATCH instance with URL of ["+url+"]");
+		TestReporter.logTrace("Preparing to send PATCH request");
+		TestReporter.logTrace("Creating Http PATCH instance with URL of ["+url+"]");
 		HttpPatch httpPatch = new HttpPatch(url);
 		
 		if(type != null)httpPatch.setHeaders(Headers.createHeader(type));		
@@ -249,8 +249,8 @@ public class RestService {
 	 */
 	
 	public RestResponse sendDeleteRequest(String url,HeaderType type){
-		TestReporter.logDebug("Preparing to send PATCH request");
-		TestReporter.logDebug("Creating Http PATCH instance with URL of ["+url+"]");
+		TestReporter.logTrace("Preparing to send PATCH request");
+		TestReporter.logTrace("Creating Http PATCH instance with URL of ["+url+"]");
 		HttpDelete httpDelete = new HttpDelete(url);
 		
 		if(type != null){
@@ -294,14 +294,14 @@ public class RestService {
 	public RestResponse sendRequest(HttpUriRequest request){
 		RestResponse response = null;
 		try {
-			TestReporter.logDebug("Sending request");
+			TestReporter.logTrace("Sending request");
 			response = new RestResponse(httpClient.execute(request));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		TestReporter.logDebug("Setting URI used on RestResponse");		
+		TestReporter.logTrace("Setting URI used on RestResponse");		
 		response.setServiceURL(request.getURI().toString());
-		TestReporter.logDebug("Returning RestResponse to calling method");
+		TestReporter.logTrace("Returning RestResponse to calling method");
 		return response;
 	}
 	
@@ -310,7 +310,7 @@ public class RestService {
     	for (NameValuePair param : params){
     		allParams += "[" +param.getName() + ": " + param.getValue()+"] ";
     	}
-		TestReporter.logInfo("Adding Parameters " + allParams);
+		TestReporter.logDebug("Adding Parameters " + allParams);
 			try {
 				if(request instanceof HttpPatch) ((HttpPatch) request).setEntity(new UrlEncodedFormEntity(params));
 				else if(request instanceof HttpPut) ((HttpPut) request).setEntity(new UrlEncodedFormEntity(params));
@@ -323,7 +323,7 @@ public class RestService {
 	
 
 	private HttpUriRequest addJson(HttpUriRequest request, String json){
-		TestReporter.logInfo("Adding json [" + json + "]");
+		TestReporter.logDebug("Adding json [" + json + "]");
 			try {
 				if(request instanceof HttpPatch) ((HttpPatch) request).setEntity( new ByteArrayEntity(json.getBytes("UTF-8")));
 				else if(request instanceof HttpPut) ((HttpPut) request).setEntity( new ByteArrayEntity(json.getBytes("UTF-8")));

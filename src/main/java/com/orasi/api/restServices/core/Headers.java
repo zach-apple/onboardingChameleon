@@ -48,13 +48,13 @@ public class Headers {
 		  Header[] headers = null;
 	        switch(type) {		    
 		        case AUTH:		        	
-        			TestReporter.logInfo("Creating headers for [AUTH]");
+        			TestReporter.logDebug("Creating headers for [AUTH]");
 
 		        	headers= new Header[] {
 		    	   		     new BasicHeader("Content-type", "application/x-www-form-urlencoded")};
 		        	break;
 		        case BASIC_CONVO:
-        			TestReporter.logInfo("Creating headers for [BASIC_CONVO]");
+        			TestReporter.logDebug("Creating headers for [BASIC_CONVO]");
 		        	headers = new Header[] {
 		    	   		     new BasicHeader("Content-type", "application/json;charset=utf-8")
 		    	   		    ,new BasicHeader("Accept", "application/json")
@@ -73,7 +73,7 @@ public class Headers {
 	    	for (Header header : headers){
 	    		allHeaders += "[" +header.getName() + ": " + header.getValue()+"] ";
 	    	}
-			TestReporter.logInfo("Headers added " + allHeaders);
+			TestReporter.logDebug("Headers added " + allHeaders);
 			
 			return headers;
 	    }
