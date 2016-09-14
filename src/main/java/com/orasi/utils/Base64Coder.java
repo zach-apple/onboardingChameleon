@@ -34,7 +34,7 @@ public class Base64Coder {
     private static final String systemLineSeparator = System.getProperty("line.separator");
 
     public static void main(String[] args) {
-	byte[] toEncode = "setSecure".getBytes();
+	byte[] toEncode = "?access_token=4fa170ef17506135dbde1b37cb9ad4e44525c7ef".getBytes();
         System.out.println(encode(toEncode)); // Display the string.
     }
     

@@ -604,8 +604,8 @@ public class TestEnvironment {
 		}
 
 		getDriver().setElementTimeout(Constants.ELEMENT_TIMEOUT);
-		getDriver().setPageTimeout(Constants.PAGE_TIMEOUT);
-		getDriver().setScriptTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+		getDriver().setPageTimeout(30);
+		getDriver().setScriptTimeout(30);
 		getDriver().manage().window().maximize();
 		// setDefaultTestTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
 		if (!getBrowserUnderTest().toLowerCase().contains("edge")) {
