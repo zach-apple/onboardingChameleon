@@ -79,7 +79,7 @@ public class TestReporter {
 						!filename.contains("com.orasi.utils.PageLoaded") &&
 						!filename.contains("java.lang.reflect") &&
 						!filename.contains("java.lang.Thread") &&
-						!filename.contains("com.orasi.core.interfaces") &&
+						//!filename.contains("com.orasi.core.interfaces") &&
 						!filename.contains("com.sun.proxy") && //
 						!filename.contains("org.testng.internal") &&
 						!filename.contains("java.util.concurrent.ThreadPoolExecutor") &&
@@ -124,13 +124,11 @@ public class TestReporter {
 	}
 
 	public static void interfaceLog(String message) {
-		Reporter.log(getTimestamp() + getClassPath() + message + "<br />");
-		if(getPrintToConsole()) System.out.println(getTimestamp() + getClassPath() + trimHtml(message.trim()));
+		logInfo(message);
 	}
 
 	public static void interfaceLog(String message, boolean failed) {
-		Reporter.log(getTimestamp() + "<font size = 2 color=\"red\">" + getClassPath() + message + "</font><br />");
-		if(getPrintToConsole()) System.out.println(getTimestamp() + getClassPath() + trimHtml(message.trim()));
+		logInfo("<font size = 2 color=\"red\">"  + message + "</font>");
 	}
 
 	public static void log(String message) {
@@ -140,7 +138,7 @@ public class TestReporter {
 
 	public static void logFailure(String message){
 		Reporter.log(getTimestamp() + " <font size = 2 color=\"red\"><b><u> FAILURE: " +getClassPath() +  message + "</font></u></b><br />");
-		if(getPrintToConsole()) System.out.println(getTimestamp() + trimHtml( "FAILURE: " + getClassPath() + message ));
+		if(getPrintToConsole()) System.out.println(getTimestamp() + trimHtml( "FAILURE: " + getClassPath() + trimHtml(message) ));
 	}
 	/**
 	 * Use to output low-level granular steps
@@ -149,7 +147,7 @@ public class TestReporter {
 	public static void logTrace(String message) {
 		if(debugLevel >= TRACE){
 			Reporter.log(getTimestamp() + "TRACE :: " + getClassPath() + message + "<br />");
-			System.out.println(getTimestamp() + "TRACE :: " + getClassPath() +  (message.trim()));
+			System.out.println(getTimestamp() + "TRACE :: " + getClassPath() +  (trimHtml(message).trim()));
 		}
 	}
 	/**
@@ -158,8 +156,8 @@ public class TestReporter {
 	 */
 	public static void logInfo(String message) {
 		if(debugLevel >= INFO){
-			Reporter.log(getTimestamp() + "INFO :: "+ getClassPath()  + message + "<br />");
-			System.out.println(getTimestamp() + "INFO :: "  + getClassPath() + " > "+ message.trim());
+			Reporter.log(getTimestamp() + " INFO  :: "+ getClassPath()  + message + "<br />");
+			System.out.println(getTimestamp() + " INFO  :: "  + getClassPath() + " > "+ trimHtml(message).trim());
 		}
 	}
 
@@ -170,7 +168,7 @@ public class TestReporter {
 	public static void logDebug(String message) {
 		if(debugLevel >= DEBUG){
 			Reporter.log(getTimestamp() + "DEBUG :: "+ getClassPath()  + message + "<br />");
-			System.out.println(getTimestamp()+ "DEBUG :: "  + getClassPath() + " > "+ message.trim());
+			System.out.println(getTimestamp()+ "DEBUG :: "  + getClassPath() + " > "+ trimHtml(message).trim());
 		}
 	}
 
