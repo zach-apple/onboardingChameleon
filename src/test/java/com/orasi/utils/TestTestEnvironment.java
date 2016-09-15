@@ -92,6 +92,8 @@ public class TestTestEnvironment {
 		te.setPageURL(pageURL);
 		te.testStart(testingName);
 		Assert.assertTrue(te.getDriver().getTitle().equals("Unit test site"));
+		
+
 	}
 
 

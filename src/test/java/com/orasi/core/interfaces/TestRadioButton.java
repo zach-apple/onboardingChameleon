@@ -41,7 +41,7 @@ public class TestRadioButton extends TestEnvironment{
     public void getNumberOfOptions(){
 
 	RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
-	Assert.assertTrue(radiogroup.getNumberOfOptions() == 2 );
+	Assert.assertTrue(radiogroup.getNumberOfOptions() == 3 );
     }
     
    /* @Test(groups ={"regression", "interfaces", "radiogroup"})

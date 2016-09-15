@@ -10,7 +10,17 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class FrameHandler {
 	
-
+	@Deprecated
+	public static void findAndSwitchToFrame(WebDriver driver, String frame) {
+		int timeout = Constants.ELEMENT_TIMEOUT;
+		if (driver instanceof OrasiDriver) {
+			timeout = ((OrasiDriver) driver).getElementTimeout();
+		}
+		driver.switchTo().defaultContent();
+		WebDriverWait wait = new WebDriverWait(driver,timeout);
+		wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frame));
+	}
+	
 	public static String getCurrentFrameName(WebDriver driver) {
 		if (driver instanceof OrasiDriver) {
 			driver = ((OrasiDriver) driver).getDriver();

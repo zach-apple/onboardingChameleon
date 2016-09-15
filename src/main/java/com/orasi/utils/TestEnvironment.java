@@ -96,7 +96,7 @@ public class TestEnvironment {
 		this.environment = environment;
 		/*Use setter methods for these fields as the data may be coming from a jenkins parameter */
 		setBrowserUnderTest(browserUnderTest);
-		setBrowserUnderTest(browserVersion);
+		setBrowserVersion(browserVersion);
 		setOperatingSystem(operatingSystem);
 		setRunLocation(runLocation);
 	}
@@ -451,7 +451,9 @@ public class TestEnvironment {
 			}
 
 			break;
-
+		case "html":
+			caps = DesiredCapabilities.htmlUnitWithJs();
+			break;
 		default:
 			throw new RuntimeException("Parameter not set for browser type");
 		}
