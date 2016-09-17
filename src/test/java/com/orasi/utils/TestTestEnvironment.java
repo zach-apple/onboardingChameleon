@@ -157,17 +157,5 @@ public class TestTestEnvironment extends TestEnvironment{
 		Assert.assertTrue(te.pageLoaded());
 	}
 
-	@Features("Utilities")
-	@Stories("TestEnvironment")
-	@Title("pageLoadedWithElement")
-	@Test(groups = "regression", dependsOnMethods = "testTestStart")
-	public void pageLoadedWithElement() {
-		TestEnvironment te = new TestEnvironment(application, browserUnderTest, browserVersion, operatingSystem,
-				runLocation, testingEnvironment);
-		te.setPageURL(pageURL);
-		OrasiDriver driver = te.testStart(testingName);
-		Assert.assertTrue(driver.page().isDomComplete());
-		Assert.assertTrue(PageLoaded.syncPresent(driver, driver.findElement(By.id("text1"))));
-	}
 
 }
