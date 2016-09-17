@@ -137,8 +137,8 @@ public class TestReporter {
 	}
 
 	public static void logFailure(String message){
-		Reporter.log(getTimestamp() + " <font size = 2 color=\"red\"><b><u> FAILURE: " +getClassPath() +  message + "</font></u></b><br />");
-		if(getPrintToConsole()) System.out.println(getTimestamp() + trimHtml( "FAILURE: " + getClassPath() + trimHtml(message) ));
+		Reporter.log(getTimestamp() + " <font size = 2 color=\"red\"><b><u> ERROR :: " +getClassPath() +  message + "</font></u></b><br />");
+		if(getPrintToConsole()) System.out.println(getTimestamp() + trimHtml( "ERROR :: " + getClassPath() + trimHtml(message) ));
 	}
 	/**
 	 * Use to output low-level granular steps

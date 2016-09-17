@@ -358,6 +358,7 @@ public class PageLoaded {
      *  					syncTextInElement("text", 10, false)
      */
     public static boolean syncVisible(OrasiDriver driver, Element element,  Object... args) {
+		TestReporter.logTrace("Entering PageLoaded#syncVisible");
 	int timeout = driver.getElementTimeout();
 	boolean failTestOnSync = PageLoaded.getSyncToFailTest();
 	try{
@@ -394,6 +395,7 @@ public class PageLoaded {
 			    + (timeLapse) / 1000.0 + " ] seconds.", driver);
 	}
 	if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, element);
+	TestReporter.logTrace("Exiting PageLoaded#syncVisible");
 	return found;
     }
 

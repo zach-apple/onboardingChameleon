@@ -3,15 +3,17 @@ package com.orasi.core.interfaces.impl;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang.time.StopWatch;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
-import org.openqa.selenium.Rectangle;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -20,11 +22,14 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.internal.WrapsElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.orasi.core.Beta;
 import com.orasi.core.by.angular.ByNG;
 import com.orasi.core.interfaces.Element;
 import com.orasi.exception.AutomationException;
+import com.orasi.exception.automation.ElementNotHiddenException;
+import com.orasi.utils.ExtendedExpectedConditions;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.PageLoaded;
 import com.orasi.utils.TestReporter;
@@ -51,9 +56,20 @@ public class ElementImpl implements Element {
 	public ElementImpl( final OrasiDriver driver, final By by) {
 		this.by= by;
 		this.driver = driver;
+		int timeout = 1;
 		try{
+			TestReporter.logTrace("Entering ElementImpl#init");
+			timeout = driver.getElementTimeout();
+			driver.setElementTimeout(1);
+			TestReporter.logTrace("Inital search for element [ " + by + "]");
 			element = driver.getWebDriver().findElement(by);
-		}catch(NoSuchElementException throwAway){}
+			TestReporter.logTrace("Element [ " + by + "] found and stored");			
+		}catch(NoSuchElementException throwAway){
+			TestReporter.logTrace("Element [ " + by + "] NOT found intially, will search again later");
+		}finally{
+			driver.setElementTimeout(timeout);
+		}
+		TestReporter.logTrace("Exiting ElementImpl#init");
 	}
 
 
@@ -235,18 +251,31 @@ public class ElementImpl implements Element {
 
 	@Override
 	public WebElement getWrappedElement() {
+		TestReporter.logTrace("Entering ElementImpl#getWrappedElement");
 	    WebElement tempElement = null;
 	    try{
-			if(element == null) tempElement = reload();
-			else tempElement = element;
+	    	TestReporter.logTrace("Validate element [ " + by.toString() + " ] is not null");
+			if(element == null){
+				TestReporter.logTrace("Element [ " + by.toString() + " ] is null, attempt to reload the element");
+				tempElement = reload();
+				TestReporter.logTrace("Successfully reloaded element [ " + by.toString() + " ]");
+			}else tempElement = element;
+			
+			TestReporter.logTrace("Validate element [ " + by.toString() + " ] is not stale");
 			tempElement.isEnabled();
+			TestReporter.logTrace("Successfully validated element [ " + by.toString() + " ] is usable");
+			 TestReporter.logTrace("Exiting ElementImpl#getWrappedElement");
 			return tempElement;
 	    }catch(NoSuchElementException |  StaleElementReferenceException| NullPointerException e){
 
 			try{
+				TestReporter.logTrace("Element [ " + by.toString() + " ] is stale, attempt to reload the element");
 				tempElement=reload();
+				TestReporter.logTrace("Successfully reloaded element [ " + by.toString() + " ]");
+				 TestReporter.logTrace("Exiting ElementImpl#getWrappedElement");
 				return tempElement;
 			 }catch(NullPointerException sere){
+				 TestReporter.logTrace("Exiting ElementImpl#getWrappedElement");
 				 return element;
 			 }
 	    }
@@ -535,13 +564,45 @@ public class ElementImpl implements Element {
 	 *  					syncVisible("text", 10, false)
 	 */
 	public boolean syncVisible(Object... args) {
+		TestReporter.logTrace("Entering ElementImpl#syncVisible");
 	    int timeout = getWrappedDriver().getElementTimeout();
 	    boolean failTestOnSync = PageLoaded.getSyncToFailTest();
 	    try{
     	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
     	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 	    }catch(ArrayIndexOutOfBoundsException aiobe){}
-		return PageLoaded.syncVisible(getWrappedDriver(), new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
+	    
+	    StopWatch stopwatch = new StopWatch();
+		TestReporter.interfaceLog("<i>Syncing to element [<b>" + getElementLocatorInfo()
+		+ "</b> ] to be <b>VISIBLE</b> within [ <b>" + timeout + "</b> ] seconds.</i>");
+
+		boolean found = false;
+		long timeLapse;
+		stopwatch.start();
+		 WebDriverWait wait = new WebDriverWait(driver, timeout);
+
+			try {
+			    found = wait.until(ExtendedExpectedConditions.elementToBeVisible(element));
+			} catch (TimeoutException te){
+			    found = false;
+			}
+		stopwatch.stop();
+		timeLapse = stopwatch.getTime();
+		stopwatch.reset();
+
+		if (!found && failTestOnSync) {
+		    Highlight.highlightError(driver, element);
+		    TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
+		    + " </b>] is not <b>VISIBLE</b> on the page after [ "
+		    + (timeLapse) / 1000.0 + " ] seconds.</i>");
+		    throw new ElementNotHiddenException(
+			    "Element [ " + getElementLocatorInfo() + " ] is not HIDDEN on the page after [ "
+				    + (timeLapse) / 1000.0 + " ] seconds.", driver);
+		}
+		
+		TestReporter.logTrace("Exiting ElementImpl#syncVisible");
+		return found;
+	   
 	}
 
 	/**
@@ -803,16 +864,21 @@ public class ElementImpl implements Element {
 	
 	@Beta
 	protected WebElement reload(){
-	    return getWrappedDriver().findWebElement(by);
+		TestReporter.logTrace("Entering ElementImpl#reload");
+		TestReporter.logTrace("Search DOM for element [ " + by.toString() + " ]");
+		WebElement el = getWrappedDriver().findWebElement(by);
+		TestReporter.logTrace("Found element [ " + by.toString() + " ]");
+		TestReporter.logTrace("Exiting ElementImpl#reload");
+	    return el;
 	}
 
 
 
-	@Override
+/*	@Override
 	public Rectangle getRect() {
 	    // TODO Auto-generated method stub
 	    return null;
-	}
+	}*/
 	
 	
 }

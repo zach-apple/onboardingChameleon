@@ -58,9 +58,8 @@ public class ElementHandler  implements InvocationHandler {
 	@Override
 	public Object invoke(Object object, Method method, Object[] objects) throws Throwable {
     	TestReporter.logTrace("Entering ElementHandler#invoke");
-    	TestReporter.logTrace("Attemptting to invoke method [ " +method.getName() +" ]");
+    	TestReporter.logTrace("Attempting to invoke method [ " +method.getName() +" ]");
 		WebElement element = null;
-
 
 		By by= null;
 		Field elementField = null;
