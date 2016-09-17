@@ -22,6 +22,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.internal.WrapsElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.orasi.core.Beta;
@@ -29,6 +30,7 @@ import com.orasi.core.by.angular.ByNG;
 import com.orasi.core.interfaces.Element;
 import com.orasi.exception.AutomationException;
 import com.orasi.exception.automation.ElementNotHiddenException;
+import com.orasi.exception.automation.ElementNotVisibleException;
 import com.orasi.utils.ExtendedExpectedConditions;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.PageLoaded;
@@ -59,15 +61,16 @@ public class ElementImpl implements Element {
 		int timeout = 1;
 		try{
 			TestReporter.logTrace("Entering ElementImpl#init");
-			timeout = driver.getElementTimeout();
-			driver.setElementTimeout(1);
+			//timeout = driver.getElementTimeout();
+			//driver.setElementTimeout(1);
 			TestReporter.logTrace("Inital search for element [ " + by + "]");
-			element = driver.getWebDriver().findElement(by);
+			WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), 1);
+			element = wait.until(ExpectedConditions.presenceOfElementLocated(by));
 			TestReporter.logTrace("Element [ " + by + "] found and stored");			
 		}catch(NoSuchElementException throwAway){
 			TestReporter.logTrace("Element [ " + by + "] NOT found intially, will search again later");
 		}finally{
-			driver.setElementTimeout(timeout);
+			//driver.setElementTimeout(timeout);
 		}
 		TestReporter.logTrace("Exiting ElementImpl#init");
 	}
@@ -554,15 +557,13 @@ public class ElementImpl implements Element {
 		stopwatch.reset();
 
 		if (!found && failTestOnSync) {
-		    Highlight.highlightError(driver, element);
 		    TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
 		    + " </b>] is not <b>VISIBLE</b> on the page after [ "
 		    + (timeLapse) / 1000.0 + " ] seconds.</i>");
-		    throw new ElementNotHiddenException(
-			    "Element [ " + getElementLocatorInfo() + " ] is not HIDDEN on the page after [ "
+		    throw new ElementNotVisibleException(
+			    "Element [ " + getElementLocatorInfo() + " ] is not VISIBLE on the page after [ "
 				    + (timeLapse) / 1000.0 + " ] seconds.", driver);
 		}
-		
 		TestReporter.logTrace("Exiting ElementImpl#syncVisible");
 		return found;
 	   
