@@ -86,10 +86,10 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 	    if (text == null) text = "";
 	    if (!text.isEmpty()){
 		if (text.equalsIgnoreCase("<blank>") || text.equalsIgnoreCase("(blank)")){
-		    TestReporter.log(" Request to blank text field sent. Clearing Textbox [ <b>" + getElementLocatorInfo()  + " </b> ]");
+		    TestReporter.interfaceLog(" Request to blank text field sent. Clearing Textbox [ <b>" + getElementLocatorInfo()  + " </b> ]");
 		    getWrappedElement().clear();
 		}else{
-		    TestReporter.log(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>" + getElementLocatorInfo()  + " </b> ]");
+		    TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>" + getElementLocatorInfo()  + " </b> ]");
 		    try{
 			getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].setAttribute('value', arguments[1])", getWrappedElement(), text);
 		    }catch(WebDriverException wde){
@@ -98,7 +98,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 		    }
 		}
 	    }else{
-		TestReporter.log(" Skipping input to Textbox [ <b>" + getElementLocatorInfo()  + " </b> ]");
+		TestReporter.interfaceLog(" Skipping input to Textbox [ <b>" + getElementLocatorInfo()  + " </b> ]");
 	    }
 	}
 	

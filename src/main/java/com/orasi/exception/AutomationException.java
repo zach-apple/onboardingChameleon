@@ -28,23 +28,19 @@ public class AutomationException extends RuntimeException{
 	
 	public AutomationException(String message){
 		super("Automation Error: " + message);
-		TestReporter.logFailure("Automation Error: " + message);
 	}
 	
 	public AutomationException(String message, WebDriver driver){
 	    super("Automation Error: " + message);
-		TestReporter.logFailure("Automation Error: " + message);
 	    this.driver = driver;
 	}
 	public AutomationException(String message, OrasiDriver driver){
 	    super("Automation Error: " + message);
-		TestReporter.logFailure("Automation Error: " + message);
 	    this.driver = driver.getWebDriver();
 	}
 	
 	public AutomationException(String message, Throwable cause){
 		super("Automation Error: " + message, cause);
-		TestReporter.logFailure("Automation Error: " + message);
 	}
 	 @Override
 	  public String getMessage() {
