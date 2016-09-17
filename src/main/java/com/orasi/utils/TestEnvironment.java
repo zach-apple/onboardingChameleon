@@ -648,16 +648,16 @@ public class TestEnvironment {
 		return PageLoaded.isElementLoaded(clazz, getDriver(), element);
 	}
 	
-	/**
+/*	*//**
 	 *  loops for a predetermined amount of time (defined by
 	 *          OrasiDriver.getElementTimeout()) to determine if the
 	 *          Element is present in the DOM
 	 * @param element - element with which to determine if a page is loaded
 	 * @return boolean: true if the element is present in the DOM, false otherwise
-	 */
+	 *//*
 	public boolean pageLoaded(Element element) {
-		return PageLoaded.syncPresent(getDriver(), element);
-	}
+		return PageLoaded.isDomComplete(driver);
+	}*/
 
 	private Platform getGridPlatformByOS(String os) {
 		switch (os.toLowerCase()) {

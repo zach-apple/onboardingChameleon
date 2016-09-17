@@ -250,33 +250,6 @@ public class TestElement extends TestEnvironment {
 
 	@Features("Element Interfaces")
 	@Stories("Element")
-	@Title("syncPresentBasic")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
-	public void syncPresentBasic() {
-		Element element = getDriver().findElement(By.id("text1"));
-		Assert.assertTrue(element.syncPresent());
-	}
-
-	@Features("Element Interfaces")
-	@Stories("Element")
-	@Title("syncPresentNegative")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", expectedExceptions=RuntimeException.class)
-	public void syncPresentNegative() {
-		Element element = getDriver().findElement(By.id("NoElement"));
-		element.syncPresent();		
-	}
-
-	@Features("Element Interfaces")
-	@Stories("Element")
-	@Title("syncPresentAdvanced")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired")
-	public void syncPresentAdvanced() {
-		Element element = getDriver().findElement(By.id("text1"));
-		Assert.assertTrue(element.syncPresent(5, false));
-	}
-
-	@Features("Element Interfaces")
-	@Stories("Element")
 	@Title("syncDisabledBasic")
 	@Test(groups = { "regression", "interfaces", "element" })
 	public void syncDisabledBasic() {

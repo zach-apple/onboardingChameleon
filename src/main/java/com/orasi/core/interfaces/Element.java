@@ -251,25 +251,6 @@ public interface Element extends WebElement, WrapsElement, Locatable {
 
 
 	/**
-	 * Used in conjunction with WebObjectPresent to determine if the desired
-	 * element is present in the DOM Will loop for the time out passed in
-	 * parameter timeout If object is not present within the time, handle error
-	 * based on returnError
-	 * 
-	 * @author Justin
-	 * @param args
-	 *  		Optional arguments </br>
-	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
-	 *  							 with syncTextInElement("text", 10)</br>
-	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
-	 *  					fail the script. If FALSE, the script will 
-	 *  					not fail, instead a FALSE will be returned 
-	 *  					to the calling function. Called with 
-	 *  					syncTextInElement("text", 10, false)
-	 */
-	public boolean syncPresent(Object... args);
-
-	/**
 	 * Used in conjunction with WebObjectVisible to determine if the desired
 	 * element is visible on the screen Will loop for the time out passed in the
 	 * variable timeout If object is not visible within the time, handle the

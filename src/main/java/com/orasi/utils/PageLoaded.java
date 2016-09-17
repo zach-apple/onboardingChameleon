@@ -278,67 +278,6 @@ public class PageLoaded {
     }
 
     /**
-     * Used in conjunction with WebElementPresent to determine if the desired
-     * element is present in the DOM Will loop for the time out passed in
-     * parameter timeout If object is not present within the time, handle error
-     * based on returnError
-     * 
-     * @author Justin
-     * @param driver - instance of the OrasiDriver
-     * @param element - Element to sync too
-     * @param args
-     *  		Optional arguments </br>
-     *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
-     *  							 with syncTextInElement("text", 10)</br>
-     *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
-     *  					fail the script. If FALSE, the script will 
-     *  					not fail, instead a FALSE will be returned 
-     *  					to the calling function. Called with 
-     *  					syncTextInElement("text", 10, false)
-     */
-    public static boolean syncPresent(OrasiDriver driver, Element element,  Object... args) {
-	int timeout = driver.getElementTimeout();
-	boolean failTestOnSync = PageLoaded.getSyncToFailTest();
-	try{
-	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
-	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
-	}catch(ArrayIndexOutOfBoundsException aiobe){}
-	boolean found = false;
-	long timeLapse;
-	StopWatch stopwatch = new StopWatch();
-	By locator = element.getElementLocator();
-	TestReporter.interfaceLog("<i> Syncing to element [ <b>" + element.getElementLocatorInfo()
-	+ "</b> ] to be <b>PRESENT</b> in DOM within [ " + timeout + " ] seconds.</i>");
-	int currentTimeout = driver.getElementTimeout();
-	driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
-
-	stopwatch.start();
-	do {
-	    if (webElementPresent(driver, locator)) {
-		found = true;
-		break;
-	    }
-
-	} while (stopwatch.getTime() / 1000.0 < (long) timeout);
-	stopwatch.stop();
-	timeLapse = stopwatch.getTime();
-	stopwatch.reset();
-
-	driver.setElementTimeout(currentTimeout);
-
-	if (!found && failTestOnSync) {
-	    TestReporter.interfaceLog("<i>Element [<b>" + element.getElementLocatorInfo()
-	    + " </b>] is not <b>PRESENT</b> on the page after [ "
-	    + (timeLapse) / 1000.0 + " ] seconds.</i>");
-	    throw new RuntimeException(
-		    "Element [ " + element.getElementLocatorInfo() + " ] is not PRESENT on the page after [ "
-			    + (timeLapse) / 1000.0 + " ] seconds.");
-	}
-	if(Highlight.getDebugMode() && found) Highlight.highlightSuccess(driver, element);
-	return found;
-    }
-
-    /**
      * Used in conjunction with WebObjectVisible to determine if the desired
      * element is visible on the screen Will loop for the time out passed in the
      * variable timeout If object is not visible within the time, handle the

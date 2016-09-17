@@ -509,43 +509,6 @@ public class ElementImpl implements Element {
 		return ((TakesScreenshot) driver.getWebDriver()).getScreenshotAs(target);
 	}
 
-	/*
-	 * @Override public <X> X getScreenshotAs(OutputType<X> target) throws
-	 * WebDriverException { getScreenshotAs(target); // String base64 = //
-	 * execute(DriverCommand.SCREENSHOT).getValue().toString(); // ... and
-	 * convert it.
-	 * 
-	 * System.out.println("getScreenShotAs is unimplemented"); return null; //
-	 * target.convertFromBase64Png(base64); }
-	 */
-
-	/**
-	 * Used in conjunction with WebObjectPresent to determine if the desired
-	 * element is present in the DOM Will loop for the time out passed in
-	 * parameter timeout If object is not present within the time, handle error
-	 * based on returnError
-	 * 
-	 * @author Justin
-	 * @param args
-	 *  		Optional arguments </br>
-	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
-	 *  							 with syncPresent("text", 10)</br>
-	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
-	 *  					fail the script. If FALSE, the script will 
-	 *  					not fail, instead a FALSE will be returned 
-	 *  					to the calling function. Called with 
-	 *  					syncPresent("text", 10, false)
-	 */
-	public boolean syncPresent(Object... args) {
-	    int timeout = getWrappedDriver().getElementTimeout();
-	    boolean failTestOnSync = PageLoaded.getSyncToFailTest();
-	    try{
-    	    if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
-    	    if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
-	    }catch(ArrayIndexOutOfBoundsException aiobe){}
-	    return PageLoaded.syncPresent(getWrappedDriver(), new ElementImpl(getWrappedDriver(), by), timeout, failTestOnSync);
-	}
-
 	/**
 	 * Used in conjunction with WebObjectVisible to determine if the desired
 	 * element is visible on the screen Will loop for the time out passed in the
