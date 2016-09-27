@@ -1,43 +1,51 @@
 package com.orasi.utils;
 
+import org.openqa.selenium.By;
 import org.testng.ITestContext;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import com.orasi.utils.debugging.Highlight;
+
 public class sandbox extends TestEnvironment{
-    @BeforeTest(groups ={"regression", "utils", "dev"})
-    @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
-	    "operatingSystem", "environment" })
-    public void setup(@Optional String runLocation, String browserUnderTest,
-	    String browserVersion, String operatingSystem, String environment) {
-	setApplicationUnderTest("Test Site");
-	setBrowserUnderTest(browserUnderTest);
-	setBrowserVersion(browserVersion);
-	setOperatingSystem(operatingSystem);
-	setRunLocation(runLocation);
-	setTestEnvironment(environment);
-	//setPageURL("http://toyota-oss:changeit@origin.staging.toyota.com/");
-	setPageURL("http://origin.staging.toyota.com/");
-	testStart("TestAlert");
-    }
-    
-    @AfterTest(groups ={"regression", "utils", "dev"})
-    public void close(ITestContext testResults){
-	endTest("TestAlert", testResults);
-    }
-    
-    @Test(groups ={"regression", "utils", "dev"})
-    public void isAlertPresent(){
-	Sleeper.sleep(3000);
-/*	Actions action = new Actions(getDriver());
-	action.sendKeys("toyota-oss");
-	action.sendKeys(Keys.TAB);
-	action.sendKeys("changeit");
-	action.sendKeys(Keys.ENTER);*/
-	driver.switchTo().defaultContent();
-	System.out.println(AlertHandler.isAlertPresent(driver, 2));
-    }
+    private OrasiDriver driver = null;
+        
+        @BeforeMethod( alwaysRun=true)
+       public void setup() {
+            setPageURL("http://toyota-oss:changeit@origin.staging.toyota.com/local-specials");
+    		setApplicationUnderTest("Toyota");
+    		setBrowserUnderTest("firefox");
+    		setBrowserVersion("");
+    		setOperatingSystem("windows");
+    		setRunLocation("Local");
+    		setTestEnvironment("");
+    		setThreadDriver(true);
+    		testName="Sandbox";
+    		testStart(testName);
+    		driver = getDriver();
+    		Highlight.setDebugMode(true);
+        }
+        
+        @Test
+        public void main(){
+
+           driver.findTextbox(By.className("tcom-zipcode-changer-input")).syncEnabled();
+           driver.findTextbox(By.className("tcom-zipcode-changer-input")).set("27409");
+           driver.findButton(By.className("tcom-submit")).click();
+
+           driver.findElement(By.className("tcom-filter-group-header")).syncEnabled();
+           driver.findCheckbox(By.xpath("//div[@data-path='Cars & Minivan']/.//input[@value='camry']/..")).syncVisible();
+           driver.findCheckbox(By.xpath("//div[@data-path='Cars & Minivan']/.//input[@value='camry']/..")).jsClick();
+           
+
+           driver.findCheckbox(By.xpath("//div[@data-path='model-year']/.//input[@value='2016']/..")).syncVisible();
+           driver.findCheckbox(By.xpath("//div[@data-path='model-year']/.//input[@value='2016']/..")).click();
+           System.out.println();
+        }
+        
+        @AfterMethod
+        public void cleanup(ITestContext testResults){
+            endTest(testName, testResults);
+        }
 }

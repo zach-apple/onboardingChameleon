@@ -9,13 +9,11 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 
-import com.orasi.core.interfaces.Element;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.saucerest.SauceREST;
 
@@ -79,6 +77,11 @@ public class TestEnvironment {
 
 	protected String sauceLabsURL = "http://" + authentication.getUsername() + ":" + authentication.getAccessKey()
 			+ "@ondemand.saucelabs.com:80/wd/hub";
+	
+	/*
+	 * Mustard Fields
+	 */
+	protected boolean reportToMustard = false;
 
 	/*
 	 * Constructors for TestEnvironment class
@@ -188,6 +191,13 @@ public class TestEnvironment {
 		defaultSeleniumHubURL = appURLRepository.getString(newHubURLName);;
 	}
 	
+	public boolean isReportingToMustard() {
+	    return reportToMustard;
+	}
+	
+	public void setReportToMustard(boolean reportToMustard) {
+	    this.reportToMustard = reportToMustard;
+	}
 
 	// ************************************
 	// ************************************
@@ -196,22 +206,26 @@ public class TestEnvironment {
 	// ************************************
 	// ************************************
 	// ************************************
+	
+
 
 	/*
 	 * Getter and setter for the actual WebDriver
 	 */
-	private void setDriver(OrasiDriver driverSession) {
+	protected void setDriver(OrasiDriver driverSession) {
 		if (isThreadedDriver())
 			threadedDriver.set(driverSession);
-		else
+		else{
 			driver = driverSession;
+		}
 	}
 
 	public OrasiDriver getDriver() {
 		if (isThreadedDriver())
 			return threadedDriver.get();
-		else
+		else{
 			return driver;
+		}
 	}
 
 	/**

@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
-<suite name="Core-Regression" parallel="tests" thread-count="20">
-	<parameter name="browserUnderTest" value="chrome" />
+<suite name="Core-Regression"  parallel="tests" thread-count="20">
+	<listeners>
+		<listener class-name="com.orasi.utils.debugging.Screenshot" />
+	</listeners>
+	<parameter name="browserUnderTest" value="firefox" />
 	<parameter name="environment" value="blah" />
-	<parameter name="runLocation" value="local" />
-	<parameter name="browserVersion" value="" />
-	<parameter name="operatingSystem" value="windows" />
+	<parameter name="runLocation" value="remote" />
+	<parameter name="browserVersion" value="43" />
+	<parameter name="operatingSystem" value="windows 10" />
     <test name="Element">
 		<classes>
 			<class name="com.orasi.core.interfaces.TestElement" />
+		</classes>
+	</test>
+
+	<test name="TestElementInternalHandlers">
+		<classes>
+			<class name="com.orasi.core.interfaces.TestElementInternalHandlers" />
 		</classes>
 	</test>
 
@@ -85,15 +94,33 @@
 		</classes>
 	</test>
 
-	<test name="TestFrameHandler">
+	<test name="TestAlertHandler">
 		<classes>
-			<class name="com.orasi.utils.TestFrameHandler" />
+			<class name="com.orasi.utils.TestAlertHandler" />
 		</classes>
 	</test>
 
-	<test name="TestOrasiDriver">
+    <test name="TestFrameHandler">
+        <classes>
+            <class name="com.orasi.utils.TestFrameHandler" />
+        </classes>
+    </test>
+
+    <test name="TestRegex">
+        <classes>
+            <class name="com.orasi.utils.TestRegex" />
+        </classes>
+    </test>
+
+    <test name="TestOrasiDriver">
 		<classes>
 			<class name="com.orasi.utils.TestOrasiDriver" />
+		</classes>
+	</test>
+	
+	<test name="TestWindowHandler">
+		<classes>
+			<class name="com.orasi.utils.TestWindowHandler" />
 		</classes>
 	</test>
 </suite> <!-- Suite -->

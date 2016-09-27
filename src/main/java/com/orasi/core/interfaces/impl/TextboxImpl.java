@@ -1,6 +1,8 @@
 package com.orasi.core.interfaces.impl;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import com.orasi.core.interfaces.Textbox;
@@ -21,22 +23,25 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 	public TextboxImpl(WebElement element) {
 		super(element);
 	}
+	
 
-	public TextboxImpl(WebElement element, OrasiDriver driver) {
-		super(element, driver);
+	public TextboxImpl(OrasiDriver driver, By by) {
+		super(driver, by);
+	//	element = driver.findWebElement(by);
 	}
+
 
 	/**
 	 * @summary - Gets the value of an input field. Overrides default clear().
-	 * @see org.openqa.selenium.WebElement.clear()
+	 * @see org.openqa.selenium.WebElement#clear()
 	 */
 	@Override
 	public void clear() {
 		try {
 			getWrappedElement().clear();
-			TestReporter.interfaceLog(" Clear text from Textbox [<b>@FindBy: " + getElementLocatorInfo() + " </b>]");
+			TestReporter.interfaceLog(" Clear text from Textbox [<b>" + getElementLocatorInfo() + " </b>]");
 		} catch (RuntimeException rte) {
-			TestReporter.interfaceLog(" Clear text from Textbox [<b>@FindBy: " + getElementLocatorInfo() + " </b>]",
+			TestReporter.interfaceLog(" Clear text from Textbox [<b>" + getElementLocatorInfo() + " </b>]",
 					true);
 			throw rte;
 		}
@@ -57,16 +62,46 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 				getWrappedElement().clear();
 				getWrappedElement().sendKeys(text);
 			} catch (RuntimeException rte) {
-				TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: "
+				TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>"
 						+ getElementLocatorInfo() + " </b>  ]", true);
 				throw rte;
 			}
 		} else {
-			TestReporter
-					.interfaceLog(" Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+			TestReporter.interfaceLog(" Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
 		}
 	}
 
+
+	/**
+	 * @summary - If the text parameter is not an empty string, this method
+	 *          clears any existing values and performs a "sendKeys(text)" to
+	 *          simulate typing the value. If the text parameter is an empty
+	 *          string, this step is skipped.
+	 * @param text
+	 *            - text to enter into the field
+	 */
+
+	@Override
+	public void jsSet( String text) {
+	    if (text == null) text = "";
+	    if (!text.isEmpty()){
+		if (text.equalsIgnoreCase("<blank>") || text.equalsIgnoreCase("(blank)")){
+		    TestReporter.interfaceLog(" Request to blank text field sent. Clearing Textbox [ <b>" + getElementLocatorInfo()  + " </b> ]");
+		    getWrappedElement().clear();
+		}else{
+		    TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>" + getElementLocatorInfo()  + " </b> ]");
+		    try{
+			getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].setAttribute('value', arguments[1])", getWrappedElement(), text);
+		    }catch(WebDriverException wde){
+			getWrappedElement().clear();
+			getWrappedElement().sendKeys(text);
+		    }
+		}
+	    }else{
+		TestReporter.interfaceLog(" Skipping input to Textbox [ <b>" + getElementLocatorInfo()  + " </b> ]");
+	    }
+	}
+	
 	/**
 	 * @summary - Overloads overridden set() method. If the text parameter is
 	 *          not an empty string, this method uses a JavascriptExecutor to
@@ -74,8 +109,6 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 	 *          uses Selenium to clear any existing values and performs a
 	 *          "sendKeys(text)" to simulate typing the value. If the text
 	 *          parameter is an empty string, this step is skipped.
-	 * @param driver
-	 *            - Current active WebDriver object
 	 * @param text
 	 *            - text to enter into the field
 	 */
@@ -83,21 +116,21 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 	public void scrollAndSet(String text) {
 		if (!text.isEmpty()) {
 			try {
-				driver.executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();",
+				getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();",
 						getWrappedElement());
 				getWrappedElement().clear();
 				getWrappedElement().sendKeys(text);
-				TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: "
+				TestReporter.interfaceLog(" Send Keys [ <b>" + text + "</b> ] to Textbox [ <b>"
 						+ getElementLocatorInfo() + " </b> ]");
 
 			} catch (RuntimeException rte) {
-				TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: "
+				TestReporter.interfaceLog("Send Keys [ <b>" + text + "</b> ] to Textbox [ <b>"
 						+ getElementLocatorInfo() + " </b> ]", true);
 				throw rte;
 			}
 		} else {
 			TestReporter
-					.interfaceLog(" Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+					.interfaceLog(" Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
 		}
 	}
 
@@ -115,21 +148,20 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 	public void safeSet(String text) {
 		if (!text.isEmpty()) {
 			try {
-				char ctrl_a = '\u0001';
-				getWrappedElement().click();
-				getWrappedElement().sendKeys(String.valueOf(ctrl_a));
+
+			    getWrappedDriver().executeJavaScript("arguments[0].setAttribute('value', arguments[1])", getWrappedElement(), "");
 				getWrappedElement().sendKeys(text);
 				getWrappedElement().sendKeys(Keys.TAB);
-				TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [  <b>@FindBy: "
+				TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [  <b>"
 						+ getElementLocatorInfo() + " </b> ]");
 			} catch (RuntimeException rte) {
-				TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [  <b>@FindBy: "
+				TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [  <b>"
 						+ getElementLocatorInfo() + " </b> ]", true);
 				throw rte;
 			}
 		} else {
 			TestReporter
-					.interfaceLog(" Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+					.interfaceLog(" Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
 		}
 	}
 
@@ -147,15 +179,15 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 			try {
 				getWrappedElement().sendKeys(Base64Coder.decodeString(text).toString());
 				TestReporter.interfaceLog(" Send encoded text [ <b>" + text.toString()
-						+ "</b> ] to Textbox [  <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+						+ "</b> ] to Textbox [  <b>" + getElementLocatorInfo() + " </b> ]");
 			} catch (RuntimeException rte) {
 				TestReporter.interfaceLog("Send encoded text [ <b>" + text.toString()
-						+ "</b> ] to Textbox [  <b>@FindBy: " + getElementLocatorInfo() + " </b> ]", true);
+						+ "</b> ] to Textbox [  <b>" + getElementLocatorInfo() + " </b> ]", true);
 				throw rte;
 			}
 		} else {
 			TestReporter
-					.interfaceLog(" Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+					.interfaceLog(" Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
 		}
 	}
 
@@ -174,22 +206,20 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 	public void safeSetSecure(String text) {
 		if (!text.isEmpty()) {
 			try {
-				char ctrl_a = '\u0001';
-				getWrappedElement().click();
-				getWrappedElement().sendKeys(String.valueOf(ctrl_a));
+			    getWrappedDriver().executeJavaScript("arguments[0].setAttribute('value', arguments[1])", getWrappedElement(), "");
 				getWrappedElement().sendKeys(Base64Coder.decodeString(text).toString());
 				getWrappedElement().sendKeys(Keys.TAB);
-				TestReporter.log(" Send encoded text [ <b>" + text.toString() + "</b> ] to Textbox [  <b>@FindBy: "
+				TestReporter.log(" Send encoded text [ <b>" + text.toString() + "</b> ] to Textbox [  <b>"
 						+ getElementLocatorInfo() + " </b> ]");
 			} catch (RuntimeException rte) {
 				TestReporter.interfaceLog("Send encoded text [ <b>" + text.toString()
-						+ "</b> ] to Textbox [  <b>@FindBy: " + getElementLocatorInfo() + " </b> ]", true);
+						+ "</b> ] to Textbox [  <b>" + getElementLocatorInfo() + " </b> ]", true);
 				throw rte;
 			}
 
 		} else {
 			TestReporter
-					.interfaceLog(" Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+					.interfaceLog(" Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
 		}
 
 	}

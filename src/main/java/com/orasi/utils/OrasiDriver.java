@@ -9,6 +9,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -16,9 +17,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.MarionetteDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteExecuteMethod;
+import org.openqa.selenium.remote.RemoteKeyboard;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
@@ -57,10 +61,12 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	private static final long serialVersionUID = -657563735440878909L;
 	private WebDriver driver;
+	private DataWarehouse dataWarehouse;
 	private int currentPageTimeout = Constants.PAGE_TIMEOUT;
 	private int currentElementTimeout = Constants.ELEMENT_TIMEOUT;
 	private int currentScriptTimeout = Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT;
 
+	public OrasiDriver() {}
 	/**
 	 * Constructor for OrasiDriver
 	 * Example usage: OrasiDriver oDriver = new OrasiDriver(caps);
@@ -83,14 +89,17 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Example usage: getDriver().getDriver();
 	 * @return - current OrasiDriver
 	 */
-	public WebDriver getDriver() {
+	public WebDriver getWebDriver() {
 		return driver;
+	}
+	public void setDriver(WebDriver driver) {
+		this.driver = driver;
 	}
 	/**
 	 * Method to navigate to a user-defined URL
 	 * Example usage: getDriver().get(url);
 	 * @param url - URL to which to navigate
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#get-java.lang.String-
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#get-java.lang.String-
 	 */
 	@Override
 	public void get(String url) {
@@ -101,7 +110,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to return the current URL
 	 * Example usage: getDriver().getCurrentUrl();
 	 * @return - current URL
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#getCurrentUrl--
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#getCurrentUrl--
 	 */
 	@Override
 	public String getCurrentUrl() {
@@ -111,7 +120,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to return the title of the current page
 	 * Example usage: getDriver().getTitle();
 	 * @return - title of the current page
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#getTitle--
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#getTitle--
 	 */
 	@Override
 	public String getTitle() {
@@ -120,7 +129,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	/**
 	 * Method to set the script timeout
 	 * @param timeout - timeout with which to set the script timeout
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.Timeouts.html#setScriptTimeout-long-java.util.concurrent.TimeUnit-
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.Timeouts.html#setScriptTimeout-long-java.util.concurrent.TimeUnit-
 	 */
 	public void setScriptTimeout(int timeout) {
 		setScriptTimeout(timeout, TimeUnit.SECONDS);
@@ -130,7 +139,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @param timeout - timeout with which to set the script timeout
 	 * @param timeUnit -Java TimeUnit, used to determine the unit of time to be associated with the timeout
 	 * @see http://docs.oracle.com/javase/8/docs/api/java/util/concurrent/TimeUnit.html
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.Timeouts.html#setScriptTimeout-long-java.util.concurrent.TimeUnit-
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.Timeouts.html#setScriptTimeout-long-java.util.concurrent.TimeUnit-
 	 */
 	public void setScriptTimeout(int timeout, TimeUnit timeUnit) {
 		this.currentScriptTimeout = timeout;
@@ -146,7 +155,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	/**
 	 * Method to set the page timeout
 	 * @param timeout - timeout with which to set the page timeout
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.Timeouts.html#pageLoadTimeout-long-java.util.concurrent.TimeUnit-
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.Timeouts.html#pageLoadTimeout-long-java.util.concurrent.TimeUnit-
 	 */
 	public void setPageTimeout(int timeout) {
 		setPageTimeout(timeout, TimeUnit.SECONDS);
@@ -156,7 +165,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @param timeout - timeout with which to set the page timeout
 	 * @param timeUnit -Java TimeUnit, used to determine the unit of time to be associated with the timeout
 	 * @see http://docs.oracle.com/javase/8/docs/api/java/util/concurrent/TimeUnit.html
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.Timeouts.html#pageLoadTimeout-long-java.util.concurrent.TimeUnit-
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.Timeouts.html#pageLoadTimeout-long-java.util.concurrent.TimeUnit-
 	 */
 	public void setPageTimeout(int timeout, TimeUnit timeUnit) {
 		if (driver instanceof SafariDriver || driver.toString().contains("safari")) {
@@ -176,7 +185,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	/**
 	 * Method to set element timeout
 	 * @param timeout - timeout with which to set the element timeout
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.Timeouts.html#implicitlyWait-long-java.util.concurrent.TimeUnit-
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.Timeouts.html#implicitlyWait-long-java.util.concurrent.TimeUnit-
 	 */
 	public void setElementTimeout(int timeout) {
 		setElementTimeout(timeout, TimeUnit.SECONDS);
@@ -186,7 +195,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @param timeout - timeout with which to set the element timeout
 	 * @param timeUnit
 	 * @see http://docs.oracle.com/javase/8/docs/api/java/util/concurrent/TimeUnit.html
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.Timeouts.html#implicitlyWait-long-java.util.concurrent.TimeUnit-
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.Timeouts.html#implicitlyWait-long-java.util.concurrent.TimeUnit-
 	 */
 	public void setElementTimeout(int timeout, TimeUnit timeUnit) {
 		this.currentElementTimeout = timeout;
@@ -210,8 +219,8 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @param by - Selenium <b><i>By</i></b> locator with which to locate WebElements
 	 * @return - List of WebElements, if any, found by using the Selenium <b><i>By</i></b> locator
 	 * @see http://docs.oracle.com/javase/8/docs/api/java/util/List.html
-	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElements-org.openqa.selenium.By-
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElements-org.openqa.selenium.By-
 	 */
 	@Override
 	public List<WebElement> findElements(By by) {
@@ -227,8 +236,8 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @param by - Selenium <b><i>By</i></b> locator with which to locate WebElements
 	 * @return - List of WebElements, if any, found by using the Selenium <b><i>By</i></b> locator
 	 * @see http://docs.oracle.com/javase/8/docs/api/java/util/List.html
-	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElements-org.openqa.selenium.By-
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElements-org.openqa.selenium.By-
 	 */
 	public List<WebElement> findWebElements(By by) {
 		try {
@@ -242,14 +251,14 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to find a single Element for a given page, using a Selenium <b><i>By</i></b> locator
 	 * @param by - Selenium <b><i>By</i></b> locator with which to locate the Element
 	 * @return Element, if any, found by using the Selenium <b><i>By</i></b> locator 
-	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/ElementImpl.java
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/ElementImpl.java
 	 */
 	@Override
 	public Element findElement(By by) {
 		try {
-			return new ElementImpl(driver.findElement(by), this);
+			return new ElementImpl(this, by);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Element with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -259,13 +268,13 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to find a single Element for a given page, using an Orasi <b><i>ByNG</i></b> locator
 	 * @param by - Orasi <b><i>ByNG</i></b> locator with which to locate the Element
 	 * @return Element, if any, found by using the Orasi <b><i>ByNG</i></b> locator
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/ElementImpl.java
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/ElementImpl.java
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
 	 */
 	public Element findElement(ByNG by) {
 		try {
-			return new ElementImpl(driver.findElement(getByNGType(by)), this);
+			return new ElementImpl(this, getByNGType(by));
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Element with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -275,13 +284,13 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to find a single Textbox for a given page, using a Selenium <b><i>By</i></b> locator
 	 * @param by - Selenium <b><i>By</i></b> locator with which to locate the Textbox
 	 * @return Textbox, if any, found by using the Selenium <b><i>By</i></b> locator
-	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/TextboxImpl.java
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/TextboxImpl.java
 	 */
 	public Textbox findTextbox(By by) {
 		try {
-			return new TextboxImpl(driver.findElement(by), this);
+			return new TextboxImpl(this, by);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Textbox with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -291,13 +300,13 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to find a single Textbox for a given page, using an Orasi <b><i>ByNG</i></b> locator
 	 * @param by - Orasi <b><i>ByNG</i></b> locator with which to locate the Textbox
 	 * @return Textbox, if any, found by using the Orasi <b><i>ByNG</i></b> locator
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/TextboxImpl.java
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/TextboxImpl.java
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
 	 */
 	public Textbox findTextbox(ByNG by) {
 		try {
-			return new TextboxImpl(driver.findElement(getByNGType(by)), this);
+			return new TextboxImpl(this, getByNGType(by));
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Textbox with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -307,13 +316,13 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to find a single Button for a given page, using a Selenium <b><i>By</i></b> locator
 	 * @param by - Selenium <b><i>By</i></b> locator with which to locate the Button
 	 * @return Button, if any, found by using the Selenium <b><i>By</i></b> locator
-	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/ButtonImpl.java
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/ButtonImpl.java
 	 */
 	public Button findButton(By by) {
 		try {
-			return new ButtonImpl(driver.findElement(by), this);
+			return new ButtonImpl(this, by);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Button with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -323,13 +332,13 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to find a single Button for a given page, using an Orasi <b><i>ByNG</i></b> locator
 	 * @param  by - Orasi <b><i>ByNG</i></b> locator with which to locate the Button
 	 * @return Button, if any, found by using the Orasi <b><i>ByNG</i></b> locator
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/ButtonImpl.java
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/ButtonImpl.java
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
 	 */
 	public Button findButton(ByNG by) {
 		try {
-			return new ButtonImpl(driver.findElement(getByNGType(by)), this);
+			return new ButtonImpl(this, getByNGType(by));
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Button with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -339,13 +348,13 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to find a single Checkbox for a given page, using a Selenium <b><i>By</i></b> locator
 	 * @param by - Selenium <b><i>By</i></b> locator with which to locate the Checkbox
 	 * @return Checkbox, if any, found by using the Selenium <b><i>By</i></b> locator
-	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/CheckboxImpl.java
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/CheckboxImpl.java
 	 */
 	public Checkbox findCheckbox(By by) {
 		try {
-			return new CheckboxImpl(driver.findElement(by), this);
+			return new CheckboxImpl(this, by);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Checkbox with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -355,13 +364,13 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to find a single Checkbox for a given page, using an Orasi <b><i>ByNG</i></b> locator
 	 * @param  by - Orasi <b><i>ByNG</i></b> locator with which to locate the Checkbox
 	 * @return Checkbox, if any, found by using the Orasi <b><i>ByNG</i></b> locator
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/CheckboxImpl.java
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/CheckboxImpl.java
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
 	 */
 	public Checkbox findCheckbox(ByNG by) {
 		try {
-			return new CheckboxImpl(driver.findElement(getByNGType(by)), this);
+			return new CheckboxImpl(this, getByNGType(by));
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Checkbox with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -371,13 +380,13 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to find a single Label for a given page, using a Selenium <b><i>By</i></b> locator
 	 * @param by - Selenium <b><i>By</i></b> locator with which to locate the Checkbox
 	 * @return Label, if any, found by using the Selenium <b><i>By</i></b> locator
-	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/LabelImpl.java
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/LabelImpl.java
 	 */
 	public Label findLabel(By by) {
 		try {
-			return new LabelImpl(driver.findElement(by), this);
+			return new LabelImpl(this, by);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Label with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -387,13 +396,13 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to find a single Label for a given page, using an Orasi <b><i>ByNG</i></b> locator
 	 * @param by - Orasi <b><i>ByNG</i></b> locator with which to locate the Label
 	 * @return Label, if any, found by using the Orasi <b><i>ByNG</i></b> locator
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/LabelImpl.java
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/LabelImpl.java
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
 	 */
 	public Label findLabel(ByNG by) {
 		try {
-			return new LabelImpl(driver.findElement(getByNGType(by)), this);
+			return new LabelImpl(this, getByNGType(by));
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Label with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -403,13 +412,13 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to find a single Link for a given page, using a Selenium <b><i>By</i></b> locator
 	 * @param by - Selenium <b><i>By</i></b> locator with which to locate the Link
 	 * @return Link, if any, found by using the Selenium <b><i>By</i></b> locator
-	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/LinkImpl.java
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/LinkImpl.java
 	 */
 	public Link findLink(By by) {
 		try {
-			return new LinkImpl(driver.findElement(by), this);
+			return new LinkImpl(this, by);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Link with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -419,13 +428,13 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to find a single Link for a given page, using an Orasi <b><i>ByNG</i></b> locator
 	 * @param by - Orasi <b><i>ByNG</i></b> locator with which to locate the Link
 	 * @return Link, if any, found by using the Orasi <b><i>ByNG</i></b> locator
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/LinkImpl.java
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/LinkImpl.java
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
 	 */
 	public Link findLink(ByNG by) {
 		try {
-			return new LinkImpl(driver.findElement(getByNGType(by)), this);
+			return new LinkImpl(this, getByNGType(by));
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Link with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -435,13 +444,13 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to find a single Listbox for a given page, using a Selenium <b><i>By</i></b> locator
 	 * @param by - Selenium <b><i>By</i></b> locator with which to locate the Listbox
 	 * @return Listbox, if any, found by using the Selenium <b><i>By</i></b> locator
-	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/ListboxImpl.java
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/ListboxImpl.java
 	 */
 	public Listbox findListbox(By by) {
 		try {
-			return new ListboxImpl(driver.findElement(by), this);
+			return new ListboxImpl(this, by);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Listbox with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -451,13 +460,13 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to find a single Listbox for a given page, using an Orasi <b><i>ByNG</i></b> locator
 	 * @param by - Orasi <b><i>ByNG</i></b> locator with which to locate the Listbox
 	 * @return Listbox, if any, found by using the Orasi <b><i>ByNG</i></b> locator
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/ListboxImpl.java
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/ListboxImpl.java
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
 	 */
 	public Listbox findListbox(ByNG by) {
 		try {
-			return new ListboxImpl(driver.findElement(getByNGType(by)), this);
+			return new ListboxImpl(this, getByNGType(by));
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Listbox with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -467,13 +476,13 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to find a single RadioGroup for a given page, using a Selenium <b><i>By</i></b> locator
 	 * @param by - Selenium <b><i>By</i></b> locator with which to locate the RadioGroup
 	 * @return RadioGroup, if any, found by using the Selenium <b><i>By</i></b> locator
-	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/RadioGroupImpl.java
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/RadioGroupImpl.java
 	 */
 	public RadioGroup findRadioGroup(By by) {
 		try {
-			return new RadioGroupImpl(driver.findElement(by), this);
+			return new RadioGroupImpl(this, by);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such RadioGroup with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -483,13 +492,13 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to find a single RadioGroup for a given page, using an Orasi <b><i>ByNG</i></b> locator
 	 * @param by - Orasi <b><i>ByNG</i></b> locator with which to locate the RadioGroup
 	 * @return RadioGroup, if any, found by using the Orasi <b><i>ByNG</i></b> locator
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/RadioGroupImpl.java
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/RadioGroupImpl.java
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
 	 */
 	public RadioGroup findRadioGroup(ByNG by) {
 		try {
-			return new RadioGroupImpl(driver.findElement(getByNGType(by)), this);
+			return new RadioGroupImpl(this, getByNGType(by));
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such RadioGroup with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -499,13 +508,13 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to find a single Webtable for a given page, using a Selenium <b><i>By</i></b> locator
 	 * @param by - Selenium <b><i>By</i></b> locator with which to locate the Webtable
 	 * @return Webtable, if any, found by using the Selenium <b><i>By</i></b> locator
-	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/WebtableImpl.java
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/WebtableImpl.java
 	 */
 	public Webtable findWebtable(By by) {
 		try {
-			return new WebtableImpl(driver.findElement(by), this);
+			return new WebtableImpl(this, by);
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Webtable with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -515,13 +524,13 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to find a single Webtable for a given page, using an Orasi <b><i>ByNG</i></b> locator
 	 * @param by - Orasi <b><i>ByNG</i></b> locator with which to locate the Webtable
 	 * @return Webtable, if any, found by using the Orasi <b><i>ByNG</i></b> locator
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/WebtableImpl.java
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/WebtableImpl.java
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
 	 */
 	public Webtable findWebtable(ByNG by) {
 		try {
-			return new WebtableImpl(driver.findElement(getByNGType(by)), this);
+			return new WebtableImpl(this, getByNGType(by));
 		} catch (NoSuchElementException nse) {
 			TestReporter.logFailure("No such Webtable with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
@@ -531,15 +540,15 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to find a single WebElement for a given page, using a Selenium <b><i>By</i></b> locator
 	 * @param by - Selenium <b><i>By</i></b> locator with which to locate the WebElement
 	 * @return WebElement, if any, found by using the Orasi <b><i>ByNG</i></b> locator
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
-	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
-	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebElement.html
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebElement.html
 	 */
 	public WebElement findWebElement(By by) {
 		try {
 			return driver.findElement(by);
 		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such WebElement with context: " + by.toString());
+			//TestReporter.logFailure("No such WebElement with context: " + by.toString());
 			throw new NoSuchElementException(nse.getMessage());
 		}
 	}
@@ -547,9 +556,9 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to find a single WebElement for a given page, using an Orasi <b><i>ByNG</i></b> locator
 	 * @param  by - Orasi <b><i>ByNG</i></b> locator with which to locate the WebElement
 	 * @return WebElement, if any, found by using the Orasi <b><i>ByNG</i></b> locator
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
-	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebElement.html
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebElement.html
 	 */
 	public WebElement findWebElement(ByNG by) {
 		try {
@@ -562,15 +571,16 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	/**
 	 * Method to return the page source of a given current page
 	 * @return page source of the given current page
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#getPageSource--
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#getPageSource--
 	 */
 	@Override
 	public String getPageSource() {
 		return driver.getPageSource();
 	}
+	    
 	/**
 	 * Method to close the current window
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#close--
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#close--
 	 */
 	@Override
 	public void close() {
@@ -578,7 +588,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	}
 	/**
 	 * Method to quit the driver, closing every associated window
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#quit--
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#quit--
 	 */
 	@Override
 	public void quit() {
@@ -587,7 +597,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	/**
 	 * Method to return all window handles contained within a given current driver
 	 * @return Set of string window handles
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#getWindowHandles--
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#getWindowHandles--
 	 */
 	@Override
 	public Set<String> getWindowHandles() {
@@ -596,7 +606,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	/**
 	 * Method to return the current window handle for a given currnet driver
 	 * @return Current window handle as a String
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#getWindowHandle--
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#getWindowHandle--
 	 */
 	@Override
 	public String getWindowHandle() {
@@ -605,7 +615,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	/**
 	 * Method to switch to another frame or window
 	 * @return TargetLocator that can be used to select a frame or window
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#switchTo--
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#switchTo--
 	 */
 	@Override
 	public TargetLocator switchTo() {
@@ -614,7 +624,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	/**
 	 * Method to navigate to a pre-defined URL
 	 * @return Navigation object that allows the selection of what to do next
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#navigate--
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#navigate--
 	 */
 	@Override
 	public Navigation navigate() {
@@ -623,7 +633,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	/**
 	 * Method to facilitate the management of the driver (e.g. timeouts, cookies, etc)
 	 * @return Options interface
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#manage--
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#manage--
 	 */
 	@Override
 	public Options manage() {
@@ -681,7 +691,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @param script script to be executed
 	 * @param parameters any parameters that may need to be referenced by the script
 	 * @return Return value types vary based on the return type of the script
-	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/JavascriptExecutor.html
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/JavascriptExecutor.html
 	 */
 	public Object executeJavaScript(String script, Object... parameters) {
 		return ((JavascriptExecutor) driver).executeScript(script, parameters);
@@ -691,7 +701,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @param script script to be executed
 	 * @param parameters any parameters that may need to be referenced by the script
 	 * @return Return value types vary based on the return type of the script
-	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/JavascriptExecutor.html
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/JavascriptExecutor.html
 	 */
 	public Object executeAsyncJavaScript(String script, Object... parameters) {
 		return ((JavascriptExecutor) driver).executeAsyncScript(script, parameters);
@@ -719,29 +729,44 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	/**
 	 * Method to return the RemoteWebDriver session ID
 	 * @return RemotWebDriver session ID as a String
-	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/remote/RemoteWebDriver.html#getSessionId()
+	 * @see https://github.com/SeleniumHQ/selenium/blob/master/java/client/src/org/openqa/selenium/remote/SessionId.java
 	 */
 	public String getSessionId() {
-		return ((RemoteWebDriver) driver).getSessionId().toString();
+		return getRemoteWebDriver().getSessionId().toString();
 	}
+
+
+	/**
+	 * Method to return the RemoteWebDriver 
+	 * @return RemotWebDriver 
+	 * @see https://github.com/SeleniumHQ/selenium/blob/master/java/client/src/org/openqa/selenium/remote/RemoteKeyboard.java
+	 */
+	public RemoteKeyboard getKeyboard(){
+	    return new RemoteKeyboard(new RemoteExecuteMethod(getRemoteWebDriver()));
+	}
+	
 	/**
 	 * Method to set the capabilities for a driver, based on the browser type
 	 * @param caps - Selenium DesiredCapabilities to be used to generate a WebDriver
-	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/firefox/FirefoxDriver.html
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/firefox/FirefoxDriver.html
 	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/ie/InternetExplorerDriver.html
 	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/chrome/ChromeDriver.html
 	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/safari/SafariDriver.html
 	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/htmlunit/HtmlUnitDriver.html
-	 * @see https://msdn.microsoft.com/en-us/library/mt188085(v=vs.85).aspx
+	 * @see http://msdn.microsoft.com/en-us/library/mt188085(v=vs.85).aspx
 	 */
 	private void setDriverWithCapabilties(DesiredCapabilities caps) {
 		switch (caps.getBrowserName().toLowerCase()) {
 		case "firefox":
 			driver = new FirefoxDriver(caps);
 			break;
+		case "marionette":
+			driver = new MarionetteDriver(caps);
+			break;
 		case "internet explorer":
 		case "ie":
 			driver = new InternetExplorerDriver(caps);
+			//driver = new SynchronizedInternetExplorerDriver(caps);			
 			break;
 		case "chrome":
 			driver = new ChromeDriver(caps);
@@ -774,7 +799,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to take a screen shot
 	 * @param target - image type to capture the screenshot
 	 * @return Object which si stored information about the screenshot
-	 * @see https://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/TakesScreenshot.html#getScreenshotAs-org.openqa.selenium.OutputType-
+	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/TakesScreenshot.html#getScreenshotAs-org.openqa.selenium.OutputType-
 	 */
 	@Override
 	public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
@@ -783,23 +808,35 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	/**
 	 * Subclass to assist with interacting with a RemoteWebDriver
 	 * @author Justin Phlegar
-	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/remote/RemoteWebDriver.html#getCapabilities()
-	 * @see https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/Capabilities.html
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/remote/RemoteWebDriver.html#getCapabilities()
+	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/Capabilities.html
 	 */
-	class Capabilities {
+	public class Capabilities {
 
 		public String browserName() {
-			return ((RemoteWebDriver) driver).getCapabilities().getBrowserName();
+			//if(driver instanceof HtmlUnitDriver) return ((HtmlUnitDriver) driver).getCapabilities().getBrowserName();
+			return getRemoteWebDriver().getCapabilities().getBrowserName();
 		}
 
 		public String browserVersion() {
-			return ((RemoteWebDriver) driver).getCapabilities().getVersion();
+			//if(driver instanceof HtmlUnitDriver) return ((HtmlUnitDriver) driver).getCapabilities().getVersion();
+			return getRemoteWebDriver().getCapabilities().getVersion();
 		}
 
 		public String platformOS() {
-			return ((RemoteWebDriver) driver).getCapabilities().getPlatform().name() + " "
-					+ ((RemoteWebDriver) driver).getCapabilities().getPlatform().getMajorVersion() + "."
-					+ ((RemoteWebDriver) driver).getCapabilities().getPlatform().getMinorVersion();
+			/*if(driver instanceof HtmlUnitDriver) {
+				return ((HtmlUnitDriver) driver).getCapabilities().getPlatform().name() + " "
+						+ ((HtmlUnitDriver) driver).getCapabilities().getPlatform().getMajorVersion() + "."
+						+ ((HtmlUnitDriver) driver).getCapabilities().getPlatform().getMinorVersion();
+			}*/
+			return getRemoteWebDriver().getCapabilities().getPlatform().name() + " "
+					+ getRemoteWebDriver().getCapabilities().getPlatform().getMajorVersion() + "."
+					+ getRemoteWebDriver().getCapabilities().getPlatform().getMinorVersion();
+		}
+		public Platform platform() {
+			//if(driver instanceof HtmlUnitDriver) return ((HtmlUnitDriver) driver).getCapabilities().getPlatform();
+			
+			return getRemoteWebDriver().getCapabilities().getPlatform() ;
 		}
 
 	}
@@ -807,22 +844,22 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Method to return an Orasi <b><i>ByAngular.BaseBy</i></b> locator for a given Orasi <b><i>ByNG</i></b> locator
 	 * @param by - Orasi <b><i>ByNG</i></b> locator
 	 * @return Orasi <b><i>ByAngular.BaseBy</i></b> locator
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
-	 * @see https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/internal/ByAngular.java
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
+	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/internal/ByAngular.java
 	 */
 	@SuppressWarnings("static-access")
 	private ByAngular.BaseBy getByNGType(ByNG by) {
 		String text = by.toString().replace("By.buttonText:", "").trim();
 		if (by instanceof ByNGButton)
-			return new ByAngular(getDriver()).buttonText(text);
+			return new ByAngular(getWebDriver()).buttonText(text);
 		if (by instanceof ByNGController)
-			return new ByAngular(getDriver()).controller(text);
+			return new ByAngular(getWebDriver()).controller(text);
 		if (by instanceof ByNGModel)
-			return new ByAngular(getDriver()).model(text);
+			return new ByAngular(getWebDriver()).model(text);
 		if (by instanceof ByNGRepeater)
-			return new ByAngular(getDriver()).repeater(text);
+			return new ByAngular(getWebDriver()).repeater(text);
 		if (by instanceof ByNGShow)
-			return new ByAngular(getDriver()).show(text);
+			return new ByAngular(getWebDriver()).show(text);
 		return null;
 	}
 	/**
@@ -832,13 +869,65 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	public Page page() {
 		return new Page();
 	}
+	
+	/*
+	 * Method that returns the instance of the DataWarehouse
+	 */
+	public DataWarehouse data() {
+	    if (dataWarehouse == null) {
+		dataWarehouse = new DataWarehouse();
+	    }
+	    return dataWarehouse;
+	}
 
+	/**
+	 * Method to return this OrasiDriver class
+	 * @return - current OrasiDriver
+	 */
+	private OrasiDriver getOrasiDriver() {
+		return this;
+	}
+
+	/**
+	 * Method to return the RemoteWebDriver 
+	 * @return RemotWebDriver 
+	 * @see https://github.com/SeleniumHQ/selenium/blob/master/java/client/src/org/openqa/selenium/remote/RemoteWebDriver.java
+	 */
+	private RemoteWebDriver getRemoteWebDriver(){
+		return ((RemoteWebDriver) driver);
+	}
+	
 	/**
 	 * This class contains methods that hook into the PageLoaded class, allowing for compact usage with the driver
 	 * Example usages provided with each method contained within.
 	 * @author Waightstill W Avery
 	 */
 	public class Page {
+
+		/**
+		 * @summary loops for a predetermined amount of time (defined by
+		 *          OrasiDriver.getElementTimeout()) to determine if the
+		 *          Element is not null
+		 * @return boolean: true is the DOM is completely loaded, false otherwise
+		 */
+		public boolean pageLoaded() {
+		    return PageLoaded.isDomComplete(getOrasiDriver());
+		}
+
+		/**
+		 * @summary loops for a predetermined amount of time (defined by
+		 *          OrasiDriver.getElementTimeout()) to determine if the
+		 *          Element is not null
+		 * @return boolean: true is the DOM is completely loaded, false otherwise
+		 * @param clazz
+		 *            - page class that is calling this method
+		 * @param element
+		 *            - element with which to determine if a page is loaded
+		 */
+		public boolean pageLoaded(Class<?> clazz, Element element) {
+		    return PageLoaded.isElementLoaded(clazz, getOrasiDriver(), element);
+		}
+		
 		/*
 		 * isDomInteractive
 		 */
@@ -848,7 +937,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		 * @return - boolean true if interactive, false otherwise
 		 */
 		public boolean isDomInteractive() {
-			return new PageLoaded(getOrasiDriver()).isDomInteractive();
+			return  PageLoaded.isDomInteractive(getOrasiDriver());
 		}
 		/**
 		 * Method that determines when/if the DOM is interactive
@@ -857,7 +946,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		 * @return - boolean true if interactive, false otherwise
 		 */
 		public boolean isDomInteractive(OrasiDriver oDriver) {
-			return new PageLoaded().isDomInteractive(oDriver);
+			return  PageLoaded.isDomInteractive(oDriver);
 		}
 		/**
 		 * Method that determines when/if the DOM is interactive
@@ -867,7 +956,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		 * @return - boolean true if interactive, false otherwise
 		 */
 		public boolean isDomInteractive(OrasiDriver oDriver, int timeout) {
-			return new PageLoaded().isDomInteractive(oDriver, timeout);
+			return  PageLoaded.isDomInteractive(oDriver, timeout);
 		}
 
 		/*
@@ -878,7 +967,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		 * Example usage: getDriver().page().isAngularComplete();
 		 */
 		public void isAngularComplete() {
-			new PageLoaded(getOrasiDriver()).isAngularComplete();
+			 PageLoaded.isAngularComplete(getOrasiDriver());
 		}
 
 		/*
@@ -890,7 +979,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		 * @return - boolean true if complete, false otherwise
 		 */
 		public boolean isDomComplete() {
-			return new PageLoaded().isDomComplete(getOrasiDriver());
+			return PageLoaded.isDomComplete(getOrasiDriver());
 		}
 		/**
 		 * Method that determines when/if the DOM is complete
@@ -899,7 +988,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		 * @return - boolean true if complete, false otherwise
 		 */
 		public boolean isDomComplete(OrasiDriver oDriver) {
-			return new PageLoaded(getOrasiDriver()).isDomComplete();
+			return  PageLoaded.isDomComplete(getOrasiDriver());
 		}
 		/**
 		 * Method that determines when/if the DOM is complete
@@ -910,265 +999,9 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		 * @return
 		 */
 		public boolean isDomComplete(OrasiDriver oDriver, int timeout) {
-			return new PageLoaded().isDomComplete(getOrasiDriver(), timeout);
+			return  PageLoaded.isDomComplete(getOrasiDriver(), timeout);
 		}
 
-		/*
-		 * syncPresent
-		 */
-		/**
-		 * Method that determines if an element is present in the DOM
-		 * Example usage: getDriver().page().syncPresent(oDriver, element);
-		 * @param oDriver - current OrasiDriver
-		 * @param element - element for which to be searched
-		 * @return - boolean true if present, false otherwise
-		 */
-		public boolean syncPresent(OrasiDriver oDriver, Element element) {
-			return PageLoaded.syncPresent(oDriver, element);
-		}
-		/**
-		 * Method that determines if an element is present in the DOM
-		 * Example usage: getDriver().page().syncPresent(oDriver, timeout, element);
-		 * @param oDriver - current OrasiDriver
-		 * @param timeout - amount of time to wait for the element to be present
-		 * @param element - element for which to be searched
-		 * @return - boolean true if present, false otherwise
-		 */
-		public boolean syncPresent(OrasiDriver oDriver, int timeout, Element element) {
-			return PageLoaded.syncPresent(oDriver, timeout, element);
-		}
-		/**
-		 * Method that determines if an element is present in the DOM
-		 * Example usage: getDriver().page().syncPresent(oDriver, timeout, returnError, element);
-		 * @param oDriver - current OrasiDriver
-		 * @param timeout - amount of time to wait for the element to be present
-		 * @param returnError - boolean true if and error is to be thrown if the element is not present, false otherwise
-		 * @param element - element for which to be searched
-		 * @return - boolean true if present, false otherwise
-		 */
-		public boolean syncPresent(OrasiDriver oDriver, int timeout, boolean returnError, Element element) {
-			return PageLoaded.syncPresent(oDriver, timeout, returnError, element);
-		}
-
-		/*
-		 * syncVisible
-		 */
-		/**
-		 * Method that determines if an element is visible on the screen
-		 * Example usage: getDriver().page().syncVisible(oDriver, element);
-		 * @param oDriver - current OrasiDriver
-		 * @param element - element for which to be searched
-		 * @return - boolean true if visible, false otherwise
-		 */
-		public boolean syncVisible(OrasiDriver oDriver, Element element) {
-			return PageLoaded.syncVisible(oDriver, element);
-		}
-		/**
-		 * Method that determines if an element is visible on the screen
-		 * Example usage: getDriver().page().syncVisible(oDriver, timeout, element);
-		 * @param oDriver - current OrasiDriver
-		 * @param timeout - amount of time to wait for the element to be visible on the screen
-		 * @param element - element for which to be searched
-		 * @return - boolean true if visible, false otherwise
-		 */
-		public boolean syncVisible(OrasiDriver oDriver, int timeout, Element element) {
-			return PageLoaded.syncVisible(oDriver, timeout, true, element);
-		}
-		/**
-		 * Method that determines if an element is visible on the screen
-		 * Example usage: getDriver().page().syncVisible(oDriver, timeout, returnError, element);
-		 * @param oDriver - current OrasiDriver
-		 * @param timeout - amount of time to wait for the element to be visible on the screen
-		 * @param returnError - boolean true if and error is to be thrown if the element is not visible, false otherwise
-		 * @param element - element for which to be searched
-		 * @return - boolean true if visible, false otherwise
-		 */
-		public boolean syncVisible(OrasiDriver oDriver, int timeout, boolean returnError, Element element) {
-			return PageLoaded.syncVisible(oDriver, timeout, returnError, element);
-		}
-
-		/*
-		 * syncHidden
-		 */
-		/**
-		 * Method that determines if an element is hidden on the screen
-		 * Example usage: getDriver().page().syncHidden(oDriver, element);
-		 * @param oDriver - current OrasiDriver
-		 * @param element - element for which to be searched
-		 * @return - boolean true if hidden, false otherwise
-		 */
-		public boolean syncHidden(OrasiDriver oDriver, Element element) {
-			return PageLoaded.syncHidden(oDriver, oDriver.getElementTimeout(), element);
-		}
-		/**
-		 * Method that determines if an element is hidden on the screen
-		 * Example usage: getDriver().page().syncHidden(oDriver, timeout, element);
-		 * @param oDriver - current OrasiDriver
-		 * @param timeout - amount of time to wait for the element to be hidden on the screen
-		 * @param element - element for which to be searched
-		 * @return - boolean true if hidden, false otherwise
-		 */
-		public boolean syncHidden(OrasiDriver oDriver, int timeout, Element element) {
-			return PageLoaded.syncHidden(oDriver, timeout, true, element);
-		}
-		/**
-		 * Method that determines if an element is hidden on the screen
-		 * Example usage: getDriver().page().syncHidden(oDriver, timeout, returnError, element);
-		 * @param oDriver - current OrasiDriver
-		 * @param timeout - amount of time to wait for the element to be hidden on the screen
-		 * @param returnError - boolean true if and error is to be thrown if the element is not hidden, false otherwise
-		 * @param element - element for which to be searched
-		 * @return - boolean true if hidden, false otherwise
-		 */
-		public boolean syncHidden(OrasiDriver oDriver, int timeout, boolean returnError, Element element) {
-			return PageLoaded.syncHidden(oDriver, timeout, returnError, element);
-		}
-
-		/*
-		 * syncEnabled
-		 */
-		/**
-		 * Method that determines if an element is clickable
-		 * Example usage: getDriver().page().syncEnabled(oDriver, element);
-		 * @param oDriver - current OrasiDriver
-		 * @param element - element for which to be searched
-		 * @return - boolean true if clickable, false otherwise
-		 */
-		public boolean syncEnabled(OrasiDriver oDriver, Element element) {
-			return PageLoaded.syncEnabled(oDriver, oDriver.getElementTimeout(), element);
-		}
-		/**
-		 * Method that determines if an element is clickable
-		 * Example usage: getDriver().page().syncEnabled(oDriver, timeout, element);
-		 * @param oDriver - current OrasiDriver
-		 * @param timeout - amount of time to wait for the element to be clickable
-		 * @param element - element for which to be searched
-		 * @return - boolean true if clickable, false otherwise
-		 */
-		public boolean syncEnabled(OrasiDriver oDriver, int timeout, Element element) {
-			return PageLoaded.syncEnabled(oDriver, timeout, true, element);
-		}
-		/**
-		 * Method that determines if an element is clickable
-		 * Example usage: getDriver().page().syncEnabled(oDriver, timeout, returnError, element);
-		 * @param oDriver - current OrasiDriver
-		 * @param timeout - amount of time to wait for the element to be not clickable
-		 * @param returnError - boolean true if and error is to be thrown if the element is not clickable, false otherwise
-		 * @param element - element for which to be searched
-		 * @return - boolean true if clickable, false otherwise
-		 */
-		public boolean syncEnabled(OrasiDriver oDriver, int timeout, boolean returnError, Element element) {
-			return syncEnabled(oDriver, timeout, returnError, element);
-		}
-
-		/*
-		 * syncDisabled
-		 */
-		/**
-		 * Method that determines if an element is not clickable
-		 * Example usage: getDriver().page().syncDisabled(oDriver, element);
-		 * @param oDriver - current OrasiDriver
-		 * @param element - element for which to be searched
-		 * @return - boolean true if not clickable, false otherwise
-		 */
-		public boolean syncDisabled(OrasiDriver oDriver, Element element) {
-			return PageLoaded.syncDisabled(oDriver, oDriver.getElementTimeout(), element);
-		}
-		/**
-		 * Method that determines if an element is not clickable
-		 * Example usage: getDriver().page().syncDisabled(oDriver, timeout, element);
-		 * @param oDriver - current OrasiDriver
-		 * @param timeout - amount of time to wait for the element to be not clickable
-		 * @param element - element for which to be searched
-		 * @return - boolean true if not clickable, false otherwise
-		 */
-		public boolean syncDisabled(OrasiDriver oDriver, int timeout, Element element) {		
-			return PageLoaded.syncDisabled(oDriver, timeout, true, element);
-		}
-		/**
-		 * Method that determines if an element is not clickable
-		 * Example usage: getDriver().page().syncDisabled(oDriver, timeout, returnError, element);
-		 * @param oDriver - current OrasiDriver
-		 * @param timeout - amount of time to wait for the element to be not clickable
-		 * @param returnError - boolean true if and error is to be thrown if the element is clickable, false otherwise
-		 * @param element - element for which to be searched
-		 * @return - boolean true if not clickable, false otherwise
-		 */
-		public boolean syncDisabled(OrasiDriver oDriver, int timeout, boolean returnError, Element element) {
-			return PageLoaded.syncDisabled(oDriver, timeout, returnError, element);
-		}
-
-		/*
-		 * syncTextInElement
-		 */
-		/**
-		 * Method that determines if an element contains user-defined text
-		 * Example usage: getDriver().page().syncTextInElement(oDriver, text, element);
-		 * @param oDriver - current OrasiDriver
-		 * @param text - text for which to search
-		 * @param element - element for which to be searched
-		 * @return - boolean true if the element contains the text, false otherwise
-		 */
-		public boolean syncTextInElement(OrasiDriver oDriver, String text, Element element) {
-			return PageLoaded.syncTextInElement(oDriver, text, oDriver.getElementTimeout(), element);
-		}
-		/**
-		 * Method that determines if an element contains user-defined text
-		 * Example usage: getDriver().page().syncTextInElement(oDriver, text, timeout, element);
-		 * @param oDriver - current OrasiDriver
-		 * @param text - text for which to search
-		 * @param timeout - amount of time to wait for the element to contain the text
-		 * @param element - element for which to be searched
-		 * @return - boolean true if the element contains the text, false otherwise
-		 */
-		public boolean syncTextInElement(OrasiDriver oDriver, String text, int timeout, Element element) {
-			return PageLoaded.syncTextInElement(oDriver, text, timeout, true, element);
-		}
-		/**
-		 * Method that determines if an element contains user-defined text
-		 * Example usage: getDriver().page().syncTextInElement(oDriver, text, timeout, returnError, element);
-		 * @param oDriver - current OrasiDriver
-		 * @param text - text for which to search
-		 * @param timeout - amount of time to wait for the element to contain the text
-		 * @param returnError - boolean true if and error is to be thrown if the element contains the text, false otherwise
-		 * @param element - element for which to be searched
-		 * @return - boolean true if the element contains the text, false otherwise
-		 */
-		public boolean syncTextInElement(OrasiDriver oDriver, String text, int timeout, boolean returnError,
-				Element element) {
-			return PageLoaded.syncTextInElement(oDriver, text, timeout, returnError, element);
-		}
-
-		/*
-		 * initializePage
-		 */
-		/**
-		 * Method that (re)initializes all of the elements for a given page
-		 * class. This is useful to stave off the Selenium StaleElementException
-		 * Example usage: getDriver().page().initializePage(clazz);
-		 * @param clazz - page class for which to (re)initialize all elements
-		 */
-		public void initializePage(Class<?> clazz) {
-			PageLoaded.initializePage(clazz);
-		}
-		
-		/**
-		 * Method that (re)initializes all of the elements for a given page
-		 * class. This is useful to stave off the Selenium StaleElementException
-		 * Example usage: getDriver().page().initializePage(clazz, oDriver);
-		 * @param clazz - page class for which to (re)initialize all elements
-		 * @param oDriver - current OrasiDriver
-		 */
-		public void initializePage(Class<?> clazz, OrasiDriver oDriver) {
-			PageLoaded.initializePage(clazz, oDriver);
-		}
 	}
 
-	/**
-	 * Method to return this OrasiDriver class
-	 * @return - current OrasiDriver
-	 */
-	private OrasiDriver getOrasiDriver() {
-		return this;
-	}
 }

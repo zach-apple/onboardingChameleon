@@ -7,57 +7,69 @@
 	<parameter name="runLocation" value="sauce" />
 	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="linux" />
- 	<test name="Element">
+	<test name="Element">
 		<classes>
-			<class name="com.orasi.core.TestElement" />
+			<class name="com.orasi.core.interfaces.TestElement" />
+		</classes>
+	</test>
+
+	<test name="TestElementInternalHandlers">
+		<classes>
+			<class name="com.orasi.core.interfaces.TestElementInternalHandlers" />
 		</classes>
 	</test>
 
 	<test name="Button">
 		<classes>
-			<class name="com.orasi.core.TestButton" />
+			<class name="com.orasi.core.interfaces.TestButton" />
 		</classes>
 	</test>
 
 	<test name="Checkbox">
 		<classes>
-			<class name="com.orasi.core.TestCheckbox" />
+			<class name="com.orasi.core.interfaces.TestCheckbox" />
 		</classes>
 	</test>
 
 	<test name="Label">
 		<classes>
-			<class name="com.orasi.core.TestLabel" />
+			<class name="com.orasi.core.interfaces.TestLabel" />
 		</classes>
 	</test>
 
 	<test name="Link">
 		<classes>
-			<class name="com.orasi.core.TestLink" />
+			<class name="com.orasi.core.interfaces.TestLink" />
 		</classes>
 	</test>
 
-  	<test name="Listbox">
+	<test name="Listbox">
 		<classes>
-			<class name="com.orasi.core.TestListbox" />
+			<class name="com.orasi.core.interfaces.TestListbox" />
 		</classes>
 	</test>
 
 	<test name="RadioButton">
 		<classes>
-			<class name="com.orasi.core.TestRadioButton" />
+			<class name="com.orasi.core.interfaces.TestRadioButton" />
 		</classes>
 	</test>
 
 	<test name="Textbox">
 		<classes>
-			<class name="com.orasi.core.TestTextbox" />
+			<class name="com.orasi.core.interfaces.TestTextbox" />
 		</classes>
 	</test>
 
 	<test name="Webtable">
 		<classes>
-			<class name="com.orasi.core.TestWebtable" />
+			<class name="com.orasi.core.interfaces.TestWebtable" />
+		</classes>
+	</test>
+
+	<test name="ByAngular">
+		<classes>
+			<class name="com.orasi.core.angular.TestByAngular" />
 		</classes>
 	</test>
 
@@ -79,9 +91,33 @@
 		</classes>
 	</test>
 
+	<test name="TestAlertHandler">
+		<classes>
+			<class name="com.orasi.utils.TestAlertHandler" />
+		</classes>
+	</test>
+
+	<test name="TestFrameHandler">
+		<classes>
+			<class name="com.orasi.utils.TestFrameHandler" />
+		</classes>
+	</test>
+
+	<test name="TestRegex">
+		<classes>
+			<class name="com.orasi.utils.TestRegex" />
+		</classes>
+	</test>
+
 	<test name="TestOrasiDriver">
 		<classes>
 			<class name="com.orasi.utils.TestOrasiDriver" />
+		</classes>
+	</test>
+	
+	<test name="TestWindowHandler">
+		<classes>
+			<class name="com.orasi.utils.TestWindowHandler" />
 		</classes>
 	</test>
 </suite> <!-- Suite -->
