@@ -55,10 +55,16 @@ public class TestEnvironment {
 	 */
 	protected ResourceBundle appURLRepository = ResourceBundle.getBundle(Constants.ENVIRONMENT_URL_PATH);
 	/*
-	 * Selenium Hub Field
+	 * Selenium Grid Hub Field
 	 */
 	protected String defaultSeleniumHubURL = appURLRepository.getString("DEFAULT_SELENIUMGRID_HUB_URL");
 
+	/*
+	 * Mobile Fields
+	 */
+	protected String deviceID = "";
+	protected String mobileHubURL = appURLRepository.getString("MOBILE_URL");
+	
 	/*
 	 * Sauce Labs Fields
 	 */
@@ -182,6 +188,8 @@ public class TestEnvironment {
 			return sauceLabsURL;
 		else if (runLocation.equalsIgnoreCase("grid"))
 			return defaultSeleniumHubURL;
+		else if (runLocation.equalsIgnoreCase("mobile"))
+			return mobileHubURL;
 		else
 			return "";
 	}
@@ -191,6 +199,9 @@ public class TestEnvironment {
 		defaultSeleniumHubURL = appURLRepository.getString(newHubURLName);;
 	}
 	
+	/*
+	 * Mustard specific 
+	 */
 	public boolean isReportingToMustard() {
 	    return reportToMustard;
 	}
@@ -198,7 +209,14 @@ public class TestEnvironment {
 	public void setReportToMustard(boolean reportToMustard) {
 	    this.reportToMustard = reportToMustard;
 	}
-
+	
+	/*
+	 * Mobile Specific
+	 */
+	protected void setDeviceID(String deviceID) {
+		this.deviceID = deviceID;
+	}
+	
 	// ************************************
 	// ************************************
 	// ************************************
@@ -378,9 +396,14 @@ public class TestEnvironment {
 		// Code for running on remote execution such as a selenium grid or saucelabs
 		} else if (runLocation.equalsIgnoreCase("grid") || runLocation.equalsIgnoreCase("sauce")) {
 			remoteDriverSetup();
-		} else {
+		} 
+		//Code for running on mobile devices
+		else if (runLocation.equalsIgnoreCase("mobile")){
+			mobileDriverSetup();
+		}
+		else {
 			throw new RuntimeException(
-					"Parameter for run [Location] was not set to 'Local', 'Grid', 'Sauce'");
+					"Parameter for run [Location] was not set to 'Local', 'Grid', 'Sauce', 'Mobile'");
 		}
 
 		//Set the timeouts to the defaults according to the constants class
@@ -389,7 +412,7 @@ public class TestEnvironment {
 		getDriver().setScriptTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
 
 		//Microsoft Edge Browser 
-		if (!browserUnderTest.toLowerCase().contains("edge")) {
+		if (!browserUnderTest.toLowerCase().contains("edge")&&!getRunLocation().toLowerCase().contains("mobile")) {
 			getDriver().manage().deleteAllCookies();
 			getDriver().manage().window().maximize();
 		}
@@ -506,6 +529,19 @@ public class TestEnvironment {
 			throw new RuntimeException(
 					"Problem with creatting the remote web driver: ");
 
+		}
+	}
+	
+	private void mobileDriverSetup(){
+		//Capabilities for the remote web driver
+		DesiredCapabilities caps = new DesiredCapabilities();
+		caps.setCapability(CapabilityType.PLATFORM, Platform.ANY);
+		caps.setCapability("deviceName",deviceID);
+		try {
+			setDriver(new OrasiDriver(caps, new URL(getRemoteURL())));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
