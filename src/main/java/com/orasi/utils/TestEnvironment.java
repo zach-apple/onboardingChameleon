@@ -14,6 +14,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 
+import com.orasi.exception.AutomationException;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.saucerest.SauceREST;
 
@@ -332,10 +333,7 @@ public class TestEnvironment {
 		if (getDriver() != null && getDriver().getWindowHandles().size() > 0) {
 			getDriver().quit();
 		}
-		
-		//if using SL, report the test results to SL
-		
-		
+	
 	}
 	/**
 	 * Ends the test and grabs the test result (pass/fail) in case need to use that 
@@ -402,7 +400,7 @@ public class TestEnvironment {
 			mobileDriverSetup();
 		}
 		else {
-			throw new RuntimeException(
+			throw new AutomationException(
 					"Parameter for run [Location] was not set to 'Local', 'Grid', 'Sauce', 'Mobile'");
 		}
 
@@ -492,7 +490,7 @@ public class TestEnvironment {
 			caps = DesiredCapabilities.htmlUnitWithJs();
 			break;
 		default:
-			throw new RuntimeException("Parameter not set for browser type");
+			throw new AutomationException("Parameter not set for browser type");
 		}
 
 		setDriver(new OrasiDriver(caps));
@@ -525,23 +523,25 @@ public class TestEnvironment {
 		try {
 			setDriver(new OrasiDriver(caps, new URL(getRemoteURL())));
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(
-					"Problem with creatting the remote web driver: ");
+			throw new AutomationException("Problem with creatting the remote web driver: ", e);
 
 		}
 	}
 	
+	/**
+	 *Sets up the driver with capabilities for mobile devices.  Uses a remote mobile hub URL
+	 *@date 9/28/2016	
+	 *@author jessica.marshall
+	 */
 	private void mobileDriverSetup(){
-		//Capabilities for the remote web driver
+		//Capabilities for the remote mobile driver
 		DesiredCapabilities caps = new DesiredCapabilities();
 		caps.setCapability(CapabilityType.PLATFORM, Platform.ANY);
 		caps.setCapability("deviceName",deviceID);
 		try {
 			setDriver(new OrasiDriver(caps, new URL(getRemoteURL())));
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new AutomationException("Could not generate the moblile remote driver", e);
 		}
 	}
 	
