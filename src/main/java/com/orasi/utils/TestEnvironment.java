@@ -43,6 +43,7 @@ public class TestEnvironment {
 	protected String environment = "";
 	protected String testName = "";
 	protected String pageUrl = "";
+
 	/*
 	 * WebDriver Fields
 	 */
@@ -64,7 +65,9 @@ public class TestEnvironment {
 	 * Mobile Fields
 	 */
 	protected String deviceID = "";
-	protected String mobileHubURL = appURLRepository.getString("MOBILE_URL");
+	protected String mobileHubURL = appURLRepository.getString("MOBILE_HUB_URL");
+	protected String mobileOSVersion = "";
+	protected String mobileAppPath = appURLRepository.getString("MOBILE_APP_PATH");
 	
 	/*
 	 * Sauce Labs Fields
@@ -97,7 +100,15 @@ public class TestEnvironment {
 	public TestEnvironment() {
 	};
 
-	
+	/**
+	 * General constructor for setting up driver for remote or local execution
+	 * @param application
+	 * @param browserUnderTest
+	 * @param browserVersion
+	 * @param operatingSystem
+	 * @param runLocation
+	 * @param environment
+	 */
 	public TestEnvironment(String application, String browserUnderTest, String browserVersion, String operatingSystem,
 			String runLocation, String environment) {
 		
@@ -111,7 +122,6 @@ public class TestEnvironment {
 		setRunLocation(runLocation);
 	}
 	
-
 	/*
 	 * Getters and setters
 	 */
@@ -217,6 +227,10 @@ public class TestEnvironment {
 	protected void setDeviceID(String deviceID) {
 		this.deviceID = deviceID;
 	}
+	protected void setMobileOSVersion(String mobileOSVersion){
+		this.mobileOSVersion = mobileOSVersion;
+	}
+
 	
 	// ************************************
 	// ************************************
@@ -340,7 +354,7 @@ public class TestEnvironment {
 	/**
 	 * Ends the test and grabs the test result (pass/fail) in case need to use that 
 	 * for additional reporting - such as to a sauce labs run.  Allows for different
-	 * ways of quiting the browser depending on r
+	 * ways of quiting the browser depending on run status
 	 * Use ITestContext from @AfterTest or @AfterSuite to determine run status
 	 * before closing test if reporting to sauce labs
 	 */
@@ -532,14 +546,36 @@ public class TestEnvironment {
 	
 	/**
 	 *Sets up the driver with capabilities for mobile devices.  Uses a remote mobile hub URL
+	 *Gives user option to either specify the device to test on using deviceID or to give
+	 *parameters for auto selection of device.  If deviceID is null, then will do auto selection using
+	 *these parameters:
+	 *operatingSystem -- mobile OS platform, e.g. iOS, Android
+	 *mobileOSVersion -- Mobile OS version, e.g. 7.1, 4.4
+	 *browserUnderTest -- Name of mobile web browser to automate. Should be an empty string if automating an app instead
+	 *mobileAppPath -- The absolute local path or remote http URL to an .ipa or .apk file, or a .zip containing one of these.
+	 *					Leave browserUnderTest blank/null if using this
 	 *@date 9/28/2016	
 	 *@author jessica.marshall
 	 */
 	private void mobileDriverSetup(){
-		//Capabilities for the remote mobile driver
 		DesiredCapabilities caps = new DesiredCapabilities();
-		caps.setCapability(CapabilityType.PLATFORM, Platform.ANY);
-		caps.setCapability("deviceName",deviceID);
+		//if a device ID is specified, go to that device
+		if (deviceID.isEmpty()){
+			//Which mobile OS platform to use, e.g. iOS, Android
+			caps.setCapability("platformName", operatingSystem);
+			//Mobile OS version, e.g. 7.1, 4.4
+			caps.setCapability("platformVersion", mobileOSVersion);
+			//Name of mobile web browser to automate. Should be an empty string if automating an app instead
+			caps.setCapability("browserName", browserUnderTest);
+			//The absolute local path or remote http URL to an .ipa or .apk file, or a .zip containing one of these.
+			//leave browserUnderTest blank/null if using this
+			caps.setCapability("app", mobileAppPath);
+		} else {
+			caps.setCapability(CapabilityType.PLATFORM, Platform.ANY);
+			caps.setCapability("deviceName",deviceID);
+		}
+		
+		
 		try {
 			setDriver(new OrasiDriver(caps, new URL(getRemoteURL())));
 		} catch (MalformedURLException e) {
