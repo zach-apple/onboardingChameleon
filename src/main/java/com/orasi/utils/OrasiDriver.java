@@ -814,27 +814,27 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	public class Capabilities {
 
 		public String browserName() {
-			//if(driver instanceof HtmlUnitDriver) return ((HtmlUnitDriver) driver).getCapabilities().getBrowserName();
+			if(driver instanceof HtmlUnitDriver) return ((HtmlUnitDriver) driver).getCapabilities().getBrowserName();
 			return getRemoteWebDriver().getCapabilities().getBrowserName();
 		}
 
 		public String browserVersion() {
-			//if(driver instanceof HtmlUnitDriver) return ((HtmlUnitDriver) driver).getCapabilities().getVersion();
+			if(driver instanceof HtmlUnitDriver) return ((HtmlUnitDriver) driver).getCapabilities().getVersion();
 			return getRemoteWebDriver().getCapabilities().getVersion();
 		}
 
 		public String platformOS() {
-			/*if(driver instanceof HtmlUnitDriver) {
+			if(driver instanceof HtmlUnitDriver) {
 				return ((HtmlUnitDriver) driver).getCapabilities().getPlatform().name() + " "
 						+ ((HtmlUnitDriver) driver).getCapabilities().getPlatform().getMajorVersion() + "."
 						+ ((HtmlUnitDriver) driver).getCapabilities().getPlatform().getMinorVersion();
-			}*/
+			}
 			return getRemoteWebDriver().getCapabilities().getPlatform().name() + " "
 					+ getRemoteWebDriver().getCapabilities().getPlatform().getMajorVersion() + "."
 					+ getRemoteWebDriver().getCapabilities().getPlatform().getMinorVersion();
 		}
 		public Platform platform() {
-			//if(driver instanceof HtmlUnitDriver) return ((HtmlUnitDriver) driver).getCapabilities().getPlatform();
+			if(driver instanceof HtmlUnitDriver) return ((HtmlUnitDriver) driver).getCapabilities().getPlatform();
 			
 			return getRemoteWebDriver().getCapabilities().getPlatform() ;
 		}
