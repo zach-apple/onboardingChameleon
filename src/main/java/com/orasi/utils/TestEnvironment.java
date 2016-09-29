@@ -232,16 +232,18 @@ public class TestEnvironment {
 	 * Getter and setter for the actual WebDriver
 	 */
 	protected void setDriver(OrasiDriver driverSession) {
-		if (isThreadedDriver())
+		if (isThreadedDriver()){
 			threadedDriver.set(driverSession);
+		}
 		else{
 			driver = driverSession;
 		}
 	}
 
 	public OrasiDriver getDriver() {
-		if (isThreadedDriver())
+		if (isThreadedDriver()){
 			return threadedDriver.get();
+		}
 		else{
 			return driver;
 		}
@@ -259,7 +261,7 @@ public class TestEnvironment {
 		this.setThreadDriver = setThreadDriver;
 	}
 
-	/*
+	/**
 	 * Method to retrive the URL and Credential Repository
 	 */
 	protected ResourceBundle getEnvironmentURLRepository() {
