@@ -457,6 +457,8 @@ public class TestEnvironment {
 			break;
 
 		case "ie":
+		case "internet explorer":
+		case "iexplore":
 			caps.setCapability("ignoreZoomSetting", true);
 			caps.setCapability("enablePersistentHover", false);
 			file = new File(
