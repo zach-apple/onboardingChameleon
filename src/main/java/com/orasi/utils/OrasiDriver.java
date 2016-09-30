@@ -758,12 +758,15 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	private void setDriverWithCapabilties(DesiredCapabilities caps) {
 		switch (caps.getBrowserName().toLowerCase()) {
 		case "firefox":
-			driver = new FirefoxDriver(caps);
-			break;
-		case "marionette":
-			driver = new MarionetteDriver(caps);
+			if (caps.getCapability("marionette").equals(true)){
+				driver = new MarionetteDriver(caps);
+			} else {
+				driver = new FirefoxDriver(caps);
+			}
+			
 			break;
 		case "internet explorer":
+		case "iexplore":
 		case "ie":
 			driver = new InternetExplorerDriver(caps);
 			//driver = new SynchronizedInternetExplorerDriver(caps);			
