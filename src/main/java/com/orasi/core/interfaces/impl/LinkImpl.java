@@ -57,5 +57,4 @@ public class LinkImpl extends ElementImpl implements Link {
 	public String getURL() {
 		return getWrappedElement().getAttribute("href");
 	}
-
 }

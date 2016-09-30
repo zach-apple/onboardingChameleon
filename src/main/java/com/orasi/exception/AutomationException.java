@@ -11,7 +11,6 @@ import org.openqa.selenium.internal.BuildInfo;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import com.orasi.utils.OrasiDriver;
-import com.orasi.utils.TestReporter;
 
 public class AutomationException extends RuntimeException{
 

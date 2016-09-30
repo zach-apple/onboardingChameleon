@@ -28,7 +28,7 @@ public class WindowHandler {
 	 * @return 	true/false
 	 */
 	public static boolean waitUntilWindowExistsWithTitle(WebDriver driver, String windowNameOrHandle, int timeoutInSeconds){
-		
+
 		//Adding for backwards compatibility for WebDriver
 		if(driver instanceof OrasiDriver){
 			timeoutInSeconds = ((OrasiDriver)driver).getPageTimeout();

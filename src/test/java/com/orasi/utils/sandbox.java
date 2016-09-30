@@ -1,6 +1,7 @@
 package com.orasi.utils;
 
 import org.openqa.selenium.By;
+import org.testng.ITestContext;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -44,7 +45,7 @@ public class sandbox extends TestEnvironment{
         }
         
         @AfterMethod
-        public void cleanup(){
-            endTest(testName);
+        public void cleanup(ITestContext testResults){
+            endTest(testName, testResults);
         }
 }

@@ -7,11 +7,11 @@
 	<parameter name="browserUnderTest" value="html" />
 	<parameter name="environment" value="staging" />
 	<parameter name="runLocation" value="local" />
-	<parameter name="browserVersion" value="" />
+	<parameter name="browserVersion" value="47" />
 	<parameter name="operatingSystem" value="windows" />
  	<test name="TestEnvironment">
 		<classes>
-			<class name="com.orasi.core.interfaces.TestTextbox" />
+			<class name="com.orasi.core.interfaces.TestButton" />
 		</classes>
 	</test> 
 </suite> <!-- Suite -->

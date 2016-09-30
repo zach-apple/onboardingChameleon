@@ -24,7 +24,6 @@ public class TestFrameHandler extends TestEnvironment {
 		setOperatingSystem(operatingSystem);
 		setRunLocation(runLocation);
 		setTestEnvironment(environment);
-		setDefaultTestTimeout(3);
 		setPageURL("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/utils/frameHandler.html");
 		testStart("TestFrame");
 	}
