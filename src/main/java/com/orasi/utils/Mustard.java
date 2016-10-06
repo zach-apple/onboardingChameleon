@@ -15,8 +15,8 @@ import com.saucelabs.common.SauceOnDemandAuthentication;
 
 @Beta
 public class Mustard {
-	private static String mustardURL = "http://mustard.orasi.com/results";
-    	private static String mustardKey = "c73fbfed815904a032a5cec113bfe85f"; //dev key da8f8779749cfb27bbba1fb9f136c1cf
+	private static String mustardURL = "https://mustard.orasi.com/results";
+    	private static String mustardKey = "a70b4e914a58f2cafce05d7c6ecd2612"; //dev key da8f8779749cfb27bbba1fb9f136c1cf
 	protected static ResourceBundle appURLRepository = ResourceBundle.getBundle(Constants.ENVIRONMENT_URL_PATH);
 	protected static SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(
 			Base64Coder.decodeString(appURLRepository.getString("SAUCELABS_USERNAME")),
@@ -40,11 +40,18 @@ public class Mustard {
 		String sauceURL = "";
 		MultipartEntityBuilder multipartEntity = MultipartEntityBuilder.create();
 		multipartEntity.addTextBody("project_id",mustardKey);
+		multipartEntity.addTextBody("result_type","automated");
+		multipartEntity.addTextBody("environment_id",device_id);
+		multipartEntity.addTextBody("testcase_id",test_name);
+		multipartEntity.addTextBody("status",status);
+		multipartEntity.addTextBody("display_name",test_name);
+		
+		/*
 		multipartEntity.addTextBody("device_id", device_id);
 		multipartEntity.addTextBody("device_platform", device_platform);
 		multipartEntity.addTextBody("test_name",test_name);
 		multipartEntity.addTextBody("status",status);
-		
+		*/
 		if(runLocation.toLowerCase().equals("sauce")){
 		    sauceURL = "https://saucelabs.com/beta/tests/" + driver.getSessionId().toString();
 		    multipartEntity.addTextBody("link",sauceURL);
@@ -53,7 +60,8 @@ public class Mustard {
 		if(status.equals("fail")) {
 		    multipartEntity.addTextBody("comment",result.getThrowable().getMessage());
 		    multipartEntity.addTextBody("stacktrace",ExceptionUtils.getFullStackTrace(result.getThrowable()));
-		    multipartEntity.addBinaryBody("screenshot", driver.getScreenshotAs(OutputType.FILE), ContentType.create("image/jpeg"), Randomness.randomAlphaNumeric(32));
+		    //multipartEntity.addBinaryBody("screenshot", driver.getScreenshotAs(OutputType.FILE), ContentType.create("image/jpeg"), Randomness.randomAlphaNumeric(32));
+		  //  multipartEntity.addTextBody("screenshot", Base64Coder.encodeLines(driver.getScreenshotAs(OutputType.FILE).));
 		}
 	
 		
