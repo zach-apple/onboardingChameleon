@@ -256,3 +256,33 @@ driver.setElementTimeout(currentTimeout);
 
 * **Angular support**
  * Organized classes to fall under a single package. Updated classes with issues and allowed extentions to OrasiDriver 
+
+##Version 1.0.7 - 10/10/2016
+* **Enchancements**
+ * [**com.orasi.utils.TestReporter**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)
+   New logging methods have been added and TRACE logs have been added to various low-level areas of the toolkit. Usability is as follows
+   	 * TestReporter.NONE (Default):  No additional info printed to console
+	 * TestReporter.INFO: Will print useful information to console such as URL's, parameters, and RQ/RS
+	 * TestReporter.DEBUG: Will print debugging information for test developer to console 
+	 * TestReporter.TRACE: Will print low level information to console from the framework 
+  * New Methods
+    * setDebugLevel(TestReporter.___) - Using on the the options above (NONE, INFO, DEBUG, or TRACE) will display logs in the console and TestNG report up to that level
+    * logInfo(String log) - The first level of logs. This are intended to write useful info to the console to display what the script is doing, but isn't always needed. 
+    * logDebug(String log) - The second level of logs intended for developers where they may leave debug messages to display to step through more complex automation code
+    * logTrace(String log) - This level of log is intended for the Toolkit itself, where almost every miniscule action in the low levels of the code is displayed and recorded. This is intended to be used for when there are issues in the toolkit, and assistance from other developers is required.
+ * [**com.orasi.utils.TestEnvironment**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)
+   * Removed a lot of code that was made redundant when OrasiDriver was created.
+   * Removed location type of "Remote" in favor of dedicated "Sauce" and "Grid".
+   * Added location type of "Mobile".   
+ * [**com.orasi.utils.ExtendedExpectedConditions**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)  
+   This class contains several helper methods for Explicit Waits statements to use in conjunction with the WebDriverWait class. 
+   * elementToBeHidden(WebElement element) - An expectation for checking if the given element is hidden on the screen
+   * elementToBeVisible(WebElement element) - An expectation for checking if the given element is visible on the screen
+   * findWindowWithTitleAndSwitchToIt(String title) - Loop through windows for duration to see if it finds a title with exact queried text
+   * findWindowContainsTitleAndSwitchToIt(String title) - Loop through windows for duration to see if it finds a title that contains queried text
+   * findWindowMatchesTitleAndSwitchToIt(String regex) - Loop through windows for duration to see if it finds a title with the matching regex pattern
+   * textToMatchInElement(WebElement element, String regex) - An expectation for checking if the given text is present in the specified element
+   * textToBePresentInElementAttribute(WebElement element, String attribute, String text) - An expectation for checking if the given text is present in the specified elements value attribute
+   * textToMatchInElementAttribute(WebElement element, String attribute, String regex) - An expectation for checking if the given regex matches the given element attribute
+   * textToBePresentInElementCssProperty(WebElement element, String cssProperty, String text) - An expectation for checking if the given text is present in CSS property the specified elements property value 
+   * textToMatchInElementCssProperty(WebElement element, String cssProperty, String regex) - An expectation for checking if the given regex matches the given element CSS Property
