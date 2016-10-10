@@ -135,7 +135,8 @@ public class TestRadioButton extends TestEnvironment{
 	@Stories("RadioGroup")
 	@Title("selectByOptionNegative")
 	@Test(groups ={"regression", "interfaces", "radiogroup"}, dependsOnMethods="selectByOption")
-	public void selectByOptionNegative(){if(driver.getDriverCapability().browserName().contains("explorer")) throw new SkipException("Test not valid for Internet Explorer");
+	public void selectByOptionNegative(){
+		if(driver.getDriverCapability().browserName().contains("explorer")) throw new SkipException("Test not valid for Internet Explorer");
 		if(getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty() ) throw new SkipException("Test not valid for HTMLUnitDriver");
 		if(getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty() ) throw new SkipException("Test not valid for HTMLUnitDriver");
 		RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));

@@ -356,6 +356,7 @@ public class TestOrasiDriver extends TestEnvironment {
     @Title("findNGRepeater")
     @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "findNGController")
     public void findNGRepeater() {
+    	Sleeper.sleep(2000);
 	Assert.assertNotNull(driver.findElement(ByNG.repeater("employee in employees")));
     }
 

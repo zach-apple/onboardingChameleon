@@ -18,6 +18,7 @@ import com.orasi.exception.automation.ElementNotHiddenException;
 import com.orasi.exception.automation.ElementNotVisibleException;
 import com.orasi.exception.automation.TextInElementNotPresentException;
 import com.orasi.utils.TestEnvironment;
+import com.orasi.utils.TestReporter;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
@@ -27,7 +28,7 @@ public class TestElement extends TestEnvironment {
 	@BeforeTest(groups = { "regression", "interfaces", "element", "dev" })
 	@Parameters({ "runLocation", "browserUnderTest", "browserVersion", "operatingSystem", "environment" })
 	public void setup(@Optional String runLocation, String browserUnderTest, String browserVersion,
-			String operatingSystem, String environment) {
+			String operatingSystem, String environment) {TestReporter.setDebugLevel(3);
 		setApplicationUnderTest("Test Site");
 		setBrowserUnderTest(browserUnderTest);
 		setBrowserVersion(browserVersion);

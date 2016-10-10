@@ -56,7 +56,7 @@ public class TestLink extends TestEnvironment {
 	public void click(){
 		Link link= getDriver().findLink(By.xpath("//a[@href='testLinks.html']"));
 		link.click();
-		Assert.assertTrue(PageLoaded.syncVisible(getDriver(), getDriver().findElement(By.xpath("//a[@href='link.html']"))));
+		Assert.assertTrue(getDriver().findElement(By.xpath("//a[@href='link.html']")).syncVisible());
 	}
 
 	@Features("Element Interfaces")
@@ -84,7 +84,7 @@ public class TestLink extends TestEnvironment {
         public void jsClick(){
 		Link link= getDriver().findLink(By.xpath("//a[@href='link.html']"));
 		link.jsClick();
-		Assert.assertTrue(PageLoaded.syncVisible(getDriver(), getDriver().findLink(By.xpath("//a[@href='testLinks.html']"))));
+		Assert.assertTrue(getDriver().findLink(By.xpath("//a[@href='testLinks.html']")).syncVisible());
 	}
 
 	@Features("Element Interfaces")
