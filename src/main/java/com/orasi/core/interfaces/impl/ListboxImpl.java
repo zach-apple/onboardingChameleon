@@ -178,9 +178,10 @@ public class ListboxImpl extends ElementImpl implements Listbox {
 		TestReporter.logTrace("Entering ListboxImpl#isSelected");
 		List<WebElement> selectedOptions = innerSelect.getAllSelectedOptions();
 		for (WebElement selectOption : selectedOptions) {
-			if (selectOption.getText().equals(option))
+			if (selectOption.getText().equals(option)){
 				TestReporter.logTrace("Exiting ListboxImpl#isSelected");
 				return true;
+			}
 		}
 		TestReporter.logTrace("Exiting ListboxImpl#isSelected");
 		return false;
