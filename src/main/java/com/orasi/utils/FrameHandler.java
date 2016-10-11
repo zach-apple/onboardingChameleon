@@ -1,5 +1,7 @@
 package com.orasi.utils;
 
+import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -7,13 +9,18 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class FrameHandler {
+	
 	@Deprecated
 	public static void findAndSwitchToFrame(WebDriver driver, String frame) {
+		int timeout = Constants.ELEMENT_TIMEOUT;
+		if (driver instanceof OrasiDriver) {
+			timeout = ((OrasiDriver) driver).getElementTimeout();
+		}
 		driver.switchTo().defaultContent();
-		WebDriverWait wait = new WebDriverWait(driver, TestEnvironment.getDefaultTestTimeout());
+		WebDriverWait wait = new WebDriverWait(driver,timeout);
 		wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frame));
 	}
-
+	
 	public static String getCurrentFrameName(WebDriver driver) {
 		if (driver instanceof OrasiDriver) {
 			driver = ((OrasiDriver) driver).getWebDriver();
@@ -64,12 +71,20 @@ public class FrameHandler {
 	}
 
 	private static void switchToFrame(WebDriver driver, String frameName) {
-		WebDriverWait wait = new WebDriverWait(driver, TestEnvironment.getDefaultTestTimeout());
+		int timeout = Constants.ELEMENT_TIMEOUT;
+		if (driver instanceof OrasiDriver) {
+			timeout = ((OrasiDriver) driver).getElementTimeout();
+		}
+		WebDriverWait wait = new WebDriverWait(driver, timeout);
 		wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameName));
 	}
 
 	private static void switchToFrame(WebDriver driver, By byFrameLocator) {
-		WebDriverWait wait = new WebDriverWait(driver, TestEnvironment.getDefaultTestTimeout());
+		int timeout = Constants.ELEMENT_TIMEOUT;
+		if (driver instanceof OrasiDriver) {
+			timeout = ((OrasiDriver) driver).getElementTimeout();
+		}
+		WebDriverWait wait = new WebDriverWait(driver, timeout);
 		wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(byFrameLocator));
 	}
 }

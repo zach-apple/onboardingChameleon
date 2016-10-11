@@ -18,6 +18,7 @@ import com.orasi.exception.automation.ElementNotHiddenException;
 import com.orasi.exception.automation.ElementNotVisibleException;
 import com.orasi.exception.automation.TextInElementNotPresentException;
 import com.orasi.utils.TestEnvironment;
+import com.orasi.utils.TestReporter;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
@@ -27,7 +28,7 @@ public class TestElement extends TestEnvironment {
 	@BeforeTest(groups = { "regression", "interfaces", "element", "dev" })
 	@Parameters({ "runLocation", "browserUnderTest", "browserVersion", "operatingSystem", "environment" })
 	public void setup(@Optional String runLocation, String browserUnderTest, String browserVersion,
-			String operatingSystem, String environment) {
+			String operatingSystem, String environment) {TestReporter.setDebugLevel(3);
 		setApplicationUnderTest("Test Site");
 		setBrowserUnderTest(browserUnderTest);
 		setBrowserVersion(browserVersion);
@@ -246,33 +247,6 @@ public class TestElement extends TestEnvironment {
 		Element element = getDriver().findElement(By.id("text1"));
 		element.sendKeys("testing");
 		Assert.assertTrue(element.getAttribute("value").equals("Clicked buttontesting"));
-	}
-
-	@Features("Element Interfaces")
-	@Stories("Element")
-	@Title("syncPresentBasic")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
-	public void syncPresentBasic() {
-		Element element = getDriver().findElement(By.id("text1"));
-		Assert.assertTrue(element.syncPresent());
-	}
-
-	@Features("Element Interfaces")
-	@Stories("Element")
-	@Title("syncPresentNegative")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", expectedExceptions=RuntimeException.class)
-	public void syncPresentNegative() {
-		Element element = getDriver().findElement(By.id("NoElement"));
-		element.syncPresent();		
-	}
-
-	@Features("Element Interfaces")
-	@Stories("Element")
-	@Title("syncPresentAdvanced")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired")
-	public void syncPresentAdvanced() {
-		Element element = getDriver().findElement(By.id("text1"));
-		Assert.assertTrue(element.syncPresent(5, false));
 	}
 
 	@Features("Element Interfaces")

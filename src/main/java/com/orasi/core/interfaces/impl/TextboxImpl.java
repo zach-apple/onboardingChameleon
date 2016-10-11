@@ -23,11 +23,11 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 	public TextboxImpl(WebElement element) {
 		super(element);
 	}
-	
+
 
 	public TextboxImpl(OrasiDriver driver, By by) {
 		super(driver, by);
-	//	element = driver.findWebElement(by);
+		//	element = driver.findWebElement(by);
 	}
 
 
@@ -37,14 +37,17 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 	 */
 	@Override
 	public void clear() {
+		TestReporter.logTrace("Entering TextboxImpl#clear");
 		try {
 			getWrappedElement().clear();
-			TestReporter.interfaceLog(" Clear text from Textbox [<b>" + getElementLocatorInfo() + " </b>]");
+			TestReporter.interfaceLog("Clear text from Textbox [<b>" + getElementLocatorInfo() + " </b>]");
 		} catch (RuntimeException rte) {
-			TestReporter.interfaceLog(" Clear text from Textbox [<b>" + getElementLocatorInfo() + " </b>]",
+			TestReporter.interfaceLog("Clear text from Textbox [<b>" + getElementLocatorInfo() + " </b>]",
 					true);
+			TestReporter.logTrace("Exiting TextboxImpl#clear");
 			throw rte;
 		}
+		TestReporter.logTrace("Exiting TextboxImpl#clear");
 	}
 
 	/**
@@ -57,6 +60,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 	 */
 	@Override
 	public void set(String text) {
+		TestReporter.logTrace("Entering TextboxImpl#set");
 		if (!text.isEmpty()) {
 			try {
 				getWrappedElement().clear();
@@ -64,11 +68,13 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 			} catch (RuntimeException rte) {
 				TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>"
 						+ getElementLocatorInfo() + " </b>  ]", true);
+				TestReporter.logTrace("Exiting TextboxImpl#set");
 				throw rte;
 			}
 		} else {
-			TestReporter.interfaceLog(" Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
+			TestReporter.interfaceLog("Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
 		}
+		TestReporter.logTrace("Exiting TextboxImpl#set");
 	}
 
 
@@ -83,25 +89,27 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 
 	@Override
 	public void jsSet( String text) {
-	    if (text == null) text = "";
-	    if (!text.isEmpty()){
-		if (text.equalsIgnoreCase("<blank>") || text.equalsIgnoreCase("(blank)")){
-		    TestReporter.log(" Request to blank text field sent. Clearing Textbox [ <b>" + getElementLocatorInfo()  + " </b> ]");
-		    getWrappedElement().clear();
+		TestReporter.logTrace("Entering TextboxImpl#jsSet");
+		if (text == null) text = "";
+		if (!text.isEmpty()){
+			if (text.equalsIgnoreCase("<blank>") || text.equalsIgnoreCase("(blank)")){
+				TestReporter.interfaceLog(" Request to blank text field sent. Clearing Textbox [ <b>" + getElementLocatorInfo()  + " </b> ]");
+				getWrappedElement().clear();
+			}else{
+				TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>" + getElementLocatorInfo()  + " </b> ]");
+				try{
+					getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].setAttribute('value', arguments[1])", getWrappedElement(), text);
+				}catch(WebDriverException wde){
+					getWrappedElement().clear();
+					getWrappedElement().sendKeys(text);
+				}
+			}
 		}else{
-		    TestReporter.log(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>" + getElementLocatorInfo()  + " </b> ]");
-		    try{
-			getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].setAttribute('value', arguments[1])", getWrappedElement(), text);
-		    }catch(WebDriverException wde){
-			getWrappedElement().clear();
-			getWrappedElement().sendKeys(text);
-		    }
+			TestReporter.interfaceLog("Skipping input to Textbox [ <b>" + getElementLocatorInfo()  + " </b> ]");
 		}
-	    }else{
-		TestReporter.log(" Skipping input to Textbox [ <b>" + getElementLocatorInfo()  + " </b> ]");
-	    }
+		TestReporter.logTrace("Exiting TextboxImpl#jsSet");
 	}
-	
+
 	/**
 	 * @summary - Overloads overridden set() method. If the text parameter is
 	 *          not an empty string, this method uses a JavascriptExecutor to
@@ -114,10 +122,10 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 	 */
 	@Override
 	public void scrollAndSet(String text) {
+		TestReporter.logTrace("Entering TextboxImpl#scrollAndSet");
 		if (!text.isEmpty()) {
 			try {
-				getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();",
-						getWrappedElement());
+				getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();",	getWrappedElement());
 				getWrappedElement().clear();
 				getWrappedElement().sendKeys(text);
 				TestReporter.interfaceLog(" Send Keys [ <b>" + text + "</b> ] to Textbox [ <b>"
@@ -126,12 +134,13 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 			} catch (RuntimeException rte) {
 				TestReporter.interfaceLog("Send Keys [ <b>" + text + "</b> ] to Textbox [ <b>"
 						+ getElementLocatorInfo() + " </b> ]", true);
+				TestReporter.logTrace("Exiting TextboxImpl#scrollAndSet");
 				throw rte;
 			}
 		} else {
-			TestReporter
-					.interfaceLog(" Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
+			TestReporter.interfaceLog("Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
 		}
+		TestReporter.logTrace("Exiting TextboxImpl#scrollAndSet");
 	}
 
 	/**
@@ -146,10 +155,11 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 	 */
 	@Override
 	public void safeSet(String text) {
+		TestReporter.logTrace("Entering TextboxImpl#safeSet");
 		if (!text.isEmpty()) {
 			try {
 
-			    getWrappedDriver().executeJavaScript("arguments[0].setAttribute('value', arguments[1])", getWrappedElement(), "");
+				getWrappedDriver().executeJavaScript("arguments[0].setAttribute('value', arguments[1])", getWrappedElement(), "");
 				getWrappedElement().sendKeys(text);
 				getWrappedElement().sendKeys(Keys.TAB);
 				TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [  <b>"
@@ -160,9 +170,9 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 				throw rte;
 			}
 		} else {
-			TestReporter
-					.interfaceLog(" Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
+			TestReporter.interfaceLog("Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
 		}
+		TestReporter.logTrace("Exiting TextboxImpl#safeSet");
 	}
 
 	/**
@@ -175,20 +185,21 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 	 */
 	@Override
 	public void setSecure(String text) {
+		TestReporter.logTrace("Entering TextboxImpl#setSecure");
 		if (!text.isEmpty()) {
 			try {
 				getWrappedElement().sendKeys(Base64Coder.decodeString(text).toString());
 				TestReporter.interfaceLog(" Send encoded text [ <b>" + text.toString()
-						+ "</b> ] to Textbox [  <b>" + getElementLocatorInfo() + " </b> ]");
+				+ "</b> ] to Textbox [  <b>" + getElementLocatorInfo() + " </b> ]");
 			} catch (RuntimeException rte) {
 				TestReporter.interfaceLog("Send encoded text [ <b>" + text.toString()
-						+ "</b> ] to Textbox [  <b>" + getElementLocatorInfo() + " </b> ]", true);
+				+ "</b> ] to Textbox [  <b>" + getElementLocatorInfo() + " </b> ]", true);
 				throw rte;
 			}
 		} else {
-			TestReporter
-					.interfaceLog(" Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
+			TestReporter.interfaceLog("Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
 		}
+		TestReporter.logTrace("Exiting TextboxImpl#setSecure");
 	}
 
 	/**
@@ -204,24 +215,26 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 	 */
 	@Override
 	public void safeSetSecure(String text) {
+		TestReporter.logTrace("Entering TextboxImpl#safeSetSecure");
 		if (!text.isEmpty()) {
 			try {
-			    getWrappedDriver().executeJavaScript("arguments[0].setAttribute('value', arguments[1])", getWrappedElement(), "");
+				getWrappedDriver().executeJavaScript("arguments[0].setAttribute('value', arguments[1])", getWrappedElement(), "");
 				getWrappedElement().sendKeys(Base64Coder.decodeString(text).toString());
 				getWrappedElement().sendKeys(Keys.TAB);
 				TestReporter.log(" Send encoded text [ <b>" + text.toString() + "</b> ] to Textbox [  <b>"
 						+ getElementLocatorInfo() + " </b> ]");
 			} catch (RuntimeException rte) {
 				TestReporter.interfaceLog("Send encoded text [ <b>" + text.toString()
-						+ "</b> ] to Textbox [  <b>" + getElementLocatorInfo() + " </b> ]", true);
+				+ "</b> ] to Textbox [  <b>" + getElementLocatorInfo() + " </b> ]", true);
+				TestReporter.logTrace("Exiting TextboxImpl#safeSetSecure");
 				throw rte;
 			}
 
 		} else {
-			TestReporter
-					.interfaceLog(" Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
+			TestReporter.interfaceLog("Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
 		}
 
+		TestReporter.logTrace("Exiting TextboxImpl#safeSetSecure");
 	}
 
 	/**
@@ -230,6 +243,9 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 	 */
 	@Override
 	public String getText() {
-		return getWrappedElement().getAttribute("value");
+		TestReporter.logTrace("Entering TextboxImpl#getText");
+		String text = getWrappedElement().getAttribute("value");
+		TestReporter.logTrace("Exiting TextboxImpl#getText");
+		return text;
 	}
 }

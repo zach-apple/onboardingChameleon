@@ -1,6 +1,5 @@
 package com.orasi.utils;
 
-import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -9,7 +8,8 @@ import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestTestEnvironment extends TestEnvironment{
+
+public class TestTestEnvironment extends TestEnvironment {
 	private String application = "application";
 	private String browserUnderTest = "html";
 	private String browserVersion = "1";
@@ -18,11 +18,12 @@ public class TestTestEnvironment extends TestEnvironment{
 	private String testingEnvironment = "stage";
 	private String testingName = "TestEnvironment";
 	private String pageURL = "http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/element.html";
+	
 	@BeforeTest
-	    public void setup(){
+	public void setup() {
 		setReportToMustard(false);
-	    }
-
+	}
+	
 	@Features("Utilities")
 	@Stories("TestEnvironment")
 	@Title("testEnviroment")
@@ -31,7 +32,7 @@ public class TestTestEnvironment extends TestEnvironment{
 		TestEnvironment te = new TestEnvironment();
 		Assert.assertNotNull(te);
 	}
-
+	
 	@Features("Utilities")
 	@Stories("TestEnvironment")
 	@Title("testEnviromentWithStringConstructor")
@@ -40,17 +41,6 @@ public class TestTestEnvironment extends TestEnvironment{
 		TestEnvironment te = new TestEnvironment(application, browserUnderTest, browserVersion, operatingSystem,
 				runLocation, testingEnvironment);
 		Assert.assertNotNull(te);
-	}
-
-	@Features("Utilities")
-	@Stories("TestEnvironment")
-	@Title("testEnviromentWithTestEnvironmentConstructor")
-	@Test(groups = "regression")
-	public void testEnviromentWithTestEnvironmentConstructor() {
-		TestEnvironment te = new TestEnvironment();
-		TestEnvironment te2 = new TestEnvironment(te);
-
-		Assert.assertNotNull(te2);
 	}
 
 	@Features("Utilities")
@@ -143,31 +133,9 @@ public class TestTestEnvironment extends TestEnvironment{
 		te.setPageURL(pageURL);
 		te.testStart(testingName);
 		Assert.assertTrue(te.getDriver().getTitle().equals("Unit test site"));
+		
+
 	}
 
-	@Features("Utilities")
-	@Stories("TestEnvironment")
-	@Title("pageLoaded")
-	@Test(groups = "regression", dependsOnMethods = "testTestStart")
-	public void testPageLoaded() {
-		TestEnvironment te = new TestEnvironment(application, browserUnderTest, browserVersion, operatingSystem,
-				runLocation, testingEnvironment);
-		te.setPageURL(pageURL);
-		te.testStart(testingName);
-		Assert.assertTrue(te.pageLoaded());
-	}
-
-	@Features("Utilities")
-	@Stories("TestEnvironment")
-	@Title("pageLoadedWithElement")
-	@Test(groups = "regression", dependsOnMethods = "testTestStart")
-	public void pageLoadedWithElement() {
-		TestEnvironment te = new TestEnvironment(application, browserUnderTest, browserVersion, operatingSystem,
-				runLocation, testingEnvironment);
-		te.setPageURL(pageURL);
-		OrasiDriver driver = te.testStart(testingName);
-		Assert.assertTrue(driver.page().isDomComplete());
-		Assert.assertTrue(PageLoaded.syncPresent(driver, driver.findElement(By.id("text1"))));
-	}
 
 }
