@@ -34,7 +34,8 @@ public class Headers {
 	 */
 	public static enum HeaderType {
 	  	AUTH,
-	    BASIC_CONVO;
+	    BASIC_CONVO,
+	    JSON;
 	}
 	/*  private Header[] getHeaders(){
 		  return headers;
@@ -63,7 +64,14 @@ public class Headers {
 		    	   		    ,new BasicHeader("Connection", "keep-alive")
 		    	   		    ,new BasicHeader("requestedTimestamp", Randomness.generateCurrentXMLDatetime() + ".000-04:00")
 		    	   		};
-		        	break;
+		        	break;   
+		        case JSON:
+	        			TestReporter.logDebug("Creating headers for [JSON]");
+			        	headers = new Header[] {
+			    	   		     new BasicHeader("Content-type", "application/json")
+			    	   		    
+			    	   		};
+			        	break;
 	            default:
 	                break;
 	        }
