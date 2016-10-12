@@ -64,7 +64,8 @@ public class AutomationException extends RuntimeException{
 	return (originalMessageString == null ? "" : originalMessageString + "\n")
 		+ supportMessage
 		+ getBuildInformation() + "\n"
-		+ getDriverInfo(driver); 
+		+ getDriverInfo(driver) + "\n"
+		+ getGridInfo(driver) ; 
     }
 
     public String getSystemInformation() {
