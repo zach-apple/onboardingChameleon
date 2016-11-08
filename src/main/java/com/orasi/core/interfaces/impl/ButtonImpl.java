@@ -21,6 +21,7 @@ public class ButtonImpl extends ElementImpl implements Button {
 	 */
 	public ButtonImpl(WebElement element) {
 		super(element);
+		
 	}
 
 	public ButtonImpl(OrasiDriver driver, By by) {

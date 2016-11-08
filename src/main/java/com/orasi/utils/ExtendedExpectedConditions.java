@@ -261,16 +261,60 @@ public class ExtendedExpectedConditions {
 		  @Override
 		  public Boolean apply(WebDriver driver) {
 			  try {
-				  Point location = element.getLocation();
-
+				  Point location = element.getLocation();			
 				  Dimension size = element.getSize();
 				  if ((location.getX() > 0 & location.getY() > 0) | (size.getHeight() > 0 & size.getWidth() > 0)) {
+					//  String attributeHidden = element.getAttribute("hidden");
 					  if (element.getAttribute("hidden") != null)
-						  if (element.getAttribute("hidden").toLowerCase().equals("true")) return false;
+						  if (element.getAttribute("hidden").toLowerCase().equals("true")) 
+							  return false;
+
+					//  String attributeType= element.getAttribute("type");
 					  if (element.getAttribute("type") != null) {
 						  if (element.getAttribute("type").equals("hidden"))
 							  return false;
 					  }
+					  
+					  return true;
+				  } else {
+					  return false;
+				  }
+			  }catch (StaleElementReferenceException sere){
+		            return false;
+			  } catch (WebDriverException | ClassCastException | NullPointerException e) {
+				  return false;
+			  }
+		  }
+
+		  @Override
+		  public String toString() {
+			  return String.format("element ('%s') to be visible", element);
+		  }
+	  };
+  }
+  public static ExpectedCondition<Boolean> elementToBeHidden(
+		  final WebElement element) {
+
+	  return new ExpectedCondition<Boolean>() {
+		  @Override
+		  public Boolean apply(WebDriver driver) {
+			  try {
+				
+				//  String attributeHidden = element.getAttribute("hidden");
+				  if (element.getAttribute("hidden") != null)
+					  if (element.getAttribute("hidden").toLowerCase().equals("true")) 
+						  return true;
+				  
+				//  String attributeType= element.getAttribute("type");
+				  if (element.getAttribute("type") != null) {
+					  if (element.getAttribute("type").equals("hidden"))
+						  return true;
+				  }
+				  
+				  Point location = element.getLocation();
+				  Dimension size = element.getSize();
+				  
+				  if ((location.getX() <= 0 & location.getY() <= 0) | (size.getHeight() <= 0 & size.getWidth() <= 0)) {					 
 					  return true;
 				  } else {
 					  return false;
