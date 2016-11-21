@@ -608,26 +608,39 @@ public class TestEnvironment {
 			return Platform.ANDROID;
 		case "windows":
 			return Platform.WINDOWS;
+		case "win7":
+		case "windows 7":
+			return Platform.VISTA;
+		case "windows 8":
 		case "win8":
 			return Platform.WIN8;
+		case "windows 8.1":
 		case "win8.1":
 			return Platform.WIN8_1;
+		case "win10":
+		case "windows 10":
+			return Platform.WIN10;
 		case "xp":
 			return Platform.XP;
 		case "linux":
 			return Platform.LINUX;
 		case "mac":
 			return Platform.MAC;
+		case "el capitan":
+		case "el_capitan":
+			return Platform.EL_CAPITAN;
 		case "mavericks":
 			return Platform.MAVERICKS;
+		case "mountain lion":
 		case "mountain_lion":
 			return Platform.MOUNTAIN_LION;
+		case "snow leopard":
 		case "snow_leopard":
 			return Platform.SNOW_LEOPARD;
 		case "yosemite":
 			return Platform.YOSEMITE;
 		default:
-			return Platform.ANY;
+			throw new AutomationException("OS is not in supported list of platforms: " + os);
 		}
 	}
 
