@@ -11,6 +11,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
+import org.openqa.selenium.Rectangle;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.TimeoutException;
@@ -1158,5 +1159,11 @@ public class ElementImpl implements Element {
 		TestReporter.logTrace("Found element [ " + by.toString() + " ]");
 		TestReporter.logTrace("Exiting ElementImpl#reload");
 		return el;
+	}
+
+	@Override
+	public Rectangle getRect() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

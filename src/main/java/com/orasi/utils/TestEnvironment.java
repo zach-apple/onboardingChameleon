@@ -9,8 +9,10 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.safari.SafariOptions;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 
@@ -352,7 +354,9 @@ public class TestEnvironment {
 		} 
 		//quit driver
 		if (getDriver() != null && getDriver().getWindowHandles().size() > 0) {
-			getDriver().quit();
+			if (!getDriver().toString().contains("null")){
+				getDriver().quit();
+			}	
 		}
 	
 	}
@@ -373,7 +377,9 @@ public class TestEnvironment {
 		}
 		//quit driver
 		if (getDriver() != null && getDriver().getWindowHandles().size() > 0) {
-			getDriver().quit();
+			if (!getDriver().toString().contains("null")){
+				getDriver().quit();
+			}	
 		}
 	}
 
@@ -453,11 +459,13 @@ public class TestEnvironment {
 		case "firefox":
 			caps = DesiredCapabilities.firefox();
 			//For firefox versions greater than 46, will need to use the marionette/gecko driver
-			if (browserVersion.isEmpty() || Integer.parseInt(browserVersion) > 46 )  {
+			if (browserVersion.isEmpty() || Integer.parseInt(browserVersion) > 47 )  {
 				file = new File(
 						this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "geckodriver.exe").getPath());
 				System.setProperty("webdriver.gecko.driver", file.getAbsolutePath());
 				caps.setCapability("marionette", true);
+			}else {
+				caps.setCapability("marionette", false);
 			}
 			
 			break;
@@ -512,6 +520,9 @@ public class TestEnvironment {
 		case "html":
 			caps = DesiredCapabilities.htmlUnitWithJs();
 			break;
+		case "safari":
+			caps = DesiredCapabilities.safari();
+			break;
 		default:
 			throw new AutomationException("Parameter not set for browser type");
 		}
@@ -536,13 +547,26 @@ public class TestEnvironment {
 		}
 		//gecko/firefox
 		if (browserUnderTest.equalsIgnoreCase("firefox")){
-			if (browserVersion.isEmpty() || Integer.parseInt(browserVersion) > 46 ) {
+			
+			//Marionette/gecko capability
+			if (browserVersion.isEmpty() || Integer.parseInt(browserVersion) > 47 ) {
 				caps.setCapability("marionette", true);
+			} else {
+				caps.setCapability("marionette", false);
 			}
 	
 		}
+		
+		//safari
+		if (browserUnderTest.equalsIgnoreCase("safari")){
+			SafariOptions options = new SafariOptions();
+			options.setUseCleanSession(true);
+			caps.setCapability(SafariOptions.CAPABILITY, options);
+		}
+		
 		//Operating System
 		caps.setCapability(CapabilityType.PLATFORM, getGridPlatformByOS(operatingSystem));
+		
 		//IE specific capabilities
 		if (browserUnderTest.toLowerCase().contains("ie")
 				|| browserUnderTest.toLowerCase().contains("iexplore") || browserUnderTest.equalsIgnoreCase("internet explorer")) {
@@ -598,7 +622,7 @@ public class TestEnvironment {
 	}
 	
 	/**
-	 * 
+	 * Used to get the Platform used by Selenium
 	 * @param os
 	 * @return
 	 */
@@ -608,26 +632,39 @@ public class TestEnvironment {
 			return Platform.ANDROID;
 		case "windows":
 			return Platform.WINDOWS;
+		case "win7":
+		case "windows 7":
+			return Platform.VISTA;
+		case "windows 8":
 		case "win8":
 			return Platform.WIN8;
+		case "windows 8.1":
 		case "win8.1":
 			return Platform.WIN8_1;
+		case "win10":
+		case "windows 10":
+			return Platform.WIN10;
 		case "xp":
 			return Platform.XP;
 		case "linux":
 			return Platform.LINUX;
 		case "mac":
 			return Platform.MAC;
+		case "el capitan":
+		case "el_capitan":
+			return Platform.EL_CAPITAN;
 		case "mavericks":
 			return Platform.MAVERICKS;
+		case "mountain lion":
 		case "mountain_lion":
 			return Platform.MOUNTAIN_LION;
+		case "snow leopard":
 		case "snow_leopard":
 			return Platform.SNOW_LEOPARD;
 		case "yosemite":
 			return Platform.YOSEMITE;
 		default:
-			return Platform.ANY;
+			throw new AutomationException("OS is not in supported list of platforms: " + os);
 		}
 	}
 
