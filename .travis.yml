@@ -2,7 +2,7 @@ language: java
 install: mvn install -DskipTests=true
 script: mvn test -DjenkinsOperatingSystem=linux -DjenkinsBrowser=html -DjenkinsRunLocation=local -Denvironment=null -DjenkinsBrowserVersion=null -DsuiteXmlFile=src/test/resources/localRegression.xml
 jdk:
-  - openjdk7
+  - openjdk8
 after_script:
   - cat target/surefire-reports/TestSuite.txt
   # blacklist
