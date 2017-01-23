@@ -11,6 +11,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
+import org.openqa.selenium.Rectangle;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.TimeoutException;
@@ -69,7 +70,7 @@ public class ElementImpl implements Element {
 			WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), 1);
 			element = wait.until(ExpectedConditions.presenceOfElementLocated(by));
 			TestReporter.logTrace("Element [ " + by + "] found and stored");			
-		}catch(NoSuchElementException throwAway){
+		}catch(NoSuchElementException | TimeoutException throwAway){
 			TestReporter.logTrace("Element [ " + by + "] NOT found intially, will search again later");
 		}
 		TestReporter.logTrace("Exiting ElementImpl#init");
@@ -1185,5 +1186,11 @@ public class ElementImpl implements Element {
 		TestReporter.logTrace("Found element [ " + by.toString() + " ]");
 		TestReporter.logTrace("Exiting ElementImpl#reload");
 		return el;
+	}
+
+	@Override
+	public Rectangle getRect() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

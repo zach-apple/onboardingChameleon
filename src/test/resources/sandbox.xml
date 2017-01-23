@@ -4,11 +4,11 @@
 	<listeners>
 		<listener class-name="com.orasi.utils.debugging.Screenshot" />
 	</listeners>
-	<parameter name="browserUnderTest" value="chrome" />
+	<parameter name="browserUnderTest" value="firefox" />
 	<parameter name="environment" value="staging" />
-	<parameter name="runLocation" value="local" />
-	<parameter name="browserVersion" value="" />
-	<parameter name="operatingSystem" value="win10" />
+	<parameter name="runLocation" value="grid" />
+	<parameter name="browserVersion" value="47" />
+	<parameter name="operatingSystem" value="WINDOWS" />
  	<test name="TestEnvironment">
 		<classes>
 			<class name="com.orasi.core.interfaces.TestListbox" />
