@@ -20,13 +20,14 @@ import org.testng.TestListenerAdapter;
 import org.testng.xml.XmlSuite;
 
 import com.orasi.utils.Constants;
-import com.orasi.utils.Mustard;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
+import com.orasi.utils.mustard.Mustard;
 
 import ru.yandex.qatools.allure.annotations.Attachment;
 
+@Deprecated
 public class Screenshot extends TestListenerAdapter implements IReporter{
 	private OrasiDriver driver = null;
 	private String runLocation = "";

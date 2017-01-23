@@ -91,7 +91,7 @@ public class TestEnvironment {
 	/*
 	 * Mustard Fields
 	 */
-	protected boolean reportToMustard = false;
+	protected boolean reportToMustard = true;
 
 	/*
 	 * Constructors for TestEnvironment class
