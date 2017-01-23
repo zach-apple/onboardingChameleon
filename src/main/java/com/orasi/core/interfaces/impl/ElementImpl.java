@@ -588,9 +588,11 @@ public class ElementImpl implements Element {
 
 		WebDriverWait wait = new WebDriverWait(driver, timeout);
 		stopwatch.start();
-		try {
-			found = wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.elementToBeVisible(reload()));
-		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
+		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
+        		try {
+        			found = wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.elementToBeVisible(reload()));
+        		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
+		}
 		stopwatch.stop();
 		timeLapse = stopwatch.getTime();
 		stopwatch.reset();
@@ -645,10 +647,12 @@ public class ElementImpl implements Element {
 		long timeLapse;
 		stopwatch.start();
 		WebDriverWait wait = new WebDriverWait(driver, timeout);
-
-		try {
-			found = wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.elementToBeHidden(reload()));
-		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
+		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
+        		try {
+        			found = wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.elementToBeHidden(reload()));
+        		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
+		}
+		
 		stopwatch.stop();
 		timeLapse = stopwatch.getTime();
 		stopwatch.reset();
@@ -700,11 +704,14 @@ public class ElementImpl implements Element {
 		+ "</b> ] to be <b>ENABLED</b> within [ <b>" + timeout + "</b> ] seconds.</i>");
 		stopwatch.start();
 		WebDriverWait wait = new WebDriverWait(driver, timeout);
-
-		try {
-			if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
-			found = wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExpectedConditions.elementToBeClickable(reload())) != null;		    
-		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
+		
+		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
+        		try {
+        		    if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
+        		    found = wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExpectedConditions.elementToBeClickable(reload())) != null;		  
+        		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
+		}
+	
 		stopwatch.stop();
 		timeLapse = stopwatch.getTime();
 		stopwatch.reset();
@@ -759,10 +766,13 @@ public class ElementImpl implements Element {
 		stopwatch.start();
 		WebDriverWait wait = new WebDriverWait(driver, timeout);
 
-		try {
-			if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, element);
-			found = wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(reload()))) != null;		    
-		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
+		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
+        		try {
+        		    if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
+        		    found = wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(reload()))) != null;		  
+        		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
+		}
+		
 		stopwatch.stop();
 		timeLapse = stopwatch.getTime();
 		stopwatch.reset();
@@ -946,10 +956,13 @@ public class ElementImpl implements Element {
 		stopwatch.start();
 		WebDriverWait wait = new WebDriverWait(driver, timeout);
 
-		try {
-			if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
-			found =  wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.textToBePresentInElementAttribute(reload(), attribute, value));
-		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
+		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
+        		try {
+        		    if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
+        		    found =  wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.textToBePresentInElementAttribute(reload(), attribute, value));	  
+        		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
+		}
+
 		stopwatch.stop();
 		timeLapse = stopwatch.getTime();
 		stopwatch.reset();
@@ -1006,12 +1019,16 @@ public class ElementImpl implements Element {
 
 
 		stopwatch.start();
-		try {
+		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
+		    try {
 			if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
 			found =  wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.textToMatchInElementAttribute(reload(), attribute, regex));
-		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){
-			found =  false;
+    		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){
+    			found =  false;
+    		}
 		}
+
+		
 		stopwatch.stop();
 		timeLapse = stopwatch.getTime();
 		stopwatch.reset();
@@ -1067,10 +1084,15 @@ public class ElementImpl implements Element {
 
 		WebDriverWait wait = new WebDriverWait(driver, timeout);
 		stopwatch.start();
-		try {
+		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
+		    try {
 			if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
 			found =  wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.textToBePresentInElementCssProperty(reload(), cssProperty, value));
-		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
+    		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){
+    			found =  false;
+    		}
+		}
+		
 		stopwatch.stop();
 		timeLapse = stopwatch.getTime();
 		stopwatch.reset();
@@ -1124,11 +1146,16 @@ public class ElementImpl implements Element {
 				+ getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + timeout + "</b> ] seconds.</i>");
 		WebDriverWait wait = new WebDriverWait(driver, 0);
 		stopwatch.start();
-
-		try {
+		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
+		    try {
 			if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
 			found =  wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.textToMatchInElementCssProperty(reload(), cssProperty, regex));
-		} catch (TimeoutException te){}
+    		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){
+    			found =  false;
+    		}
+		}
+		
+		
 		stopwatch.stop();
 		timeLapse = stopwatch.getTime();
 		stopwatch.reset();

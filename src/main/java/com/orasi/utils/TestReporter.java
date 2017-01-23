@@ -147,7 +147,7 @@ public class TestReporter {
 	public static void logTrace(String message) {
 		if(debugLevel >= TRACE){
 			Reporter.log(getTimestamp() + "TRACE :: " + getClassPath() + message + "<br />");
-			System.out.println(getTimestamp() + "TRACE :: " + getClassPath() +  (trimHtml(message).trim()));
+			System.out.println(getTimestamp() + "TRACE :: " + getClassPath()  + " > "+   (trimHtml(message).trim()));
 		}
 	}
 	/**
@@ -156,8 +156,8 @@ public class TestReporter {
 	 */
 	public static void logInfo(String message) {
 		if(debugLevel >= INFO){
-			Reporter.log(getTimestamp() + " INFO :: "+ getClassPath()  + message + "<br />");
-			System.out.println(getTimestamp() + " INFO :: "  + getClassPath() + " > "+ trimHtml(message).trim());
+			Reporter.log(getTimestamp() + "  INFO:: "+ getClassPath()  + message + "<br />");
+			System.out.println(getTimestamp() + " INFO:: "  + getClassPath() + " > "+ trimHtml(message).trim());
 		}
 	}
 
