@@ -1,6 +1,7 @@
 package com.orasi.utils;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -316,8 +317,12 @@ public class XMLTools{
 					.newInstance();
 			factory.setNamespaceAware(false);
 			factory.setIgnoringElementContentWhitespace(true);
+
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			doc = builder.parse(new ByteArrayInputStream(outputStream.toByteArray()));
+			InputSource source = new InputSource(new ByteArrayInputStream(outputStream.toByteArray()));
+
+			source.setEncoding("ISO-8859-1");
+			doc = builder.parse(source);
 		} catch (ParserConfigurationException pce) {
 			throw new RuntimeException("Failed to create a Document Builder Factory", pce.getCause());
 		} catch (SAXException saxe) {
@@ -351,10 +356,11 @@ public class XMLTools{
 		Document doc = null;
 		try {
 			TestReporter.logTrace("Attempting to transform String to XML");
-			builder = factory.newDocumentBuilder();
+			 builder = factory.newDocumentBuilder();
 			InputSource source = new InputSource(new ByteArrayInputStream(xml
-					.toString().getBytes()));
-			 doc = builder.parse(source);
+				.toString().getBytes()));
+        		source.setEncoding("ISO-8859-1");
+        		 doc = builder.parse(source);
 		} catch (ParserConfigurationException pce) {
 			throw new RuntimeException("Failed to create a Document Builder Factory", pce.getCause());
 		} catch (SAXException saxe) {
@@ -369,7 +375,39 @@ public class XMLTools{
 		return doc;
 
 	}
+	
+	/**
+	 * Generate an XML Document from String
+	 * @author Justin Phlegar
+	 * @version Created: 08/28/2014
+	 * @param xml  String of XML to transform to XML Document
+	 * @return Document xml of String
+	 */
+	public static Document makeXMLDocument(File file)  {
+		TestReporter.logTrace("Entering XMLTools#makeXMLDocument");
+		TestReporter.logTrace("Creating Document factory"); 
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setNamespaceAware(false);
+		factory.setIgnoringElementContentWhitespace(true);
+		Document doc = null;
+		try {
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			TestReporter.logTrace("Attempting to from file and save as to XML. File [ " + file.getPath()+ " ]");
+			doc = builder.parse(file);
+		} catch (SAXException saxe) {
+			 throw new RuntimeException("Failed to parse the xml", saxe.getCause());
+		} catch (IOException ioe) {
+			throw new RuntimeException("Failed to find the source XML", ioe.getCause());
+		} catch (ParserConfigurationException pce) {
+			throw new RuntimeException("Failed to create a Document Builder Factory", pce.getCause());
+		}
 
+		TestReporter.logTrace("Successfully transformed String to XML. Normalize document");
+		doc.getDocumentElement().normalize();
+		TestReporter.logTrace("Exiting XMLTools#makeXMLDocument");
+		return doc;
+
+	}
 	/**
 	 * Transform a XML Document to String
 	 * @author Justin Phlegar

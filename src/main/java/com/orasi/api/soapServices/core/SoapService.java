@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
@@ -59,6 +61,8 @@ public abstract class SoapService{
     private Document responseDocument = null;
     protected StringBuffer buffer = new StringBuffer();
     private String soapVersion = SOAPConstants.SOAP_1_1_PROTOCOL;
+    private Map<String, String> requestHeaders = new HashMap<String, String>();
+    private MimeHeaders responseHeaders = null;
 
     /*****************************
      **** Start Gets and Sets ****
@@ -241,6 +245,17 @@ public abstract class SoapService{
 	soapVersion = version;
     }
 
+
+	public String getResponseHeader(String name){
+		for(String header : responseHeaders.getHeader(name)){
+			return header;
+		}
+		return "";
+	}
+	
+	public void addRequestHeader(String header, String value){
+		requestHeaders.put(header, value);
+	}
     /***************************
      **** End Gets and Sets ****
      ***************************/
@@ -415,7 +430,16 @@ public abstract class SoapService{
 	    TestReporter.logTrace("Loading byte stream into Message Factory");
 	    request = messageFactory.createMessage(new MimeHeaders(),in);	
 	    TestReporter.logTrace("Successfully generated Soap Message");
-
+    		
+	    if(requestHeaders.size() > 0){		
+		TestReporter.logTrace("Additional headers to be added");
+    		for(String key : requestHeaders.keySet()){
+    		    TestReporter.logInfo("Adding header [" + key + " ] with value [" + requestHeaders.get(key) + " ]");
+    		    MimeHeaders soapHeader = request.getMimeHeaders();
+    		    soapHeader.addHeader(key, requestHeaders.get(key));	
+    		}		
+	    }
+		
 	    TestReporter.logTrace("Create Soap Connection Factory");
 	    connectionFactory = SOAPConnectionFactory.newInstance();
 
@@ -425,6 +449,8 @@ public abstract class SoapService{
 	    TestReporter.logTrace("Send request to service");
 	    response = connection.call(request, url);
 
+	    responseHeaders = response.getMimeHeaders();
+		
 	    TestReporter.logTrace("Successfully sent Soap Message. Normalizing response");
 	    response.getSOAPBody().normalize();
 	    responseBody = response.getSOAPBody();
