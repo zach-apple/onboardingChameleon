@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.orasi.exception.automation.KeyExistsException;
 import com.orasi.exception.automation.NoKeyFoundException;
+import com.orasi.utils.TestReporter;
 
 public class DataWarehouse {
 
@@ -71,5 +72,9 @@ public class DataWarehouse {
 	 */
 	public HashMap<String, Object> getData() {
 	    return dataMap;
+	}
+	
+	public void printData(){
+		dataMap.forEach((key, value) -> TestReporter.log(key + " = " + value));
 	}
 }
