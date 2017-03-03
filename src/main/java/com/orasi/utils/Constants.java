@@ -31,7 +31,10 @@ public class Constants {
     
     /** The current path of the project */ 
     final static public String CURRENT_DIR = determineCurrentPath();
-		
+
+    /** The location screenshots are to be stored */
+    final static public String SCREENSHOT_FOLDER = CURRENT_DIR + "selenium-reports" + DIR_SEPARATOR + "html" + DIR_SEPARATOR + "screenshots"  ;
+    
     /** The global system property line.separator */
     final static public String LINE_SEPARATOR = System.getProperty("line.separator", "\n");
     
@@ -46,18 +49,7 @@ public class Constants {
     
     /** The timeout (seconds) for page/DOM/transitions, should also be a generous */
     static public int PAGE_TIMEOUT = 10;
-    
-    /** System properties */
-
-    public static final String APPLICATION_UNDER_TEST = "selenium.applicationUnderTest";
-    public static final String BROWSER = "selenium.browser";
-    public static final String BROWSER_VERSION = "selenium.browserVersion";
-    public static final String OPERATING_SYSTEM = "selenium.OS";
-    public static final String RUN_LOCATION = "selenium.runLocation";
-    public static final String SELENIUM_HUB_URL = "selenium.hubUrl";
-    public static final String TEST_DRIVER_TIMEOUT = "selenium.testDriverTimeout";
-    public static final String TEST_ENVIRONMENT = "selenium.testEnvironment";
-    public static final String TEST_NAME = "selenium.testName";
+   
 	public static boolean defaultSyncHandler = true;
 	public static int millisecondsToPollForElement = 250;
 

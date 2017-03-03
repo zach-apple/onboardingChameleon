@@ -47,15 +47,9 @@ public class Screenshot extends TestListenerAdapter implements IReporter{
 		init(result);
 		if (driver == null) return;
 		String slash = Constants.DIR_SEPARATOR;
-		File directory = new File(".");
+
+		String destDir = Constants.SCREENSHOT_FOLDER + slash + result.getInstanceName().replace(".", slash);
 		
-		String destDir = null;
-		try {
-			destDir = directory.getCanonicalPath()
-					+ slash + "selenium-reports" + slash + "html" + slash + "screenshots";
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		Reporter.setCurrentTestResult(result);
 		
 		WebDriver augmentDriver= driver.getWebDriver();
