@@ -1,4 +1,4 @@
-package com.orasi.utils.debugging;
+package com.orasi.utils.listeners;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +19,7 @@ import org.testng.Reporter;
 import org.testng.TestListenerAdapter;
 import org.testng.xml.XmlSuite;
 
+import com.orasi.api.soapServices.core.SoapService;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.TestEnvironment;
@@ -27,17 +28,22 @@ import com.orasi.utils.mustard.Mustard;
 
 import ru.yandex.qatools.allure.annotations.Attachment;
 
-@Deprecated
-public class Screenshot extends TestListenerAdapter implements IReporter{
+public class TestListener extends TestListenerAdapter implements IReporter{
 	private OrasiDriver driver = null;
 	private String runLocation = "";
+	private String testEnvironment = "";
 	private boolean reportToMustard = true;
 	private void init(ITestResult result){
+
+	    Object currentClass = result.getInstance();
+	    reportToMustard = ((TestEnvironment) currentClass).isReportingToMustard();
 	    try{
-		Object currentClass = result.getInstance();
+		runLocation = ((TestEnvironment) currentClass).getRunLocation().toLowerCase();	
+		testEnvironment = ((TestEnvironment) currentClass).getTestEnvironment().toLowerCase();	
+	    }catch (Exception e){}
+	    
+	    try{
 		driver = ((TestEnvironment) currentClass).getDriver();
-		runLocation = ((TestEnvironment) currentClass).getRunLocation().toLowerCase();		
-		reportToMustard = ((TestEnvironment) currentClass).isReportingToMustard();
 	    }catch (Exception e){}
 	    
 	}
@@ -45,7 +51,6 @@ public class Screenshot extends TestListenerAdapter implements IReporter{
 	@Override
 	public void onTestFailure(ITestResult result) {
 		init(result);
-		if (driver == null) return;
 		String slash = Constants.DIR_SEPARATOR;
 		File directory = new File(".");
 		
@@ -71,17 +76,17 @@ public class Screenshot extends TestListenerAdapter implements IReporter{
 	
 			//Capture a screenshot for TestNG reporting
 			TestReporter.logScreenshot(augmentDriver, destDir + slash + destFile, slash, runLocation);
+			//Capture a screenshot for Allure reporting
+			FailedScreenshot(augmentDriver);
 		}		
-		//Capture a screenshot for Allure reporting
-	//	FailedScreenshot(augmentDriver);
-		if(reportToMustard) Mustard.postResultsToMustard(driver, result, runLocation );
+		
+		if(reportToMustard) Mustard.postResultsToMustard(driver, result, runLocation );	 
 	}
 
 	@Override
 	public void onTestSkipped(ITestResult result) {
 		// will be called after test will be skipped
-		init(result);
-		if (driver == null) return;
+		init(result);		
 		if(reportToMustard) Mustard.postResultsToMustard(driver, result, runLocation );
 	}
 
@@ -89,13 +94,7 @@ public class Screenshot extends TestListenerAdapter implements IReporter{
 	public void onTestSuccess(ITestResult result) {
 		// will be called after test will pass
 		init(result);
-		if (driver == null) return;
 		if(reportToMustard) Mustard.postResultsToMustard(driver, result, runLocation );
-	}
-
-	@Attachment(type = "image/png")
-	public static byte[] FailedScreenshot(WebDriver driver) {
-		return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
 	}
 
 	@Override
@@ -105,4 +104,8 @@ public class Screenshot extends TestListenerAdapter implements IReporter{
 	    
 	}
 
+	@Attachment(type = "image/png")
+	public static byte[] FailedScreenshot(WebDriver driver) {
+		return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+	}
 }
