@@ -83,23 +83,23 @@ public class Party {
 	 * @version 11/28/2015 Justin Phlegar - original
 	 * @return the number of children in Party
 	 */
-	public String numberOfChildren() {
+	public int numberOfChildren() {
 		int numberOfChildren = 0;
 		for (Person person : party) {
 			if (person.isChild() && Integer.valueOf(person.getAge()) > 2
 					&& Integer.valueOf(person.getAge()) < 18)
 				numberOfChildren++;
 		}
-		return String.valueOf(numberOfChildren);
+		return numberOfChildren;
 	}
 
-	public String numberOfInfants() {
+	public int numberOfInfants() {
 		int numberOfInfant = 0;
 		for (Person person : party) {
 			if (person.isChild() && Integer.valueOf(person.getAge()) <= 2)
 				numberOfInfant++;
 		}
-		return String.valueOf(numberOfInfant);
+		return numberOfInfant;
 	}
 
 	/**
@@ -108,13 +108,13 @@ public class Party {
 	 * @version 11/28/2015 Justin Phlegar - original
 	 * @return the number of adults in Party
 	 */
-	public String numberOfAdults() {
+	public int  numberOfAdults() {
 		int numberOfAdults = 0;
 		for (Person person : party) {
 			if (!person.isChild())
 				numberOfAdults++;
 		}
-		return String.valueOf(numberOfAdults);
+		return numberOfAdults;
 	}
 
 }
