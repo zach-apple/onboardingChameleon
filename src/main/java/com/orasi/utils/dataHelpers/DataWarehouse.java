@@ -1,4 +1,4 @@
-package com.orasi.utils;
+package com.orasi.utils.dataHelpers;
 
 import java.util.HashMap;
 
@@ -53,7 +53,7 @@ public class DataWarehouse {
 	/*
 	 * Method for retrieving the HashMap
 	 */
-	public HashMap<String, Object> getDataHashMap() {
+	public HashMap<String, Object> getData() {
 	    return dataMap;
 	}
 }
