@@ -3,6 +3,8 @@ package com.orasi.utils;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Random;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -89,6 +91,15 @@ public class Randomness {
 		int index = new Random().nextInt(array.length);
 		return array[index];
 	}
-
+	
+	public static Date randomDate(){
+	     
+	     int month = new Random().nextInt(Calendar.DECEMBER) + Calendar.JANUARY;;
+	     int year = Randomness.randomNumberBetween(1940, 2016);
+	     int day  = new Random().nextInt(30)+1;
+	 
+	       GregorianCalendar calendar = new GregorianCalendar(year, month, day);
+	    return calendar.getTime();
+	}
 
 }
