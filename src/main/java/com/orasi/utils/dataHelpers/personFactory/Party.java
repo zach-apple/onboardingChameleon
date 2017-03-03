@@ -8,14 +8,14 @@ public class Party {
 
 	private ArrayList<Person> party = new ArrayList<Person>();
 	public Party(int numberOfPeople) {
-		TestReporter.logDebug("Entering Party#init with number of People");
-		TestReporter.logInfo("Creating party with ["+numberOfPeople+"] party");
+		TestReporter.logTrace("Entering Party#init with number of People");
+		TestReporter.logTrace("Creating party with ["+numberOfPeople+"] party");
 		
 		for (int x = 0; x < numberOfPeople; x++) {
-			TestReporter.logDebug("Generating Person [" + (x+1) + "]");	
+			TestReporter.logTrace("Generating Person [" + (x+1) + "]");	
 			addPerson(new Person());
 
-			TestReporter.logDebug("Setting Person [" +(x+1)+"] Address, Phone and Email to primary Person");
+			TestReporter.logTrace("Setting Person [" +(x+1)+"] Address, Phone and Email to primary Person");
 			party.get(x).getAllAddresses().get(0).setPrimary(true);
 			party.get(x).getAllAddresses().get(0).setStreetName(party.get(0).primaryAddress().getStreetName());
 			party.get(x).getAllAddresses().get(0).setStreetNumber(party.get(0).primaryAddress().getStreetNumber());
@@ -26,18 +26,18 @@ public class Party {
 			party.get(x).getAllAddresses().get(0).setOptIn(true);
 			party.get(x).getAllPhones().get(0).setPrimary(true);
 			party.get(x).getAllEmails().get(0).setPrimary(true);
-			TestReporter.logInfo("\n"+party.get(x).toString().replace("<br/>", "\n"));
+			TestReporter.logTrace("\n"+party.get(x).toString().replace("<br/>", "\n"));
 		}
 
-		TestReporter.logDebug("Set first Person as Primary Person");
+		TestReporter.logTrace("Set first Person as Primary Person");
 		party.get(0).setPrimary(true);
-		TestReporter.logDebug("Ensure first Person is older than 18");
+		TestReporter.logTrace("Ensure first Person is older than 18");
 		if (Integer.parseInt(party.get(0).getAge()) <= 18) {
 			party.get(0).setAge("45");
 			party.get(0).setChild(false);
 			party.get(0).setBirthDate("1970-01-14");
 		}
-		TestReporter.logDebug("Entering Party#init with number of Persons");
+		TestReporter.logTrace("Entering Party#init with number of Persons");
 	}
 
 
