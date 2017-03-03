@@ -258,7 +258,7 @@ driver.setElementTimeout(currentTimeout);
  * Organized classes to fall under a single package. Updated classes with issues and allowed extentions to OrasiDriver 
 
 ##Version 1.0.7 - 10/10/2016
-* **Enchancements**
+* **Enhancements**
  * [**com.orasi.utils.TestReporter**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)
    New logging methods have been added and TRACE logs have been added to various low-level areas of the toolkit. Usability is as follows
    	 * TestReporter.NONE (Default):  No additional info printed to console
@@ -270,6 +270,13 @@ driver.setElementTimeout(currentTimeout);
     * logInfo(String log) - The first level of logs. This are intended to write useful info to the console to display what the script is doing, but isn't always needed. 
     * logDebug(String log) - The second level of logs intended for developers where they may leave debug messages to display to step through more complex automation code
     * logTrace(String log) - This level of log is intended for the Toolkit itself, where almost every miniscule action in the low levels of the code is displayed and recorded. This is intended to be used for when there are issues in the toolkit, and assistance from other developers is required.
+ In addition, new Soft Assertions have been added. This allows a test to report out multiple failures until explictly called to fail
+    * softAssertTrue(boolean condition, String description) - If condition is not met, report to TestNG log of failure. If assertAll() is called, test will fail.
+    * softAssertFalse(boolean condition, String description) - If condition is not met, report to TestNG log of failure. If assertAll() is called, test will fail.
+    * softAssertEquals(Object value1, Object value2, String description) - If both objects are not equal, report to TestNG log of failure. If assertAll() is called, test will fail.
+    * softAssertNull(Object condition, String description) - If object condition is not null, report to TestNG log of failure. If assertAll() is called, test will fail.
+    * softAssertNotNull(Object condition, String description) - If object condition is null, report to TestNG log of failure. If assertAll() is called, test will fail.   
+    * assertAll() - If any soft assert have failed, fail test 
  * [**com.orasi.utils.TestEnvironment**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)
    * Removed a lot of code that was made redundant when OrasiDriver was created.
    * Removed location type of "Remote" in favor of dedicated "Sauce" and "Grid".
@@ -286,3 +293,6 @@ driver.setElementTimeout(currentTimeout);
    * textToMatchInElementAttribute(WebElement element, String attribute, String regex) - An expectation for checking if the given regex matches the given element attribute
    * textToBePresentInElementCssProperty(WebElement element, String cssProperty, String text) - An expectation for checking if the given text is present in CSS property the specified elements property value 
    * textToMatchInElementCssProperty(WebElement element, String cssProperty, String regex) - An expectation for checking if the given regex matches the given element CSS Property
+   
+ * [**com.orasi.utils.DataWarehouse**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)
+ 	
