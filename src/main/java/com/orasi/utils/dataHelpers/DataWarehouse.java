@@ -32,16 +32,8 @@ public class DataWarehouse {
 	 * Method for merging a new HashMap of data into DataWarehouse
 	 * @param patch Existing HashMap to merge into DataWarehouse
 	 */
-	public void add(HashMap<String, Object> patch) {
+	public void patch(HashMap<String, Object> patch) {
 	    patch.forEach(dataMap::putIfAbsent);
-	    patch.forEach(dataMap::replace);
-	}
-	
-	/**
-	 * Method for merging a new HashMap of data into DataWarehouse
-	 * @param patch Existing HashMap to merge into DataWarehouse
-	 */
-	public void update(HashMap<String, Object> patch) {
 	    patch.forEach(dataMap::replace);
 	}
 	

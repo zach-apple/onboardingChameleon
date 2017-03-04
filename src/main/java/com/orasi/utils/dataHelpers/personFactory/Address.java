@@ -7,7 +7,7 @@ import com.orasi.utils.dataHelpers.personFactory.seeds.USLocations;
 
 public class Address{
 	private String locatorId = "0";
-	Address(){
+	public Address(){
 		String location = USLocations.getLocation();
 		this.type = "Home";
 		this.country = "United States";

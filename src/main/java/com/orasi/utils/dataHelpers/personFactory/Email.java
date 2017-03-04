@@ -10,7 +10,7 @@ public class Email {
 	private String email = "";
 	private boolean optIn = false;
 	
-	Email(){
+	public Email(){
 		this.country = "USA";
 		this.type = "Personal";
 		this.email = Randomness.randomString(1).substring(0, 1).toUpperCase()  + Randomness.randomString(11).substring(1).toLowerCase()  + "@test.com";

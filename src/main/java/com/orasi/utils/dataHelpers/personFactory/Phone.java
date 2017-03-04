@@ -13,7 +13,7 @@ public class Phone {
 	private String type = "";
 	private String number = "";
 	
-	Phone(){
+	public Phone(){
 		this.country = "United States";
 		this.type = "Home";
 		this.number = "336" + Randomness.randomNumber(7);
