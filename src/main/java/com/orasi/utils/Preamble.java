@@ -19,9 +19,9 @@ import java.lang.annotation.Target;
 public @interface Preamble {
     String author();
     String date();
-    String[] reviewers();
-    String[] steps();
     String summary();
+    String[] reviewers() default "N/A";
+    String[] steps() default "N/A";
     String precondition() default "N/A";
     String dataFile() default "N/A";
     String[] params() default "N/A";
