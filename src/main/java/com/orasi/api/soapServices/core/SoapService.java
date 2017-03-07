@@ -37,11 +37,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.eviware.soapui.impl.wsdl.WsdlInterface;
-import com.eviware.soapui.impl.wsdl.WsdlOperation;
-import com.eviware.soapui.impl.wsdl.WsdlProject;
-import com.eviware.soapui.impl.wsdl.support.wsdl.WsdlImporter;
-import com.eviware.soapui.support.SoapUIException;
 import com.orasi.api.soapServices.core.exceptions.SoapException;
 import com.orasi.api.soapServices.core.exceptions.XPathNotFoundException;
 import com.orasi.api.soapServices.core.exceptions.XPathNullNodeValueException;
@@ -52,7 +47,6 @@ import com.orasi.utils.TestReporter;
 import com.orasi.utils.XMLTools;
 
 public abstract class SoapService{
-    private static WsdlProject project = null;
     private String strServiceName;
     private String strOperationName;
     private String url = null;
@@ -726,49 +720,6 @@ public abstract class SoapService{
     public boolean validateResponse(String resourcePath, String scenario) {
 	return validateNodeValueByXPath(getResponseDocument(),
 		getTestScenario(resourcePath, scenario));
-    }
-
-    /**
-     *  Opens the WSDL file that was loaded with the {@link setEnvironmentServiceURL} and load a XML Template for selected operation
-     * @author Justin Phlegar
-     * @version Created: 08/28/2014
-     * @param operation String: operation to load
-     */
-    protected String buildRequestFromWSDL(String operation) {
-	TestReporter.logTrace("Entering SoapService#buildRequestFromWSDL");
-	System.setProperty("soapui.log4j.config", this.getClass().getResource("/soapui-log4j.xml").getPath());
-	WsdlInterface[] wsdls = null;
-	WsdlInterface wsdl = null;
-	try {
-	    TestReporter.logTrace("Starting empty SoapUI Project");
-	    project = new WsdlProject();
-
-	    TestReporter.logTrace("Successfully started SoapUI Project");
-	    TestReporter.logTrace("Import WSDL into project from URL [ " + url+" ]");
-	    wsdls = WsdlImporter.importWsdl(project, url);
-	    wsdl = wsdls[0];
-	    TestReporter.logTrace("Successfully loaded WSDL");
-	    //}
-	} catch (XmlException xmle) {
-	    throw new RuntimeException("Error loading XML: " + xmle.getCause());
-	} catch (IOException ioe) {
-	    throw new RuntimeException("Error reading WSDL file: " + ioe.getCause());		
-	} catch (SoapUIException e1) {	
-	    throw new SoapException("Failed to start Soap Project", e1.getCause());
-	} catch (Exception e) {
-	    throw new RuntimeException("Error reading WSDL file: " + e.getCause());
-	}
-
-	TestReporter.logTrace("Load Operation by name [ "+operation+" ]");
-	WsdlOperation wsdlOperation = wsdl.getOperationByName(operation);
-
-	TestReporter.logTrace("Successfully loaded operation");
-	TestReporter.logTrace("Generate raw request from operation");
-	String rawRequest = wsdlOperation.createRequest(true);
-
-	TestReporter.logTrace("Successfully generated request");
-	TestReporter.logTrace("Exiting SoapService#buildRequestFromWSDL");
-	return rawRequest ;
     }
 
     protected void removeComments() {
