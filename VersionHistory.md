@@ -1,6 +1,6 @@
 #Version History
 
-##Version 1.0.7 - 10/10/2016
+##Version 1.0.7 - 03/07/2017
 **Enhancements**
 * [**com.orasi.core.interfaces**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/core/interfaces) Element interfaces has seen performance increases due to an update on when the element is searched for. On creation, the Element will attempt a findElement, but will only search with 1 ms timeout. If found, it is cached. Upon usage of the Element, if the cached Element has because stale or if it was not found to begin with, then it will reload/research itself again. 
 * [**com.orasi.utils.TestReporter**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)
@@ -27,22 +27,13 @@
    * Added location type of "Mobile".  
     
 **New Classes**
- * [**com.orasi.utils.ExtendedExpectedConditions**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)This class contains several helper methods for Explicit Waits statements to use in conjunction with the WebDriverWait class. 
-   * elementToBeHidden(WebElement element) - An expectation for checking if the given element is hidden on the screen
-    * elementToBeVisible(WebElement element) - An expectation for checking if the given element is visible on the screen
-    * findWindowWithTitleAndSwitchToIt(String title) - Loop through windows for duration to see if it finds a title with exact queried text
-    * findWindowContainsTitleAndSwitchToIt(String title) - Loop through windows for duration to see if it finds a title that contains queried text
-    * findWindowMatchesTitleAndSwitchToIt(String regex) - Loop through windows for duration to see if it finds a title with the matching regex pattern
-    * textToMatchInElement(WebElement element, String regex) - An expectation for checking if the given text is present in the specified element
-    * textToBePresentInElementAttribute(WebElement element, String attribute, String text) - An expectation for checking if the given text is present in the specified elements value attribute
-    * textToMatchInElementAttribute(WebElement element, String attribute, String regex) - An expectation for checking if the given regex matches the given element attribute
-    * textToBePresentInElementCssProperty(WebElement element, String cssProperty, String text) - An expectation for checking if the given text is present in CSS property the specified elements property value 
-    * textToMatchInElementCssProperty(WebElement element, String cssProperty, String regex) - An expectation for checking if the given regex matches the given element CSS Property
+ * [**com.orasi.utils.ExtendedExpectedConditions**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)This class contains several helper methods for Explicit Waits statements to use in conjunction with the WebDriverWait class. See wiki for more info [ExtendedExpectedConditions](https://github.com/Orasi/Selenium-Java-Core/wiki/ExtendedExpectedConditions.java)
    
 * [**com.orasi.utils.dataHelpers**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/dataHelpers) Several data generation helper classes added 
    * [Person](https://github.com/Orasi/Selenium-Java-Core/wiki/Person.java) Create random data about a person to use in a test case
    * [Party](https://github.com/Orasi/Selenium-Java-Core/wiki/Party.java) Collection of multiple Person objects with additional helper methods
    * [DataWarehouse](https://github.com/Orasi/Selenium-Java-Core/wiki/DataWarehouse.java) Simplified Hashmap built to quickly add, remove and update data. Intended to be used within the OrasiDriver.
+* [**com.orasi.utils.Preamble**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/Preamble.java) A custom annotation that can be used to help enforce and standardize code documentation. See more at the wiki [Preamble.java](https://github.com/Orasi/Selenium-Java-Core/wiki/Preamble.java)
 
 ##Version 1.0.6 - 11/30/2015
 * [**com.orasi.utils.OrasiDriver**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)
