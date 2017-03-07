@@ -606,7 +606,14 @@ public class ElementImpl implements Element {
 			throw new ElementNotVisibleException(
 					"Element [ " + getElementLocatorInfo() + " ] is not VISIBLE on the page after [ "
 							+ (timeLapse) / 1000.0 + " ] seconds.", driver);
+		} else if (!found){
+			TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
+					+ " </b>] is not <b>VISIBLE</b> on the page after [ "
+					+ (timeLapse) / 1000.0 + " ] seconds.</i>");
+			TestReporter.logTrace("Exiting ElementImpl#syncVisible");
+			return found;
 		}
+		
 		TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()   + " </b>] is <b>VISIBLE</b> on the page after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
 		if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, reload());
 		TestReporter.logTrace("Exiting ElementImpl#syncVisible");
@@ -666,7 +673,14 @@ public class ElementImpl implements Element {
 			throw new ElementNotHiddenException(
 					"Element [ " + getElementLocatorInfo() + " ] is not HIDDEN on the page after [ "
 							+ (timeLapse) / 1000.0 + " ] seconds.", driver);
+		} else if (!found){
+			TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
+					+ " </b>] is not <b>HIDDEN</b> on the page after [ "
+					+ (timeLapse) / 1000.0 + " ] seconds.</i>");
+			TestReporter.logTrace("Exiting ElementImpl#syncHidden");
+			return found;
 		}
+		
 		TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()   + " </b>] is <b>HIDDEN</b> on the page after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
 		TestReporter.logTrace("Exiting ElementImpl#syncHidden");
 		return found;
@@ -725,7 +739,14 @@ public class ElementImpl implements Element {
 			throw new ElementNotEnabledException(
 					"Element [ " + getElementLocatorInfo() + " ] is not ENABLED on the page after [ "
 							+ (timeLapse) / 1000.0 + " ] seconds.", driver);
-		}	
+		}else if (!found){
+			TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
+					+ " </b>] is not <b>ENABLED</b> on the page after [ "
+					+ (timeLapse) / 1000.0 + " ] seconds.</i>");
+			TestReporter.logTrace("Exiting ElementImpl#syncEnabled");
+			return found;
+		}
+			
 		TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
 		+ " </b>] is <b>ENABLED</b> on the page after [ "
 		+ (timeLapse) / 1000.0 + " ] seconds.</i>");
@@ -786,7 +807,14 @@ public class ElementImpl implements Element {
 			throw new ElementNotDisabledException(
 					"Element [ " + getElementLocatorInfo() + " ] is not DISABLED on the page after [ "
 							+ (timeLapse) / 1000.0 + " ] seconds.", driver);
+		} else if (!found){
+			TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
+			+ " </b>] is not <b>DISABLED</b> on the page after [ "
+			+ (timeLapse) / 1000.0 + " ] seconds.</i>");
+			TestReporter.logTrace("Exiting ElementImpl#syncDisabled");
+			return found;
 		}
+		
 		TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
 		+ " </b>] is <b>DISABLED</b> on the page after [ "
 		+ (timeLapse) / 1000.0 + " ] seconds.</i>");
@@ -851,6 +879,12 @@ public class ElementImpl implements Element {
 			throw new TextInElementNotPresentException(
 					"Element [ " + getElementLocatorInfo() + " ] did not contain the text [ " + text
 					+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.", driver);
+		} else if (!found){
+			TestReporter.interfaceLog(
+					"<i>Element [<b>" + getElementLocatorInfo() + " </b>] did not contain the text [ " + text
+					+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
+			TestReporter.logTrace("Exiting ElementImpl#syncTextInElement");
+			return found;
 		}
 		TestReporter.interfaceLog(
 				"<i>Element [<b>" + getElementLocatorInfo() + " </b>] contains the text [ " + text
@@ -914,7 +948,14 @@ public class ElementImpl implements Element {
 			throw new TextInElementNotPresentException(
 					"Element [ " + getElementLocatorInfo() + " ] did not contain the text [ " + regex
 					+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.", driver);
+		} else if (!found){
+			TestReporter.interfaceLog(
+					"<i>Element [<b>" + getElementLocatorInfo() + " </b>] did not contain the text [ " + regex
+					+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
+			TestReporter.logTrace("Exiting ElementImpl#syncTextMatchesInElement");
+			return found;
 		}
+		
 		TestReporter.interfaceLog(
 				"<i>Element [<b>" + getElementLocatorInfo() + " </b>] contains the text [ " + regex
 				+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
@@ -976,7 +1017,14 @@ public class ElementImpl implements Element {
 			throw new ElementAttributeValueNotMatchingException(
 					"Element [ " + getElementLocatorInfo() + " ]attribute [" + attribute + "] did not contain the text [ " + value
 					+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.", driver);
+		} else if (!found){
+			TestReporter.interfaceLog(
+					"<i>Element [<b>" + getElementLocatorInfo() + " </b>] attribute [<b>" + attribute + "</b> ] did not contain the text [ " + value
+					+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
+			TestReporter.logTrace("Exiting ElementImpl#syncAttributeContainsValue");
+			return found;
 		}
+		
 		TestReporter.interfaceLog(
 				"<i>Element [<b>" + getElementLocatorInfo() + " </b>] attribute [<b>" + attribute + "</b> ] contains the text [ " + value
 				+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
@@ -1042,6 +1090,12 @@ public class ElementImpl implements Element {
 			throw new ElementAttributeValueNotMatchingException(
 					"Element [ " + getElementLocatorInfo() + " ]attribute [" + attribute + "] did not match the regular expression of [ " + regex
 					+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.", driver);
+		}else if (!found){
+			TestReporter.interfaceLog(
+					"<i>Element [<b>" + getElementLocatorInfo() + " </b>] attribute [<b>" + attribute + "</b> ] did not match the regular expression of [ " + regex
+					+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
+				TestReporter.logTrace("Exiting ElementImpl#syncAttributeMatchesValue");
+			return found;
 		}
 		TestReporter.interfaceLog(
 				"<i>Element [<b>" + getElementLocatorInfo() + " </b>] attribute [<b>" + attribute + "</b> ] matches the regular expression of [ " + regex
@@ -1105,7 +1159,14 @@ public class ElementImpl implements Element {
 					+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
 			throw new ElementCssValueNotMatchingException( "Element [ " + getElementLocatorInfo() + " ] CSS Property [" + cssProperty  + " ] did not contain the text [ " + value
 					+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.", driver);
+		}else if (!found){
+			TestReporter.interfaceLog(
+					"<i>Element [<b>" + getElementLocatorInfo() + " </b>] CSS Property [<b>" + cssProperty  + "</b> ] did not contain the text [ " + value
+					+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
+			TestReporter.logTrace("Exiting ElementImpl#syncCssPropertyContainsValue");
+			return found;
 		}
+		
 
 		TestReporter.interfaceLog(
 				"<i>Element [<b>" + getElementLocatorInfo() + " </b>] CSS Property [<b>" + cssProperty  + "</b> ] contains the text [ " + value
@@ -1169,6 +1230,12 @@ public class ElementImpl implements Element {
 			throw new ElementCssValueNotMatchingException(
 					"Element [ " + getElementLocatorInfo() + " ] CSS Property [" + cssProperty  + "] did not match the regular expression of [ " + regex
 					+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.", driver);
+		}else if (!found){
+			TestReporter.interfaceLog(
+					"<i>Element [<b>" + getElementLocatorInfo() + " </b>] CSS Property [<b>" + cssProperty  + "</b> ] did not match the regular expression of [ " + regex
+					+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
+			TestReporter.logTrace("Exiting ElementImpl#syncCssPropertyMatchesValue");
+			return found;
 		}
 		TestReporter.interfaceLog(
 				"<i>Element [<b>" + getElementLocatorInfo() + " </b>] CSS Property [<b>" + cssProperty  + "</b> ] matches the regular expression of [ " + regex

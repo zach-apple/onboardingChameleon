@@ -1,9 +1,10 @@
-package com.orasi.utils;
+package com.orasi.utils.dataHelpers;
 
 import java.util.HashMap;
 
 import com.orasi.exception.automation.KeyExistsException;
 import com.orasi.exception.automation.NoKeyFoundException;
+import com.orasi.utils.TestReporter;
 
 public class DataWarehouse {
 
@@ -26,6 +27,14 @@ public class DataWarehouse {
 		throw new KeyExistsException("Failed to add " + key + " because the key already exists.");
 	    }
 	    dataMap.put(key, value);
+	}
+	/**
+	 * Method for merging a new HashMap of data into DataWarehouse
+	 * @param patch Existing HashMap to merge into DataWarehouse
+	 */
+	public void patch(HashMap<String, Object> patch) {
+	    patch.forEach(dataMap::putIfAbsent);
+	    patch.forEach(dataMap::replace);
 	}
 	
 	/*
@@ -53,7 +62,11 @@ public class DataWarehouse {
 	/*
 	 * Method for retrieving the HashMap
 	 */
-	public HashMap<String, Object> getDataHashMap() {
+	public HashMap<String, Object> getData() {
 	    return dataMap;
+	}
+	
+	public void printData(){
+		dataMap.forEach((key, value) -> TestReporter.log(key + " = " + value));
 	}
 }

@@ -52,15 +52,9 @@ public class TestListener extends TestListenerAdapter implements IReporter{
 	public void onTestFailure(ITestResult result) {
 		init(result);
 		String slash = Constants.DIR_SEPARATOR;
-		File directory = new File(".");
+
+		String destDir = Constants.SCREENSHOT_FOLDER + slash + result.getInstanceName().replace(".", slash);
 		
-		String destDir = null;
-		try {
-			destDir = directory.getCanonicalPath()
-					+ slash + "selenium-reports" + slash + "html" + slash + "screenshots";
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		Reporter.setCurrentTestResult(result);
 		
 		WebDriver augmentDriver= driver.getWebDriver();
@@ -77,7 +71,7 @@ public class TestListener extends TestListenerAdapter implements IReporter{
 			//Capture a screenshot for TestNG reporting
 			TestReporter.logScreenshot(augmentDriver, destDir + slash + destFile, slash, runLocation);
 			//Capture a screenshot for Allure reporting
-			FailedScreenshot(augmentDriver);
+			failedScreenshot(augmentDriver);
 		}		
 		
 		if(reportToMustard) Mustard.postResultsToMustard(driver, result, runLocation );	 
@@ -105,7 +99,7 @@ public class TestListener extends TestListenerAdapter implements IReporter{
 	}
 
 	@Attachment(type = "image/png")
-	public static byte[] FailedScreenshot(WebDriver driver) {
+	public static byte[] failedScreenshot(WebDriver driver) {
 		return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
 	}
 }

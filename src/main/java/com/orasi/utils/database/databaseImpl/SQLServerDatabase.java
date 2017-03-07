@@ -10,11 +10,11 @@ public class SQLServerDatabase extends Database {
 
 	@Override
 	protected void setDbDriver(String driver) {
-		super.strDriver = driver;	
+		super.driver = driver;	
 	}
 
 	@Override
 	protected void setDbConnectionString(String connection) {
-		super.strConnectionString = connection;
+		super.connectionString = connection;
 	}
 }

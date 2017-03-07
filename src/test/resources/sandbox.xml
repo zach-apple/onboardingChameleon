@@ -11,7 +11,7 @@
 	<parameter name="operatingSystem" value="WINDOWS" />
  	<test name="TestEnvironment">
 		<classes>
-			<class name="com.orasi.core.interfaces.TestListbox" />
+			<class name="com.orasi.core.interfaces.TestButton" />
 		</classes>
 	</test> 
 </suite> <!-- Suite -->

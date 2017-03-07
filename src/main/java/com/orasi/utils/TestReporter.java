@@ -12,6 +12,7 @@ import org.testng.Reporter;
 
 import com.orasi.api.soapServices.core.SoapService;
 import com.orasi.api.soapServices.core.exceptions.SoapException;
+import com.orasi.exception.AutomationException;
 import com.orasi.utils.date.SimpleDate;
 
 public class TestReporter {
@@ -383,17 +384,25 @@ public class TestReporter {
 			file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 			FileUtils.copyFile(file, new File(fileLocation));
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
+			throw new AutomationException("Failed to capture screenshot", e);
 		}
-		if(runLocation.equalsIgnoreCase("remote")){
-			fileLocation = fileLocation.replace("/var/lib/jenkins/jobs/OpenSandbox/jobs/Toyota-SauceLabs/workspace/", "job/OpenSandbox/job/Toyota-SauceLabs/ws/");
-			//fileLocation = fileLocation.replace("/var/lib/jenkins/jobs/OpenSandbox/jobs/Toyota-SauceLabs/workspace/", "job/OpenSandbox/job/Toyota-SauceLabs/230/testngreports/toyota/TestAllSecondaryNavigations/");
-			Reporter.log("<a href='https://jenkins.orasi.com/" + fileLocation + "'>FAILED SCREENSHOT</a>");
+		
+		String jenkinsPath = System.getenv("JOB_URL");
+		String jenkinsName = System.getenv("JOB_NAME");
+		String jenkinsWorkspace = System.getenv("HOME") + slash + "workspace" + slash;
+		
+		if(jenkinsPath != null && !jenkinsPath.isEmpty()){
+			TestReporter.logTrace("Jenkins URL [ " + jenkinsPath + " ]");
+			TestReporter.logTrace("Job URL [ " + jenkinsName + " ]");
+			TestReporter.logTrace("Jenkins workspace Path [ " + jenkinsWorkspace + " ]");
+
+			String webFileLocation = fileLocation.replace(jenkinsWorkspace + jenkinsName , jenkinsPath+"ws/");
+		
+			TestReporter.log("Web File Location : " +webFileLocation);
+			Reporter.log("<a  target='_blank' href='" + webFileLocation + "'><img src='"+ webFileLocation + "' height='200' width='300'/></a>");
 		}else{
-			TestReporter.log(fileLocation);
-			Reporter.log("<a href='" + fileLocation + "'> <img src='file:///" + fileLocation + "' height='200' width='300'/> </a>");
+			TestReporter.log("File Location : " +fileLocation);
+			Reporter.log("<a  target='_blank' href='" + fileLocation + "'> <img src='file:///" + fileLocation + "' height='200' width='300'/> </a>");
 		}
 	}
 
