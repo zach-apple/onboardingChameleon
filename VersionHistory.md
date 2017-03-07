@@ -2,7 +2,9 @@
 
 ##Version 1.0.7 - 03/07/2017
 **Enhancements**
-* [**com.orasi.core.interfaces**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/core/interfaces) Element interfaces has seen performance increases due to an update on when the element is searched for. On creation, the Element will attempt a findElement, but will only search with 1 ms timeout. If found, it is cached. Upon usage of the Element, if the cached Element has because stale or if it was not found to begin with, then it will reload/research itself again. 
+* [**com.orasi.core.interfaces**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/core/interfaces)
+  * Element interfaces has seen performance increases due to an update on when the element is searched for. On creation, the Element will attempt a findElement, but will only search with 1 ms timeout. If found, it is cached. Upon usage of the Element, if the cached Element has because stale or if it was not found to begin with, then it will reload/research itself again. 
+  * Many methods with throw dedicated exceptions to allow better handling of test flows. Fox example, if a option was not present in a Listbox, an **OptionNotInListboxException** will be thrown instead of **RuntimeException**. If a syncVisible fails, it will throw a **ElementNotVisibleException**. Additionally, a general **AutomationException** was created that can be fed other custom exception classes. It also will output system info to stacktrace for easier debugging.
 * [**com.orasi.utils.TestReporter**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)
    New logging methods have been added and TRACE logs have been added to various low-level areas of the toolkit. Usability is as follows
  * TestReporter.NONE (Default):  No additional info printed to console
