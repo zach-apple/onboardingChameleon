@@ -1,6 +1,6 @@
 #Version History
 
-##Version 1.0.7 - 03/07/2017
+##Version 1.1.0 - 03/07/2017
 **Enhancements**
 * [**com.orasi.core.interfaces**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/core/interfaces)
   * Element interfaces has seen performance increases due to an update on when the element is searched for. On creation, the Element will attempt a findElement, but will only search with 1 ms timeout. If found, it is cached. Upon usage of the Element, if the cached Element has because stale or if it was not found to begin with, then it will reload/research itself again. 
