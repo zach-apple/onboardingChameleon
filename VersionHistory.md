@@ -1,43 +1,41 @@
 #Version History
 
-##Version 1.0.7 - 10/10/2016
-* **Enhancements**
- * [**com.orasi.utils.TestReporter**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)
+##Version 1.0.7 - 03/07/2017
+**Enhancements**
+* [**com.orasi.core.interfaces**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/core/interfaces)
+  * Element interfaces has seen performance increases due to an update on when the element is searched for. On creation, the Element will attempt a findElement, but will only search with 1 ms timeout. If found, it is cached. Upon usage of the Element, if the cached Element has because stale or if it was not found to begin with, then it will reload/research itself again. 
+  * Many methods with throw dedicated exceptions to allow better handling of test flows. Fox example, if a option was not present in a Listbox, an **OptionNotInListboxException** will be thrown instead of **RuntimeException**. If a syncVisible fails, it will throw a **ElementNotVisibleException**. Additionally, a general **AutomationException** was created that can be fed other custom exception classes. It also will output system info to stacktrace for easier debugging.
+* [**com.orasi.utils.TestReporter**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)
    New logging methods have been added and TRACE logs have been added to various low-level areas of the toolkit. Usability is as follows
-   	 * TestReporter.NONE (Default):  No additional info printed to console
-	 * TestReporter.INFO: Will print useful information to console such as URL's, parameters, and RQ/RS
-	 * TestReporter.DEBUG: Will print debugging information for test developer to console 
-	 * TestReporter.TRACE: Will print low level information to console from the framework 
-  * New Methods
-    * setDebugLevel(TestReporter.___) - Using on the the options above (NONE, INFO, DEBUG, or TRACE) will display logs in the console and TestNG report up to that level
-    * logInfo(String log) - The first level of logs. This are intended to write useful info to the console to display what the script is doing, but isn't always needed. 
-    * logDebug(String log) - The second level of logs intended for developers where they may leave debug messages to display to step through more complex automation code
-    * logTrace(String log) - This level of log is intended for the Toolkit itself, where almost every miniscule action in the low levels of the code is displayed and recorded. This is intended to be used for when there are issues in the toolkit, and assistance from other developers is required.
- In addition, new Soft Assertions have been added. This allows a test to report out multiple failures until explictly called to fail
-    * softAssertTrue(boolean condition, String description) - If condition is not met, report to TestNG log of failure. If assertAll() is called, test will fail.
-    * softAssertFalse(boolean condition, String description) - If condition is not met, report to TestNG log of failure. If assertAll() is called, test will fail.
-    * softAssertEquals(Object value1, Object value2, String description) - If both objects are not equal, report to TestNG log of failure. If assertAll() is called, test will fail.
-    * softAssertNull(Object condition, String description) - If object condition is not null, report to TestNG log of failure. If assertAll() is called, test will fail.
-    * softAssertNotNull(Object condition, String description) - If object condition is null, report to TestNG log of failure. If assertAll() is called, test will fail.   
-    * assertAll() - If any soft assert have failed, fail test 
- * [**com.orasi.utils.TestEnvironment**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)
+ * TestReporter.NONE (Default):  No additional info printed to console
+ * TestReporter.INFO: Will print useful information to console such as URL's, parameters, and RQ/RS
+ * TestReporter.DEBUG: Will print debugging information for test developer to console 
+ * TestReporter.TRACE: Will print low level information to console from the framework 
+   * New Methods
+      * setDebugLevel(TestReporter.___) - Using on the the options above (NONE, INFO, DEBUG, or TRACE) will display logs in the console and TestNG report up to that level
+      * logInfo(String log) - The first level of logs. This are intended to write useful info to the console to display what the script is doing, but isn't always needed. 
+      * logDebug(String log) - The second level of logs intended for developers where they may leave debug messages to display to step through more complex automation code
+      * logTrace(String log) - This level of log is intended for the Toolkit itself, where almost every miniscule action in the low levels of the code is displayed and recorded. This is intended to be used for when there are issues in the toolkit, and assistance from other developers is required.
+    * In addition, new Soft Assertions have been added. This allows a test to report out multiple failures until explictly called to fail
+      * softAssertTrue(boolean condition, String description) - If condition is not met, report to TestNG log of failure. If assertAll() is called, test will fail.
+      *  softAssertFalse(boolean condition, String description) - If condition is not met, report to TestNG log of failure. If assertAll() is called, test will fail.
+      *  softAssertEquals(Object value1, Object value2, String description) - If both objects are not equal, report to TestNG log of failure. If assertAll() is called, test will fail.
+      * softAssertNull(Object condition, String description) - If object condition is not null, report to TestNG log of failure. If assertAll() is called, test will fail.
+      * softAssertNotNull(Object condition, String description) - If object condition is null, report to TestNG log of failure. If assertAll() is called, test will fail.   
+      * assertAll() - If any soft assert have failed, fail test 
+* [**com.orasi.utils.TestEnvironment**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)
    * Removed a lot of code that was made redundant when OrasiDriver was created.
    * Removed location type of "Remote" in favor of dedicated "Sauce" and "Grid".
-   * Added location type of "Mobile".   
- * [**com.orasi.utils.ExtendedExpectedConditions**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)  
-   This class contains several helper methods for Explicit Waits statements to use in conjunction with the WebDriverWait class. 
-   * elementToBeHidden(WebElement element) - An expectation for checking if the given element is hidden on the screen
-   * elementToBeVisible(WebElement element) - An expectation for checking if the given element is visible on the screen
-   * findWindowWithTitleAndSwitchToIt(String title) - Loop through windows for duration to see if it finds a title with exact queried text
-   * findWindowContainsTitleAndSwitchToIt(String title) - Loop through windows for duration to see if it finds a title that contains queried text
-   * findWindowMatchesTitleAndSwitchToIt(String regex) - Loop through windows for duration to see if it finds a title with the matching regex pattern
-   * textToMatchInElement(WebElement element, String regex) - An expectation for checking if the given text is present in the specified element
-   * textToBePresentInElementAttribute(WebElement element, String attribute, String text) - An expectation for checking if the given text is present in the specified elements value attribute
-   * textToMatchInElementAttribute(WebElement element, String attribute, String regex) - An expectation for checking if the given regex matches the given element attribute
-   * textToBePresentInElementCssProperty(WebElement element, String cssProperty, String text) - An expectation for checking if the given text is present in CSS property the specified elements property value 
-   * textToMatchInElementCssProperty(WebElement element, String cssProperty, String regex) - An expectation for checking if the given regex matches the given element CSS Property
+   * Added location type of "Mobile".  
+    
+**New Classes**
+ * [**com.orasi.utils.ExtendedExpectedConditions**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)This class contains several helper methods for Explicit Waits statements to use in conjunction with the WebDriverWait class. See wiki for more info [ExtendedExpectedConditions](https://github.com/Orasi/Selenium-Java-Core/wiki/ExtendedExpectedConditions.java)
    
- * [**com.orasi.utils.DataWarehouse**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)
+* [**com.orasi.utils.dataHelpers**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/dataHelpers) Several data generation helper classes added 
+   * [Person](https://github.com/Orasi/Selenium-Java-Core/wiki/Person.java) Create random data about a person to use in a test case
+   * [Party](https://github.com/Orasi/Selenium-Java-Core/wiki/Party.java) Collection of multiple Person objects with additional helper methods
+   * [DataWarehouse](https://github.com/Orasi/Selenium-Java-Core/wiki/DataWarehouse.java) Simplified Hashmap built to quickly add, remove and update data. Intended to be used within the OrasiDriver.
+* [**com.orasi.utils.Preamble**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils/Preamble.java) A custom annotation that can be used to help enforce and standardize code documentation. See more at the wiki [Preamble.java](https://github.com/Orasi/Selenium-Java-Core/wiki/Preamble.java)
 
 ##Version 1.0.6 - 11/30/2015
 * [**com.orasi.utils.OrasiDriver**](https://github.com/Orasi/Selenium-Java-Core/tree/master/src/main/java/com/orasi/utils)
