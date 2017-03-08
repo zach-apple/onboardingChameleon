@@ -41,7 +41,7 @@ public class AlertHandler {
     private static void alertHandler(WebDriver driver){
 	try {
 	    Alert alert = driver.switchTo().alert();
-	    TestReporter.log("Closing alert popup with text [ <i>" + alert.getText() +" </i> ]<br />");
+	    TestReporter.logInfo("Closing alert popup with text [ <i>" + alert.getText() +" </i> ]<br />");
 	    alert.accept();            	        
 	} catch (Exception throwAway) {}
     }
@@ -49,7 +49,7 @@ public class AlertHandler {
     private static void alertHandler(WebDriver driver, String inputText){
 	try {
 	    Alert alert = driver.switchTo().alert();
-	    TestReporter.log("Sending text [ <i>" + inputText +" </i> ] to Alert popup<br />");
+	    TestReporter.logInfo("Sending text [ <i>" + inputText +" </i> ] to Alert popup<br />");
 	    alert.sendKeys(inputText);
 	    alertHandler(driver);
 	} catch (Exception throwAway) {}
@@ -58,7 +58,7 @@ public class AlertHandler {
     private static void alertHandler(WebDriver driver, Credentials user){
 	try {
 	    Alert alert = driver.switchTo().alert();
-	    TestReporter.log("Closing alert popup with text [ <i>" + alert.getText() +" </i> ] with authentication user <br />");
+	    TestReporter.logInfo("Closing alert popup with text [ <i>" + alert.getText() +" </i> ] with authentication user <br />");
 	    alert.authenticateUsing(user);                      
 	} catch (Exception throwAway) {}
     }
