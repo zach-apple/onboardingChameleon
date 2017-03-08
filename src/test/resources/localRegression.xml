@@ -1,99 +1,126 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
-<suite name="Core-Regression" parallel="tests" thread-count="20">
-	<parameter name="browserUnderTest" value="html" />
+<suite name="Core-Regression"  parallel="tests" thread-count="20">
+	<listeners>
+		<listener class-name="com.orasi.utils.debugging.Screenshot" />
+	</listeners>
+	<parameter name="browserUnderTest" value="chrome" />
 	<parameter name="environment" value="blah" />
-	<parameter name="runLocation" value="local" />
-	<parameter name="browserVersion" value="" />
-	<parameter name="operatingSystem" value="windows" />
-    <test name="Element">
+	<parameter name="runLocation" value="sauce" />
+	<parameter name="browserVersion" value="52" />
+	<parameter name="operatingSystem" value="windows 10" />
+    <test name="Element" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.core.interfaces.TestElement" />
 		</classes>
 	</test>
 
-	<test name="Button">
+	<test name="TestElementInternalHandlers" parallel="methods" thread-count="20">
+		<classes>
+			<class name="com.orasi.core.interfaces.TestElementInternalHandlers" />
+		</classes>
+	</test>
+
+	<test name="Button" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.core.interfaces.TestButton" />
 		</classes>
 	</test>
 
-	<test name="Checkbox">
+	<test name="Checkbox" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.core.interfaces.TestCheckbox" />
 		</classes>
 	</test>
 
-	<test name="Label">
+	<test name="Label" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.core.interfaces.TestLabel" />
 		</classes>
 	</test>
 
-	<test name="Link">
+	<test name="Link" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.core.interfaces.TestLink" />
 		</classes>
 	</test>
 
-  	<test name="Listbox">
+  	<test name="Listbox" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.core.interfaces.TestListbox" />
 		</classes>
 	</test>
 
-	<test name="RadioButton">
+	<test name="RadioButton" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.core.interfaces.TestRadioButton" />
 		</classes>
 	</test>
 
-	<test name="Textbox">
+	<test name="Textbox" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.core.interfaces.TestTextbox" />
 		</classes>
 	</test>
 
-	<test name="Webtable">
+	<test name="Webtable" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.core.interfaces.TestWebtable" />
 		</classes>
 	</test>
 
-	<test name="ByAngular">
+	<test name="ByAngular" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.core.angular.TestByAngular" />
 		</classes>
 	</test>
 	
-	<test name="Base64Encoder">
+	<test name="Base64Encoder" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.utils.TestBase64Encoder" />
 		</classes>
 	</test>
 
-	<test name="ExcelDocumentReader">
+	<test name="ExcelDocumentReader" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.utils.TestExcelDocumentReader" />
 		</classes>
 	</test>
 
-	<test name="TestEnvironment">
+	<test name="TestEnvironment" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.utils.TestTestEnvironment" />
 		</classes>
 	</test>
 
-	<test name="TestFrameHandler">
+	<test name="TestAlertHandler" parallel="methods" thread-count="20">
 		<classes>
-			<class name="com.orasi.utils.TestFrameHandler" />
+			<class name="com.orasi.utils.TestAlertHandler" />
 		</classes>
 	</test>
 
-	<test name="TestOrasiDriver">
+    <test name="TestFrameHandler" parallel="methods" thread-count="20">
+        <classes>
+            <class name="com.orasi.utils.TestFrameHandler" />
+        </classes>
+    </test>
+
+    <test name="TestRegex" parallel="methods" thread-count="20">
+        <classes>
+            <class name="com.orasi.utils.TestRegex" />
+        </classes>
+    </test>
+
+    <test name="TestOrasiDriver" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.utils.TestOrasiDriver" />
+		</classes>
+	</test>
+	
+	<test name="TestWindowHandler" parallel="methods" thread-count="20">
+		<classes>
+			<class name="com.orasi.utils.TestWindowHandler" />
 		</classes>
 	</test>
 </suite> <!-- Suite -->

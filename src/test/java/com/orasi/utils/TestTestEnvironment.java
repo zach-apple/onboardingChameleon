@@ -1,13 +1,15 @@
 package com.orasi.utils;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.orasi.core.interfaces.Element;
+import ru.yandex.qatools.allure.annotations.Features;
+import ru.yandex.qatools.allure.annotations.Stories;
+import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestTestEnvironment {
+
+public class TestTestEnvironment extends TestEnvironment {
 	private String application = "application";
 	private String browserUnderTest = "html";
 	private String browserVersion = "1";
@@ -16,14 +18,24 @@ public class TestTestEnvironment {
 	private String testingEnvironment = "stage";
 	private String testingName = "TestEnvironment";
 	private String pageURL = "http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/element.html";
-
-
+	
+	@BeforeTest
+	public void setup() {
+		setReportToMustard(false);
+	}
+	
+	@Features("Utilities")
+	@Stories("TestEnvironment")
+	@Title("testEnviroment")
 	@Test(groups = "regression")
 	public void testEnviroment() {
 		TestEnvironment te = new TestEnvironment();
 		Assert.assertNotNull(te);
 	}
-
+	
+	@Features("Utilities")
+	@Stories("TestEnvironment")
+	@Title("testEnviromentWithStringConstructor")
 	@Test(groups = "regression")
 	public void testEnviromentWithStringConstructor() {
 		TestEnvironment te = new TestEnvironment(application, browserUnderTest, browserVersion, operatingSystem,
@@ -31,14 +43,9 @@ public class TestTestEnvironment {
 		Assert.assertNotNull(te);
 	}
 
-	@Test(groups = "regression")
-	public void testEnviromentWithTestEnvironmentConstructor() {
-		TestEnvironment te = new TestEnvironment();
-		TestEnvironment te2 = new TestEnvironment(te);
-
-		Assert.assertNotNull(te2);
-	}
-
+	@Features("Utilities")
+	@Stories("TestEnvironment")
+	@Title("applicationUnderTest")
 	@Test(groups = "regression")
 	public void applicationUnderTest() {
 		TestEnvironment te = new TestEnvironment();
@@ -46,6 +53,9 @@ public class TestTestEnvironment {
 		Assert.assertTrue(te.getApplicationUnderTest().equals(application));
 	}
 
+	@Features("Utilities")
+	@Stories("TestEnvironment")
+	@Title("browserUnderTest")
 	@Test(groups = "regression")
 	public void browserUnderTest() {
 		TestEnvironment te = new TestEnvironment();
@@ -53,6 +63,9 @@ public class TestTestEnvironment {
 		Assert.assertTrue(te.getBrowserUnderTest().equals(browserUnderTest));
 	}
 
+	@Features("Utilities")
+	@Stories("TestEnvironment")
+	@Title("browserVersion")
 	@Test(groups = "regression")
 	public void browserVersion() {
 		TestEnvironment te = new TestEnvironment();
@@ -60,6 +73,9 @@ public class TestTestEnvironment {
 		Assert.assertTrue(te.getBrowserVersion().equals(browserVersion));
 	}
 
+	@Features("Utilities")
+	@Stories("TestEnvironment")
+	@Title("operatingSystem")
 	@Test(groups = "regression")
 	public void operatingSystem() {
 		TestEnvironment te = new TestEnvironment();
@@ -67,6 +83,9 @@ public class TestTestEnvironment {
 		Assert.assertTrue(te.getOperatingSystem().equals(operatingSystem));
 	}
 
+	@Features("Utilities")
+	@Stories("TestEnvironment")
+	@Title("runLocation")
 	@Test(groups = "regression")
 	public void runLocation() {
 		TestEnvironment te = new TestEnvironment();
@@ -74,6 +93,9 @@ public class TestTestEnvironment {
 		Assert.assertTrue(te.getRunLocation().equals(runLocation));
 	}
 
+	@Features("Utilities")
+	@Stories("TestEnvironment")
+	@Title("testEnvironment")
 	@Test(groups = "regression")
 	public void testEnvironment() {
 		TestEnvironment te = new TestEnvironment();
@@ -81,6 +103,9 @@ public class TestTestEnvironment {
 		Assert.assertTrue(te.getTestEnvironment().equals(testingEnvironment));
 	}
 
+	@Features("Utilities")
+	@Stories("TestEnvironment")
+	@Title("testName")
 	@Test(groups = "regression")
 	public void testName() {
 		TestEnvironment te = new TestEnvironment();
@@ -88,6 +113,9 @@ public class TestTestEnvironment {
 		Assert.assertTrue(te.getTestName().equals(testingName));
 	}
 
+	@Features("Utilities")
+	@Stories("TestEnvironment")
+	@Title("pageURL")
 	@Test(groups = "regression")
 	public void pageURL() {
 		TestEnvironment te = new TestEnvironment();
@@ -95,32 +123,19 @@ public class TestTestEnvironment {
 		Assert.assertTrue(te.getPageURL().equals(pageURL));
 	}
 
+	@Features("Utilities")
+	@Stories("TestEnvironment")
+	@Title("testStart")
 	@Test(groups = "regression")
-	public void testStart() {
+	public void testTestStart() {
 		TestEnvironment te = new TestEnvironment(application, browserUnderTest, browserVersion, operatingSystem,
 				runLocation, testingEnvironment);
 		te.setPageURL(pageURL);
 		te.testStart(testingName);
 		Assert.assertTrue(te.getDriver().getTitle().equals("Unit test site"));
+		
+
 	}
 
-	@Test(groups = "regression", dependsOnMethods = "testStart")
-	public void pageLoaded() {
-		TestEnvironment te = new TestEnvironment(application, browserUnderTest, browserVersion, operatingSystem,
-				runLocation, testingEnvironment);
-		te.setPageURL(pageURL);
-		te.testStart(testingName);
-		Assert.assertTrue(te.pageLoaded());
-	}
-
-	@Test(groups = "regression", dependsOnMethods = "testStart")
-	public void pageLoadedWithElement() {
-		TestEnvironment te = new TestEnvironment(application, browserUnderTest, browserVersion, operatingSystem,
-				runLocation, testingEnvironment);
-		te.setPageURL(pageURL);
-		OrasiDriver driver = te.testStart(testingName);
-		Assert.assertTrue(new PageLoaded(driver).isDomComplete());
-		Assert.assertTrue(PageLoaded.syncPresent(driver, driver.findElement(By.id("text1"))));
-	}
 
 }

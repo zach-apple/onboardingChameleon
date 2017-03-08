@@ -75,7 +75,15 @@ public interface Element extends WebElement, WrapsElement, Locatable {
 	 * @summary - sends the char sequence to the element if the sequnce is not
 	 *          an empty string
 	 */
-	@Override
+	
+	/**
+	 * @author Justin
+	 * @see main.java.com.orasi.core.interfaces.impl.ElementImpl#onBlur()
+	 * @summary - triggers the onBlure FireEvent in the DOM
+	 */
+
+	void onBlur();
+	
 	void sendKeys(CharSequence... keysToSend);
 
 	/**
@@ -241,196 +249,208 @@ public interface Element extends WebElement, WrapsElement, Locatable {
 	@Override
 	public <X> X getScreenshotAs(OutputType<X> target);
 
-	/**
-	 * Used in conjunction with WebObjectPresent to determine if the desired
-	 * element is present in the DOM Will loop for the time out listed in
-	 * com.orasi.utils.Constants If object is not present within the time, throw
-	 * an error
-	 * 
-	 * @author Justin
-	 */
-	public boolean syncPresent();
 
 	/**
-	 * Used in conjunction with WebObjectPresent to determine if the desired
-	 * element is present in the DOM Will loop for the time out passed in
-	 * parameter timeout If object is not present within the time, throw an
-	 * error
-	 * 
-	 * @author Justin
-	 */
-	public boolean syncPresent(int timeout);
-
-	/**
-	 * Used in conjunction with WebObjectPresent to determine if the desired
-	 * element is present in the DOM Will loop for the time out passed in
-	 * parameter timeout If object is not present within the time, handle error
-	 * based on returnError
-	 * 
-	 * @author Justin
-	 */
-	public boolean syncPresent(int timeout, boolean returnError);
-
-	/**
-	 *
-	 * Used in conjunction with WebObjectVisible to determine if the desired
-	 * element is visible on the screen Will loop for the time out listed in
-	 * org.orasi.chameleon.CONSTANT.TIMEOUT If object is not visible within the
-	 * time, throw an error
-	 * 
-	 * @author Justin
-	 */
-	public boolean syncVisible();
-
-	/**
-	 * Used in conjunction with WebObjectVisible to determine if the desired
-	 * element is visible on the screen Will loop for the time out passed in the
-	 * variable timeout If object is not visible within the time, throw an error
-	 * 
-	 * @author Justin
-	 * 
-	 */
-	public boolean syncVisible(int timeout);
-
-	/**
-	 * Used in conjunction with WebObjectVisible to determine if the desired
-	 * element is visible on the screen Will loop for the time out passed in the
-	 * variable timeout If object is not visible within the time, handle the
-	 * error based on the boolean
+	 * Used to determine if the desired element is visible on the screen 
+	 * Will wait for default element timeout unless new timeout is passed in 
+	 * If object is not visible within the time, handle the error based default handler 
+	 * or by boolean passed in
 	 *
 	 * @author Justin
-	 *
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncVisible(10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncVisible(10, false)
 	 */
-	public boolean syncVisible(int timeout, boolean returnError);
+	public boolean syncVisible(Object... args);
+
 
 	/**
-	 * Used in conjunction with WebObjectVisible to determine if the desired
-	 * element is hidden from the screen Will loop for the time out listed in
-	 * org.orasi.chameleon.CONSTANT.TIMEOUT If object is not visible within the
-	 * time, throw an error
+	 * Used to determine if the desired element is hidden on the screen 
+	 * Will wait for default element timeout unless new timeout is passed in 
+	 * If object is not hidden within the time, handle the error based default handler 
+	 * or by boolean passed in
 	 * 
 	 * @author Justin
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncHidden(10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncHidden(10, false)
 	 */
-	public boolean syncHidden();
+	public boolean syncHidden(Object... args);
 
 	/**
-	 * Used in conjunction with WebObjectVisible to determine if the desired
-	 * element is hidden from the screen Will loop for the time out listed in
-	 * org.orasi.chameleon.CONSTANT.TIMEOUT If object is not visible within the
-	 * time, throw an error
-	 * 
-	 * @author Justin
-	 */
-	public boolean syncHidden(int timeout);
-
-	/**
-	 * Used in conjunction with WebObjectVisible to determine if the desired
-	 * element is visible on the screen Will loop for the time out passed in the
-	 * variable timeout If object is not visible within the time, handle the
-	 * error based on the boolean
-	 * 
-	 * @author Justin
-	 */
-	public boolean syncHidden(int timeout, boolean returnError);
-
-	/**
-	 *
-	 * Used in conjunction with WebObjectEnabled to determine if the desired
-	 * element is enabled on the screen Will loop for the time out listed in
-	 * org.orasi.chameleon.CONSTANT.TIMEOUT If object is not enabled within the
-	 * time, throw an error
-	 * 
-	 * @author Justin
-	 */
-	public boolean syncEnabled();
-
-	/**
-	 * 
-	 * Used in conjunction with WebObjectEnabled to determine if the desired
-	 * element is enabled on the screen Will loop for the time out passed in the
-	 * variable timeout If object is not enabled within the time, throw an error
-	 * 
-	 * @author Justin
-	 * 
-	 */
-	public boolean syncEnabled(int timeout);
-
-	/**
-	 * Used in conjunction with WebObjectEnabled to determine if the desired
-	 * element is enabled on the screen Will loop for the time out passed in the
-	 * variable timeout If object is not enabled within the time, handle the
-	 * error based on the boolean
+	 * Used to determine if the desired element is enabled on the screen 
+	 * Will wait for default element timeout unless new timeout is passed in 
+	 * If object is not enabled within the time, handle the error based default handler 
+	 * or by boolean passed in
 	 *
 	 * @author Justin
-	 *
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncEnabled(10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncEnabled(10, false)
 	 */
-	public boolean syncEnabled(int timeout, boolean returnError);
+	public boolean syncEnabled( Object... args);
 
 	/**
+	 * Used to determine if the desired element is disabled on the screen 
+	 * Will wait for default element timeout unless new timeout is passed in 
+	 * If object is not disabled within the time, handle the error based default handler 
+	 * or by boolean passed in
 	 *
-	 * Used in conjunction with WebObjectEnabled to determine if the desired
-	 * element is disabled on the screen Will loop for the time out listed in
-	 * org.orasi.chameleon.CONSTANT.TIMEOUT If object is not disabled within the
-	 * time, throw an error
-	 * 
 	 * @author Justin
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncDisabled(10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncDisabled(10, false)
 	 */
-	public boolean syncDisabled();
+	public boolean syncDisabled( Object... args);
+
+	
+	/**
+	 * Used to determine if the desired text is present in the desired element 
+	 * Will wait for default element timeout unless new timeout is passed in 
+	 * If text is not present within the time, handle the error based default handler 
+	 * or by boolean passed in
+	 *
+	 * @author Justin
+	 * @param text - Text to search for
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncTextInElement("text", 10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncTextInElement("text", 10, false)
+	 */
+	public boolean syncTextInElement(String text, Object... args);
+	
+	/**
+	 * Used to determine if the desired text is present in the desired element 
+	 * Will wait for default element timeout unless new timeout is passed in 
+	 * If text is not present within the time, handle the error based default handler 
+	 * or by boolean passed in
+	 *
+	 * @author Justin
+	 * @param regex (Required) The regular expression that should match to text the element should contain in either its text or 'value' attribute
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncTextMatchesInElement("text", 10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncTextMatchesInElement("text", 10, false)
+	 */
+	public boolean syncTextMatchesInElement(String regex, Object... args);
+	
 
 	/**
-	 * 
-	 * Used in conjunction with WebObjectDisabled to determine if the desired
-	 * element is disabled on the screen Will loop for the time out passed in
-	 * the variable timeout If object is not disabled within the time, throw an
-	 * error
-	 * 
+	 * Used to determine if the desired text is present in the desired attribute of Element
+	 * Will wait for default element timeout unless new timeout is passed in 
+	 * If value is not present within the time, handle the error based default handler 
+	 * or by boolean passed in
+	 *
 	 * @author Justin
-	 * 
+	 * @param attribute (Required) - Element attribute to view
+	 * @param value	(Required) - The text the element attribute should contain in either its text or value attribute
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncAttributeContainsValue("attribute, "value", 10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncAttributeContainsValue("attribute", "value", 10, false)
 	 */
-	public boolean syncDisabled(int timeout);
+	public boolean syncAttributeContainsValue(String attribute, String value, Object... args);
 
 	/**
-	 * Used in conjunction with WebObjectDisabled to determine if the desired
-	 * element is disabled on the screen Will loop for the time out passed in
-	 * the variable timeout If object is not disabled within the time, handle
-	 * the error based on the boolean
+	 * Used to determine if the desired text is present in the desired attribute of Element
+	 * Will wait for default element timeout unless new timeout is passed in 
+	 * If value is not present within the time, handle the error based default handler 
+	 * or by boolean passed in
 	 *
 	 * @author Justin
-	 *
+	 * @param attribute (Required) - Element attribute to view
+	 * @param regex	(Required) - The regular expression that should match the text of the element attribute 
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncAttributeMatchesValue("attribute", "regex", 10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncAttributeMatchesValue("attribute", "regex", 10, false)
 	 */
-	public boolean syncDisabled(int timeout, boolean returnError);
+	public boolean syncAttributeMatchesValue(String attribute, String regex, Object... args);
+	
+	/**
+	 * Used to determine if the desired text is present in the desired CSS Property of Element
+	 * Will wait for default element timeout unless new timeout is passed in 
+	 * If value is not present within the time, handle the error based default handler 
+	 * or by boolean passed in
+	 *
+	 * @author Justin
+	 * @param cssProperty (Required) - Element CSS Property to match
+	 * @param regex	(Required) - The regular expression that should match the text of the element CSS Property 
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncCssPropertyContainsValue("property", "value", 10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncCssPropertyContainsValue("property", "value", 10, false)
+	 */
+	public boolean syncCssPropertyContainsValue(String cssProperty, String value, Object... args);
 
 	/**
-	 *
-	 * Used in conjunction with WebObjectText Present to determine if the
-	 * desired text is present in the desired element Will loop for the time out
-	 * listed in org.orasi.chameleon.CONSTANT.TIMEOUT If text is not present
-	 * within the time, throw an error
-	 * 
-	 * @author Justin
-	 */
-	public boolean syncTextInElement(String text);
-
-	/**
-	 * 
-	 * Used in conjunction with WebObjectText Present to determine if the
-	 * desired text is present in the desired element Will loop for the time out
-	 * passed in the variable timeout If text is not present within the time,
-	 * throw an error
-	 * 
-	 * @author Justin
-	 * 
-	 */
-	public boolean syncTextInElement(String text, int timeout);
-
-	/**
-	 * Used in conjunction with WebObjectText Present to determine if the
-	 * desired text is present in the desired element Will loop for the time out
-	 * passed in the variable timeout If text is not present within the time,
-	 * handle the error based on the boolean
+	 * Used to determine if the desired text is present in the desired CSS Property of Element
+	 * Will wait for default element timeout unless new timeout is passed in 
+	 * If value is not present within the time, handle the error based default handler 
+	 * or by boolean passed in
 	 *
 	 * @author Justin
-	 *
+	 * @param cssProperty (Required) - Element CSS Property to match
+	 * @param regex	(Required) - The regular expression that should match the text of the element CSS Property 
+	 * @param args
+	 *  		Optional arguments </br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>timeout</b> - the maximum time in seconds the method should try to sync. Called 
+	 *  							 with syncCssPropertyMatchesValue("property", "value", 10)</br>
+	 *  		&nbsp;&nbsp;&nbsp;&nbsp;<b>failTestOnSyncFailure </b>- if TRUE, the test will throw an exception and 
+	 *  					fail the script. If FALSE, the script will 
+	 *  					not fail, instead a FALSE will be returned 
+	 *  					to the calling function. Called with 
+	 *  					syncCssPropertyMatchesValue("property", "value", 10, false)
 	 */
-	public boolean syncTextInElement(String text, int timeout, boolean returnError);
+	public boolean syncCssPropertyMatchesValue(String cssProperty, String regex, Object... args);
+	
 }

@@ -50,4 +50,6 @@ public interface Textbox extends Element {
 	@Override
 	public String getText();
 
+	void jsSet(String text);
+
 }
