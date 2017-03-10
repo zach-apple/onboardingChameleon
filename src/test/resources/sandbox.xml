@@ -4,14 +4,14 @@
 	<listeners>
 		<listener class-name="com.orasi.utils.debugging.Screenshot" />
 	</listeners>
-	<parameter name="browserUnderTest" value="firefox" />
+	<parameter name="browserUnderTest" value="chrome" />
 	<parameter name="environment" value="staging" />
-	<parameter name="runLocation" value="grid" />
-	<parameter name="browserVersion" value="47" />
-	<parameter name="operatingSystem" value="WINDOWS" />
+	<parameter name="runLocation" value="sauce" />
+	<parameter name="browserVersion" value="52" />
+	<parameter name="operatingSystem" value="windows 10" />
  	<test name="TestEnvironment">
 		<classes>
-			<class name="com.orasi.core.interfaces.TestButton" />
+			<class name="com.orasi.utils.sandbox" />
 		</classes>
 	</test> 
 </suite> <!-- Suite -->

@@ -47,8 +47,18 @@ public class TestElement extends TestEnvironment {
 
 	@Features("Element Interfaces")
 	@Stories("Element")
-	@Title("clear")
+	@Title("reload")
 	@Test(groups = { "regression", "interfaces", "element" })
+	public void reload() {
+		Element element = getDriver().findElement(By.id("text1"));
+		getDriver().get(pageUrl);
+		Assert.assertTrue(element.isEnabled());
+	}
+	
+	@Features("Element Interfaces")
+	@Stories("Element")
+	@Title("clear")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void clear() {
 		Element element = getDriver().findElement(By.id("text1"));
 		element.clear();
@@ -58,7 +68,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("click")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "clear")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "clear", alwaysRun=true)
 	public void click() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
 		if(getBrowserUnderTest().toLowerCase().contains("edge")) element.jsClick();
@@ -70,7 +80,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("elementWired")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "click")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "click", alwaysRun=true)
 	public void elementWired() {
 		Element element = getDriver().findElement(By.id("text1"));
 		Assert.assertTrue(element.elementWired());
@@ -79,7 +89,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("getAttribute")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void getAttribute() {
 		Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
 		Assert.assertTrue(element.getAttribute("type").equals("radio"));
@@ -88,7 +98,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("getCoordinates")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void getCoordinates() {
 		Element element = getDriver().findElement(By.id("text1"));
 		try {
@@ -103,7 +113,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("getCssValue")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void getCssValue() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
 		if (getBrowserUnderTest().equalsIgnoreCase("html"))
@@ -115,7 +125,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("getElementIdentifier")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void getElementIdentifier() {
 		Element element = getDriver().findElement(By.id("text1"));
 		Assert.assertTrue(element.getElementIdentifier().equals("text1"));
@@ -124,7 +134,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("getElementLocator")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void getElementLocator() {
 		Element element = getDriver().findElement(By.id("text1"));
 		Assert.assertNotNull(element.getElementLocator());
@@ -133,7 +143,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("getElementLocatorInfo")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void getElementLocatorInfo() {
 		Element element = getDriver().findElement(By.id("text1"));
 		Assert.assertNotNull(element.getElementLocatorInfo());
@@ -142,7 +152,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("getLocation")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void getLocation() {
 		Element element = getDriver().findElement(By.id("text1"));
 		try {
@@ -157,7 +167,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("getSize")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void getSize() {
 		Element element = getDriver().findElement(By.id("text1"));
 		Assert.assertTrue(element.getSize().getHeight() > 0);
@@ -167,7 +177,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("getTagName")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void getTagName() {
 		Element element = getDriver().findElement(By.id("text1"));
 		Assert.assertTrue(element.getTagName().equals("input"));
@@ -176,7 +186,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("getText")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void getText() {
 		Element element = getDriver().findElement(By.id("pageheader"));
 		Assert.assertTrue(element.getText().equals("Element test page"));
@@ -185,7 +195,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("highlight")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "getAttribute")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "getAttribute", alwaysRun=true)
 	public void highlight() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
 		element.highlight();
@@ -195,7 +205,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("isDisplayed")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void isDisplayed() {
 		Element element = getDriver().findElement(By.id("text1"));
 		Assert.assertTrue(element.isDisplayed());
@@ -204,7 +214,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("isEnabled")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void isEnabled() {
 		Element element = getDriver().findElement(By.id("text1"));
 		Assert.assertTrue(element.isEnabled());
@@ -213,7 +223,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("isSelected")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void isSelected() {
 		Element element = getDriver().findElement(By.xpath("//*[@id='radiogroup']/input[1]"));
 		Assert.assertTrue(element.isSelected());
@@ -222,7 +232,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("isSelectedNegative")
-	@Test(groups = { "regression", "element" })
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void isSelectedNegative() {
 		Element element = getDriver().findElement(By.xpath("//*[@id='radiogroup']/input[2]"));
 		Assert.assertFalse(element.isSelected());
@@ -231,7 +241,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("jsClick")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "click")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "click", alwaysRun=true)
 	public void jsClick() {
 		getDriver().findElement(By.id("text1")).sendKeys("blah");
 		Element element = getDriver().findElement(By.id("buttonForText1"));
@@ -242,7 +252,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("sendKeys")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "jsClick")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "jsClick", alwaysRun=true)
 	public void sendKeys() {
 		Element element = getDriver().findElement(By.id("text1"));
 		element.sendKeys("testing");
@@ -252,7 +262,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncDisabledBasic")
-	@Test(groups = { "regression", "interfaces", "element" })
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void syncDisabledBasic() {
 		Element element = getDriver().findElement(By.id("disable"));
 		Assert.assertTrue(element.syncDisabled());
@@ -261,7 +271,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncDisabledBasicNegative")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = { "syncDisabledBasic" }, expectedExceptions=ElementNotDisabledException.class)
+	@Test(groups = { "regression", "element" }, dependsOnMethods = { "syncDisabledBasic" }, alwaysRun=true, expectedExceptions=ElementNotDisabledException.class)
 	public void syncDisabledBasicNegative() {
 		Element element = getDriver().findElement(By.id("text1"));
 		element.syncDisabled();
@@ -270,7 +280,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncDisabledAdvanced")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = { "syncDisabledBasic" })
+	@Test(groups = { "regression", "element" }, dependsOnMethods = { "syncDisabledBasic" }, alwaysRun=true)
 	public void syncDisabledAdvanced() {
 		Element element = getDriver().findElement(By.id("disable"));
 		Assert.assertTrue(element.syncDisabled(5, false));
@@ -279,7 +289,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncDisabledAdvancedNegative")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = { "syncDisabledBasic" })
+	@Test(groups = { "regression", "element" }, dependsOnMethods = { "syncDisabledBasic" }, alwaysRun=true)
 	public void syncDisabledAdvancedNegative() {
 		Element element = getDriver().findElement(By.id("text1"));
 		Assert.assertFalse(element.syncDisabled(1, false));
@@ -288,7 +298,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncHiddenBasic")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void syncHiddenBasic() {
 		Element element = getDriver().findElement(By.id("hidden"));
 		Assert.assertTrue(element.syncHidden());
@@ -297,7 +307,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncHiddenBasicNegative")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", expectedExceptions=ElementNotHiddenException.class)
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", alwaysRun=true, expectedExceptions=ElementNotHiddenException.class)
 	public void syncHiddenBasicNegative() {
 		Element element = getDriver().findElement(By.id("text1"));
 		element.syncHidden();
@@ -306,7 +316,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncHiddenAdvanced")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void syncHiddenAdvanced() {
 		Element element = getDriver().findElement(By.id("hidden"));
 		Assert.assertTrue(element.syncHidden(5, false));
@@ -315,7 +325,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncHiddenAdvancedNegative")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void syncHiddenAdvancedNegative() {
 		Element element = getDriver().findElement(By.id("text1"));
 		Assert.assertFalse(element.syncHidden(1, false));
@@ -324,7 +334,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncVisibleBasic")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void syncVisibleBasic() {
 		Textbox element = getDriver().findTextbox(By.id("text1"));
 		Assert.assertTrue(element.syncVisible());
@@ -333,7 +343,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncVisibleBasicNegative")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", expectedExceptions=ElementNotVisibleException.class)
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", alwaysRun=true, expectedExceptions=ElementNotVisibleException.class)
 	public void syncVisibleBasicNegative() {
 		Element element = getDriver().findElement(By.id("hidden"));
 		element.syncVisible();
@@ -342,7 +352,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncVisibleAdvanced")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void syncVisibleAdvanced() {
 		Element element = getDriver().findElement(By.id("text1"));
 		Assert.assertTrue(element.syncVisible(5, false));
@@ -351,7 +361,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncVisibleAdvancedNegative")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void syncVisibleAdvancedNegative() {
 		Element element = getDriver().findElement(By.id("hidden"));
 		Assert.assertFalse(element.syncVisible(1, false));
@@ -360,7 +370,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncEnabledBasic")
-	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void syncEnabledBasic() {
 		Element element = getDriver().findElement(By.id("text1"));
 		Assert.assertTrue(element.syncEnabled());
@@ -369,7 +379,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncEnabledBasicNegative")
-	@Test(groups = { "regression", "element" }, expectedExceptions=ElementNotEnabledException.class)
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun=true, expectedExceptions=ElementNotEnabledException.class)
 	public void syncEnabledBasicNegative() {
 	    Element element = getDriver().findElement(By.id("disable"));
 	    element.syncEnabled();
@@ -378,7 +388,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncEnabledAdvanced")
-	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired")
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", alwaysRun=true)
 	public void syncEnabledAdvanced() {
 		Element element = getDriver().findElement(By.id("text1"));
 		Assert.assertTrue(element.syncEnabled(5, false));
@@ -387,7 +397,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncEnabledAdvancedNegative")
-	@Test(groups = { "regression", "element" })
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void syncEnabledAdvancedNegative() {
 		Element element = getDriver().findElement(By.id("disable"));
 		Assert.assertFalse(element.syncEnabled(1, false));
@@ -396,7 +406,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncTextInElementBasic")
-	@Test(groups = { "regression", "interfaces", "element" })
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void syncTextInElementBasic() {
 		Element element = getDriver().findElement(By.id("pageheader"));
 		Assert.assertTrue(element.syncTextInElement("Element test page"));
@@ -405,7 +415,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncTextInElementBasicNegative")
-	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=TextInElementNotPresentException.class)
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun=true, expectedExceptions=TextInElementNotPresentException.class)
 	public void syncTextInElementBasicNegative() {
 		Element element = getDriver().findElement(By.id("pageheader"));
 		element.syncTextInElement("Loading");
@@ -414,7 +424,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncTextInElementAdvanced")
-	@Test(groups = { "regression", "element" })
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void syncTextInElementAdvanced() {
 		Element element = getDriver().findElement(By.id("pageheader"));
 		Assert.assertTrue(element.syncTextInElement("Element test page", 5, false));
@@ -423,7 +433,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncTextInElementAdvancedNegative")
-	@Test(groups = { "regression", "element" })
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void syncTextInElementAdvancedNegative() {
 		Element element = getDriver().findElement(By.id("pageheader"));
 		Assert.assertFalse(element.syncTextInElement("negative", 2, false));
@@ -433,7 +443,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncTextMatchesInElementBasic")
-	@Test(groups = { "regression", "interfaces", "element" })
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void syncTextMatchesInElementBasic() {
 		Element element = getDriver().findElement(By.id("pageheader"));
 		Assert.assertTrue(element.syncTextMatchesInElement("(.*test page)"));
@@ -442,7 +452,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncTextMatchesInElementBasicNegative")
-	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=TextInElementNotPresentException.class)
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun=true, expectedExceptions=TextInElementNotPresentException.class)
 	public void syncTextMatchesInElementBasicNegative() {
 		Element element = getDriver().findElement(By.id("pageheader"));
 		element.syncTextMatchesInElement("(.*tst pge)");
@@ -452,7 +462,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncTextMatchesInElementAdvanced")
-	@Test(groups = { "regression", "element" })
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void syncTextMatchesInElementAdvanced() {
 		Element element = getDriver().findElement(By.id("pageheader"));
 		Assert.assertTrue(element.syncTextMatchesInElement("(.*test page)", 5, false));
@@ -461,7 +471,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncTextMatchesInElementAdvancedNegative")
-	@Test(groups = { "regression", "element" })
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void syncTextMatchesInElementAdvancedNegative() {
 		Element element = getDriver().findElement(By.id("pageheader"));
 		Assert.assertFalse(element.syncTextMatchesInElement("(.*tst pge)", 2, false));
@@ -470,7 +480,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncAttributeContainsValueBasic")
-	@Test(groups = { "regression", "interfaces", "element" })
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void syncAttributeContainsValueBasic() {
 		Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
 		Assert.assertTrue(element.syncAttributeContainsValue("type","radio"));
@@ -479,7 +489,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncAttributeContainsValueBasicNegative")
-	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=ElementAttributeValueNotMatchingException.class)
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun=true, expectedExceptions=ElementAttributeValueNotMatchingException.class)
 	public void syncAttributeContainsValueBasicNegative() {
 		Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
 		element.syncAttributeContainsValue("type","Radio");
@@ -488,7 +498,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncAttributeContainsValueAdvanced")
-	@Test(groups = { "regression", "element" })
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void syncAttributeContainsValueAdvanced() {
 		Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
 		Assert.assertTrue(element.syncAttributeContainsValue("type","radio", 5, false));
@@ -497,7 +507,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncAttributeContainsValueAdvancedNegative")
-	@Test(groups = { "regression", "element" })
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void syncAttributeContainsValueAdvancedNegative() {
 		Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
 		Assert.assertFalse(element.syncAttributeContainsValue("type","Rao", 2, false));
@@ -506,7 +516,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncAttributeMatchesValueBasic")
-	@Test(groups = { "regression", "interfaces", "element" })
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void syncAttributeMatchesValueBasic() {
 		Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
 		Assert.assertTrue(element.syncAttributeMatchesValue("type","(.*adi.*)"));
@@ -515,7 +525,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncAttributeMatchesValueBasicNegative")
-	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=ElementAttributeValueNotMatchingException.class)
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun=true, expectedExceptions=ElementAttributeValueNotMatchingException.class)
 	public void syncAttributeMatchesValueBasicNegative() {
 		Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
 		element.syncAttributeMatchesValue("type","(.*adi)");
@@ -525,7 +535,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncAttributeMatchesValueAdvanced")
-	@Test(groups = { "regression", "element" })
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void syncAttributeMatchesValueAdvanced() {
 		Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
 		Assert.assertTrue(element.syncAttributeMatchesValue("type","(.*adi.*)"));
@@ -534,7 +544,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncAttributeMatchesValueAdvancedNegative")
-	@Test(groups = { "regression", "element" })
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void syncAttributeMatchesValueAdvancedNegative() {
 		Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
 		Assert.assertFalse(element.syncAttributeMatchesValue("type","(.*adi)", 2, false));
@@ -543,7 +553,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncCssPropertyContainsValueBasic")
-	@Test(groups = { "regression", "interfaces", "element" })
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void syncCssPropertyContainsValueBasic() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
 		if (getBrowserUnderTest().equalsIgnoreCase("html")){
@@ -556,7 +566,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncCssPropertyContainsValueBasicNegative")
-	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=ElementCssValueNotMatchingException.class)
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun=true, expectedExceptions=ElementCssValueNotMatchingException.class)
 	public void syncCssPropertyContainsValueBasicNegative() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
 		if (getBrowserUnderTest().equalsIgnoreCase("html")){
@@ -569,7 +579,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncCssPropertyContainsValueAdvanced")
-	@Test(groups = { "regression", "element" })
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void syncCssPropertyContainsValueAdvanced() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
 		if (getBrowserUnderTest().equalsIgnoreCase("html")){
@@ -582,7 +592,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncCssPropertyContainsValueAdvancedNegative")
-	@Test(groups = { "regression", "element" })
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void syncCssPropertyContainsValueAdvancedNegative() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
 		if (getBrowserUnderTest().equalsIgnoreCase("html")){
@@ -595,7 +605,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncCssPropertyMatchesValueBasic")
-	@Test(groups = { "regression", "interfaces", "element" })
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void syncCssPropertyMatchesValueBasic() {
 	    
 		Element element = getDriver().findElement(By.id("buttonForText1"));
@@ -609,7 +619,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncCssPropertyMatchesValueBasicNegative")
-	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=ElementCssValueNotMatchingException.class)
+	@Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun=true, expectedExceptions=ElementCssValueNotMatchingException.class)
 	public void syncCssPropertyMatchesValueBasicNegative() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
 		if (getBrowserUnderTest().equalsIgnoreCase("html")){
@@ -623,7 +633,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncCssPropertyMatchesValueAdvanced")
-	@Test(groups = { "regression", "element" })
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void syncCssPropertyMatchesValueAdvanced() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
 		if (getBrowserUnderTest().equalsIgnoreCase("html")){
@@ -636,7 +646,7 @@ public class TestElement extends TestEnvironment {
 	@Features("Element Interfaces")
 	@Stories("Element")
 	@Title("syncCssPropertyMatchesValueAdvancedNegative")
-	@Test(groups = { "regression", "element" })
+	@Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun=true)
 	public void syncCssPropertyMatchesValueAdvancedNegative() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
 		if (getBrowserUnderTest().equalsIgnoreCase("html")){

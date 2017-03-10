@@ -1,6 +1,9 @@
 package com.orasi.core.interfaces.impl.internal;
 
+import com.orasi.core.by.angular.AngularElementLocator;
+import com.orasi.core.by.angular.ByNG;
 import com.orasi.core.interfaces.Element;
+import com.orasi.exception.AutomationException;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.TestReporter;
@@ -62,12 +65,18 @@ public class ElementHandler  implements InvocationHandler {
 		WebElement element = null;
 
 		By by= null;
+		ByNG byNg= null;
 		Field elementField = null;
 		
 		TestReporter.logTrace("Get locator By information");
-		elementField = locator.getClass().getDeclaredField("by");
-		elementField.setAccessible(true);
-		by=(By)elementField.get(locator);
+		try{
+			elementField = locator.getClass().getDeclaredField("by");
+			elementField.setAccessible(true);
+			if(locator instanceof AngularElementLocator) byNg=(ByNG)elementField.get(locator);
+			else by=(By)elementField.get(locator);
+		}catch(Exception e){
+			throw new AutomationException("Failed to obtain element locator", driver);
+		}
 
 		if ("getWrappedElement".equals(method.getName())) {
 			TestReporter.logTrace("Returning internal element");
@@ -80,10 +89,14 @@ public class ElementHandler  implements InvocationHandler {
 		}
 
 		TestReporter.logTrace("Generate constructor for element");
-		Constructor cons = wrappingType.getConstructor(OrasiDriver.class, By.class);
+		Constructor cons = null;
+		if(locator instanceof AngularElementLocator)  cons = wrappingType.getConstructor(OrasiDriver.class, ByNG.class);
+		else  cons = wrappingType.getConstructor(OrasiDriver.class, By.class);
 		TestReporter.logTrace("Successfully created constructor");
 		TestReporter.logTrace("Creating new instance of element");
-		Object thing = cons.newInstance(driver, by);
+		Object thing = null;
+		if(locator instanceof AngularElementLocator) thing = cons.newInstance(driver, byNg);
+		else thing = cons.newInstance(driver, by);
 		TestReporter.logTrace("Successfully created element instance");
 		try {
 			TestReporter.logTrace("Calling method [ " + method.getName() + " ]");
