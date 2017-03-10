@@ -120,7 +120,7 @@ public class TestOrasiDriver extends TestEnvironment {
 	    }
 	}
 	setDriver(driver);
-	driver.get("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/testsite.html");
+	driver.get("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/testsite.html");
 
 	// testStart("TestOrasiDriver");
     }
@@ -274,7 +274,7 @@ public class TestOrasiDriver extends TestEnvironment {
     @Title("findRadioGroup")
     @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "findWebtable")
     public void findRadioGroup() {
-	driver.get("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/radioGroup.html");
+	driver.get("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/radioGroup.html");
 	RadioGroup radioGroup = driver.findRadioGroup(By.id("Content"));
 	Assert.assertNotNull(radioGroup);
     }
@@ -284,7 +284,7 @@ public class TestOrasiDriver extends TestEnvironment {
     @Title("findCheckbox")
     @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "findRadioGroup")
     public void findCheckbox() {
-	driver.get("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/checkbox.html");
+	driver.get("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/checkbox.html");
 	Checkbox checkbox = driver.findCheckbox(By.name("checkbox"));
 	Assert.assertNotNull(checkbox);
     }
@@ -294,7 +294,7 @@ public class TestOrasiDriver extends TestEnvironment {
     @Title("findLabel")
     @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "findCheckbox")
     public void findLabel() {
-	driver.get("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/label.html");
+	driver.get("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/label.html");
 	Label label = driver.findLabel(By.xpath("//*[@id='radioForm']/label[1]"));
 	Assert.assertNotNull(label);
     }
@@ -304,7 +304,7 @@ public class TestOrasiDriver extends TestEnvironment {
     @Title("findLink")
     @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "findLabel")
     public void findLink() {
-	driver.get("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/link.html");
+	driver.get("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/link.html");
 	Link link = driver.findLink(By.xpath("//a[@href='testLinks.html']"));
 	Assert.assertNotNull(link);
     }
