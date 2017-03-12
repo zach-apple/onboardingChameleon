@@ -1,14 +1,22 @@
 #Version History
 
 ##Version 1.1.1 - 03/12/2017
-* Upgrading to Selenium 3.3.1 to support latest version of Chrome and Firefox by allow for Chrome Driver 2.28 and GeckoDriver 0.15. 
+* **POM.xml**
+  * Upgrading to Selenium 3.3.1 to support latest version of Chrome and Firefox by allow for Chrome Driver 2.28 and GeckoDriver 0.15. 
+  * Upgrading to HtmlUnitDriver 2.25
+  * Removing now unneeded JXL dependancy
+* [**com.orasi.api.soapServices**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/api/soapServices)
+  * Allow xls, xlsx and csv file types as valid input files
 * [**com.orasi.api.restServices**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/api/restServices)  
   * Adding RestException to be thrown instead of WebServiceException
   * Cleaned up and added TRACE logs
   * Added Constuctor that takes in original Http Request so both Request and Response data is accessible from single class
   * URI parameters will now appended to URL instead of setting a new entity. This fixes the conflicts where both URI parameters and request body were sent in.
+* [**com.orasi.utils.ExcelDocumentReader**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/utils)
+  * Updated to accept both xls and xlsx file types
 * [**com.orasi.utils.TestReporter**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/utils)
   * Adding logAPI method that accepts RestResponse
+
   
 ##Version 1.1.0 - 03/07/2017
 **Enhancements**
