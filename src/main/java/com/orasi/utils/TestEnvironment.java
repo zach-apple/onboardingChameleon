@@ -458,16 +458,10 @@ public class TestEnvironment {
 		switch (browserUnderTest.toLowerCase().trim()) {
 		case "firefox":
 			caps = DesiredCapabilities.firefox();
-			//For firefox versions greater than 46, will need to use the marionette/gecko driver
-			if (browserVersion.isEmpty() || Integer.parseInt(browserVersion) > 47 )  {
-				file = new File(
-						this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "geckodriver.exe").getPath());
+			file = new File(
+					this.getClass()
+					.getResource(Constants.DRIVERS_PATH_LOCAL + "geckodriver.exe").getPath());
 				System.setProperty("webdriver.gecko.driver", file.getAbsolutePath());
-				caps.setCapability("marionette", true);
-			}else {
-				caps.setCapability("marionette", false);
-			}
-			
 			break;
 
 		case "ie":
@@ -491,7 +485,7 @@ public class TestEnvironment {
 		case "chrome":
 			caps = DesiredCapabilities.chrome();
 			file = new File(
-					this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "ChromeDriver.exe").getPath());
+					this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "chromedriver.exe").getPath());
 			System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
 			//Mac operating system with chrome browser
 			if (operatingSystem.equalsIgnoreCase("mac")){
