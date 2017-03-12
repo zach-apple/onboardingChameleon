@@ -17,7 +17,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.MarionetteDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -761,12 +760,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	private void setDriverWithCapabilties(DesiredCapabilities caps) {
 		switch (caps.getBrowserName().toLowerCase()) {
 		case "firefox":
-			if (caps.getCapability("marionette").equals(true)){
-				driver = new MarionetteDriver(caps);
-			} else {
-				driver = new FirefoxDriver(caps);
-			}
-			
+			driver = new FirefoxDriver(caps);		
 			break;
 		case "internet explorer":
 		case "iexplore":
