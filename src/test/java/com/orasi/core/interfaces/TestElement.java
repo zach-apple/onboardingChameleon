@@ -28,7 +28,7 @@ public class TestElement extends TestEnvironment {
 	@BeforeTest(groups = { "regression", "interfaces", "element", "dev" })
 	@Parameters({ "runLocation", "browserUnderTest", "browserVersion", "operatingSystem", "environment" })
 	public void setup(@Optional String runLocation, String browserUnderTest, String browserVersion,
-			String operatingSystem, String environment) {TestReporter.setDebugLevel(3);
+			String operatingSystem, String environment) {
 		setApplicationUnderTest("Test Site");
 		setBrowserUnderTest(browserUnderTest);
 		setBrowserVersion(browserVersion);
