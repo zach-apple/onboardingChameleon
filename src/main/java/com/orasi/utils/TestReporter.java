@@ -398,10 +398,10 @@ public class TestReporter {
 
 			String webFileLocation = fileLocation.replace(jenkinsWorkspace + jenkinsName , jenkinsPath+"ws/");
 		
-			TestReporter.log("Web File Location : " +webFileLocation);
+			TestReporter.logInfo("Web File Location : " +webFileLocation);
 			Reporter.log("<a  target='_blank' href='" + webFileLocation + "'><img src='"+ webFileLocation + "' height='200' width='300'/></a>");
 		}else{
-			TestReporter.log("File Location : " +fileLocation);
+			TestReporter.logInfo("File Location : " +fileLocation);
 			Reporter.log("<a  target='_blank' href='" + fileLocation + "'> <img src='file:///" + fileLocation + "' height='200' width='300'/> </a>");
 		}
 	}
