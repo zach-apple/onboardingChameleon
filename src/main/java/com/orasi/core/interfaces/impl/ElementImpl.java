@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang.time.StopWatch;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
@@ -285,9 +286,21 @@ public class ElementImpl implements Element {
 	@Override
 	public void sendKeys(CharSequence... keysToSend) {
 		TestReporter.logTrace("Entering ElementImpl#sendKeys");
+		String keys = "";
 		if (keysToSend.toString() != "") {
 			getWrappedElement().sendKeys(keysToSend);
-			TestReporter.interfaceLog(" Send Keys [ <b>" + keysToSend[0].toString() + "</b> ] to Textbox [ <b>"
+			
+			for(CharSequence key : keysToSend){
+				if(key instanceof Keys){
+					if(keys.isEmpty()) keys = "Key." +((Keys) key).name();
+					else keys += " + Key." + ((Keys) key).name();				
+				}else {
+					if(keys.isEmpty()) keys = key.toString();
+					else keys += key.toString();		
+				}
+			}
+		
+			TestReporter.interfaceLog(" Send Keys [ <b>" + keys + "</b> ] to Textbox [ <b>"
 					+ getElementIdentifier() + " </b> ]");
 		}
 		TestReporter.logTrace("Exiting ElementImpl#sendKeys");
@@ -1260,4 +1273,5 @@ public class ElementImpl implements Element {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 }
