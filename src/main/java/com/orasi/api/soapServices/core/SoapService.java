@@ -569,7 +569,7 @@ public abstract class SoapService{
 	 */
 	public void setRequestNodeValueByXPath(Object[][] scenarios) {
 		for (int x = 0; x < scenarios.length; x++) {
-			TestReporter.logDebug("Set value [ " + scenarios[x][0].toString() + " ] to XPath [ " + scenarios[x][1].toString() + " ]");
+			TestReporter.logDebug("Set value [ " + scenarios[x][1].toString() + " ] to XPath [ " + scenarios[x][0].toString() + " ]");
 			setRequestNodeValueByXPath(getRequestDocument(),scenarios[x][0].toString(),
 					scenarios[x][1].toString());
 		}

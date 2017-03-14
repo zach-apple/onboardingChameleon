@@ -104,15 +104,34 @@ public class ExcelDocumentReader {
 		return (tabArray);
 	}
 
-	// This method is to read the test data from the Excel cell, in this we are
-	// passing parameters as Row num and Col num
 	private String getCellData(int rowNum, int colNum) {
-		try {
-			cell = excelWSheet.getRow(rowNum).getCell(colNum);
-			String cellData = cell.getStringCellValue();
-			return cellData;
-		} catch (Exception e) {
-			return "";
-		}
+        try {
+            cell = excelWSheet.getRow(rowNum).getCell(colNum);
+            String cellData = "";
+            switch (cell.getCellType()) {
+            case 0:
+                cellData = String.valueOf(cell.getNumericCellValue());
+                break;
+
+            case 1:
+                cellData = cell.getStringCellValue();
+                break;
+
+            case 2:
+                cellData = String.valueOf(cell.getCellFormula());
+                break;
+
+            case 4:
+                cellData = String.valueOf(cell.getBooleanCellValue());
+                break;
+
+            default:
+                break;
+            }
+            
+            return cellData;
+        } catch (Exception e) {
+            return "";
+        }
 	}
 }

@@ -328,7 +328,7 @@ public class TestEnvironment {
 	protected OrasiDriver testStart(String testName) {
 		// Uncomment the following line to have TestReporter outputs output to
 		// the console
-		TestReporter.setPrintToConsole(false);
+		TestReporter.setPrintToConsole(true);
 		setTestName(testName);
 		driverSetup();
 		//launch the application under test normally 
