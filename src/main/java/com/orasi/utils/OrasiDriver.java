@@ -1008,7 +1008,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 		return new Debug();
 	}
 	
-	class Debug{
+	public class Debug{
 		public void setReporterLogLevel(int level){
 			TestReporter.setDebugLevel(level);
 		}
