@@ -9,8 +9,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.orasi.exception.AutomationException;
@@ -76,20 +74,29 @@ public class ExcelDocumentReader {
 			else excelWSheet = excelWBook.getSheet(sheetName);
 
 			int startCol = 0;
-
+			int offsetRows = 0;
 			int ci, cj;
 
-
-			if (rowToRead == -1) totalRows = (excelWSheet.getLastRowNum() +1);
+			if (startRow > 1){
+				totalRows = excelWSheet.getLastRowNum();
+				offsetRows = totalRows - startRow;
+			}
+			else if (rowToRead == -1 && startRow ==0 ) totalRows = excelWSheet.getLastRowNum() + 1;
+			else if (rowToRead == -1) totalRows = excelWSheet.getLastRowNum();
+			else {
+				startRow = rowToRead;
+				totalRows = startRow;
+			}
 
 			// you can write a function as well to get Column count
 
 			int totalCols = excelWSheet.getRow(startRow).getLastCellNum();
 
-			tabArray = new String[totalRows][totalCols];
-
+			tabArray = new String[totalRows - offsetRows][totalCols];
+			if(offsetRows != 0 ) offsetRows--;
+			else if (startRow == 0) offsetRows = 1;
 			ci = 0;
-			for (int i = startRow; i <= totalRows-1; i++, ci++) {
+			for (int i = startRow; i <= totalRows - offsetRows; i++, ci++) {
 				cj = 0;
 				for (int j = startCol; j < totalCols; j++, cj++) {					
 					tabArray[ci][cj] = getCellData(i, j);
@@ -105,33 +112,29 @@ public class ExcelDocumentReader {
 	}
 
 	private String getCellData(int rowNum, int colNum) {
-        try {
-            cell = excelWSheet.getRow(rowNum).getCell(colNum);
-            String cellData = "";
-            switch (cell.getCellType()) {
-            case 0:
-                cellData = String.valueOf(cell.getNumericCellValue());
-                break;
+		cell = excelWSheet.getRow(rowNum).getCell(colNum);
+		String cellData = "";
+		switch (cell.getCellType()) {
+		case 0:
+			cellData = String.valueOf(cell.getNumericCellValue());
+			break;
 
-            case 1:
-                cellData = cell.getStringCellValue();
-                break;
+		case 1:
+			cellData = cell.getStringCellValue();
+			break;
 
-            case 2:
-                cellData = String.valueOf(cell.getCellFormula());
-                break;
+		case 2:
+			cellData = String.valueOf(cell.getCellFormula());
+			break;
 
-            case 4:
-                cellData = String.valueOf(cell.getBooleanCellValue());
-                break;
+		case 4:
+			cellData = String.valueOf(cell.getBooleanCellValue());
+			break;
 
-            default:
-                break;
-            }
-            
-            return cellData;
-        } catch (Exception e) {
-            return "";
-        }
+		default:
+			break;
+		}
+
+		return cellData;
 	}
 }
