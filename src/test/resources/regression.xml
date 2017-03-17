@@ -82,6 +82,12 @@
 		</classes>
 	</test>
 
+	<test name="PersonFactory" parallel="methods" thread-count="20">
+		<classes>
+			<class name="com.orasi.utils.dataHelpers.TestPersonFactory" />
+		</classes>
+	</test>
+	
 	<test name="ExcelDocumentReader" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.utils.TestExcelDocumentReader" />
