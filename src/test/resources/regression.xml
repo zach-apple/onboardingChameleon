@@ -129,4 +129,9 @@
 			<class name="com.orasi.utils.TestWindowHandler" />
 		</classes>
 	</test>
+	<test name="TestXMLTools">
+		<classes>
+			<class name="com.orasi.utils.TestXMLTools" />
+		</classes>
+	</test> 
 </suite> <!-- Suite -->

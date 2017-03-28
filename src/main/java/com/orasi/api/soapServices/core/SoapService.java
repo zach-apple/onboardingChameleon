@@ -30,8 +30,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.orasi.api.soapServices.core.exceptions.SoapException;
-import com.orasi.api.soapServices.core.exceptions.XPathNotFoundException;
-import com.orasi.api.soapServices.core.exceptions.XPathNullNodeValueException;
+import com.orasi.exception.automation.XPathNotFoundException;
+import com.orasi.exception.automation.XPathNullNodeValueException;
 import com.orasi.utils.ExcelDocumentReader;
 import com.orasi.utils.Randomness;
 import com.orasi.utils.Regex;
