@@ -76,6 +76,12 @@
 		</classes>
 	</test>
 	
+	<test name="PersonFactory" parallel="methods" thread-count="20">
+		<classes>
+			<class name="com.orasi.utils.dataHelpers.TestPersonFactory" />
+		</classes>
+	</test>
+	
 	<test name="Base64Encoder" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.utils.TestBase64Encoder" />
@@ -121,6 +127,11 @@
 	<test name="TestWindowHandler" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.utils.TestWindowHandler" />
+		</classes>
+	</test>
+	<test name="TestXMLTools" parallel="methods" thread-count="20">
+		<classes>
+			<class name="com.orasi.utils.TestXMLTools" />
 		</classes>
 	</test>
 </suite> <!-- Suite -->

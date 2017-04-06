@@ -1,11 +1,8 @@
 package com.orasi.api.soapServices.core;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,18 +16,13 @@ import javax.xml.soap.SOAPConstants;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPMessage;
+import javax.xml.ws.WebServiceException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.read.biff.BiffException;
-
-import org.apache.xmlbeans.XmlException;
 import org.testng.Reporter;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -38,13 +30,14 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.orasi.api.soapServices.core.exceptions.SoapException;
-import com.orasi.api.soapServices.core.exceptions.XPathNotFoundException;
-import com.orasi.api.soapServices.core.exceptions.XPathNullNodeValueException;
-import com.orasi.exception.AutomationException;
+import com.orasi.exception.automation.XPathNotFoundException;
+import com.orasi.exception.automation.XPathNullNodeValueException;
+import com.orasi.utils.ExcelDocumentReader;
 import com.orasi.utils.Randomness;
 import com.orasi.utils.Regex;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.XMLTools;
+import com.orasi.utils.dataProviders.CSVDataProvider;
 
 public abstract class SoapService{
 	private String strServiceName;
@@ -319,7 +312,7 @@ public abstract class SoapService{
 	}
 
 	/**
-	 *  Find and open the excel file sent. If successful, look and find
+	 *  Find and open the excel or csv file sent. If successful, look and find
 	 *          the matching scenario name then return its xpath and value data.
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
@@ -333,67 +326,56 @@ public abstract class SoapService{
 		TestReporter.logTrace("Entering SoapService#getTestScenario");
 		String[][] tabArray = null;
 		String filePath = "";
-		try {
-			TestReporter.logTrace("Getting file from Resources");
-			filePath = getClass().getResource(file).getPath();
+		TestReporter.logTrace("Getting file from Resources");
+		int startCol, endRow, endCol, ci, cj;
+		filePath = getClass().getResource(file).getPath();
 
-			filePath = filePath.replace("%20", " ");
-			TestReporter.logDebug("Full file path ["+filePath+"]");
+		filePath = filePath.replace("%20", " ");
+		TestReporter.logTrace("Full file path ["+filePath+"]");
 
-			TestReporter.logTrace("Opening excel workbook with file");
-			Workbook workbook = Workbook.getWorkbook(new File(filePath));
-
-			TestReporter.logTrace("Load default worksheet");
-			Sheet sheet = workbook.getSheet(0);
-			int startRow, startCol, endRow, endCol, ci, cj;
-
-			TestReporter.logTrace("Searching for column containing scenario");
-			Cell tableStart = sheet.findCell(scenario);
-
-			TestReporter.logTrace("Scenario found");
-			startRow = tableStart.getRow();
-			startCol = tableStart.getColumn();
-
-			TestReporter.logTrace("Determining last row containing data");
-
-			for (int i = startRow + 1;; i++) {
-				try {
-					if (sheet.getCell(startCol + 1, i).getContents().toString()
-							.equals("")) {
-						endRow = i;
-						break;
-					}
-				} catch (ArrayIndexOutOfBoundsException arrayError) {
-					endRow = i;
-					break;
-				}
-
-			}
-
-			TestReporter.logDebug("Start Column ["+startCol+"]" );
-			TestReporter.logDebug("End Row ["+endRow+"]" );
-			endCol = startCol + 3;
-
-			TestReporter.logTrace("Create an array based on end row");
-			tabArray = new String[endRow - startRow - 1][endCol - startCol - 1];
-			ci = 0;
-
-
-			TestReporter.logTrace("Transfer data from excel sheet to array");
-			for (int i = startRow + 1; i < endRow; i++, ci++) {
-				cj = 0;
-				for (int j = startCol + 1; j < endCol; j++, cj++) {
-					tabArray[ci][cj] = sheet.getCell(j, i).getContents();
-				}
-			}
-		} catch (FileNotFoundException fnfe) {
-			throw new AutomationException("File not found in path ["+filePath+"]", fnfe.getCause());
-		} catch (BiffException be) {
-			throw new AutomationException("Unable to read file. Ensure file is [xls] format and not [xlsx]", be.getCause());
-		} catch (IOException ioe) {
-			throw new RuntimeException("Unable to open file " + file + "\n"
-					+ ioe.getCause());
+		Object[][] xlsSheet = null; 
+		if (filePath.toUpperCase().indexOf(".XLS") > 0) {
+			TestReporter.logTrace("Retrieving data from ExcelDocumentReader");
+			xlsSheet = new ExcelDocumentReader(filePath).readData("0", -1, 0);
 		}
+		else {
+			TestReporter.logTrace("CSVDataProvider");
+			xlsSheet = CSVDataProvider.getData(filePath);
+		}
+		TestReporter.logTrace("Successfully retrieved data");
+
+		startCol = -1;
+		
+		TestReporter.logTrace("Finding column with scenario [ " + scenario + " ]");
+		for(int column = 0 ; column < xlsSheet[0].length ; column++){
+			if (xlsSheet[0][column].toString().contains(scenario)){
+				startCol = column;
+				break;
+			}
+		}
+		if(startCol == -1) throw new WebServiceException("Failed to find scenario [ " + scenario + " ] in CSV ");
+		endCol = startCol + 3;
+		TestReporter.logTrace("Found scenario [ " + scenario + " ]");
+		TestReporter.logTrace("Start Column [ "+startCol+"] " );
+		TestReporter.logTrace("End Column [ "+(startCol + 3)+" ]" );
+		
+		TestReporter.logTrace("Determining last row of data in column [ " + (startCol +1)+ " ]");
+		
+		for(endRow = xlsSheet.length ; xlsSheet[endRow-1][startCol+1].toString().isEmpty() ; endRow--){}
+		TestReporter.logTrace("Found last row of data in column [ " + (startCol +1)+ " ]");
+		TestReporter.logTrace("End Row [ "+endRow+"] " );
+		
+		tabArray = new String[endRow-1][2];
+		ci = 0;
+
+		TestReporter.logTrace("Transfer data from excel sheet to array");
+		for (int i = 1; i < endRow; i++, ci++) {
+			cj = 0;
+			for (int j = startCol + 1; j < endCol; j++, cj++) {
+				tabArray[ci][cj] = xlsSheet[i][j].toString();
+			}
+		}
+		TestReporter.logTrace("Successfull transfered data to array");
 		TestReporter.logTrace("Exiting SoapService#getTestScenario");
 		return (tabArray);
 	}
@@ -587,7 +569,7 @@ public abstract class SoapService{
 	 */
 	public void setRequestNodeValueByXPath(Object[][] scenarios) {
 		for (int x = 0; x < scenarios.length; x++) {
-			TestReporter.logDebug("Set value [ " + scenarios[x][0].toString() + " ] to XPath [ " + scenarios[x][1].toString() + " ]");
+			TestReporter.logDebug("Set value [ " + scenarios[x][1].toString() + " ] to XPath [ " + scenarios[x][0].toString() + " ]");
 			setRequestNodeValueByXPath(getRequestDocument(),scenarios[x][0].toString(),
 					scenarios[x][1].toString());
 		}

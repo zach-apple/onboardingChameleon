@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang.time.StopWatch;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
@@ -70,7 +71,7 @@ public class ElementImpl implements Element {
 			WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), 1);
 			element = wait.until(ExpectedConditions.presenceOfElementLocated(by));
 			TestReporter.logTrace("Element [ " + by + "] found and stored");			
-		}catch(NoSuchElementException | TimeoutException throwAway){
+		}catch(WebDriverException throwAway){
 			TestReporter.logTrace("Element [ " + by + "] NOT found intially, will search again later");
 		}
 		TestReporter.logTrace("Exiting ElementImpl#init");
@@ -285,9 +286,21 @@ public class ElementImpl implements Element {
 	@Override
 	public void sendKeys(CharSequence... keysToSend) {
 		TestReporter.logTrace("Entering ElementImpl#sendKeys");
+		String keys = "";
 		if (keysToSend.toString() != "") {
 			getWrappedElement().sendKeys(keysToSend);
-			TestReporter.interfaceLog(" Send Keys [ <b>" + keysToSend[0].toString() + "</b> ] to Textbox [ <b>"
+			
+			for(CharSequence key : keysToSend){
+				if(key instanceof Keys){
+					if(keys.isEmpty()) keys = "Key." +((Keys) key).name();
+					else keys += " + Key." + ((Keys) key).name();				
+				}else {
+					if(keys.isEmpty()) keys = key.toString();
+					else keys += key.toString();		
+				}
+			}
+		
+			TestReporter.interfaceLog(" Send Keys [ <b>" + keys + "</b> ] to Textbox [ <b>"
 					+ getElementIdentifier() + " </b> ]");
 		}
 		TestReporter.logTrace("Exiting ElementImpl#sendKeys");
@@ -587,7 +600,7 @@ public class ElementImpl implements Element {
 		boolean found = false;
 		long timeLapse;
 
-		WebDriverWait wait = new WebDriverWait(driver, timeout);
+		WebDriverWait wait = new WebDriverWait(driver, 1);
 		stopwatch.start();
 		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
         		try {
@@ -654,7 +667,7 @@ public class ElementImpl implements Element {
 		boolean found = false;
 		long timeLapse;
 		stopwatch.start();
-		WebDriverWait wait = new WebDriverWait(driver, timeout);
+		WebDriverWait wait = new WebDriverWait(driver, 1);
 		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
         		try {
         			found = wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.elementToBeHidden(reload()));
@@ -718,7 +731,7 @@ public class ElementImpl implements Element {
 		TestReporter.interfaceLog("<i>Syncing to element [<b>" + getElementLocatorInfo()
 		+ "</b> ] to be <b>ENABLED</b> within [ <b>" + timeout + "</b> ] seconds.</i>");
 		stopwatch.start();
-		WebDriverWait wait = new WebDriverWait(driver, timeout);
+		WebDriverWait wait = new WebDriverWait(driver, 1);
 		
 		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
         		try {
@@ -786,7 +799,7 @@ public class ElementImpl implements Element {
 		TestReporter.interfaceLog("<i>Syncing to element [<b>" + getElementLocatorInfo()
 		+ "</b> ] to be <b>DISABLED</b> within [ <b>" + timeout + "</b> ] seconds.</i>");
 		stopwatch.start();
-		WebDriverWait wait = new WebDriverWait(driver, timeout);
+		WebDriverWait wait = new WebDriverWait(driver, 1);
 
 		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
         		try {
@@ -996,7 +1009,7 @@ public class ElementImpl implements Element {
 		TestReporter.interfaceLog("<i>Syncing to attribute [<b> " + attribute + "</b> ] to contain [<b> " + value + "</b> ] in element [<b>"
 				+ getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + timeout + "</b> ] seconds.</i>");
 		stopwatch.start();
-		WebDriverWait wait = new WebDriverWait(driver, timeout);
+		WebDriverWait wait = new WebDriverWait(driver, 1);
 
 		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
         		try {
@@ -1064,7 +1077,7 @@ public class ElementImpl implements Element {
 		StopWatch stopwatch = new StopWatch();
 		TestReporter.interfaceLog("<i>Syncing to attribute [<b> " + attribute + "</b> ] to match the regular expression of [<b> " + regex + "</b> ] in element [<b>"
 				+ getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + timeout + "</b> ] seconds.</i>");
-		WebDriverWait wait = new WebDriverWait(driver, timeout);
+		WebDriverWait wait = new WebDriverWait(driver, 1);
 
 
 		stopwatch.start();
@@ -1137,7 +1150,7 @@ public class ElementImpl implements Element {
 		TestReporter.interfaceLog("<i>Syncing to CSS Property [<b> " + cssProperty + "</b> ] to contain [<b> " + value + "</b> ] in element [<b>"
 				+ getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + timeout + "</b> ] seconds.</i>");
 
-		WebDriverWait wait = new WebDriverWait(driver, timeout);
+		WebDriverWait wait = new WebDriverWait(driver, 1);
 		stopwatch.start();
 		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
 		    try {
@@ -1260,4 +1273,5 @@ public class ElementImpl implements Element {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 }

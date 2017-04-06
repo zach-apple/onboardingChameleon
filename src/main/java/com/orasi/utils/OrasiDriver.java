@@ -17,7 +17,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.MarionetteDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -55,6 +54,8 @@ import com.orasi.core.interfaces.impl.RadioGroupImpl;
 import com.orasi.core.interfaces.impl.TextboxImpl;
 import com.orasi.core.interfaces.impl.WebtableImpl;
 import com.orasi.utils.dataHelpers.DataWarehouse;
+import com.orasi.utils.debugging.Colors;
+import com.orasi.utils.debugging.Highlight;
 
 public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreenshot {
 	/*
@@ -225,12 +226,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	@Override
 	public List<WebElement> findElements(By by) {
-		try {
-			return findWebElements(by);
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such Element with context " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return findWebElements(by);
 	}
 	/**
 	 * Method to find all WebElements for a given page, using a Selenium <b><i>By</i></b> locator
@@ -241,12 +237,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElements-org.openqa.selenium.By-
 	 */
 	public List<WebElement> findWebElements(By by) {
-		try {
-			return driver.findElements(by);
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such WebElement with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return driver.findElements(by);
 	}
 	/**
 	 * Method to find a single Element for a given page, using a Selenium <b><i>By</i></b> locator
@@ -258,12 +249,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 */
 	@Override
 	public Element findElement(By by) {
-		try {
-			return new ElementImpl(this, by);
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such Element with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return new ElementImpl(this, by);
 	}
 	/**
 	 * Method to find a single Element for a given page, using an Orasi <b><i>ByNG</i></b> locator
@@ -274,12 +260,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
 	 */
 	public Element findElement(ByNG by) {
-		try {
-			return new ElementImpl(this, getByNGType(by));
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such Element with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return new ElementImpl(this, getByNGType(by));
 	}
 	/**
 	 * Method to find a single Textbox for a given page, using a Selenium <b><i>By</i></b> locator
@@ -290,12 +271,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/TextboxImpl.java
 	 */
 	public Textbox findTextbox(By by) {
-		try {
-			return new TextboxImpl(this, by);
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such Textbox with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return new TextboxImpl(this, by);
 	}
 	/**
 	 * Method to find a single Textbox for a given page, using an Orasi <b><i>ByNG</i></b> locator
@@ -306,12 +282,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
 	 */
 	public Textbox findTextbox(ByNG by) {
-		try {
-			return new TextboxImpl(this, getByNGType(by));
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such Textbox with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return new TextboxImpl(this, getByNGType(by));
 	}
 	/**
 	 * Method to find a single Button for a given page, using a Selenium <b><i>By</i></b> locator
@@ -322,12 +293,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/ButtonImpl.java
 	 */
 	public Button findButton(By by) {
-		try {
-			return new ButtonImpl(this, by);
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such Button with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return new ButtonImpl(this, by);
 	}
 	/**
 	 * Method to find a single Button for a given page, using an Orasi <b><i>ByNG</i></b> locator
@@ -338,12 +304,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
 	 */
 	public Button findButton(ByNG by) {
-		try {
-			return new ButtonImpl(this, getByNGType(by));
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such Button with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return new ButtonImpl(this, getByNGType(by));
 	}
 	/**
 	 * Method to find a single Checkbox for a given page, using a Selenium <b><i>By</i></b> locator
@@ -354,12 +315,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/CheckboxImpl.java
 	 */
 	public Checkbox findCheckbox(By by) {
-		try {
-			return new CheckboxImpl(this, by);
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such Checkbox with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return new CheckboxImpl(this, by);
 	}
 	/**
 	 * Method to find a single Checkbox for a given page, using an Orasi <b><i>ByNG</i></b> locator
@@ -370,12 +326,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
 	 */
 	public Checkbox findCheckbox(ByNG by) {
-		try {
-			return new CheckboxImpl(this, getByNGType(by));
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such Checkbox with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return new CheckboxImpl(this, getByNGType(by));
 	}
 	/**
 	 * Method to find a single Label for a given page, using a Selenium <b><i>By</i></b> locator
@@ -386,12 +337,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/LabelImpl.java
 	 */
 	public Label findLabel(By by) {
-		try {
-			return new LabelImpl(this, by);
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such Label with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return new LabelImpl(this, by);
 	}
 	/**
 	 * Method to find a single Label for a given page, using an Orasi <b><i>ByNG</i></b> locator
@@ -402,12 +348,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
 	 */
 	public Label findLabel(ByNG by) {
-		try {
-			return new LabelImpl(this, getByNGType(by));
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such Label with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return new LabelImpl(this, getByNGType(by));
 	}
 	/**
 	 * Method to find a single Link for a given page, using a Selenium <b><i>By</i></b> locator
@@ -418,12 +359,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/LinkImpl.java
 	 */
 	public Link findLink(By by) {
-		try {
-			return new LinkImpl(this, by);
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such Link with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return new LinkImpl(this, by);
 	}
 	/**
 	 * Method to find a single Link for a given page, using an Orasi <b><i>ByNG</i></b> locator
@@ -434,12 +370,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
 	 */
 	public Link findLink(ByNG by) {
-		try {
-			return new LinkImpl(this, getByNGType(by));
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such Link with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return new LinkImpl(this, getByNGType(by));
 	}
 	/**
 	 * Method to find a single Listbox for a given page, using a Selenium <b><i>By</i></b> locator
@@ -450,12 +381,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/ListboxImpl.java
 	 */
 	public Listbox findListbox(By by) {
-		try {
-			return new ListboxImpl(this, by);
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such Listbox with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return new ListboxImpl(this, by);
 	}
 	/**
 	 * Method to find a single Listbox for a given page, using an Orasi <b><i>ByNG</i></b> locator
@@ -466,12 +392,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
 	 */
 	public Listbox findListbox(ByNG by) {
-		try {
-			return new ListboxImpl(this, getByNGType(by));
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such Listbox with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return new ListboxImpl(this, getByNGType(by));
 	}
 	/**
 	 * Method to find a single RadioGroup for a given page, using a Selenium <b><i>By</i></b> locator
@@ -482,12 +403,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/RadioGroupImpl.java
 	 */
 	public RadioGroup findRadioGroup(By by) {
-		try {
-			return new RadioGroupImpl(this, by);
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such RadioGroup with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return new RadioGroupImpl(this, by);
 	}
 	/**
 	 * Method to find a single RadioGroup for a given page, using an Orasi <b><i>ByNG</i></b> locator
@@ -498,12 +414,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
 	 */
 	public RadioGroup findRadioGroup(ByNG by) {
-		try {
-			return new RadioGroupImpl(this, getByNGType(by));
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such RadioGroup with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return new RadioGroupImpl(this, getByNGType(by));
 	}
 	/**
 	 * Method to find a single Webtable for a given page, using a Selenium <b><i>By</i></b> locator
@@ -514,12 +425,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/interfaces/impl/WebtableImpl.java
 	 */
 	public Webtable findWebtable(By by) {
-		try {
-			return new WebtableImpl(this, by);
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such Webtable with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return new WebtableImpl(this, by);
 	}
 	/**
 	 * Method to find a single Webtable for a given page, using an Orasi <b><i>ByNG</i></b> locator
@@ -530,12 +436,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see http://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/core/by/angular/ByNG.java
 	 */
 	public Webtable findWebtable(ByNG by) {
-		try {
-			return new WebtableImpl(this, getByNGType(by));
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such Webtable with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return new WebtableImpl(this, getByNGType(by));
 	}
 	/**
 	 * Method to find a single WebElement for a given page, using a Selenium <b><i>By</i></b> locator
@@ -546,12 +447,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebElement.html
 	 */
 	public WebElement findWebElement(By by) {
-		try {
-			return driver.findElement(by);
-		} catch (NoSuchElementException nse) {
-			//TestReporter.logFailure("No such WebElement with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return driver.findElement(by);
 	}
 	/**
 	 * Method to find a single WebElement for a given page, using an Orasi <b><i>ByNG</i></b> locator
@@ -562,12 +458,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebElement.html
 	 */
 	public WebElement findWebElement(ByNG by) {
-		try {
-			return driver.findElement(getByNGType(by));
-		} catch (NoSuchElementException nse) {
-			TestReporter.logFailure("No such WebElement with context: " + by.toString());
-			throw new NoSuchElementException(nse.getMessage());
-		}
+		return driver.findElement(getByNGType(by));
 	}
 	/**
 	 * Method to return the page source of a given current page
@@ -759,12 +650,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	private void setDriverWithCapabilties(DesiredCapabilities caps) {
 		switch (caps.getBrowserName().toLowerCase()) {
 		case "firefox":
-			if (caps.getCapability("marionette").equals(true)){
-				driver = new MarionetteDriver(caps);
-			} else {
-				driver = new FirefoxDriver(caps);
-			}
-			
+			driver = new FirefoxDriver(caps);		
 			break;
 		case "internet explorer":
 		case "iexplore":
@@ -906,7 +792,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 	 * Example usages provided with each method contained within.
 	 * @author Waightstill W Avery
 	 */
-	public class Page {
+	class Page {
 
 		/**
 		 * @summary loops for a predetermined amount of time (defined by
@@ -1006,6 +892,38 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 			return  PageLoaded.isDomComplete(getOrasiDriver(), timeout);
 		}
 
+	}
+	
+	public Debug debug(){
+		return new Debug();
+	}
+	
+	public class Debug{
+		public void setReporterLogLevel(int level){
+			TestReporter.setDebugLevel(level);
+		}
+		
+		public void setReporterPrintToConsole(boolean print){
+			TestReporter.setPrintToConsole(print);
+		}
+		
+		public void setHighlightOnSync(boolean highlight){
+			Highlight.setDebugMode(highlight);
+		}
+		
+		public void setDebugColor(Colors color){
+			Highlight.setDebugColor(color);
+		}
+
+		public void setHighlightColor(Colors color){
+			Highlight.setHighlightColor(color);;
+		}
+
+		public void setErrorColor(Colors color){
+			Highlight.setErrorColor(color);
+		}
+		
+		
 	}
 
 }

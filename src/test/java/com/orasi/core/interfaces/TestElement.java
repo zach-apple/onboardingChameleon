@@ -28,14 +28,14 @@ public class TestElement extends TestEnvironment {
 	@BeforeTest(groups = { "regression", "interfaces", "element", "dev" })
 	@Parameters({ "runLocation", "browserUnderTest", "browserVersion", "operatingSystem", "environment" })
 	public void setup(@Optional String runLocation, String browserUnderTest, String browserVersion,
-			String operatingSystem, String environment) {TestReporter.setDebugLevel(3);
+			String operatingSystem, String environment) {
 		setApplicationUnderTest("Test Site");
 		setBrowserUnderTest(browserUnderTest);
 		setBrowserVersion(browserVersion);
 		setOperatingSystem(operatingSystem);
 		setRunLocation(runLocation);
 		setTestEnvironment(environment);
-		setPageURL("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/element.html");
+		setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/element.html");
 		testStart("TestElement");
 		getDriver().findWebElement(By.id("text1")).sendKeys("blah");
 	}
@@ -107,7 +107,7 @@ public class TestElement extends TestEnvironment {
 	public void getCssValue() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
 		if (getBrowserUnderTest().equalsIgnoreCase("html"))
-			Assert.assertTrue(element.getCssValue("width").equals("auto"));
+			Assert.assertTrue(element.getCssValue("font-family").equals("verdana"));
 		else
 			Assert.assertTrue(!element.getCssValue("font-family").isEmpty());
 	}
@@ -546,11 +546,8 @@ public class TestElement extends TestEnvironment {
 	@Test(groups = { "regression", "interfaces", "element" })
 	public void syncCssPropertyContainsValueBasic() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
-		if (getBrowserUnderTest().equalsIgnoreCase("html")){
-		    Assert.assertTrue(element.syncCssPropertyContainsValue("type","transparent"));
-		}else{
-		    Assert.assertTrue(element.syncCssPropertyContainsValue("display","inline"));
-		}
+		Assert.assertTrue(element.syncCssPropertyContainsValue("display","inline"));
+
 	}
 
 	@Features("Element Interfaces")
@@ -559,11 +556,7 @@ public class TestElement extends TestEnvironment {
 	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=ElementCssValueNotMatchingException.class)
 	public void syncCssPropertyContainsValueBasicNegative() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
-		if (getBrowserUnderTest().equalsIgnoreCase("html")){
-		    element.syncCssPropertyContainsValue("type","transasdfpar");
-		}else{
-		    element.syncCssPropertyContainsValue("display","Inline");
-		}
+	    element.syncCssPropertyContainsValue("display","Inline");
 	}
 
 	@Features("Element Interfaces")
@@ -572,11 +565,7 @@ public class TestElement extends TestEnvironment {
 	@Test(groups = { "regression", "element" })
 	public void syncCssPropertyContainsValueAdvanced() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
-		if (getBrowserUnderTest().equalsIgnoreCase("html")){
-		    Assert.assertTrue(element.syncCssPropertyContainsValue("type","transparent", 5, false));
-		}else{
-		    Assert.assertTrue(element.syncCssPropertyContainsValue("display","inline", 5, false));
-		}
+	    Assert.assertTrue(element.syncCssPropertyContainsValue("display","inline", 5, false));
 	}
 
 	@Features("Element Interfaces")
@@ -597,13 +586,8 @@ public class TestElement extends TestEnvironment {
 	@Title("syncCssPropertyMatchesValueBasic")
 	@Test(groups = { "regression", "interfaces", "element" })
 	public void syncCssPropertyMatchesValueBasic() {
-	    
 		Element element = getDriver().findElement(By.id("buttonForText1"));
-		if (getBrowserUnderTest().equalsIgnoreCase("html")){
-		    Assert.assertTrue(element.syncCssPropertyMatchesValue("type","(.*trans.*)"));
-		}else{
-		    Assert.assertTrue(element.syncCssPropertyMatchesValue("display","(.*inline.*)"));
-		}
+	    Assert.assertTrue(element.syncCssPropertyMatchesValue("display","(.*inline.*)"));
 	}
 
 	@Features("Element Interfaces")
@@ -612,11 +596,7 @@ public class TestElement extends TestEnvironment {
 	@Test(groups = { "regression", "interfaces", "element" }, expectedExceptions=ElementCssValueNotMatchingException.class)
 	public void syncCssPropertyMatchesValueBasicNegative() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
-		if (getBrowserUnderTest().equalsIgnoreCase("html")){
-		    element.syncCssPropertyMatchesValue("type","(.*trans)");
-		}else{
-		    element.syncCssPropertyMatchesValue("display","(.*Inline.*)");
-		}
+	    element.syncCssPropertyMatchesValue("display","(.*Inline.*)");
 	}
 
 	
@@ -626,11 +606,7 @@ public class TestElement extends TestEnvironment {
 	@Test(groups = { "regression", "element" })
 	public void syncCssPropertyMatchesValueAdvanced() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
-		if (getBrowserUnderTest().equalsIgnoreCase("html")){
-		    Assert.assertTrue(element.syncCssPropertyMatchesValue("type","(.*trans.*)", 2, false));
-		}else{
-		    Assert.assertTrue(element.syncCssPropertyMatchesValue("display","(.*inline.*)", 2, false));
-		}
+	    Assert.assertTrue(element.syncCssPropertyMatchesValue("display","(.*inline.*)", 2, false));
 	}
 	
 	@Features("Element Interfaces")
@@ -639,11 +615,7 @@ public class TestElement extends TestEnvironment {
 	@Test(groups = { "regression", "element" })
 	public void syncCssPropertyMatchesValueAdvancedNegative() {
 		Element element = getDriver().findElement(By.id("buttonForText1"));
-		if (getBrowserUnderTest().equalsIgnoreCase("html")){
-		    Assert.assertFalse(element.syncCssPropertyMatchesValue("type","(.*Trans.*)", 2, false));
-		}else{
-		    Assert.assertFalse(element.syncCssPropertyMatchesValue("display","(.*Inline-Block.*)", 2, false));
-		}
+	    Assert.assertFalse(element.syncCssPropertyMatchesValue("display","(.*Inline-Block.*)", 2, false));
 	}
 	
 	

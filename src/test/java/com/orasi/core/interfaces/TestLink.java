@@ -31,7 +31,7 @@ public class TestLink extends TestEnvironment {
         	setOperatingSystem(operatingSystem);
         	setRunLocation(runLocation);
         	setTestEnvironment(environment);
-        	setPageURL("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/link.html");
+        	setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/link.html");
         	testStart("TestLink");
         }
     
