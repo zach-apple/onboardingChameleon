@@ -652,6 +652,8 @@ public class TestEnvironment {
 		case "mountain lion":
 		case "mountain_lion":
 			return Platform.MOUNTAIN_LION;
+		case "sierra":
+			return Platform.SIERRA;
 		case "snow leopard":
 		case "snow_leopard":
 			return Platform.SNOW_LEOPARD;
