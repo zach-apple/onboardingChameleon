@@ -6,8 +6,6 @@ import org.openqa.selenium.security.Credentials;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.orasi.exception.AutomationException;
-
 public class AlertHandler {
     public static boolean isAlertPresent(WebDriver driver, int timeout){
 	TestReporter.logTrace("Entering AlertHandler#isAlertPresent");

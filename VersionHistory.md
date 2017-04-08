@@ -1,6 +1,8 @@
 #Version History
 
 ##Version 1.1.2 - 04/08/2017
+* [**com.orasi.core.by.angular**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/core/by/angular)
+  * Doing initial rework of Angular locators
 * [**com.orasi.api.soapService**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/api/soapServices)
   * Cleaned up handleValueFunctions and created unit tests
   * Removing from api.soapService.core package to just be in api.soapServices package

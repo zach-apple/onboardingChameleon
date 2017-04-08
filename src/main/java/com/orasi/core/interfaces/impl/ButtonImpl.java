@@ -3,6 +3,7 @@ package com.orasi.core.interfaces.impl;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import com.orasi.core.by.angular.ByNG;
 import com.orasi.core.interfaces.Button;
 import com.orasi.exception.AutomationException;
 import com.orasi.utils.OrasiDriver;
@@ -29,6 +30,10 @@ public class ButtonImpl extends ElementImpl implements Button {
 		//element = driver.findWebElement(by);
 	}
 
+	public ButtonImpl(OrasiDriver driver, ByNG by) {
+		super(driver, by);
+		//element = driver.findWebElement(by);
+	}
 	@Override
 	public void click() {
 		TestReporter.logTrace("Entering ButtonImpl#click");

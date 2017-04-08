@@ -29,7 +29,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
 
 	public ListboxImpl(OrasiDriver driver, By by) {
 		super(driver, by);
-		//element = driver.findWebElement(by);
+	//	element = driver.findWebElement(by);
 		TestReporter.logTrace("Entering ListboxImpl#init");
 		this.innerSelect = new org.openqa.selenium.support.ui.Select(driver.findWebElement(by));
 		TestReporter.logTrace("Exiting ListboxImpl#init");

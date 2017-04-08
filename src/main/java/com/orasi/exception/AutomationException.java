@@ -23,6 +23,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import com.orasi.utils.OrasiDriver;
 
+@SuppressWarnings("deprecation")
 public class AutomationException extends RuntimeException{
 
     public static final String SESSION_ID = "Session ID";
@@ -193,15 +194,15 @@ public class AutomationException extends RuntimeException{
 
     private String[] getHostNameAndPort(WebDriver driver) {
 	String[] hostAndPort = new String[3];
-	String errorMsg = "Failed to acquire remote webdriver node and port info. Root cause: ";
 	String sessionId = "N/A";
 
 	if(driver == null) return new String[]{"N/A", "N/A", "N/A"};
+	DefaultHttpClient client = null;
 	try {
 	    String hostName = (((HttpCommandExecutor)((RemoteWebDriver)driver).getCommandExecutor()).getAddressOfRemoteServer().getHost());
 	    int port =4444;
 	    HttpHost host = new HttpHost(hostName, port);
-	    DefaultHttpClient client = new DefaultHttpClient();
+	    client = new DefaultHttpClient();
 	    sessionId = sessionId(driver);
 	    URL sessionURL = new URL("http://" + hostName + ":" + port + "/grid/api/testsession?session=" + sessionId);
 	    BasicHttpEntityEnclosingRequest r = new BasicHttpEntityEnclosingRequest("POST", sessionURL.toExternalForm());
@@ -214,6 +215,7 @@ public class AutomationException extends RuntimeException{
 		hostAndPort[2] = sessionId;
 	    }
 	} catch (Exception throw_away) { return new String[]{"N/A", "N/A", "N/A"};}
+	finally{client.close();}
 	return hostAndPort;
     }
 

@@ -77,6 +77,22 @@ public class ElementImpl implements Element {
 		TestReporter.logTrace("Exiting ElementImpl#init");
 	}
 
+	public ElementImpl( final OrasiDriver driver, final ByNG by) {
+		this.byNG= by;
+		this.driver = driver;
+		try{
+			TestReporter.logTrace("Entering ElementImpl#init");
+			TestReporter.logTrace("Inital search for element [ " + by + "]");
+			int tempTimeout = driver.getElementTimeout();
+			driver.setElementTimeout(1);
+			element = driver.findElement(by);
+			driver.setElementTimeout(tempTimeout);
+			TestReporter.logTrace("Element [ " + by + "] found and stored");			
+		}catch(NoSuchElementException | TimeoutException throwAway){
+			TestReporter.logTrace("Element [ " + by + "] NOT found intially, will search again later");
+		}
+		TestReporter.logTrace("Exiting ElementImpl#init");
+	}
 
 
 	/**
@@ -323,7 +339,7 @@ public class ElementImpl implements Element {
 			TestReporter.logTrace("Successfully validated element [ " + by.toString() + " ] is usable");
 			TestReporter.logTrace("Exiting ElementImpl#getWrappedElement");
 			return tempElement;
-		}catch(NoSuchElementException |  StaleElementReferenceException| NullPointerException e){
+		}catch( StaleElementReferenceException| NullPointerException e){
 
 			try{
 				TestReporter.logTrace("Element [ " + by.toString() + " ] is stale, attempt to reload the element");
@@ -335,6 +351,10 @@ public class ElementImpl implements Element {
 				TestReporter.logTrace("Exiting ElementImpl#getWrappedElement");
 				return element;
 			}
+		}catch(NoSuchElementException nsee){
+			TestReporter.logTrace("Failed to reload element [ " + by.toString() + " ]");
+			TestReporter.logTrace("Exiting ElementImpl#getWrappedElement");
+			throw nsee;
 		}
 	}
 
@@ -1262,7 +1282,13 @@ public class ElementImpl implements Element {
 	protected WebElement reload(){
 		TestReporter.logTrace("Entering ElementImpl#reload");
 		TestReporter.logTrace("Search DOM for element [ " + by.toString() + " ]");
-		WebElement el = getWrappedDriver().findWebElement(by);
+		WebElement el = null;
+		try{
+			WebDriverWait wait = new WebDriverWait(getWrappedDriver().getWebDriver(), getWrappedDriver().getElementTimeout());
+			el = wait.until(ExpectedConditions.presenceOfElementLocated(by));
+		}catch(WebDriverException wde){
+			throw new NoSuchElementException("Failed locate element [ " + by.toString()+ " ]");
+		}
 		TestReporter.logTrace("Found element [ " + by.toString() + " ]");
 		TestReporter.logTrace("Exiting ElementImpl#reload");
 		return el;
