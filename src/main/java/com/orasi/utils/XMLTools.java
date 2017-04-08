@@ -32,6 +32,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.orasi.api.soapServices.core.exceptions.MissingFunctionParameterValueException;
 import com.orasi.api.soapServices.core.exceptions.SoapException;
 import com.orasi.exception.AutomationException;
 import com.orasi.exception.automation.XPathInvalidExpression;
@@ -130,6 +131,7 @@ public class XMLTools{
 		XPathExpression expr;
 		NodeList nList = null;
 		String[] values = namespace.split(",");
+		if(values.length == 1) throw new MissingFunctionParameterValueException("Missing expected parameters: Expected format [ fx:addnamespace ; xmlns:name,url] where name is the name of the namespace to add and url is the URL of the namespace");
 		String namespaceName = values[0];
 		String namespaceURL = values[1];
 		try {

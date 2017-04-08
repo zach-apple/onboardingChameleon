@@ -7,6 +7,7 @@ import java.io.IOException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -113,10 +114,12 @@ public class ExcelDocumentReader {
 
 	private String getCellData(int rowNum, int colNum) {
 		cell = excelWSheet.getRow(rowNum).getCell(colNum);
+		if(cell == null) return "";
 		String cellData = "";
 		switch (cell.getCellType()) {
 		case 0:
-			cellData = String.valueOf(cell.getNumericCellValue());
+			DataFormatter formatter = new DataFormatter();
+			cellData=formatter.formatCellValue(cell);
 			break;
 
 		case 1:

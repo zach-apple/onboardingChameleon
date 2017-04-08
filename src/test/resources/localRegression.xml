@@ -10,13 +10,13 @@
 	<parameter name="runLocation" value="sauce" />
 	<parameter name="browserVersion" value="52" />
 	<parameter name="operatingSystem" value="windows 10" />
-    <test name="Element" parallel="methods" thread-count="20">
+    <test name="Element" parallel="methods" thread-count="10">
 		<classes>
 			<class name="com.orasi.core.interfaces.TestElement" />
 		</classes>
 	</test>
 
-	<test name="TestElementInternalHandlers" parallel="methods" thread-count="20">
+	<test name="TestElementInternalHandlers" parallel="methods" thread-count="10">
 		<classes>
 			<class name="com.orasi.core.interfaces.TestElementInternalHandlers" />
 		</classes>
@@ -132,6 +132,18 @@
 	<test name="TestXMLTools" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.utils.TestXMLTools" />
+		</classes>
+	</test>
+	
+	<test name="TestSoapServiceCommands" parallel="methods" thread-count="20">
+		<classes>
+			<class name="com.orasi.api.soapServices.TestSoapServiceCommands" />
+		</classes>
+	</test>
+	
+	<test name="TestSoapService" parallel="methods" thread-count="1">
+		<classes>
+			<class name="com.orasi.api.soapServices.TestSoapService" />
 		</classes>
 	</test>
 </suite> <!-- Suite -->

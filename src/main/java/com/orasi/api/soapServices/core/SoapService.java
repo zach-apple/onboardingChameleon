@@ -29,7 +29,10 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.orasi.api.soapServices.core.exceptions.HeaderNotFoundException;
+import com.orasi.api.soapServices.core.exceptions.MissingFunctionParameterValueException;
 import com.orasi.api.soapServices.core.exceptions.SoapException;
+import com.orasi.exception.automation.XPathInvalidExpression;
 import com.orasi.exception.automation.XPathNotFoundException;
 import com.orasi.exception.automation.XPathNullNodeValueException;
 import com.orasi.utils.ExcelDocumentReader;
@@ -234,10 +237,11 @@ public abstract class SoapService{
 
 
 	public String getResponseHeader(String name){
-		for(String header : responseHeaders.getHeader(name)){
-			return header;
-		}
-		return "";
+		try{
+			return responseHeaders.getHeader(name)[0];
+		}catch(NullPointerException throwAway){}
+		//If code reaches this point, header was not found
+		throw new HeaderNotFoundException("Response Header [ " +name+" ] was not found");		
 	}
 
 	public void addRequestHeader(String header, String value){
@@ -360,7 +364,7 @@ public abstract class SoapService{
 		TestReporter.logTrace("End Column [ "+(startCol + 3)+" ]" );
 		
 		TestReporter.logTrace("Determining last row of data in column [ " + (startCol +1)+ " ]");
-		
+		endRow = 0;
 		for(endRow = xlsSheet.length ; xlsSheet[endRow-1][startCol+1].toString().isEmpty() ; endRow--){}
 		TestReporter.logTrace("Found last row of data in column [ " + (startCol +1)+ " ]");
 		TestReporter.logTrace("End Row [ "+endRow+"] " );
@@ -495,7 +499,7 @@ public abstract class SoapService{
 			expr = xPath.compile(xpath);
 			nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 		}catch (XPathExpressionException xpe) {		
-			throw new RuntimeException("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
+			throw new XPathInvalidExpression("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
 		}
 
 		TestReporter.logTrace("XPath is valid. Checking for nodes with desired xpath");
@@ -636,30 +640,12 @@ public abstract class SoapService{
 		}
 
 		//Ensure an element was found, if not then throw error and fail
-		if (nList.item(0) == null && errorMessage.isEmpty()) {
+		if (errorMessage.isEmpty() && nList.item(0) == null ) {
 			errorMessage = "No xpath was found with the path [ " + xpath + " ] ";
 		}
 
 		if (errorMessage.isEmpty()){
-			//Handle prefix types
-			if (regexValue.trim().toLowerCase().contains("value:")) {
-
-				//Node value was specifically stated. Find value of node to validate based on xpath
-				regexValue = regexValue.substring(regexValue.indexOf(":") + 1,
-						regexValue.length()).trim();
-				xPathValue = nList.item(0).getTextContent();
-			} else if (regexValue.trim().toLowerCase().contains("attribute")) {
-				//Node attribute was specifically stated. Find attribute of node to validate based on xpath and attribute name
-				regexValue = regexValue.substring(0,
-						regexValue.indexOf(":") + 1).trim();
-				String[] attributeParams = regexValue.split(",");
-				NamedNodeMap attr = nList.item(0).getAttributes();
-				Node nodeAttr = attr.getNamedItem(attributeParams[0]);
-				xPathValue = nodeAttr.getTextContent();
-			} else {
-				//Default path. Get node value based on xpath
-				xPathValue = nList.item(0).getTextContent();
-			}
+			xPathValue = nList.item(0).getTextContent();
 		}
 
 		//Validate expected value with actual value and report in html table 
@@ -719,72 +705,58 @@ public abstract class SoapService{
 	 * @param xpath String: Xpath to run the function on 
 	 * @param function String: function to call
 	 * 					<br><br><b>Supported Functions:</b>
-	 * 					<br><b>value="fx:addnode"</b>  -- Add a new node at Xpath position. Expects "Node:nodeName" where nodeName will be the name given to the node
-	 * 		            <br><b>value="fx:getdatetime"</b>  -- Set date and time in a format accepted by XML. Expects "DaysOut:x" where x is the number of days out
-	 * 					<br><b>value="fx:getdate"</b>  -- Set date in a format accepted by XML. Expects "DaysOut:x" where x is the number of days out 					
+	 * 					<br><b>value="fx:addnode"</b>  -- Add a new node at Xpath position.
+	 * 		            <br><b>value="fx:getdatetime"</b>  -- Set date and time in a format accepted by XML. 
+	 * 					<br><b>value="fx:getdate"</b>  -- Set date in a format accepted by XML. 					
 	 *  				<br><b>value="fx:removenode"</b>  -- Remove a node at Xpath position.
-	 *   				<br><b>value="fx:randomnumber"</b>  -- Set a string of random numbers. Expects "Node:x" where x is the length of the string to output
-	 *    				<br><b>value="fx:randomstring"</b>  -- Set a string of random characters. Expects "Node:x" where x is the length of the string to output
-	 *        			<br><b>value="fx:randomalphanumeric"</b>  -- Set a string of random numbers and characters. Expects "Node:x" where x is the length of the string to output 		  	
+	 *   				<br><b>value="fx:randomnumber"</b>  -- Set a string of random numbers. 
+	 *    				<br><b>value="fx:randomstring"</b>  -- Set a string of random characters. 
+	 *        			<br><b>value="fx:randomalphanumeric"</b>  -- Set a string of random numbers and characters. 	  	
 	 */
 	private String handleValueFunction(Document doc, String function, String xpath) {
 		String[] params = function.split(";");
 		String command = params[0];
-		String[] length = new String[2];
-		String[] tagName = new String[2];
-		String[] daysOut = new String[2];
+		String daysOut = "";
+		String length = "";
 
 		switch (command.toLowerCase()) {
 		case "fx:getdatetime":
-			daysOut = params[1].split(":");
-			if (daysOut[0].trim().equalsIgnoreCase("DaysOut")) {
-				return Randomness.generateCurrentXMLDatetime(Integer.parseInt(daysOut[1]));
-			} else {
-				// report error
-			}
+			if(params.length == 1) throw new MissingFunctionParameterValueException("Missing second parameter: Expected format [ fx:getdatetime ; 0] where 0 is Days Out");
+			daysOut = params[1].replace("DaysOut:", "");
+			return Randomness.generateCurrentXMLDatetime(Integer.parseInt(daysOut));
 
 		case "fx:getdate":
-			daysOut = params[1].split(":");
-			if (daysOut[0].trim().equalsIgnoreCase("DaysOut")) {
-				return Randomness.generateCurrentXMLDate(Integer.parseInt(daysOut[1]));
-			} else{
-				// report error 
-			}
+			if(params.length == 1) throw new MissingFunctionParameterValueException("Missing second parameter: Expected format [ fx:getdate ; 0] where 0 is Days Out");
+			daysOut = params[1].replace("DaysOut:", "");
+			return Randomness.generateCurrentXMLDate(Integer.parseInt(daysOut));
+			
 		case "fx:addnode":
+			if(params.length == 1) throw new MissingFunctionParameterValueException("Missing second parameter: Expected format [ fx:addnode ; nodeName] where nodeName is name of the node to add");
 			String tag = params[1].replace("node:", "").replace("Node:", "");
 			setRequestDocument(XMLTools.addNode(doc,tag.trim(), xpath));
 			return "XMLUpdated";
 
 		case "fx:addnodes":
-			tagName = params[1].split(":");
-			if (tagName[0].toLowerCase().trim().contains("node")) {
-				String[] nodes = tagName[1].split("/");
-				String appendedXpath = xpath;
-				for(String node : nodes){
-					setRequestDocument(XMLTools.addNode(doc,node.replaceAll("\\[(.*?)\\]",""), appendedXpath));
-					appendedXpath += "/"+node;
-				}
-			} else {
-				// report error
+			if(params.length == 1) throw new MissingFunctionParameterValueException("Missing second parameter: Expected format [ fx:addnodes ; nodeNameList] where nodeNameList is name of the node to add");
+			String tags = params[1].replace("node:", "").replace("Node:", "");
+			String[] nodes = tags.split("/");
+			String appendedXpath = xpath;
+			for(String node : nodes){
+				setRequestDocument(XMLTools.addNode(doc,node.replaceAll("\\[(.*?)\\]",""), appendedXpath));
+				appendedXpath += "/"+node;
 			}
 			return "XMLUpdated";
 
 		case "fx:addattribute":
-			tagName = params[1].split(":",2);
-			if (tagName[0].trim().equalsIgnoreCase("attribute")) {
-				setRequestDocument(XMLTools.addAttribute(doc,tagName[1].trim(), xpath));
-			} else {
-				// report error
-			}
+			if(params.length == 1) throw new MissingFunctionParameterValueException("Missing second parameter: Expected format [ fx:addattribute ; attributeName] where attributeName is name of the attribute to add");
+			String newAttribute = params[1].replace("attribute:", "").replace("Attribute:", "");
+			setRequestDocument(XMLTools.addAttribute(doc,newAttribute.trim(), xpath));			
 			return "XMLUpdated";
 
 		case "fx:addnamespace":
-			tagName = params[1].split(":",2);
-			if (tagName[0].trim().equalsIgnoreCase("namespace")) {
-				setRequestDocument(XMLTools.addNamespace(doc,tagName[1].trim(), xpath));
-			} else {
-				// report error
-			}
+			if(params.length == 1) throw new MissingFunctionParameterValueException("Missing second parameter: Expected format [ fx:addnamespace ; xmlns:name,url] where name is the name of the namespace to add and url is the URL of the namespace");
+			String namespace = params[1].replace("namespace:", "").replace("Namespace:", "");
+			setRequestDocument(XMLTools.addNamespace(doc,namespace.trim(), xpath));			
 			return "XMLUpdated";
 
 
@@ -797,40 +769,24 @@ public abstract class SoapService{
 			xpath = xpath.substring(0,xpath.lastIndexOf("@") -1);
 			setRequestDocument(XMLTools.removeAttribute(doc,attribute, xpath));
 			return "XMLUpdated";
-			/*
-		case "fx:dbquery":
-			break;
-
-		case "fx:dbresult":
-			break;
-			 */
 
 		case "fx:randomnumber":
-			length = params[1].split(":");
-			if (length[0].trim().equalsIgnoreCase("Node")) {
-				return Randomness.randomNumber(Integer.parseInt(length[1]));
-			} else {
-				// report error
-			}
-
+			if(params.length == 1) throw new MissingFunctionParameterValueException("Missing second parameter: Expected format [ fx:randomnumber ; 4] where 4 is length of numbers to generate");
+			length = params[1].replace("node:", "").replace("Node:", "");
+			return Randomness.randomNumber(Integer.parseInt(length));
+			
 		case "fx:randomstring":
-			length = params[1].split(":");
-			if (length[0].trim().equalsIgnoreCase("Node")) {
-				return Randomness.randomString(Integer.parseInt(length[1]));
-			} else {
-				return Randomness.randomString(Integer.parseInt(length[0]));
-			}
-
+			if(params.length == 1) throw new MissingFunctionParameterValueException("Missing second parameter: Expected format [ fx:randomstring ; 4] where 4 is length of string to generate");
+			length = params[1].replace("node:", "").replace("Node:", "");
+			return Randomness.randomString(Integer.parseInt(length));
+			
 		case "fx:randomalphanumeric":
-			length = params[1].split(":");
-			if (length[0].trim().equalsIgnoreCase("Node")) {
-				return Randomness.randomAlphaNumeric(Integer.parseInt(length[1]));
-			} else {
-				// report error
-			}
-
+			if(params.length == 1) throw new MissingFunctionParameterValueException("Missing second parameter: Expected format [ fx:randomalphanumeric ; 4] where 4 is length of string to generate");
+			length = params[1].replace("node:", "").replace("Node:", "");
+			return Randomness.randomAlphaNumeric(Integer.parseInt(length));
+			
 		default:
-			throw new RuntimeException("The command [" + command + " ] is not a valid command");
+			throw new SoapException("The command [" + command + " ] is not a valid command");
 		}
 	}
 }
