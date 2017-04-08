@@ -360,14 +360,14 @@ public abstract class SoapService{
 		if(startCol == -1) throw new WebServiceException("Failed to find scenario [ " + scenario + " ] in CSV ");
 		endCol = startCol + 3;
 		TestReporter.logTrace("Found scenario [ " + scenario + " ]");
-		TestReporter.logTrace("Start Column [ "+startCol+"] " );
+		TestReporter.logTrace("Start Column [ "+startCol+" ] " );
 		TestReporter.logTrace("End Column [ "+(startCol + 3)+" ]" );
 		
 		TestReporter.logTrace("Determining last row of data in column [ " + (startCol +1)+ " ]");
 		endRow = 0;
 		for(endRow = xlsSheet.length ; xlsSheet[endRow-1][startCol+1].toString().isEmpty() ; endRow--){}
 		TestReporter.logTrace("Found last row of data in column [ " + (startCol +1)+ " ]");
-		TestReporter.logTrace("End Row [ "+endRow+"] " );
+		TestReporter.logTrace("End Row [ "+endRow+" ] " );
 		
 		tabArray = new String[endRow-1][2];
 		ci = 0;
@@ -379,7 +379,7 @@ public abstract class SoapService{
 				tabArray[ci][cj] = xlsSheet[i][j].toString();
 			}
 		}
-		TestReporter.logTrace("Successfull transfered data to array");
+		TestReporter.logTrace("Successfully transfered data to array");
 		TestReporter.logTrace("Exiting SoapService#getTestScenario");
 		return (tabArray);
 	}

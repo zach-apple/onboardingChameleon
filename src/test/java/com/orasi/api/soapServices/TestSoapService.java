@@ -25,7 +25,6 @@ public class TestSoapService {
 	@Title("createService")
 	@Test
 	public void createService(){
-		TestReporter.setDebugLevel(3);
 		USZipService usZip = new USZipService();
 		Assert.assertNotNull(usZip);
 	}
