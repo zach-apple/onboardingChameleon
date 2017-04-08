@@ -221,7 +221,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 				getWrappedDriver().executeJavaScript("arguments[0].setAttribute('value', arguments[1])", getWrappedElement(), "");
 				getWrappedElement().sendKeys(Base64Coder.decodeString(text).toString());
 				getWrappedElement().sendKeys(Keys.TAB);
-				TestReporter.log(" Send encoded text [ <b>" + text.toString() + "</b> ] to Textbox [  <b>"
+				TestReporter.interfaceLog(" Send encoded text [ <b>" + text.toString() + "</b> ] to Textbox [  <b>"
 						+ getElementLocatorInfo() + " </b> ]");
 			} catch (RuntimeException rte) {
 				TestReporter.interfaceLog("Send encoded text [ <b>" + text.toString()

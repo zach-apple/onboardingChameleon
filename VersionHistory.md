@@ -1,5 +1,19 @@
 #Version History
 
+##Version 1.1.2 - 04/08/2017
+* [**com.orasi.api.soapService**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/api/soapServices)
+  * Cleaned up handleValueFunctions and created unit tests
+  * Removing from api.soapService.core package to just be in api.soapServices package
+* [**com.orasi.api.soapServiceCommands**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/api/soapServices)
+  * Clean up commands to make them easier to use
+  * Removing from api.soapService.core package to just be in api.soapServices package
+* [**com.orasi.api.restServices.core**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/api/restServices)
+  * Removing api.restServices.core package to just be in api.restServices package
+* [**com.orasi.utils.ExcelDocumentReader**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/utils)
+  * Fixing issue to read in number cells and formula cell properly
+* [**com.orasi.utils.TestReporter**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/utils)
+  * Adding TRACE level logs to AlertHandler and Sleeper
+
 ##Version 1.1.1 - 03/12/2017
 * **POM.xml**
   * Upgrading to Selenium 3.3.1 to support latest version of Chrome and Firefox by allow for Chrome Driver 2.28 and GeckoDriver 0.15. 

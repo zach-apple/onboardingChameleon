@@ -1,4 +1,4 @@
-package com.orasi.api.restServices.core;
+package com.orasi.api.restServices;
 
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;

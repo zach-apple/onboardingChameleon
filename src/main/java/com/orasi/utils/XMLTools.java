@@ -2,17 +2,12 @@ package com.orasi.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.net.URL;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.soap.MessageFactory;
-import javax.xml.soap.MimeHeaders;
-import javax.xml.soap.SOAPConstants;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.transform.OutputKeys;
@@ -29,6 +24,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -36,8 +32,11 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.orasi.api.soapServices.core.exceptions.SoapException;
-import com.orasi.api.soapServices.core.exceptions.XPathNotFoundException;
+import com.orasi.api.soapServices.exceptions.MissingFunctionParameterValueException;
+import com.orasi.api.soapServices.exceptions.SoapException;
+import com.orasi.exception.AutomationException;
+import com.orasi.exception.automation.XPathInvalidExpression;
+import com.orasi.exception.automation.XPathNotFoundException;
 
 
 public class XMLTools{
@@ -62,12 +61,12 @@ public class XMLTools{
 			expr = xPath.compile(xpath);
 			nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 		} catch (XPathExpressionException xpe) {
-			throw new RuntimeException("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
+			throw new XPathInvalidExpression("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
 		}
 
 		TestReporter.logTrace("XPath is valid. Checking for nodes with desired xpath");
 		//Ensure an element was found, if not then throw error and fail
-		if (nList.item(0) == null) throw new RuntimeException("No xpath was found with the path [ " + xpath + " ] ");
+		if (nList.item(0) == null) throw new XPathNotFoundException("No xpath was found with the path [ " + xpath + " ] ");
 			
 		//Create new XML document based on XPath
 		Element element  = (Element) nList.item(0);
@@ -99,12 +98,12 @@ public class XMLTools{
 			expr = xPath.compile(xpath);
 			nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 		} catch (XPathExpressionException xpe) {
-			throw new RuntimeException("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
+			throw new XPathInvalidExpression("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
 		}
 
 		TestReporter.logTrace("XPath is valid. Checking for nodes with desired xpath");
 		//Ensure an element was found, if not then throw error and fail
-		if (nList.item(0) == null) throw new RuntimeException("No xpath was found with the path [ " + xpath + " ] ");
+		if (nList.item(0) == null) throw new XPathNotFoundException("No xpath was found with the path [ " + xpath + " ] ");
 
 		TestReporter.logTrace("At least one node found on Xpath. Removing Attribute from Node");
 		//Create new XML document based on XPath
@@ -132,6 +131,7 @@ public class XMLTools{
 		XPathExpression expr;
 		NodeList nList = null;
 		String[] values = namespace.split(",");
+		if(values.length == 1) throw new MissingFunctionParameterValueException("Missing expected parameters: Expected format [ fx:addnamespace ; xmlns:name,url] where name is the name of the namespace to add and url is the URL of the namespace");
 		String namespaceName = values[0];
 		String namespaceURL = values[1];
 		try {
@@ -139,12 +139,12 @@ public class XMLTools{
 			expr = xPath.compile(xpath);
 			nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 		} catch (XPathExpressionException xpe) {
-			throw new RuntimeException("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
+			throw new XPathInvalidExpression("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
 		}
 
 		TestReporter.logTrace("XPath is valid. Checking for nodes with desired xpath");
 		//Ensure an element was found, if not then throw error and fail
-		if (nList.item(0) == null) throw new RuntimeException("No xpath was found with the path [ " + xpath + " ] ");
+		if (nList.item(0) == null) throw new XPathNotFoundException("No xpath was found with the path [ " + xpath + " ] ");
 
 		TestReporter.logTrace("At least one node found on Xpath. Adding Namespace on Xpath");
 		//Create new XML document based on XPath
@@ -177,12 +177,12 @@ public class XMLTools{
 			expr = xPath.compile(xpath);
 			nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 		} catch (XPathExpressionException xpe) {
-			throw new RuntimeException("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
+			throw new XPathInvalidExpression("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
 		}
 
 		TestReporter.logTrace("XPath is valid. Checking for nodes with desired xpath");
 		//Ensure an element was found, if not then throw error and fail
-		if (nList.item(0) == null) throw new RuntimeException("No xpath was found with the path [ " + xpath + " ] ");
+		if (nList.item(0) == null) throw new XPathNotFoundException("No xpath was found with the path [ " + xpath + " ] ");
 
 		TestReporter.logTrace("At least one node found on Xpath. Adding node to Document on Xpath");
 		//Create new XML document based on XPath
@@ -219,9 +219,10 @@ public class XMLTools{
 			expr = xPath.compile(xpath);
 			nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 		} catch (XPathExpressionException e1) {
-			throw new XPathNotFoundException("Xpath evaluation failed with xpath [ " + xpath + " ] ");	
+			throw new XPathInvalidExpression("Xpath evaluation failed with xpath [ " + xpath + " ] ");	
 		}
 
+		if (nList.item(0) == null) throw new XPathNotFoundException(xpath );
 		TestReporter.logTrace("XPath is valid. Removing node");
 		Element element = (Element) nList.item(0);
 		element.getParentNode().removeChild(element);
@@ -254,7 +255,7 @@ public class XMLTools{
 			expr = xPath.compile(xpath);
 			nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 		} catch (XPathExpressionException xpe) {
-			throw new RuntimeException("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
+			throw new XPathInvalidExpression("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
 		}
 
 		TestReporter.logTrace("XPath is valid. Checking for nodes with desired xpath");
@@ -266,37 +267,7 @@ public class XMLTools{
 		//If no errors, then return the value found
 		return nList.item(0).getTextContent();
 	}
-	
-	/**
-	 *  Load an XML file from an external location
-	 * @author Justin Phlegar
-	 * @version Created: 08/28/2014
-	 * @param xml XML as a string 
-	 * @return Document xml of input file
-	 */	
-	public static Document loadXML(String xml) {
-		TestReporter.logTrace("Entering XMLTools#loadXML");
-		SOAPMessage soapMessage = null;
-		MessageFactory messageFactory = null;
-		try {
-			TestReporter.logTrace("Attempting to load XML from project");
-			messageFactory = MessageFactory.newInstance(SOAPConstants.SOAP_1_1_PROTOCOL);
-			
-			soapMessage = messageFactory.createMessage(new MimeHeaders(),new ByteArrayInputStream(xml.getBytes()));
-		} catch (SOAPException se) {
-			throw new RuntimeException("Failed to create a SOAP message", se.getCause());
-		} catch (IOException ioe) {
-			throw new RuntimeException("Unable to transform XML [ " + xml + " ]", ioe.getCause());
-		}
 
-		TestReporter.logTrace("Successfully loaded XML. Transform to XML Document");
-		Document doc = makeXMLDocument(soapMessage); 
-
-		TestReporter.logTrace("Successfully transformmed to XML Document");
-		TestReporter.logTrace("Exiting XMLTools#loadXML");
-		return doc;
-	}
-	
 	/**
 	 * Generate an XML Document from SOAPMessage
 	 * @author Justin Phlegar
@@ -324,14 +295,12 @@ public class XMLTools{
 			source.setEncoding("ISO-8859-1");
 			doc = builder.parse(source);
 		} catch (ParserConfigurationException pce) {
-			throw new RuntimeException("Failed to create a Document Builder Factory", pce.getCause());
+			throw new AutomationException("Failed to create a Document Builder Factory", pce.getCause());
 		} catch (SAXException saxe) {
-			 throw new RuntimeException("Failed to parse the xml", saxe.getCause());
-		} catch (IOException ioe) {
-			throw new RuntimeException("Failed to find the source XML", ioe.getCause());
-		} catch (SOAPException e) {
-			throw new RuntimeException("Failed to get source XML from Soap Message", e.getCause());
-		}
+			 throw new AutomationException("Failed to parse the xml", saxe.getCause());
+		} catch (IOException | SOAPException ioe) {
+			throw new AutomationException("Failed to get source XML from Soap Message", ioe.getCause());
+		} 
 
 		TestReporter.logTrace("Successfully transformed SoapMessage to XML. Normalize document");
 		doc.getDocumentElement().normalize();
@@ -362,11 +331,11 @@ public class XMLTools{
         		source.setEncoding("ISO-8859-1");
         		 doc = builder.parse(source);
 		} catch (ParserConfigurationException pce) {
-			throw new RuntimeException("Failed to create a Document Builder Factory", pce.getCause());
+			throw new AutomationException("Failed to create a Document Builder Factory", pce.getCause());
 		} catch (SAXException saxe) {
-			 throw new RuntimeException("Failed to parse the xml", saxe.getCause());
+			 throw new AutomationException("Failed to parse the xml", saxe.getCause());
 		} catch (IOException ioe) {
-			throw new RuntimeException("Failed to find the source XML", ioe.getCause());
+			throw new AutomationException("Failed to find the source XML", ioe.getCause());
 		}
 
 		TestReporter.logTrace("Successfully transformed String to XML. Normalize document");
@@ -395,11 +364,11 @@ public class XMLTools{
 			TestReporter.logTrace("Attempting to from file and save as to XML. File [ " + file.getPath()+ " ]");
 			doc = builder.parse(file);
 		} catch (SAXException saxe) {
-			 throw new RuntimeException("Failed to parse the xml", saxe.getCause());
+			 throw new AutomationException("Failed to parse the xml", saxe.getCause());
 		} catch (IOException ioe) {
-			throw new RuntimeException("Failed to find the source XML", ioe.getCause());
+			throw new AutomationException("Failed to find the source XML", ioe.getCause());
 		} catch (ParserConfigurationException pce) {
-			throw new RuntimeException("Failed to create a Document Builder Factory", pce.getCause());
+			throw new AutomationException("Failed to create a Document Builder Factory", pce.getCause());
 		}
 
 		TestReporter.logTrace("Successfully transformed String to XML. Normalize document");
@@ -519,7 +488,7 @@ public class XMLTools{
 			expr = xPath.compile(xpath);
 			nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 		} catch (XPathExpressionException xpe) {
-			throw new XPathNotFoundException("Xpath evaluation failed with xpath [ " + xpath + " ] ");	
+			throw new XPathInvalidExpression("Xpath evaluation failed with xpath [ " + xpath + " ] ");	
 		}
 
 		TestReporter.logTrace("XPath is valid. Checking for nodes with desired xpath");
@@ -551,12 +520,12 @@ public class XMLTools{
 			expr = xPath.compile(xpath);
 			nList = (NodeList) expr.evaluate(nodeList, XPathConstants.NODESET);
 		} catch (XPathExpressionException xpe) {
-			throw new RuntimeException("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
+			throw new XPathInvalidExpression("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
 		}
 
 		TestReporter.logTrace("XPath is valid. Checking for nodes with desired xpath");
 		//Ensure an element was found, if not then throw error and fail
-		if (nList.item(0) == null) throw new RuntimeException("No xpath was found with the path [ " + xpath + " ] ");
+		if (nList.item(0) == null) throw new XPathNotFoundException("No xpath was found with the path [ " + xpath + " ] ");
 
 		TestReporter.logTrace("At least one node found on Xpath. Returning as list");
 		TestReporter.logTrace("Exiting XMLTools#getNodeList");
@@ -582,12 +551,12 @@ public class XMLTools{
 			expr = xPath.compile(xpath);
 			nList = (NodeList) expr.evaluate(nodeList, XPathConstants.NODESET);
 		} catch (XPathExpressionException xpe) {
-			throw new RuntimeException("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
+			throw new XPathInvalidExpression("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
 		}
 
 		TestReporter.logTrace("XPath is valid. Checking for nodes with desired xpath");
 		//Ensure an element was found, if not then throw error and fail
-		if (nList.item(0) == null) throw new RuntimeException("No xpath was found with the path [ " + xpath + " ] ");
+		if (nList.item(0) == null) throw new XPathNotFoundException("No xpath was found with the path [ " + xpath + " ] ");
 		TestReporter.logTrace("At least one node found on Xpath. Returning first node");
 		TestReporter.logTrace("Exiting XMLTools#getNodeList");
 		return nList.item(0);

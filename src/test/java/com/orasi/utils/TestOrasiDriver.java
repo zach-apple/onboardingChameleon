@@ -4,11 +4,15 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
@@ -151,7 +155,15 @@ public class TestOrasiDriver extends TestEnvironment {
 		}
 		driver.quit();
 	}
-
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("setOrasiDriver")
+	@Test(groups = { "regression", "utils", "orasidriver" })
+	public void setOrasiDriver() {
+		OrasiDriver orasiDriver = new OrasiDriver();
+		orasiDriver.setDriver(orasiDriver);
+	}
+	
 	@Features("Utilities")
 	@Stories("OrasiDriver")
 	@Title("getPageTimeout")
@@ -223,6 +235,25 @@ public class TestOrasiDriver extends TestEnvironment {
 		WebElement element = (WebElement) driver.executeJavaScript("return document.getElementById('FirstName')");
 		Assert.assertNotNull(element);
 	}
+	
+
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("findElements")
+	@Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "testGetDriver")
+	public void findElements() {
+		List<WebElement> elements = driver.findElements(By.tagName("input"));
+		Assert.assertTrue(elements.size() > 0);
+	}
+
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("findWebElements")
+	@Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "findElements")
+	public void findWebElements() {
+		List<WebElement> elements = driver.findElements(By.tagName("input"));
+		Assert.assertTrue(elements.size() > 0);
+	}
 
 	@Features("Utilities")
 	@Stories("OrasiDriver")
@@ -236,17 +267,18 @@ public class TestOrasiDriver extends TestEnvironment {
 	@Features("Utilities")
 	@Stories("OrasiDriver")
 	@Title("findElement")
-	@Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "findButton")
+	@Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "findWebElements")
 	public void findElement() {
 		Element element = driver.findElement(By.id("FirstName"));
 		Assert.assertNotNull(element);
 	}
-
+	
 	@Features("Utilities")
 	@Stories("OrasiDriver")
 	@Title("findListbox")
 	@Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "findElement")
 	public void findListbox() {
+		driver.setElementTimeout(3);
 		Listbox listbox = driver.findListbox(By.id("Category"));
 		Assert.assertNotNull(listbox);
 	}
@@ -320,7 +352,23 @@ public class TestOrasiDriver extends TestEnvironment {
 		driver.executeAsyncJavaScript(
 				"var callback = arguments[arguments.length - 1];angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
 	}
-
+	
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("getCurrentUrl")
+	@Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "executeAsyncJavaScript")
+	public void getCurrentUrl() {
+		Assert.assertTrue(driver.getCurrentUrl().contains("cafetownsend-angular-rails.herokuapp.com"));
+	}
+	
+	@Features("Utilities")
+	@Stories("OrasiDriver")
+	@Title("getTitle")
+	@Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "executeAsyncJavaScript")
+	public void getTitle() {
+		Assert.assertTrue(driver.getTitle().contains("CafeTownsend-AngularJS-Rails"));
+	}
+	
 	@Features("Utilities")
 	@Stories("OrasiDriver")
 	@Title("findNGModel")
@@ -359,7 +407,7 @@ public class TestOrasiDriver extends TestEnvironment {
 		Sleeper.sleep(2000);
 		Assert.assertNotNull(driver.findElement(ByNG.repeater("employee in employees")));
 	}
-
+	
 	@Features("Utilities")
 	@Stories("OrasiDriver")
 	@Title("getDataWarehouse")
