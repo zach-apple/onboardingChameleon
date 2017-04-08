@@ -1,6 +1,6 @@
 package com.orasi.api.soapServices.helpers;
 
-import com.orasi.api.soapServices.core.SoapService;
+import com.orasi.api.soapServices.SoapService;
 
 public class USZipService extends SoapService{
 

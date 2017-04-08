@@ -11,9 +11,9 @@ import org.testng.Assert;
 import org.testng.Reporter;
 
 import com.orasi.api.restServices.RestException;
-import com.orasi.api.restServices.core.RestResponse;
-import com.orasi.api.soapServices.core.SoapService;
-import com.orasi.api.soapServices.core.exceptions.SoapException;
+import com.orasi.api.restServices.RestResponse;
+import com.orasi.api.soapServices.SoapService;
+import com.orasi.api.soapServices.exceptions.SoapException;
 import com.orasi.exception.AutomationException;
 import com.orasi.utils.date.SimpleDate;
 

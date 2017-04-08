@@ -1,4 +1,4 @@
-package com.orasi.api.restServices.core;
+package com.orasi.api.restServices;
 
 import java.io.IOException;
 
@@ -20,7 +20,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.orasi.api.restServices.RestException;
 import com.orasi.utils.TestReporter;
 
 public class RestResponse {

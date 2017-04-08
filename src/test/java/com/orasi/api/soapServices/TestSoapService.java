@@ -3,10 +3,10 @@ package com.orasi.api.soapServices;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.orasi.api.soapServices.core.SoapServiceCommands;
-import com.orasi.api.soapServices.core.exceptions.HeaderNotFoundException;
-import com.orasi.api.soapServices.core.exceptions.MissingFunctionParameterValueException;
-import com.orasi.api.soapServices.core.exceptions.SoapException;
+import com.orasi.api.soapServices.SoapServiceCommands;
+import com.orasi.api.soapServices.exceptions.HeaderNotFoundException;
+import com.orasi.api.soapServices.exceptions.MissingFunctionParameterValueException;
+import com.orasi.api.soapServices.exceptions.SoapException;
 import com.orasi.api.soapServices.helpers.GetInfoByZip;
 import com.orasi.api.soapServices.helpers.USZipService;
 import com.orasi.exception.automation.XPathInvalidExpression;

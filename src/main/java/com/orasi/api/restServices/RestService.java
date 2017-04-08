@@ -1,4 +1,4 @@
-package com.orasi.api.restServices.core;
+package com.orasi.api.restServices;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -21,8 +21,7 @@ import org.apache.http.impl.client.LaxRedirectStrategy;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.orasi.api.restServices.RestException;
-import com.orasi.api.restServices.core.Headers.HeaderType;
+import com.orasi.api.restServices.Headers.HeaderType;
 import com.orasi.utils.TestReporter;
 
 

@@ -1,4 +1,4 @@
-package com.orasi.api.soapServices.core;
+package com.orasi.api.soapServices;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -29,9 +29,9 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.orasi.api.soapServices.core.exceptions.HeaderNotFoundException;
-import com.orasi.api.soapServices.core.exceptions.MissingFunctionParameterValueException;
-import com.orasi.api.soapServices.core.exceptions.SoapException;
+import com.orasi.api.soapServices.exceptions.HeaderNotFoundException;
+import com.orasi.api.soapServices.exceptions.MissingFunctionParameterValueException;
+import com.orasi.api.soapServices.exceptions.SoapException;
 import com.orasi.exception.automation.XPathInvalidExpression;
 import com.orasi.exception.automation.XPathNotFoundException;
 import com.orasi.exception.automation.XPathNullNodeValueException;

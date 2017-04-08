@@ -1,4 +1,4 @@
-package com.orasi.api.soapServices.core;
+package com.orasi.api.soapServices;
 
 import com.orasi.utils.Randomness;
 
