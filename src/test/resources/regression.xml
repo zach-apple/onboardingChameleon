@@ -33,6 +33,12 @@
 			<class name="com.orasi.core.interfaces.TestCheckbox" />
 		</classes>
 	</test>
+	
+	<test name="TestSoapService" parallel="methods" thread-count="1">
+		<classes>
+			<class name="com.orasi.api.soapServices.TestSoapService" />
+		</classes>
+	</test>
 
 	<test name="Label" parallel="methods" thread-count="20">
 		<classes>
@@ -82,6 +88,12 @@
 		</classes>
 	</test>
 
+	<test name="PersonFactory" parallel="methods" thread-count="20">
+		<classes>
+			<class name="com.orasi.utils.dataHelpers.TestPersonFactory" />
+		</classes>
+	</test>
+	
 	<test name="ExcelDocumentReader" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.utils.TestExcelDocumentReader" />
@@ -121,6 +133,17 @@
 	<test name="TestWindowHandler" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.utils.TestWindowHandler" />
+		</classes>
+	</test>
+	<test name="TestXMLTools">
+		<classes>
+			<class name="com.orasi.utils.TestXMLTools" />
+		</classes>
+	</test> 
+	
+	<test name="TestSoapServiceCommands" parallel="methods" thread-count="20">
+		<classes>
+			<class name="com.orasi.api.soapServices.TestSoapServiceCommands" />
 		</classes>
 	</test>
 </suite> <!-- Suite -->

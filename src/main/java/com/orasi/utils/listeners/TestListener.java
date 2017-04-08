@@ -1,7 +1,6 @@
 package com.orasi.utils.listeners;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,7 +18,6 @@ import org.testng.Reporter;
 import org.testng.TestListenerAdapter;
 import org.testng.xml.XmlSuite;
 
-import com.orasi.api.soapServices.core.SoapService;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.TestEnvironment;

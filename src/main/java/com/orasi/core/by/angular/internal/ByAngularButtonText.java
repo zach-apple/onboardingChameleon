@@ -44,7 +44,7 @@ public class ByAngularButtonText  extends ByAngular.BaseBy {
 				"  	}\n" +
 				"  }\n" +
 				"}\n" +
-				"return rows[0];";
+				"return rows"+oneOrAll+";";
     }
 
     @Override

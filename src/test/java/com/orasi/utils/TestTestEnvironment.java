@@ -17,7 +17,7 @@ public class TestTestEnvironment extends TestEnvironment {
 	private String runLocation = "local";
 	private String testingEnvironment = "stage";
 	private String testingName = "TestEnvironment";
-	private String pageURL = "http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/core/interfaces/element.html";
+	private String pageURL = "http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/element.html";
 	
 	@BeforeTest
 	public void setup() {

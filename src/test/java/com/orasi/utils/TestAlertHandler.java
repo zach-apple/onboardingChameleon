@@ -23,7 +23,7 @@ public class TestAlertHandler extends TestEnvironment {
 		setReportToMustard(false);
 		if(getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty() ) throw new SkipException("Test not valid for HTMLUnitDriver");
 		if(getBrowserUnderTest().toLowerCase().equals("safari") ||getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty() ) throw new SkipException("Test not valid for SafariDriver");
-		setPageURL("http://orasi.github.io/Selenium-Java-Core/sites/unitTests/orasi/utils/alertHandler.html");
+		setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/utils/alertHandler.html");
 		testStart("TestAlert");
 	}
 
