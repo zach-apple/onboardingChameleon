@@ -3,9 +3,6 @@ package com.orasi.utils.mustard;
 import java.util.ResourceBundle;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.openqa.selenium.OutputType;
 import org.testng.ITestResult;
 
 import com.orasi.api.restServices.RestService;

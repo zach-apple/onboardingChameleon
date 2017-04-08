@@ -2,18 +2,9 @@ package com.orasi.api.restServices;
 
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 
 import com.orasi.utils.Randomness;
 import com.orasi.utils.TestReporter;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class Headers {
 	//private Header[] headers ;

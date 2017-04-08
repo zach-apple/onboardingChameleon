@@ -18,7 +18,6 @@ import com.orasi.exception.automation.ElementNotHiddenException;
 import com.orasi.exception.automation.ElementNotVisibleException;
 import com.orasi.exception.automation.TextInElementNotPresentException;
 import com.orasi.utils.TestEnvironment;
-import com.orasi.utils.TestReporter;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;

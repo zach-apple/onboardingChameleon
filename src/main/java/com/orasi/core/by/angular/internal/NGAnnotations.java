@@ -3,15 +3,11 @@ package com.orasi.core.by.angular.internal;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ByIdOrName;
 import org.openqa.selenium.support.CacheLookup;
-import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
-import org.openqa.selenium.support.How;
-import org.openqa.selenium.support.pagefactory.AbstractAnnotations;
 
 import com.orasi.core.by.angular.ByNG;
 import com.orasi.core.by.angular.FindByNG;
-import com.orasi.core.by.angular.HowNG;
 
 import java.lang.reflect.Field;
 

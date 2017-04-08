@@ -4,13 +4,11 @@ import com.orasi.core.by.angular.AngularElementLocator;
 import com.orasi.core.by.angular.ByNG;
 import com.orasi.core.interfaces.Element;
 import com.orasi.exception.AutomationException;
-import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.TestReporter;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import java.lang.reflect.Constructor;
@@ -18,7 +16,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.concurrent.TimeUnit;
 
 import static com.orasi.core.interfaces.impl.internal.ImplementedByProcessor.getWrapperClass;
 
@@ -62,7 +59,6 @@ public class ElementHandler  implements InvocationHandler {
 	public Object invoke(Object object, Method method, Object[] objects) throws Throwable {
     	TestReporter.logTrace("Entering ElementHandler#invoke");
     	TestReporter.logTrace("Attempting to invoke method [ " +method.getName() +" ]");
-		WebElement element = null;
 
 		By by= null;
 		ByNG byNg= null;

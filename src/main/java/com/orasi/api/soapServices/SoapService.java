@@ -25,8 +25,6 @@ import javax.xml.xpath.XPathFactory;
 
 import org.testng.Reporter;
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.orasi.api.soapServices.exceptions.HeaderNotFoundException;

@@ -2,7 +2,6 @@ package com.orasi.core.interfaces.impl.internal;
 
 import java.lang.reflect.Field;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocator;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
