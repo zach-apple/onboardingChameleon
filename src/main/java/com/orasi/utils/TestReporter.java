@@ -10,8 +10,8 @@ import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.Reporter;
 
-import com.orasi.api.restServices.RestException;
 import com.orasi.api.restServices.RestResponse;
+import com.orasi.api.restServices.exceptions.RestException;
 import com.orasi.api.soapServices.SoapService;
 import com.orasi.api.soapServices.exceptions.SoapException;
 import com.orasi.exception.AutomationException;
@@ -438,14 +438,14 @@ public class TestReporter {
 			failFormat = "<font size = 2 color=\"red\">";
 			logFailure(message);
 		}
-		logNoHtmlTrim("<font size = 2><b>Endpoint: " + rs.getMethod() + " " + rs.getURL() + "</b><br/>"+failFormat+ "<b>REST REQUEST </b></font>");
+		Reporter.log("<font size = 2><b>Endpoint: " + rs.getMethod() + " " + rs.getURL() + "</b><br/>"+failFormat+ "<b>REST REQUEST </b></font>");
 		Reporter.setEscapeHtml(true);
-		logNoXmlTrim(rs.getRequestBody().replaceAll("</*>", "</*>"));
+		Reporter.log(rs.getRequestBody().replaceAll("</*>", "</*>"));
 		Reporter.setEscapeHtml(false);
 		Reporter.log("<br/>");
-		logNoHtmlTrim(failFormat + "<br/><b>REST RESPONSE</b></font>" );
+		Reporter.log(failFormat + "<br/><b>REST RESPONSE</b></font>" );
 		Reporter.setEscapeHtml(true);
-		logNoXmlTrim(rs.getResponse());
+		Reporter.log(rs.getResponse());
 		Reporter.setEscapeHtml(false);
 		Reporter.log("<br/>");
 

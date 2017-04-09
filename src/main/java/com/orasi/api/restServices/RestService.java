@@ -22,6 +22,7 @@ import org.apache.http.impl.client.LaxRedirectStrategy;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.api.restServices.Headers.HeaderType;
+import com.orasi.api.restServices.exceptions.RestException;
 import com.orasi.utils.TestReporter;
 
 
