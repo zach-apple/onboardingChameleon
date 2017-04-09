@@ -6,8 +6,6 @@ import org.apache.http.message.BasicHeader;
 import com.orasi.utils.Randomness;
 import com.orasi.utils.TestReporter;
 
-
-
 public class Headers {
 	/**
 	 * Used in coordination with RestService.createHeader() <br/>

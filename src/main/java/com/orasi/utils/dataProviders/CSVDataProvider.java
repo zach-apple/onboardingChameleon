@@ -105,7 +105,6 @@ public class CSVDataProvider {
 		BufferedReader bufferedReader = null;
 		FileReader fileReader = null;
 		String line = "";
-		String csvSplitBy = ",";
 		String[][] dataArray = null;
 		List<String>csvRowList = new ArrayList<String>();
 		String[] rowSplit;

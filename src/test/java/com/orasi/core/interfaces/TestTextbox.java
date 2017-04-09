@@ -224,7 +224,7 @@ public class TestTextbox extends TestEnvironment{
         Textbox textbox= getDriver().findTextbox(By.name("lname"));
         boolean valid = false;
         try{
-            textbox.setSecure("text");
+            textbox.setSecure("tex");
         }catch (RuntimeException rte){
             valid = true;
         }
@@ -262,7 +262,7 @@ public class TestTextbox extends TestEnvironment{
         Textbox textbox= getDriver().findTextbox(By.name("lname"));
         boolean valid = false;
         try{
-            textbox.safeSetSecure("text");
+            textbox.safeSetSecure("tex");
         }catch (RuntimeException rte){
             valid = true;
         }

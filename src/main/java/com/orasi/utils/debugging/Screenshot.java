@@ -1,7 +1,6 @@
 package com.orasi.utils.debugging;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;

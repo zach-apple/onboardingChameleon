@@ -29,15 +29,13 @@ import ru.yandex.qatools.allure.annotations.Attachment;
 public class TestListener extends TestListenerAdapter implements IReporter{
 	private OrasiDriver driver = null;
 	private String runLocation = "";
-	private String testEnvironment = "";
 	private boolean reportToMustard = true;
 	private void init(ITestResult result){
 
 	    Object currentClass = result.getInstance();
 	    reportToMustard = ((TestEnvironment) currentClass).isReportingToMustard();
 	    try{
-		runLocation = ((TestEnvironment) currentClass).getRunLocation().toLowerCase();	
-		testEnvironment = ((TestEnvironment) currentClass).getTestEnvironment().toLowerCase();	
+		runLocation = ((TestEnvironment) currentClass).getRunLocation().toLowerCase();		
 	    }catch (Exception e){}
 	    
 	    try{
