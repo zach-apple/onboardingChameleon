@@ -87,7 +87,7 @@ public class Randomness {
 		return RandomStringUtils.randomAlphanumeric(length);
 	}
 
-	public static Object randomizeArray(Object[] array){
+	public static <T> T randomizeArray(T[] array){
 		int index = new Random().nextInt(array.length);
 		return array[index];
 	}
