@@ -2,7 +2,6 @@ package com.orasi.api.soapServices;
 
 import com.orasi.utils.Randomness;
 
-@SuppressWarnings("unused")
 public class SoapServiceCommands {
 	private final static String ADD_NODE = "fx:addnode;";
 	private final static String ADD_NODES = "fx:addnodes;";

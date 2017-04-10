@@ -1,14 +1,18 @@
 # Version History
 
-## Version 1.1.2 - 04/08/2017
+##Version 1.1.2 - 04/08/2017
+* [**com.orasi.core.by.angular**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/core/by/angular)
+  * Doing initial rework of Angular locators
 * [**com.orasi.api.soapService**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/api/soapServices)
   * Cleaned up handleValueFunctions and created unit tests
   * Removing from api.soapService.core package to just be in api.soapServices package
 * [**com.orasi.api.soapServiceCommands**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/api/soapServices)
   * Clean up commands to make them easier to use
   * Removing from api.soapService.core package to just be in api.soapServices package
-* [**com.orasi.api.restServices.core**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/api/restServices)
+* [**com.orasi.api.restServices**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/api/restServices)
   * Removing api.restServices.core package to just be in api.restServices package
+  * Cleanup Rest components
+  * Adding Http Response code enum
 * [**com.orasi.utils.ExcelDocumentReader**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/utils)
   * Fixing issue to read in number cells and formula cell properly
 * [**com.orasi.utils.TestReporter**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/utils)

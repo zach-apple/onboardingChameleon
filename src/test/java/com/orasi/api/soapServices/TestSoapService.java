@@ -13,7 +13,6 @@ import com.orasi.exception.automation.XPathInvalidExpression;
 import com.orasi.exception.automation.XPathNotFoundException;
 import com.orasi.exception.automation.XPathNullNodeValueException;
 import com.orasi.utils.Sleeper;
-import com.orasi.utils.TestReporter;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;

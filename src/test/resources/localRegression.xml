@@ -8,7 +8,7 @@
 	<parameter name="browserUnderTest" value="chrome" />
 	<parameter name="environment" value="blah" />
 	<parameter name="runLocation" value="sauce" />
-	<parameter name="browserVersion" value="52" />
+	<parameter name="browserVersion" value="57" />
 	<parameter name="operatingSystem" value="windows 10" />
     <test name="Element" parallel="methods" thread-count="10">
 		<classes>
@@ -144,6 +144,18 @@
 	<test name="TestSoapService" parallel="methods" thread-count="1">
 		<classes>
 			<class name="com.orasi.api.soapServices.TestSoapService" />
+		</classes>
+	</test>
+	
+	<test name="TestRestService" parallel="methods" thread-count="20">
+		<classes>
+			<class name="com.orasi.api.restServices.TestRestService" />
+		</classes>
+	</test>
+	
+	<test name="TestRestResponse" parallel="methods" thread-count="20">
+		<classes>
+			<class name="com.orasi.api.restServices.TestRestResponse" />
 		</classes>
 	</test>
 </suite> <!-- Suite -->

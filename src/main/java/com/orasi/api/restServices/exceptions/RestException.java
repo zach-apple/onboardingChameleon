@@ -1,4 +1,4 @@
-package com.orasi.api.restServices;
+package com.orasi.api.restServices.exceptions;
 
 import com.orasi.api.WebServiceException;
 
