@@ -1,4 +1,4 @@
-#Version History
+# Version History
 
 ##Version 1.1.2 - 04/08/2017
 * [**com.orasi.core.by.angular**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/core/by/angular)
@@ -9,14 +9,16 @@
 * [**com.orasi.api.soapServiceCommands**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/api/soapServices)
   * Clean up commands to make them easier to use
   * Removing from api.soapService.core package to just be in api.soapServices package
-* [**com.orasi.api.restServices.core**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/api/restServices)
+* [**com.orasi.api.restServices**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/api/restServices)
   * Removing api.restServices.core package to just be in api.restServices package
+  * Cleanup Rest components
+  * Adding Http Response code enum
 * [**com.orasi.utils.ExcelDocumentReader**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/utils)
   * Fixing issue to read in number cells and formula cell properly
 * [**com.orasi.utils.TestReporter**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/utils)
   * Adding TRACE level logs to AlertHandler and Sleeper
 
-##Version 1.1.1 - 03/12/2017
+## Version 1.1.1 - 03/12/2017
 * **POM.xml**
   * Upgrading to Selenium 3.3.1 to support latest version of Chrome and Firefox by allow for Chrome Driver 2.28 and GeckoDriver 0.15. 
   * Upgrading to HtmlUnitDriver 2.25
@@ -34,7 +36,7 @@
   * Adding logAPI method that accepts RestResponse
 
   
-##Version 1.1.0 - 03/07/2017
+## Version 1.1.0 - 03/07/2017
 **Enhancements**
 * [**com.orasi.core.interfaces**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/core/interfaces)
   * Element interfaces has seen performance increases due to an update on when the element is searched for. On creation, the Element will attempt a findElement, but will only search with 1 ms timeout. If found, it is cached. Upon usage of the Element, if the cached Element has because stale or if it was not found to begin with, then it will reload/research itself again. 
@@ -71,7 +73,7 @@
    * [DataWarehouse](https://github.com/Orasi/Chameleon/wiki/DataWarehouse.java) Simplified Hashmap built to quickly add, remove and update data. Intended to be used within the OrasiDriver.
 * [**com.orasi.utils.Preamble**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/utils/Preamble.java) A custom annotation that can be used to help enforce and standardize code documentation. See more at the wiki [Preamble.java](https://github.com/Orasi/Chameleon/wiki/Preamble.java)
 
-##Version 1.0.6 - 11/30/2015
+## Version 1.0.6 - 11/30/2015
 * [**com.orasi.utils.OrasiDriver**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/utils)
   * New methods
     * getDriverCapability().browserName() - returns browser name from WebDriver Capabilities
@@ -108,7 +110,7 @@
 * **Angular support**
  * Organized classes to fall under a single package. Updated classes with issues and allowed extentions to OrasiDriver 
 
-##Version 1.0.5 - 10/20/2015
+## Version 1.0.5 - 10/20/2015
 * [**com.orasi.utils.OrasiDriver**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/utils)
 	* Instantiation requirements
 		* public OrasiDriver(DesiredCapabilities caps)
@@ -205,7 +207,7 @@ driver.setElementTimeout(currentTimeout);
 * **Issues fixed**
 	* [Issue #16- XMLTools.validateNodeContainsValueByXPath - Node loop exiting before last node can be retrieved](https://github.com/Orasi/Chameleon/issues/16) 
 	
-##Version 1.0.4 - 06/11/2015
+## Version 1.0.4 - 06/11/2015
 * [**com.orasi.utils.TestEnvironment**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/utils)
 	* Created class to facilitate full parallel remote testing that will only be limited by the number of nodes on the Selenium grid
 		* Absorb WebDriverSetup and all associated fields required to create a WebDriver, both local and remote
@@ -280,7 +282,7 @@ driver.setElementTimeout(currentTimeout);
 		* All methods now accept the TestEnvironment class instead of WebDriver class
 * **Creation of unit tests**
 	
-##Version 1.0.3 - 03/26/2015
+## Version 1.0.3 - 03/26/2015
 * **com.jenkins API**
 	* Created methods to interact with a Jenkins server to get various information about a jobs latest build. Additional expansions for Jenkins are planned.
 
@@ -302,7 +304,7 @@ driver.setElementTimeout(currentTimeout);
 	* selenium-client-factory
 	* sauce-ondemand-driver
 	
-##Version 1.0.2 - 03/13/2015
+## Version 1.0.2 - 03/13/2015
 * **POM.xml** - Added Sauce Lab dependencies 
 	* sauce_java_common
 	* sauce_junit
@@ -319,11 +321,11 @@ driver.setElementTimeout(currentTimeout);
 	* Added gets/sets for remote Selenium Hub URL and Test name
 	* Added additional constructor to allow option for Test name
 	
-##Version 1.0.1 - 02/27/2015
+## Version 1.0.1 - 02/27/2015
 * Updated POM.xml structure
 * Updated Selenium Version to 2.44.0
 * Started removal of unused imports
 * Started adding additional comments to RestService.java and SoapService.java	 
  
-##Version 1.0.0 - 02/25/2015
+## Version 1.0.0 - 02/25/2015
 * Initial Creation
