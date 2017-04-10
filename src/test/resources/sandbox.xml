@@ -9,9 +9,15 @@
 	<parameter name="runLocation" value="local" />
 	<parameter name="browserVersion" value="52" />
 	<parameter name="operatingSystem" value="windows 10" />
- 	<test name="TestEnvironment">
+ 
+	<test name="TestRestService" parallel="methods" thread-count="20">
 		<classes>
-			<class name="com.orasi.core.interfaces.TestListbox" />
+			<class name="com.orasi.api.restServices.TestRestService" />
 		</classes>
-	</test> 
+	</test>
+	<test name="TestRestResponse" parallel="methods" thread-count="20">
+		<classes>
+			<class name="com.orasi.api.restServices.TestRestResponse" />
+		</classes>
+	</test>
 </suite> <!-- Suite -->

@@ -34,23 +34,6 @@ public class RestResponse {
 	private String responseAsString = "";
 	private String url = "";
 	
-
-	public RestResponse(HttpResponse httpResponse){
-		TestReporter.logTrace("Entering RestResponse#init");
-		TestReporter.logTrace("Creating RestResponse based on HttpResponse");
-		response  = httpResponse;
-		statusCode = response.getStatusLine().getStatusCode();
-		responseFormat = ContentType.getOrDefault(response.getEntity()).getMimeType().replace("application/", "");
-		try {
-			responseAsString = EntityUtils.toString(response.getEntity());
-			TestReporter.logInfo("Response Status returned [" + httpResponse.getStatusLine() +"]");
-			TestReporter.logInfo("Response returned: " +responseAsString);
-		} catch (ParseException | IOException e) {
-			throw new RestException(e.getMessage(), e);
-		}
-		TestReporter.logTrace("Exiting RestResponse#init");
-	}
-	
 	public RestResponse(HttpUriRequest request, HttpResponse httpResponse){	
 		TestReporter.logTrace("Entering RestResponse#init");	
 		TestReporter.logTrace("Creating RestResponse based on original HttpRequest and HttpResponse");
@@ -67,7 +50,7 @@ public class RestResponse {
 				try {
 					originalRequestBody = EntityUtils.toString(entity);
 					TestReporter.logTrace("Successfully retrieved body and stored");
-				} catch (ParseException | IOException throwAway) {
+				} catch (IOException throwAway) {
 					TestReporter.logTrace("Failed to retrieve original request body");
 				}
 			}
@@ -142,10 +125,8 @@ public class RestResponse {
 			map =  mapper.readValue(stringResponse, clazz);
 		} catch (JsonParseException e) {
 			throw new RestException("Failed to parse JSON", e);
-		} catch (JsonMappingException e) {
-			throw new RestException("Failed to Map JSON", e);
 		} catch (IOException e) {
-			throw new RestException("Failed to output JSON", e);
+			throw new RestException("Failed to Map JSON", e);
 		}
 		return map;
 	}

@@ -146,4 +146,16 @@
 			<class name="com.orasi.api.soapServices.TestSoapService" />
 		</classes>
 	</test>
+	
+	<test name="TestRestService" parallel="methods" thread-count="20">
+		<classes>
+			<class name="com.orasi.api.restServices.TestRestService" />
+		</classes>
+	</test>
+	
+	<test name="TestRestResponse" parallel="methods" thread-count="20">
+		<classes>
+			<class name="com.orasi.api.restServices.TestRestResponse" />
+		</classes>
+	</test>
 </suite> <!-- Suite -->
