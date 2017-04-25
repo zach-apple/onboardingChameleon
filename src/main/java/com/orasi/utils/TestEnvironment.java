@@ -112,7 +112,7 @@ public class TestEnvironment {
 	 */
 	public TestEnvironment(String application, String browserUnderTest, String browserVersion, String operatingSystem,
 			String runLocation, String environment) {
-		TestReporter.log(String.format("Initializing test... \n Application: '%s'\n Browser: '%s'\n Browser Version: '%s'\n OS: '%s'\n Testing Environment: '%s'",
+		TestReporter.log(String.format("Initializing test... %n Application: '%s'%n Browser: '%s'%n Browser Version: '%s'%n OS: '%s'%n Testing Environment: '%s'",
 				application,
 				browserUnderTest,
 				browserVersion,
@@ -398,7 +398,7 @@ public class TestEnvironment {
 			updates.put("passed", true);
 		}
 		SauceREST client = new SauceREST(authentication.getUsername(), authentication.getAccessKey());
-		client.updateJobInfo(driver.getSessionId().toString(), updates);
+		client.updateJobInfo(driver.getSessionId(), updates);
 	}
 
 

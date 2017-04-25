@@ -74,7 +74,7 @@ public class TestReporter {
 			int x = 0;
 			String filename = "";
 			for(StackTraceElement element : elements){
-				filename = element.getClassName().toString();
+				filename = element.getClassName();
 				if(x == 0 || x == 1 || x == 2) {
 					x++;
 					continue;

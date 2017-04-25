@@ -285,8 +285,5 @@ public class Base64Coder {
         return out;
     }
 
-// Dummy constructor.
-    public Base64Coder() {
-    }
 
 } // end class Base64Coder

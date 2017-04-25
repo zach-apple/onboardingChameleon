@@ -360,7 +360,7 @@ public class Person {
 		if (convertedAge < 0)
 			convertedAge = 0;
 		this.age = String.valueOf(convertedAge);
-		this.birthDate = DateTimeConversion.convert(dateOfBirth.toString(),
+		this.birthDate = DateTimeConversion.convert(dateOfBirth,
 				"yyyy-MM-dd'T'hh:mm:ss'Z'", "yyyy-MM-dd");
 		this.isChild = Integer.parseInt(getAge()) <= 18;
 		this.username = getFirstName() + "." + getLastName();
