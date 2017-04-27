@@ -111,7 +111,7 @@ public class ElementImpl implements Element {
 	}
 
 	public void jsClick() {
-		TestReporter.logTrace("Entering ElementImpl#clicjsClickk");
+		TestReporter.logTrace("Entering ElementImpl#jsClick");
 		getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();", getWrappedElement());
 		TestReporter.interfaceLog("Clicked [ <b>" + getElementLocatorInfo() + " </b>]");
 		TestReporter.logTrace("Exiting ElementImpl#jsClick");
@@ -292,7 +292,7 @@ public class ElementImpl implements Element {
 	public void clear() {
 		TestReporter.logTrace("Entering ElementImpl#clear");
 		getWrappedElement().clear();
-		TestReporter.interfaceLog(" Clear text from Element [ <b>" + getElementLocatorInfo() + " </b> ]");
+		TestReporter.interfaceLog("Clear text from Element [ <b>" + getElementLocatorInfo() + " </b> ]");
 		TestReporter.logTrace("Exiting ElementImpl#clear");
 	}
 
