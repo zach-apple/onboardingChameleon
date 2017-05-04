@@ -76,6 +76,12 @@
 		</classes>
 	</test>
 	
+	<test name="CreditCards" parallel="methods" thread-count="20">
+		<classes>
+			<class name="com.orasi.utils.dataHelpers.TestCreditCard" />
+		</classes>
+	</test>
+	
 	<test name="PersonFactory" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.utils.dataHelpers.TestPersonFactory" />

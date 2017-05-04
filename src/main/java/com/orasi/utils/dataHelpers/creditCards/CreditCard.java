@@ -103,11 +103,9 @@ public class CreditCard {
 	return billingZip;
     }
 
-
-
-
-    /*@Override
-	public String toString(){
-	//	return String.format("Module: '%s' \nError Code: '%s' \nError Message: '%s'", moduleName, errorCode, desciption);
-	}*/
+    @Override
+    public String toString(){
+	return String.format("Generating Credit card with the following info:%nCard Type:%n%s%n%nName on Card:%n%s%n%nAddress Info:%n%s%n%s, %s %s%n%s",
+		cardType, nameOnCard, billingStreet, billingCity, billingState, billingCountry, billingZip);
+    }
 }
