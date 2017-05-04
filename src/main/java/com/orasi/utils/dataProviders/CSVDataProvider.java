@@ -3,10 +3,12 @@ package com.orasi.utils.dataProviders;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.orasi.exception.AutomationException;
+import com.orasi.exception.automation.DataProviderInputFileNotFound;
 import com.orasi.utils.TestReporter;
 
 public class CSVDataProvider {
@@ -32,7 +34,11 @@ public class CSVDataProvider {
 		int rowCount = 0;
 		
 		// Get the file location from the project main/resources folder
-		if(!filePath.contains(":")) filePath =  CSVDataProvider.class.getResource(filePath).getPath();
+		if(!filePath.contains(":")){
+		    URL file = CSVDataProvider.class.getResource(filePath);
+		    if(file == null) throw new DataProviderInputFileNotFound("Failed to find a file in path [ " + filePath + " ]");
+		    filePath =  file.getPath();
+		}
 
 		// in case file path has a %20 for a whitespace, replace with actual whitespace
 		filePath = filePath.replace("%20", " ");
