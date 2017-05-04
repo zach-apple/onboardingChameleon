@@ -20,8 +20,8 @@ public class TestPersonFactory{
 	
 	@Features("Utilities")
 	@Stories("PersonFactory")
-	@Title("constructor")
-	@Test(groups ={"partyConstructor", "utils", "Party"})
+	@Title("partyConstructor")
+	@Test(groups ={"regression", "utils", "Party"})
 	public void partyConstructor(){
 		Assert.assertNotNull(party);
 	}
