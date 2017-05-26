@@ -111,7 +111,7 @@ public class ElementImpl implements Element {
 	}
 
 	public void jsClick() {
-		TestReporter.logTrace("Entering ElementImpl#clicjsClickk");
+		TestReporter.logTrace("Entering ElementImpl#jsClick");
 		getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();", getWrappedElement());
 		TestReporter.interfaceLog("Clicked [ <b>" + getElementLocatorInfo() + " </b>]");
 		TestReporter.logTrace("Exiting ElementImpl#jsClick");
@@ -292,7 +292,7 @@ public class ElementImpl implements Element {
 	public void clear() {
 		TestReporter.logTrace("Entering ElementImpl#clear");
 		getWrappedElement().clear();
-		TestReporter.interfaceLog(" Clear text from Element [ <b>" + getElementLocatorInfo() + " </b> ]");
+		TestReporter.interfaceLog("Clear text from Element [ <b>" + getElementLocatorInfo() + " </b> ]");
 		TestReporter.logTrace("Exiting ElementImpl#clear");
 	}
 
@@ -468,7 +468,7 @@ public class ElementImpl implements Element {
 			if (element instanceof HtmlUnitWebElement) {
 				startPosition = element.toString().indexOf("=\"") + 2;
 				endPosition = element.toString().indexOf("\"", element.toString().indexOf("=\"") + 3);
-				if (startPosition == -1 | endPosition == -1)
+				if (startPosition == -1 || endPosition == -1)
 					locator = element.toString();
 				else
 					locator = element.toString().substring(startPosition, endPosition);
@@ -480,7 +480,7 @@ public class ElementImpl implements Element {
 				if(startPosition==1){
 					startPosition = wrappedElement.toString().indexOf("=\"") + 2;
 					endPosition = wrappedElement.toString().indexOf("\"", wrappedElement.toString().indexOf("=\"") + 3);
-					if (startPosition == -1 | endPosition == -1)
+					if (startPosition == -1 || endPosition == -1)
 						locator = wrappedElement.toString();
 					else
 						locator = wrappedElement.toString().substring(startPosition, endPosition);
@@ -738,10 +738,13 @@ public class ElementImpl implements Element {
 	 */
 	public boolean syncEnabled(Object... args) {
 		TestReporter.logTrace("Entering ElementImpl#syncEnabled");
-		int timeout = getWrappedDriver().getElementTimeout();
-		boolean failTestOnSync = Constants.defaultSyncHandler;
+		int requestedTimeout = getWrappedDriver().getElementTimeout();
+		int currentElementTimeout = getWrappedDriver().getElementTimeout();
+		boolean failTestOnSync = Constants.defaultSyncHandler;		
+		driver.setElementTimeout(1);
+		
 		try{
-			if(args[0] != null) timeout = Integer.valueOf(args[0].toString());
+			if(args[0] != null) requestedTimeout = Integer.valueOf(args[0].toString());
 			if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
 		}catch(ArrayIndexOutOfBoundsException aiobe){}
 
@@ -749,16 +752,18 @@ public class ElementImpl implements Element {
 		long timeLapse;
 		StopWatch stopwatch = new StopWatch();
 		TestReporter.interfaceLog("<i>Syncing to element [<b>" + getElementLocatorInfo()
-		+ "</b> ] to be <b>ENABLED</b> within [ <b>" + timeout + "</b> ] seconds.</i>");
+		+ "</b> ] to be <b>ENABLED</b> within [ <b>" + requestedTimeout + "</b> ] seconds.</i>");
 		stopwatch.start();
 		WebDriverWait wait = new WebDriverWait(driver, 1);
 		
-		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
+		while(((stopwatch.getTime()) / 1000.0) < requestedTimeout && !found){
         		try {
         		    if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
         		    found = wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExpectedConditions.elementToBeClickable(reload())) != null;		  
         		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
 		}
+		
+		driver.setElementTimeout(currentElementTimeout);
 	
 		stopwatch.stop();
 		timeLapse = stopwatch.getTime();

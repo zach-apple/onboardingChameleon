@@ -50,7 +50,7 @@ public class Mustard {
 		
 		
 		if(runLocation.toLowerCase().equals("sauce")){
-		    sauceURL = "https://saucelabs.com/beta/tests/" + driver.getSessionId().toString();
+		    sauceURL = "https://saucelabs.com/beta/tests/" + driver.getSessionId();
 		    mustardResult.getResult().setLink(sauceURL);
 		}
 		

@@ -1,9 +1,8 @@
 package com.orasi.utils.debugging;
 
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import com.orasi.utils.OrasiDriver;
@@ -75,7 +74,7 @@ public class Highlight {
 			}else{
 			    ((JavascriptExecutor)driver).executeScript(js, element);
 			}
-		}catch(StaleElementReferenceException | NoSuchElementException throwAway){}
+		}catch(WebDriverException throwAway){}
     }
     
 }

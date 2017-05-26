@@ -10,7 +10,8 @@
 	<parameter name="browserVersion" value="52" />
 	<parameter name="operatingSystem" value="windows 10" />
  
-	<test name="TestRestService" parallel="methods" thread-count="20">
+	
+	<test name="CreditCards" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.core.interfaces.TestElement" />
 		</classes>

@@ -18,9 +18,6 @@ public class SimpleDate {
     private int day = calendar.get(Calendar.DATE);
     private int year = calendar.get(Calendar.YEAR);
 
-    public SimpleDate() {
-    }
-
     public Calendar getCalendar() {
         return calendar;
     }
