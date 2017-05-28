@@ -28,7 +28,7 @@ public class TestTextbox extends TestEnvironment{
         setOperatingSystem(operatingSystem);
         setRunLocation(runLocation);
         setTestEnvironment(environment);
-        setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/textbox.html");
+        setPageURL("orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/textbox.html");
         testStart("TestTextbox");
     }
     
