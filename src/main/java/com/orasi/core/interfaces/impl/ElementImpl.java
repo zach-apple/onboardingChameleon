@@ -305,7 +305,7 @@ public class ElementImpl implements Element {
 		String keys = "";
 		if (keysToSend.toString() != "") {
 			getWrappedElement().sendKeys(keysToSend);
-			
+
 			for(CharSequence key : keysToSend){
 				if(key instanceof Keys){
 					if(keys.isEmpty()) keys = "Key." +((Keys) key).name();
@@ -315,7 +315,7 @@ public class ElementImpl implements Element {
 					else keys += key.toString();		
 				}
 			}
-		
+
 			TestReporter.interfaceLog(" Send Keys [ <b>" + keys + "</b> ] to Textbox [ <b>"
 					+ getElementIdentifier() + " </b> ]");
 		}
@@ -623,9 +623,9 @@ public class ElementImpl implements Element {
 		WebDriverWait wait = new WebDriverWait(driver, 1);
 		stopwatch.start();
 		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
-        		try {
-        			found = wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.elementToBeVisible(reload()));
-        		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
+			try {
+				found = wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.elementToBeVisible(reload()));
+			} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
 		}
 		stopwatch.stop();
 		timeLapse = stopwatch.getTime();
@@ -641,12 +641,12 @@ public class ElementImpl implements Element {
 							+ (timeLapse) / 1000.0 + " ] seconds.", driver);
 		} else if (!found){
 			TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
-					+ " </b>] is not <b>VISIBLE</b> on the page after [ "
-					+ (timeLapse) / 1000.0 + " ] seconds.</i>");
+			+ " </b>] is not <b>VISIBLE</b> on the page after [ "
+			+ (timeLapse) / 1000.0 + " ] seconds.</i>");
 			TestReporter.logTrace("Exiting ElementImpl#syncVisible");
 			return found;
 		}
-		
+
 		TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()   + " </b>] is <b>VISIBLE</b> on the page after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
 		if(Highlight.getDebugMode()) Highlight.highlightSuccess(driver, reload());
 		TestReporter.logTrace("Exiting ElementImpl#syncVisible");
@@ -689,11 +689,11 @@ public class ElementImpl implements Element {
 		stopwatch.start();
 		WebDriverWait wait = new WebDriverWait(driver, 1);
 		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
-        		try {
-        			found = wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.elementToBeHidden(reload()));
-        		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
+			try {
+				found = wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.elementToBeHidden(reload()));
+			} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
 		}
-		
+
 		stopwatch.stop();
 		timeLapse = stopwatch.getTime();
 		stopwatch.reset();
@@ -708,12 +708,12 @@ public class ElementImpl implements Element {
 							+ (timeLapse) / 1000.0 + " ] seconds.", driver);
 		} else if (!found){
 			TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
-					+ " </b>] is not <b>HIDDEN</b> on the page after [ "
-					+ (timeLapse) / 1000.0 + " ] seconds.</i>");
+			+ " </b>] is not <b>HIDDEN</b> on the page after [ "
+			+ (timeLapse) / 1000.0 + " ] seconds.</i>");
 			TestReporter.logTrace("Exiting ElementImpl#syncHidden");
 			return found;
 		}
-		
+
 		TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()   + " </b>] is <b>HIDDEN</b> on the page after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
 		TestReporter.logTrace("Exiting ElementImpl#syncHidden");
 		return found;
@@ -742,7 +742,7 @@ public class ElementImpl implements Element {
 		int currentElementTimeout = getWrappedDriver().getElementTimeout();
 		boolean failTestOnSync = Constants.defaultSyncHandler;		
 		driver.setElementTimeout(1);
-		
+
 		try{
 			if(args[0] != null) requestedTimeout = Integer.valueOf(args[0].toString());
 			if(args[1] != null) failTestOnSync = Boolean.parseBoolean(args[1].toString());
@@ -755,16 +755,16 @@ public class ElementImpl implements Element {
 		+ "</b> ] to be <b>ENABLED</b> within [ <b>" + requestedTimeout + "</b> ] seconds.</i>");
 		stopwatch.start();
 		WebDriverWait wait = new WebDriverWait(driver, 1);
-		
+
 		while(((stopwatch.getTime()) / 1000.0) < requestedTimeout && !found){
-        		try {
-        		    if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
-        		    found = wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExpectedConditions.elementToBeClickable(reload())) != null;		  
-        		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
+			try {
+				if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
+				found = wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExpectedConditions.elementToBeClickable(reload())) != null;		  
+			} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
 		}
-		
+
 		driver.setElementTimeout(currentElementTimeout);
-	
+
 		stopwatch.stop();
 		timeLapse = stopwatch.getTime();
 		stopwatch.reset();
@@ -779,12 +779,12 @@ public class ElementImpl implements Element {
 							+ (timeLapse) / 1000.0 + " ] seconds.", driver);
 		}else if (!found){
 			TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
-					+ " </b>] is not <b>ENABLED</b> on the page after [ "
-					+ (timeLapse) / 1000.0 + " ] seconds.</i>");
+			+ " </b>] is not <b>ENABLED</b> on the page after [ "
+			+ (timeLapse) / 1000.0 + " ] seconds.</i>");
 			TestReporter.logTrace("Exiting ElementImpl#syncEnabled");
 			return found;
 		}
-			
+
 		TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
 		+ " </b>] is <b>ENABLED</b> on the page after [ "
 		+ (timeLapse) / 1000.0 + " ] seconds.</i>");
@@ -827,12 +827,12 @@ public class ElementImpl implements Element {
 		WebDriverWait wait = new WebDriverWait(driver, 1);
 
 		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
-        		try {
-        		    if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
-        		    found = wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(reload()))) != null;		  
-        		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
+			try {
+				if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
+				found = wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(reload()))) != null;		  
+			} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
 		}
-		
+
 		stopwatch.stop();
 		timeLapse = stopwatch.getTime();
 		stopwatch.reset();
@@ -852,7 +852,7 @@ public class ElementImpl implements Element {
 			TestReporter.logTrace("Exiting ElementImpl#syncDisabled");
 			return found;
 		}
-		
+
 		TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
 		+ " </b>] is <b>DISABLED</b> on the page after [ "
 		+ (timeLapse) / 1000.0 + " ] seconds.</i>");
@@ -993,7 +993,7 @@ public class ElementImpl implements Element {
 			TestReporter.logTrace("Exiting ElementImpl#syncTextMatchesInElement");
 			return found;
 		}
-		
+
 		TestReporter.interfaceLog(
 				"<i>Element [<b>" + getElementLocatorInfo() + " </b>] contains the text [ " + regex
 				+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
@@ -1037,10 +1037,10 @@ public class ElementImpl implements Element {
 		WebDriverWait wait = new WebDriverWait(driver, 1);
 
 		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
-        		try {
-        		    if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
-        		    found =  wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.textToBePresentInElementAttribute(reload(), attribute, value));	  
-        		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
+			try {
+				if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
+				found =  wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.textToBePresentInElementAttribute(reload(), attribute, value));	  
+			} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){}
 		}
 
 		stopwatch.stop();
@@ -1062,7 +1062,7 @@ public class ElementImpl implements Element {
 			TestReporter.logTrace("Exiting ElementImpl#syncAttributeContainsValue");
 			return found;
 		}
-		
+
 		TestReporter.interfaceLog(
 				"<i>Element [<b>" + getElementLocatorInfo() + " </b>] attribute [<b>" + attribute + "</b> ] contains the text [ " + value
 				+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
@@ -1107,15 +1107,15 @@ public class ElementImpl implements Element {
 
 		stopwatch.start();
 		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
-		    try {
-			if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
-			found =  wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.textToMatchInElementAttribute(reload(), attribute, regex));
-    		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){
-    			found =  false;
-    		}
+			try {
+				if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
+				found =  wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.textToMatchInElementAttribute(reload(), attribute, regex));
+			} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){
+				found =  false;
+			}
 		}
 
-		
+
 		stopwatch.stop();
 		timeLapse = stopwatch.getTime();
 		stopwatch.reset();
@@ -1132,7 +1132,7 @@ public class ElementImpl implements Element {
 			TestReporter.interfaceLog(
 					"<i>Element [<b>" + getElementLocatorInfo() + " </b>] attribute [<b>" + attribute + "</b> ] did not match the regular expression of [ " + regex
 					+ " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
-				TestReporter.logTrace("Exiting ElementImpl#syncAttributeMatchesValue");
+			TestReporter.logTrace("Exiting ElementImpl#syncAttributeMatchesValue");
 			return found;
 		}
 		TestReporter.interfaceLog(
@@ -1178,14 +1178,14 @@ public class ElementImpl implements Element {
 		WebDriverWait wait = new WebDriverWait(driver, 1);
 		stopwatch.start();
 		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
-		    try {
-			if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
-			found =  wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.textToBePresentInElementCssProperty(reload(), cssProperty, value));
-    		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){
-    			found =  false;
-    		}
+			try {
+				if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
+				found =  wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.textToBePresentInElementCssProperty(reload(), cssProperty, value));
+			} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){
+				found =  false;
+			}
 		}
-		
+
 		stopwatch.stop();
 		timeLapse = stopwatch.getTime();
 		stopwatch.reset();
@@ -1204,7 +1204,7 @@ public class ElementImpl implements Element {
 			TestReporter.logTrace("Exiting ElementImpl#syncCssPropertyContainsValue");
 			return found;
 		}
-		
+
 
 		TestReporter.interfaceLog(
 				"<i>Element [<b>" + getElementLocatorInfo() + " </b>] CSS Property [<b>" + cssProperty  + "</b> ] contains the text [ " + value
@@ -1247,15 +1247,15 @@ public class ElementImpl implements Element {
 		WebDriverWait wait = new WebDriverWait(driver, 0);
 		stopwatch.start();
 		while(((stopwatch.getTime()) / 1000.0) < timeout && !found){
-		    try {
-			if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
-			found =  wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.textToMatchInElementCssProperty(reload(), cssProperty, regex));
-    		} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){
-    			found =  false;
-    		}
+			try {
+				if(Highlight.getDebugMode()) Highlight.highlightDebug(driver, reload());
+				found =  wait.pollingEvery(Constants.millisecondsToPollForElement, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.textToMatchInElementCssProperty(reload(), cssProperty, regex));
+			} catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te){
+				found =  false;
+			}
 		}
-		
-		
+
+
 		stopwatch.stop();
 		timeLapse = stopwatch.getTime();
 		stopwatch.reset();
@@ -1299,10 +1299,128 @@ public class ElementImpl implements Element {
 		return el;
 	}
 
+	public int findFrame(int timeoutInSeconds){
+		return this.findFrame(timeoutInSeconds, 0);
+	}
+
+	public int findFrame(){
+		return this.findFrame(Constants.ELEMENT_TIMEOUT, 0);
+	}
+
+	@Beta
+	public int findFrame(int timeoutInSeconds, int timeoutInMilliseconds) {
+		int foundFrame = -2;
+		StopWatch stopwatch = new StopWatch();
+		WebDriverWait wait = new WebDriverWait(driver, 0);
+		try {
+			int timeout = (timeoutInSeconds * 1000) + timeoutInMilliseconds;
+			long elapsedTime = 0L;
+			boolean searching = true;
+			boolean elementFound = false;
+			boolean eF = false;
+
+			//Grab default timeout to revert back to
+			int defaultTimeout = getWrappedDriver().getElementTimeout();
+			getWrappedDriver().setElementTimeout(0);
+			getWrappedDriver().switchTo().defaultContent();
+
+			//Get frame count
+			List<WebElement> frames = getWrappedDriver().findElements(By.xpath("//iframe"));
+			int frameCount = frames.size();
+			TestReporter.logTrace("Frame count: " + frameCount);
+			int tryCount = 0;
+			int curFrame = 0;
+
+			stopwatch.start();
+			while(((stopwatch.getTime()) / 1000.0) < timeout && searching){
+
+		//	while(searching){
+
+				TestReporter.logTrace("Try #: " + tryCount);
+				tryCount++;
+				try {
+					TestReporter.logTrace("Trying default frame.");
+					getWrappedDriver().switchTo().defaultContent();
+
+					eF = false;
+					try {
+					//	WebDriverWait wait = new WebDriverWait(driver, 0);
+					//	wait.until(ExpectedConditions.elementToBeClickable(by));
+						element = wait.until(ExpectedConditions.elementToBeClickable(by));
+						eF = true;
+					} catch (Exception e) {
+						eF = false;
+					}
+
+					if (eF){
+						elementFound = true;
+						searching = false;
+						foundFrame = -1;
+						TestReporter.logTrace("Default frame: SUCCESS.");
+						break; //break while
+					}
+				}catch (Exception e) {TestReporter.logTrace("Default frame: FAIL.");}
+
+				try {
+
+					for (int i = 0; i < frameCount + 1; i++) {
+						curFrame = i;
+
+						try {
+							TestReporter.logTrace("Switching to frame: " + i);
+							getWrappedDriver().switchTo().defaultContent();
+							getWrappedDriver().switchTo().frame(i);
+
+							try {
+
+								eF = false;
+								try {
+								//	WebDriverWait wait = new WebDriverWait(driver, 0);
+								//	wait.until(ExpectedConditions.elementToBeClickable(by));
+									element = wait.until(ExpectedConditions.elementToBeClickable(by));
+									eF = true;
+								} catch (Exception e) {eF = false;}
+
+								if (eF){
+									elementFound = true;
+									foundFrame = i;
+									searching = false;
+									TestReporter.logTrace("Frame: " + i + " SUCCESS.");
+									break; //Break for
+								}}catch(Exception e3){TestReporter.logTrace("Find element on frame: " + i + " FAIL.");}
+
+						}catch(Exception e2){TestReporter.logTrace("Frame switch to: " + i + " FAIL.");}
+					}
+
+					if(elementFound){
+						break; //Break while
+					}
+
+				}catch (Exception e4) {TestReporter.logTrace("Frame: " + curFrame + " Frame not found.");}
+
+/*				if(elapsedTime < timeout) {
+					elapsedTime = (new Date()).getTime() - startTime;
+				}else{
+					TestReporter.logTrace("Timeout reached");
+					searching = false;
+				}
+*/
+			}
+			TestReporter.logTrace("Resetting timeout to default timeout of: " + defaultTimeout);
+			getWrappedDriver().setElementTimeout(defaultTimeout);
+
+		} catch (Exception e5) {TestReporter.logTrace("ERROR IN FINDFRAME: " + e5.toString());}
+		stopwatch.stop();
+		return foundFrame;
+
+	}
+
+
+
 	@Override
 	public Rectangle getRect() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 }
