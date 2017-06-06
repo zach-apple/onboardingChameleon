@@ -1,5 +1,7 @@
 # Orasi Selenium Core Project
 
+<img src="http://ruraldirectory.orasi.com/images/chameleon.png" width="35%" height="35%" />
+
 This is the homepage for the Orasi Selenium Core libraries. These libraries contain both original code created by Orasi developers
 and open source code from various other projects which are listed further down. With these libraries, consumers have access to extended 
 functionality for creating testing suites for Web Applications and API Web Services.
