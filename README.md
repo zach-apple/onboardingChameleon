@@ -1,4 +1,4 @@
-# Orasi Selenium Core Project
+#  Orasi Chameleon Project
 
 <img src="http://ruraldirectory.orasi.com/images/chameleonSmall.png"/>
 
