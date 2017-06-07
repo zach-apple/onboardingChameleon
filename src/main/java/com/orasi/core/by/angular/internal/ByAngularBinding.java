@@ -1,5 +1,7 @@
 package com.orasi.core.by.angular.internal;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
@@ -7,8 +9,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import com.orasi.core.Beta;
-
-import java.util.List;
 
 /*
  * Original Code from https://github.com/paul-hammant/ngWebDriver
@@ -26,8 +26,7 @@ public class ByAngularBinding extends By {
     }
 
     private String makeJsBy(String oneOrAll) {
-        return
-                "var using = arguments[0] || document;\n" +
+        return "var using = arguments[0] || document;\n" +
                 "var binding = '" + binding + "';\n" +
                 "var bindings = using.getElementsByClassName('ng-binding');\n" +
                 "var matches = [];\n" +
@@ -50,7 +49,7 @@ public class ByAngularBinding extends By {
     }
 
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     public List<WebElement> findElements(SearchContext searchContext) {
         if (searchContext instanceof WebDriver) {
             searchContext = null;

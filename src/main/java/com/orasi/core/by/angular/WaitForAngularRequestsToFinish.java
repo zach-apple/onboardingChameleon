@@ -9,17 +9,15 @@ import com.orasi.utils.OrasiDriver;
  * Original Code from https://github.com/paul-hammant/ngWebDriver
  */
 
-public class WaitForAngularRequestsToFinish  {
+public class WaitForAngularRequestsToFinish {
 
+    public static void waitForAngularRequestsToFinish(WebDriver driver) {
+        if (driver instanceof OrasiDriver) {
+            driver = ((OrasiDriver) driver).getWebDriver();
+        }
 
+        ((JavascriptExecutor) driver).executeAsyncScript("var callback = arguments[arguments.length - 1];" +
+                "angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
 
-	public static void waitForAngularRequestsToFinish(WebDriver driver) {
-		if(driver instanceof OrasiDriver) {
-			driver = ((OrasiDriver)driver).getWebDriver();
-		} 		    	
-    	
-		((JavascriptExecutor) driver).executeAsyncScript("var callback = arguments[arguments.length - 1];" +
-    				"angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
-   
     }
 }
