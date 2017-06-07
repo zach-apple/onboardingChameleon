@@ -30,8 +30,9 @@ public class ExtendedExpectedConditions {
                 try {
                     for (String handle : driver.getWindowHandles()) {
                         driver.switchTo().window(handle);
-                        if (driver.getTitle().equals(title))
+                        if (driver.getTitle().equals(title)) {
                             return true;
+                        }
                     }
                 } catch (WebDriverException e) {
                     return null;
@@ -61,8 +62,9 @@ public class ExtendedExpectedConditions {
                 try {
                     for (String handle : driver.getWindowHandles()) {
                         driver.switchTo().window(handle);
-                        if (driver.getTitle().contains(title))
+                        if (driver.getTitle().contains(title)) {
                             return true;
+                        }
                     }
                 } catch (WebDriverException e) {
                     return null;
@@ -91,8 +93,9 @@ public class ExtendedExpectedConditions {
                 try {
                     for (String handle : driver.getWindowHandles()) {
                         driver.switchTo().window(handle);
-                        if (driver.getTitle().matches(regex))
+                        if (driver.getTitle().matches(regex)) {
                             return true;
+                        }
                     }
                 } catch (WebDriverException e) {
                     return null;
@@ -157,10 +160,11 @@ public class ExtendedExpectedConditions {
             public Boolean apply(WebDriver driver) {
                 try {
                     String elementText = element.getAttribute(attribute);
-                    if (elementText != null)
+                    if (elementText != null) {
                         return elementText.contains(text);
-                    else
+                    } else {
                         return false;
+                    }
                 } catch (StaleElementReferenceException e) {
                     return false;
                 }
@@ -192,10 +196,11 @@ public class ExtendedExpectedConditions {
             public Boolean apply(WebDriver driver) {
                 try {
                     String elementText = element.getAttribute(attribute);
-                    if (elementText != null)
+                    if (elementText != null) {
                         return elementText.matches(regex);
-                    else
+                    } else {
                         return false;
+                    }
                 } catch (StaleElementReferenceException e) {
                     return false;
                 }
@@ -228,10 +233,11 @@ public class ExtendedExpectedConditions {
             public Boolean apply(WebDriver driver) {
                 try {
                     String elementText = element.getCssValue(cssProperty);
-                    if (elementText != null)
+                    if (elementText != null) {
                         return elementText.contains(text);
-                    else
+                    } else {
                         return false;
+                    }
                 } catch (StaleElementReferenceException e) {
                     return false;
                 }
@@ -263,10 +269,11 @@ public class ExtendedExpectedConditions {
             public Boolean apply(WebDriver driver) {
                 try {
                     String elementText = element.getCssValue(cssProperty);
-                    if (elementText != null)
+                    if (elementText != null) {
                         return elementText.matches(regex);
-                    else
+                    } else {
                         return false;
+                    }
                 } catch (StaleElementReferenceException e) {
                     return false;
                 }
@@ -291,19 +298,22 @@ public class ExtendedExpectedConditions {
                     if ((location.getX() > 0 & location.getY() > 0) | (size.getHeight() > 0 & size.getWidth() > 0)) {
                         // String attributeHidden = element.getAttribute("hidden");
                         if (element.getAttribute("hidden") != null) {
-                            if (element.getAttribute("hidden").toLowerCase().equals("true"))
+                            if (element.getAttribute("hidden").toLowerCase().equals("true")) {
                                 return false;
+                            }
                         }
 
                         // String attributeType= element.getAttribute("type");
                         if (element.getAttribute("type") != null) {
-                            if (element.getAttribute("type").equals("hidden"))
+                            if (element.getAttribute("type").equals("hidden")) {
                                 return false;
+                            }
                         }
 
                         return true;
-                    } else
+                    } else {
                         return false;
+                    }
                 } catch (StaleElementReferenceException sere) {
                     return false;
                 } catch (WebDriverException | ClassCastException | NullPointerException e) {
@@ -328,23 +338,26 @@ public class ExtendedExpectedConditions {
 
                     // String attributeHidden = element.getAttribute("hidden");
                     if (element.getAttribute("hidden") != null) {
-                        if (element.getAttribute("hidden").toLowerCase().equals("true"))
+                        if (element.getAttribute("hidden").toLowerCase().equals("true")) {
                             return true;
+                        }
                     }
 
                     // String attributeType= element.getAttribute("type");
                     if (element.getAttribute("type") != null) {
-                        if (element.getAttribute("type").equals("hidden"))
+                        if (element.getAttribute("type").equals("hidden")) {
                             return true;
+                        }
                     }
 
                     Point location = element.getLocation();
                     Dimension size = element.getSize();
 
-                    if ((location.getX() <= 0 & location.getY() <= 0) | (size.getHeight() <= 0 & size.getWidth() <= 0))
+                    if ((location.getX() <= 0 & location.getY() <= 0) | (size.getHeight() <= 0 & size.getWidth() <= 0)) {
                         return true;
-                    else
+                    } else {
                         return false;
+                    }
                 } catch (StaleElementReferenceException sere) {
                     return false;
                 } catch (WebDriverException | ClassCastException | NullPointerException e) {
@@ -416,8 +429,9 @@ public class ExtendedExpectedConditions {
                     } catch (WebDriverException throwAway) {
                     }
 
-                    if (crawl(driver, by))
+                    if (crawl(driver, by)) {
                         return true;
+                    }
 
                     driver.switchTo().defaultContent();
                     level--;
