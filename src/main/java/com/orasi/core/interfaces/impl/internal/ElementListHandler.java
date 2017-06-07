@@ -1,9 +1,6 @@
 package com.orasi.core.interfaces.impl.internal;
 
-import com.orasi.core.interfaces.Element;
-
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.pagefactory.ElementLocator;
+import static com.orasi.core.interfaces.impl.internal.ImplementedByProcessor.getWrapperClass;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
@@ -12,7 +9,10 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.orasi.core.interfaces.impl.internal.ImplementedByProcessor.getWrapperClass;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.pagefactory.ElementLocator;
+
+import com.orasi.core.interfaces.Element;
 
 /**
  * Wraps a list of WebElements in multiple wrapped elements.
@@ -25,9 +25,12 @@ public class ElementListHandler implements InvocationHandler {
     /**
      * Given an interface and a locator, apply a wrapper over a list of elements.
      *
-     * @param interfaceType interface type we're trying to wrap around the element.
-     * @param locator       locator on the page for the elements.
-     * @param <T>           type of the interface.
+     * @param interfaceType
+     *            interface type we're trying to wrap around the element.
+     * @param locator
+     *            locator on the page for the elements.
+     * @param <T>
+     *            type of the interface.
      */
     public <T> ElementListHandler(Class<T> interfaceType, ElementLocator locator) {
         this.locator = locator;
@@ -41,14 +44,18 @@ public class ElementListHandler implements InvocationHandler {
     /**
      * Executed on invoke of the requested proxy. Used to gather a list of wrapped WebElements.
      *
-     * @param o       object to invoke on
-     * @param method  method to invoke
-     * @param objects parameters for method
+     * @param o
+     *            object to invoke on
+     * @param method
+     *            method to invoke
+     * @param objects
+     *            parameters for method
      * @return return value from method
-     * @throws Throwable when frightened.
+     * @throws Throwable
+     *             when frightened.
      */
     @SuppressWarnings("rawtypes")
-	@Override
+    @Override
     public Object invoke(Object o, Method method, Object[] objects) throws Throwable {
         List<Object> wrappedList = new ArrayList<Object>();
         Constructor cons = wrappingType.getConstructor(WebElement.class);
@@ -63,6 +70,5 @@ public class ElementListHandler implements InvocationHandler {
             throw e.getCause();
         }
     }
-
 
 }

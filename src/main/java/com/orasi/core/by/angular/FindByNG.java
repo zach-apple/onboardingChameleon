@@ -10,12 +10,18 @@ import com.orasi.core.Beta;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface FindByNG {
-  HowNG howNG() default HowNG.ID;
-  String using() default "";
-  String ngButtonText() default "";
-  String ngController() default "";
-  String ngModel() default "";
-  String ngRepeater() default "";
-  @Beta
-  String ngShow() default "";
+    HowNG howNG() default HowNG.ID;
+
+    String using() default "";
+
+    String ngButtonText() default "";
+
+    String ngController() default "";
+
+    String ngModel() default "";
+
+    String ngRepeater() default "";
+
+    @Beta
+    String ngShow() default "";
 }

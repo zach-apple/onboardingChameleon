@@ -1,5 +1,7 @@
 package com.orasi.utils.database;
+
 import static java.lang.String.format;
+
 public final class PrettyPrinter {
 
     private static final char BORDER_KNOT = '+';
@@ -20,14 +22,14 @@ public final class PrettyPrinter {
     }
 
     public static <T> String print(T[][] table, Printer<T> printer) {
-        if ( table == null ) {
+        if (table == null) {
             throw new IllegalArgumentException("No tabular data provided");
         }
-        if ( table.length == 0 ) {
+        if (table.length == 0) {
             return "";
         }
-        if( printer == null ) {
-        throw new IllegalArgumentException("No instance of Printer provided");
+        if (printer == null) {
+            throw new IllegalArgumentException("No instance of Printer provided");
         }
         final int[] widths = new int[getMaxColumns(table)];
         adjustColumnWidths(table, widths, printer);
@@ -39,8 +41,8 @@ public final class PrettyPrinter {
         StringBuilder sb = new StringBuilder();
         sb.append(horizontalBorder);
         sb.append('\n');
-        for ( final T[] row : table ) {
-            if ( row != null ) {
+        for (final T[] row : table) {
+            if (row != null) {
                 sb.append(getRow(row, widths, lineLength, printer));
                 sb.append('\n');
                 sb.append(horizontalBorder);
@@ -53,7 +55,7 @@ public final class PrettyPrinter {
     private static <T> String getRow(T[] row, int[] widths, int lineLength, Printer<T> printer) {
         final StringBuilder builder = new StringBuilder(lineLength).append(VERTICAL_BORDER);
         final int maxWidths = widths.length;
-        for ( int i = 0; i < maxWidths; i++ ) {
+        for (int i = 0; i < maxWidths; i++) {
             builder.append(padRight(getCellValue(safeGet(row, i, printer), printer), widths[i])).append(VERTICAL_BORDER);
         }
         return builder.toString();
@@ -62,8 +64,8 @@ public final class PrettyPrinter {
     private static String getHorizontalBorder(int[] widths) {
         final StringBuilder builder = new StringBuilder(256);
         builder.append(BORDER_KNOT);
-        for ( final int w : widths ) {
-            for ( int i = 0; i < w; i++ ) {
+        for (final int w : widths) {
+            for (int i = 0; i < w; i++) {
                 builder.append(HORIZONTAL_BORDER);
             }
             builder.append(BORDER_KNOT);
@@ -73,8 +75,8 @@ public final class PrettyPrinter {
 
     private static int getMaxColumns(Object[][] rows) {
         int max = 0;
-        for ( final Object[] row : rows ) {
-            if ( row != null && row.length > max ) {
+        for (final Object[] row : rows) {
+            if (row != null && row.length > max) {
                 max = row.length;
             }
         }
@@ -82,12 +84,12 @@ public final class PrettyPrinter {
     }
 
     private static <T> void adjustColumnWidths(T[][] rows, int[] widths, Printer<T> printer) {
-        for ( final T[] row : rows ) {
-            if ( row != null ) {
-                for ( int c = 0; c < widths.length; c++ ) {
+        for (final T[] row : rows) {
+            if (row != null) {
+                for (int c = 0; c < widths.length; c++) {
                     final String cv = getCellValue(safeGet(row, c, printer), printer);
                     final int l = cv.length();
-                    if ( widths[c] < l ) {
+                    if (widths[c] < l) {
                         widths[c] = l;
                     }
                 }

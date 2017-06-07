@@ -1,13 +1,13 @@
 package com.orasi.core.by.angular.internal;
 
+import java.util.List;
+
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import com.orasi.core.Beta;
-
-import java.util.List;
 
 /*
  * Original Code from https://github.com/paul-hammant/ngWebDriver
@@ -35,7 +35,7 @@ public class ByAngularRepeaterColumn extends ByAngular.BaseBy {
     }
 
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     public List<WebElement> findElements(SearchContext searchContext) {
         if (searchContext instanceof WebDriver) {
             searchContext = null;
@@ -75,8 +75,8 @@ public class ByAngularRepeaterColumn extends ByAngular.BaseBy {
                         "    }\n" +
                         "  }\n" +
                         "}\n" +
-                        "return matches;"
-                , searchContext);
+                        "return matches;",
+                searchContext);
         errorIfNull(o);
         return (List<WebElement>) o;
 
@@ -86,6 +86,5 @@ public class ByAngularRepeaterColumn extends ByAngular.BaseBy {
     public String toString() {
         return "repeater(" + repeater + ").column(" + column + ")";
     }
-
 
 }

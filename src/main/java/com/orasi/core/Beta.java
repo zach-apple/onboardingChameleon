@@ -9,15 +9,16 @@ import java.lang.annotation.Target;
 /**
  * Indicates that a feature is in active development. This feature
  * should not be used as it may not be working, working as intended
- * or removed at a future date 
+ * or removed at a future date
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({
-    ElementType.ANNOTATION_TYPE,
-    ElementType.CONSTRUCTOR,
-    ElementType.FIELD,
-    ElementType.METHOD,
-    ElementType.TYPE})
+        ElementType.ANNOTATION_TYPE,
+        ElementType.CONSTRUCTOR,
+        ElementType.FIELD,
+        ElementType.METHOD,
+        ElementType.TYPE })
 @Documented
-public @interface Beta {}
+public @interface Beta {
+}

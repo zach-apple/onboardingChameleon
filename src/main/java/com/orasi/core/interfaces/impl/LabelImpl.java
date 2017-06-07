@@ -10,22 +10,23 @@ import com.orasi.utils.OrasiDriver;
  * Wraps a label on a html form with some behavior.
  */
 public class LabelImpl extends ElementImpl implements Label {
-	/**
-	 * Creates an Element for a given WebElement.
-	 *
-	 * @param element
-	 *            element to wrap up
-	 */
-	public LabelImpl(WebElement element) {
-		super(element);
-	}
-	public LabelImpl(OrasiDriver driver, By by) {
-		super(driver, by);
-	//	element = driver.findWebElement(by);
-	}
+    /**
+     * Creates an Element for a given WebElement.
+     *
+     * @param element
+     *            element to wrap up
+     */
+    public LabelImpl(WebElement element) {
+        super(element);
+    }
 
-	@Override
-	public String getFor() {
-		return getWrappedElement().getAttribute("for");
-	}
+    public LabelImpl(OrasiDriver driver, By by) {
+        super(driver, by);
+        // element = driver.findWebElement(by);
+    }
+
+    @Override
+    public String getFor() {
+        return getWrappedElement().getAttribute("for");
+    }
 }

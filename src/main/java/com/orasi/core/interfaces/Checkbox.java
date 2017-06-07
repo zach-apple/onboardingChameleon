@@ -9,30 +9,30 @@ import com.orasi.core.interfaces.impl.internal.ImplementedBy;
 @ImplementedBy(CheckboxImpl.class)
 public interface Checkbox extends Element {
 
-	/**
-	 * @summary - Toggle the state of the checkbox.
-	 */
-	void toggle();
+    /**
+     * @summary - Toggle the state of the checkbox.
+     */
+    void toggle();
 
-	/**
-	 * @summary - Toggle the state of the checkbox using JavascriptExecutor
-	 */
-	void jsToggle();
+    /**
+     * @summary - Toggle the state of the checkbox using JavascriptExecutor
+     */
+    void jsToggle();
 
-	/**
-	 * @summary - Checks checkbox if unchecked.
-	 */
-	void check();
+    /**
+     * @summary - Checks checkbox if unchecked.
+     */
+    void check();
 
-	/**
-	 * @summary - Un-checks checkbox if checked.
-	 */
-	void uncheck();
+    /**
+     * @summary - Un-checks checkbox if checked.
+     */
+    void uncheck();
 
-	/**
-	 * @summary - Check if an element is selected, and return boolean.
-	 * @return true if check is checked, return false in other case
-	 */
-	boolean isChecked();
+    /**
+     * @summary - Check if an element is selected, and return boolean.
+     * @return true if check is checked, return false in other case
+     */
+    boolean isChecked();
 
 }
