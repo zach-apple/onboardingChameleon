@@ -1,11 +1,13 @@
 package com.orasi.core.interfaces.impl;
 
+import static com.orasi.utils.TestReporter.interfaceLog;
+import static com.orasi.utils.TestReporter.logTrace;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import com.orasi.core.interfaces.Checkbox;
 import com.orasi.utils.OrasiDriver;
-import com.orasi.utils.TestReporter;
 
 /**
  * Wrapper class like Select that wraps basic checkbox functionality.
@@ -29,57 +31,57 @@ public class CheckboxImpl extends ElementImpl implements Checkbox {
 
     @Override
     public void toggle() {
-        TestReporter.logTrace("Entering CheckboxImpl#toggle");
+        logTrace("Entering CheckboxImpl#toggle");
         getWrappedElement().click();
-        TestReporter.logTrace("Exiting CheckboxImpl#toggle");
+        logTrace("Exiting CheckboxImpl#toggle");
     }
 
     @Override
     public void jsToggle() {
-        TestReporter.logTrace("Entering CheckboxImpl#jsToggle");
+        logTrace("Entering CheckboxImpl#jsToggle");
         getWrappedDriver().executeJavaScript("if( document.createEvent ) {var click_ev = document.createEvent('MouseEvents'); click_ev.initEvent('click', true , true )"
                 + ";arguments[0].dispatchEvent(click_ev);} else { arguments[0].click();}", element);
-        TestReporter.logTrace("Exiting CheckboxImpl#jsToggle");
+        logTrace("Exiting CheckboxImpl#jsToggle");
     }
 
     @Override
     public void check() {
-        TestReporter.logTrace("Entering CheckboxImpl#check");
+        logTrace("Entering CheckboxImpl#check");
         if (!isChecked()) {
             try {
                 toggle();
             } catch (RuntimeException rte) {
-                TestReporter.interfaceLog(" Checking the Checkbox [ <b>" + getElementLocatorInfo() + " </b>]", true);
-                TestReporter.logTrace("Exiting CheckboxImpl#uncheck");
+                interfaceLog(" Checking the Checkbox [ <b>" + getElementLocatorInfo() + " </b>]", true);
+                logTrace("Exiting CheckboxImpl#uncheck");
                 throw rte;
             }
-            TestReporter.interfaceLog(" Checking the Checkbox [ <b>" + getElementLocatorInfo() + " </b>]");
+            interfaceLog(" Checking the Checkbox [ <b>" + getElementLocatorInfo() + " </b>]");
         }
-        TestReporter.logTrace("Exiting CheckboxImpl#check");
+        logTrace("Exiting CheckboxImpl#check");
     }
 
     @Override
     public void uncheck() {
-        TestReporter.logTrace("Entering CheckboxImpl#uncheck");
+        logTrace("Entering CheckboxImpl#uncheck");
         if (isChecked()) {
             try {
                 toggle();
             } catch (RuntimeException rte) {
-                TestReporter.interfaceLog(" Unchecking the Checkbox [ <b>" + getElementLocatorInfo() + " </b>]", true);
-                TestReporter.logTrace("Exiting CheckboxImpl#uncheck");
+                interfaceLog(" Unchecking the Checkbox [ <b>" + getElementLocatorInfo() + " </b>]", true);
+                logTrace("Exiting CheckboxImpl#uncheck");
                 throw rte;
             }
 
-            TestReporter.interfaceLog(" Unchecking the Checkbox [ <b>" + getElementLocatorInfo() + " </b>]");
+            interfaceLog(" Unchecking the Checkbox [ <b>" + getElementLocatorInfo() + " </b>]");
         }
-        TestReporter.logTrace("Exiting CheckboxImpl#uncheck");
+        logTrace("Exiting CheckboxImpl#uncheck");
     }
 
     @Override
     public boolean isChecked() {
-        TestReporter.logTrace("Entering CheckboxImpl#isChecked");
+        logTrace("Entering CheckboxImpl#isChecked");
         boolean checked = getWrappedElement().isSelected();
-        TestReporter.logTrace("Exiting CheckboxImpl#isChecked");
+        logTrace("Exiting CheckboxImpl#isChecked");
         return checked;
     }
 }

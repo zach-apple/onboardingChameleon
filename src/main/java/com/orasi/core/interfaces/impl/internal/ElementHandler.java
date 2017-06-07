@@ -1,6 +1,7 @@
 package com.orasi.core.interfaces.impl.internal;
 
 import static com.orasi.core.interfaces.impl.internal.ImplementedByProcessor.getWrapperClass;
+import static com.orasi.utils.TestReporter.logTrace;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -17,7 +18,6 @@ import com.orasi.core.by.angular.ByNG;
 import com.orasi.core.interfaces.Element;
 import com.orasi.exception.AutomationException;
 import com.orasi.utils.OrasiDriver;
-import com.orasi.utils.TestReporter;
 
 /**
  * Replaces DefaultLocatingElementHandler. Simply opens it up to descendants of the WebElement interface, and other
@@ -60,14 +60,14 @@ public class ElementHandler implements InvocationHandler {
     @SuppressWarnings("rawtypes")
     @Override
     public Object invoke(Object object, Method method, Object[] objects) throws Throwable {
-        TestReporter.logTrace("Entering ElementHandler#invoke");
-        TestReporter.logTrace("Attempting to invoke method [ " + method.getName() + " ]");
+        logTrace("Entering ElementHandler#invoke");
+        logTrace("Attempting to invoke method [ " + method.getName() + " ]");
 
         By by = null;
         ByNG byNg = null;
         Field elementField = null;
 
-        TestReporter.logTrace("Get locator By information");
+        logTrace("Get locator By information");
         try {
             elementField = locator.getClass().getDeclaredField("by");
             elementField.setAccessible(true);
@@ -81,35 +81,35 @@ public class ElementHandler implements InvocationHandler {
         }
 
         if ("getWrappedElement".equals(method.getName())) {
-            TestReporter.logTrace("Returning internal element");
+            logTrace("Returning internal element");
             return locator.findElement();
         }
 
         if ("getWrappedDriver".equals(method.getName())) {
-            TestReporter.logTrace("Returning internal driver");
+            logTrace("Returning internal driver");
             return driver;
         }
 
-        TestReporter.logTrace("Generate constructor for element");
+        logTrace("Generate constructor for element");
         Constructor cons = null;
         if (locator instanceof AngularElementLocator) {
             cons = wrappingType.getConstructor(OrasiDriver.class, ByNG.class);
         } else {
             cons = wrappingType.getConstructor(OrasiDriver.class, By.class);
         }
-        TestReporter.logTrace("Successfully created constructor");
-        TestReporter.logTrace("Creating new instance of element");
+        logTrace("Successfully created constructor");
+        logTrace("Creating new instance of element");
         Object thing = null;
         if (locator instanceof AngularElementLocator) {
             thing = cons.newInstance(driver, byNg);
         } else {
             thing = cons.newInstance(driver, by);
         }
-        TestReporter.logTrace("Successfully created element instance");
+        logTrace("Successfully created element instance");
         try {
-            TestReporter.logTrace("Calling method [ " + method.getName() + " ]");
+            logTrace("Calling method [ " + method.getName() + " ]");
             Object response = method.invoke(wrappingType.cast(thing), objects);
-            TestReporter.logTrace("Successfully called method [ " + method.getName() + " ]");
+            logTrace("Successfully called method [ " + method.getName() + " ]");
             return response;
         } catch (InvocationTargetException e) {
             // Unwrap the underlying exception

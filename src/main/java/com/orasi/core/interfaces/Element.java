@@ -221,7 +221,7 @@ public interface Element extends WebElement, WrapsElement, Locatable {
      * @return {@link By} locator value of element that was used to create
      *         element using {@link FindBy}
      */
-    String getElementIdentifier();
+    // String getElementIdentifier();
 
     /**
      * @author Justin

@@ -1,5 +1,8 @@
 package com.orasi.api.restServices;
 
+import static com.orasi.utils.TestReporter.logInfo;
+import static com.orasi.utils.TestReporter.logTrace;
+
 import java.io.IOException;
 
 import org.apache.http.Header;
@@ -20,7 +23,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.api.restServices.exceptions.RestException;
-import com.orasi.utils.TestReporter;
 
 public class RestResponse {
     private ObjectMapper mapper = new ObjectMapper(); // .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -34,56 +36,56 @@ public class RestResponse {
     private String url = "";
 
     public RestResponse(HttpUriRequest request, HttpResponse httpResponse) {
-        TestReporter.logTrace("Entering RestResponse#init");
-        TestReporter.logTrace("Creating RestResponse based on original HttpRequest and HttpResponse");
+        logTrace("Entering RestResponse#init");
+        logTrace("Creating RestResponse based on original HttpRequest and HttpResponse");
 
-        TestReporter.logTrace("Storing orignal request for later usage");
+        logTrace("Storing orignal request for later usage");
         this.originalRequest = request;
         if (request instanceof HttpEntityEnclosingRequestBase) {
-            TestReporter.logTrace("Original request has a body entity, attempting to extract body");
+            logTrace("Original request has a body entity, attempting to extract body");
             HttpEntity entity = ((HttpEntityEnclosingRequest) request).getEntity();
 
             if (entity != null) {
-                TestReporter.logTrace("Successfully extracted body entity");
-                TestReporter.logTrace("Attempting to get body entity as String");
+                logTrace("Successfully extracted body entity");
+                logTrace("Attempting to get body entity as String");
                 try {
                     originalRequestBody = EntityUtils.toString(entity);
-                    TestReporter.logTrace("Successfully retrieved body and stored");
+                    logTrace("Successfully retrieved body and stored");
                 } catch (IOException throwAway) {
-                    TestReporter.logTrace("Failed to retrieve original request body");
+                    logTrace("Failed to retrieve original request body");
                 }
             }
         }
 
-        TestReporter.logTrace("Retrieve Request URI");
+        logTrace("Retrieve Request URI");
         url = request.getURI().toString();
-        TestReporter.logTrace("Successfully stored URI [ " + url + " ]");
+        logTrace("Successfully stored URI [ " + url + " ]");
 
-        TestReporter.logTrace("Retrieve Request Method");
+        logTrace("Retrieve Request Method");
         method = request.getMethod();
-        TestReporter.logTrace("Successfully stored Request Method [ " + method + " ]");
+        logTrace("Successfully stored Request Method [ " + method + " ]");
 
         response = httpResponse;
 
-        TestReporter.logTrace("Retrieve Response Status Code");
+        logTrace("Retrieve Response Status Code");
         statusCode = response.getStatusLine().getStatusCode();
-        TestReporter.logTrace("Successfully stored Response Status Code [ " + statusCode + " ]");
+        logTrace("Successfully stored Response Status Code [ " + statusCode + " ]");
 
-        TestReporter.logTrace("Retrieve Response Format");
+        logTrace("Retrieve Response Format");
         responseFormat = ContentType.getOrDefault(response.getEntity()).getMimeType().replace("application/", "");
-        TestReporter.logTrace("Successfully stored Response Format [ " + responseFormat + " ]");
+        logTrace("Successfully stored Response Format [ " + responseFormat + " ]");
 
         try {
             if (statusCode != 204 || response.getEntity() != null) {
-                TestReporter.logTrace("Retrieve Response Body as String");
+                logTrace("Retrieve Response Body as String");
                 responseAsString = EntityUtils.toString(response.getEntity());
-                TestReporter.logInfo("Response Status returned [" + httpResponse.getStatusLine() + "]");
+                logInfo("Response Status returned [" + httpResponse.getStatusLine() + "]");
             }
-            TestReporter.logInfo("Response returned: " + responseAsString);
+            logInfo("Response returned: " + responseAsString);
         } catch (ParseException | IOException e) {
             throw new RestException(e.getMessage(), e);
         }
-        TestReporter.logTrace("Exiting RestResponse#init");
+        logTrace("Exiting RestResponse#init");
     }
 
     public int getStatusCode() {
@@ -129,7 +131,7 @@ public class RestResponse {
 
     /**
      * Uses the class instance of the responeAsString to map to object
-     * 
+     *
      * @param clazz
      * @return
      * @throws IOException
@@ -141,7 +143,7 @@ public class RestResponse {
 
     /**
      * Can pass in any json as a string and map to object
-     * 
+     *
      * @param clazz
      * @return
      * @throws IOException
@@ -160,7 +162,7 @@ public class RestResponse {
 
     /**
      * Can pass in any json as a string and maps to tree
-     * 
+     *
      * @param clazz
      * @return
      * @throws IOException
@@ -176,7 +178,7 @@ public class RestResponse {
 
     /**
      * Uses the class instance of the responeAsString to map to tree
-     * 
+     *
      * @param clazz
      * @return
      * @throws IOException

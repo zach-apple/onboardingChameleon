@@ -1,5 +1,7 @@
 package com.orasi.utils;
 
+import static com.orasi.utils.TestReporter.logFailure;
+
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.NoSuchElementException;
@@ -22,7 +24,7 @@ public class PageLoaded {
     /**
      * This waits for a specified element on the page to be found on the page by
      * the driver Uses the default test time out set by WebDriverSetup
-     * 
+     *
      * @param clazz
      *            the class calling this method - used so can initialize the
      *            page class repeatedly
@@ -43,8 +45,8 @@ public class PageLoaded {
     /**
      * Overloaded method where you can specify the timeout This waits for a
      * specified element on the page to be found on the page by the driver
-     * 
-     * 
+     *
+     *
      * @param clazz
      *            the class calling this method - used so can initialize the
      *            page class repeatedly
@@ -108,7 +110,7 @@ public class PageLoaded {
      * Overloaded method - gives option of specifying a timeout. This uses the
      * HTML DOM readyState property to wait until a page is finished loading. It
      * will wait for the ready state to be either 'interactive' or 'complete'.
-     * 
+     *
      * @param oDriver
      *            The webDriver
      * @param timeout
@@ -149,14 +151,14 @@ public class PageLoaded {
      *
      * @version 10/16/2014
      * @author Justin Phlegar
-     * 
+     *
      */
     public static void isAngularComplete(OrasiDriver oDriver) {
         try {
             oDriver.executeAsyncJavaScript("var callback = arguments[arguments.length - 1];"
                     + "angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
         } catch (WebDriverException wde) {
-            TestReporter.logFailure(
+            logFailure(
                     "Unable to perform Angular sync. This is most likely because the $browser service is not injected within the Angular Controller. Performing a IsDomComplete instead");
             isDomComplete(oDriver);
         }
@@ -167,7 +169,7 @@ public class PageLoaded {
      * A more strict version of isDomInteractive. This uses the HTML DOM
      * readyState property to wait until a page is finished loading. It will
      * wait for the ready state to be 'complete'.
-     * 
+     *
      * @param oDriver
      *            The webDriver
      * @version 12/16/2014
@@ -184,7 +186,7 @@ public class PageLoaded {
      * version of isDomInteractive This uses the HTML DOM readyState property to
      * wait until a page is finished loading. It will wait for the ready state
      * to be 'complete'.
-     * 
+     *
      * @param oDriver
      *            The webDriver
      * @param timeout
@@ -227,7 +229,7 @@ public class PageLoaded {
      * @return N/A
      * @param clazz
      *            - page class that is calling this method for which to initialize elements
-     * 
+     *
      * @param oDriver
      *            - The webDriver
      */

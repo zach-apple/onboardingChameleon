@@ -22,7 +22,7 @@ public class TestExcelDocumentReader extends TestEnvironment {
     @Test(groups = "regression")
     public void readDataFilePathConstructorAllRows() {
         Object[][] data = null;
-        String filepath = getClass().getResource("/excelsheets/TestData.xlsx").getPath();
+        String filepath = "/excelsheets/TestData.xlsx";
         data = new ExcelDocumentReader(filepath).readData("Data");
 
         Assert.assertNotNull(data);
@@ -38,7 +38,7 @@ public class TestExcelDocumentReader extends TestEnvironment {
     @Test(groups = "regression")
     public void readDataFilePathConstructorSingleRow() {
         Object[][] data = null;
-        String filepath = getClass().getResource("/excelsheets/TestData.xlsx").getPath();
+        String filepath = "/excelsheets/TestData.xlsx";
         data = new ExcelDocumentReader(filepath).readData("Data", 1);
 
         Assert.assertNotNull(data);
@@ -54,7 +54,7 @@ public class TestExcelDocumentReader extends TestEnvironment {
     @Test(groups = "regression")
     public void readDataFilePathConstructorSheetNameSingleRow() {
         Object[][] data = null;
-        String filepath = getClass().getResource("/excelsheets/TestData.xlsx").getPath();
+        String filepath = "/excelsheets/TestData.xlsx";
         data = new ExcelDocumentReader(filepath).readData("Data", 1);
 
         Assert.assertNotNull(data);
@@ -70,7 +70,7 @@ public class TestExcelDocumentReader extends TestEnvironment {
     @Test(groups = "regression")
     public void readDataDefaultConstructorAllRows() {
         Object[][] data = null;
-        String filepath = getClass().getResource("/excelsheets/TestData.xlsx").getPath();
+        String filepath = "/excelsheets/TestData.xlsx";
         data = new ExcelDocumentReader().readData(filepath, "Data");
 
         Assert.assertNotNull(data);
@@ -86,7 +86,7 @@ public class TestExcelDocumentReader extends TestEnvironment {
     @Test(groups = "regression")
     public void readDataDefaultConstructorAllRowsIncludeColumns() {
         Object[][] data = null;
-        String filepath = getClass().getResource("/excelsheets/TestData.xlsx").getPath();
+        String filepath = "/excelsheets/TestData.xlsx";
         data = new ExcelDocumentReader(filepath).readData("Data", -1, 0);
 
         Assert.assertNotNull(data);
@@ -101,7 +101,7 @@ public class TestExcelDocumentReader extends TestEnvironment {
     @Test(groups = "regression")
     public void readDataDefaultConstructorAllRowsStartRow() {
         Object[][] data = null;
-        String filepath = getClass().getResource("/excelsheets/TestData.xlsx").getPath();
+        String filepath = "/excelsheets/TestData.xlsx";
         data = new ExcelDocumentReader(filepath).readData("Data", -1, 2);
 
         Assert.assertNotNull(data);
@@ -117,7 +117,7 @@ public class TestExcelDocumentReader extends TestEnvironment {
     @Test(groups = "regression")
     public void readDataDefaultConstructorSingleRow() {
         Object[][] data = null;
-        String filepath = getClass().getResource("/excelsheets/TestData.xlsx").getPath();
+        String filepath = "/excelsheets/TestData.xlsx";
         data = new ExcelDocumentReader().readData(filepath, "Data", 1);
 
         Assert.assertNotNull(data);
@@ -133,7 +133,7 @@ public class TestExcelDocumentReader extends TestEnvironment {
     @Test(groups = "regression")
     public void readDataXlsFile() {
         Object[][] data = null;
-        String filepath = getClass().getResource("/excelsheets/TestData_xls.xls").getPath();
+        String filepath = "/excelsheets/TestData_xls.xls";
         data = new ExcelDocumentReader().readData(filepath, "Data", 1);
 
         Assert.assertNotNull(data);
@@ -156,7 +156,7 @@ public class TestExcelDocumentReader extends TestEnvironment {
     @Title("readDataInvalidXlsFile")
     @Test(groups = "regression", expectedExceptions = { AutomationException.class })
     public void readDataInvalidXlsFile() {
-        String filepath = getClass().getResource("/excelsheets/TestData_csv.csv").getPath();
+        String filepath = "/excelsheets/TestData_csv.csv";
         new ExcelDocumentReader().readData(filepath, "Data", 1);
     }
 
@@ -166,7 +166,7 @@ public class TestExcelDocumentReader extends TestEnvironment {
     @Test(groups = "regression")
     public void readDataSheetAsIndex() {
         Object[][] data = null;
-        String filepath = getClass().getResource("/excelsheets/TestData.xlsx").getPath();
+        String filepath = "/excelsheets/TestData.xlsx";
         data = new ExcelDocumentReader().readData(filepath, "0");
 
         Assert.assertNotNull(data);

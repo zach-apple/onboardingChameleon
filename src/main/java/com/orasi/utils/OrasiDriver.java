@@ -32,7 +32,6 @@ import com.orasi.core.by.angular.ByNG.ByNGButton;
 import com.orasi.core.by.angular.ByNG.ByNGController;
 import com.orasi.core.by.angular.ByNG.ByNGModel;
 import com.orasi.core.by.angular.ByNG.ByNGRepeater;
-import com.orasi.core.by.angular.ByNG.ByNGShow;
 import com.orasi.core.by.angular.internal.ByAngular;
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Checkbox;
@@ -66,6 +65,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
     private int currentPageTimeout = Constants.PAGE_TIMEOUT;
     private int currentElementTimeout = Constants.ELEMENT_TIMEOUT;
     private int currentScriptTimeout = Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT;
+    public static boolean DEFAULT_SYNC_HANDLER = true;
 
     public OrasiDriver() {
     }
@@ -857,30 +857,34 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
     public class Capabilities {
 
         public String browserName() {
-            if (driver instanceof HtmlUnitDriver)
+            if (driver instanceof HtmlUnitDriver) {
                 return ((HtmlUnitDriver) driver).getCapabilities().getBrowserName();
+            }
             return getRemoteWebDriver().getCapabilities().getBrowserName();
         }
 
         public String browserVersion() {
-            if (driver instanceof HtmlUnitDriver)
+            if (driver instanceof HtmlUnitDriver) {
                 return ((HtmlUnitDriver) driver).getCapabilities().getVersion();
+            }
             return getRemoteWebDriver().getCapabilities().getVersion();
         }
 
         public String platformOS() {
-            if (driver instanceof HtmlUnitDriver)
+            if (driver instanceof HtmlUnitDriver) {
                 return ((HtmlUnitDriver) driver).getCapabilities().getPlatform().name() + " "
                         + ((HtmlUnitDriver) driver).getCapabilities().getPlatform().getMajorVersion() + "."
                         + ((HtmlUnitDriver) driver).getCapabilities().getPlatform().getMinorVersion();
+            }
             return getRemoteWebDriver().getCapabilities().getPlatform().name() + " "
                     + getRemoteWebDriver().getCapabilities().getPlatform().getMajorVersion() + "."
                     + getRemoteWebDriver().getCapabilities().getPlatform().getMinorVersion();
         }
 
         public Platform platform() {
-            if (driver instanceof HtmlUnitDriver)
+            if (driver instanceof HtmlUnitDriver) {
                 return ((HtmlUnitDriver) driver).getCapabilities().getPlatform();
+            }
 
             return getRemoteWebDriver().getCapabilities().getPlatform();
         }
@@ -913,10 +917,6 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
         if (by instanceof ByNGRepeater) {
             new ByAngular(getWebDriver());
             return ByAngular.repeater(text);
-        }
-        if (by instanceof ByNGShow) {
-            new ByAngular(getWebDriver());
-            return ByAngular.show(text);
         }
         return null;
     }
@@ -1111,6 +1111,10 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
 
         public void setErrorColor(Colors color) {
             Highlight.setErrorColor(color);
+        }
+
+        public void setSyncToFailTest(boolean syncHandler) {
+            DEFAULT_SYNC_HANDLER = syncHandler;
         }
 
     }

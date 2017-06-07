@@ -1,10 +1,12 @@
 package com.orasi.api.restServices;
 
+import static com.orasi.utils.TestReporter.logDebug;
+import static com.orasi.utils.TestReporter.logTrace;
+
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 
 import com.orasi.utils.Randomness;
-import com.orasi.utils.TestReporter;
 
 public class Headers {
     /**
@@ -32,7 +34,7 @@ public class Headers {
 
     /**
      * Automatically populates headers based on predefined options from RestService.HeaderType
-     * 
+     *
      * @param type
      *            Uses options from RestService.HeaderType enum
      */
@@ -40,18 +42,18 @@ public class Headers {
         Header[] headers = null;
         switch (type) {
             case AUTH:
-                TestReporter.logTrace("Creating headers for [AUTH]");
+                logTrace("Creating headers for [AUTH]");
                 headers = new Header[] {
                         new BasicHeader("Content-type", "application/x-www-form-urlencoded") };
                 break;
             case BASIC_CONVO:
-                TestReporter.logDebug("Creating headers for [BASIC_CONVO]");
+                logDebug("Creating headers for [BASIC_CONVO]");
                 headers = new Header[] {
                         new BasicHeader("Content-type", "application/json;charset=utf-8"), new BasicHeader("Accept", "application/json"), new BasicHeader("username", "test.user"), new BasicHeader("messageId", Randomness.generateMessageId()), new BasicHeader("Connection", "keep-alive"), new BasicHeader("requestedTimestamp", Randomness.generateCurrentXMLDatetime() + ".000-04:00")
                 };
                 break;
             case JSON:
-                TestReporter.logTrace("Creating headers for [JSON]");
+                logTrace("Creating headers for [JSON]");
                 headers = new Header[] {
                         new BasicHeader("Content-type", "application/json")
 
@@ -66,7 +68,7 @@ public class Headers {
         for (Header header : headers) {
             allHeaders += "[" + header.getName() + ": " + header.getValue() + "] ";
         }
-        TestReporter.logTrace("Headers added " + allHeaders);
+        logTrace("Headers added " + allHeaders);
 
         return headers;
     }

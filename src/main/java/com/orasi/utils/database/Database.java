@@ -1,5 +1,8 @@
 package com.orasi.utils.database;
 
+import static com.orasi.utils.TestReporter.logDebug;
+import static com.orasi.utils.TestReporter.logTrace;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -7,8 +10,6 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
-
-import com.orasi.utils.TestReporter;
 
 public abstract class Database {
 
@@ -73,26 +74,26 @@ public abstract class Database {
     }
 
     public Object[][] getResultSet(String query) {
-        TestReporter.logTrace("Entering Database#getResultSet");
+        logTrace("Entering Database#getResultSet");
         loadDriver();
 
         Connection connection = null;
         try {
-            TestReporter.logTrace("Attempt to connect to database [ " + connectionString + " ]");
+            logTrace("Attempt to connect to database [ " + connectionString + " ]");
             connection = DriverManager.getConnection(connectionString, dbUser, dbPassword);
-            TestReporter.logTrace("Connection successful");
+            logTrace("Connection successful");
         } catch (SQLException e) {
             throw new DatabaseException("Failed to establish database connection to " + connectionString, e);
         }
 
-        TestReporter.logTrace("Running query");
-        TestReporter.logTrace(query);
+        logTrace("Running query");
+        logTrace(query);
         ResultSet rs = null;
         try {
             rs = runQuery(connection, query);
-            TestReporter.logTrace("Query results returned with no errors. Parsing results");
+            logTrace("Query results returned with no errors. Parsing results");
             Object[][] parsedRs = extract(rs);
-            TestReporter.logTrace("Exiting Database#getResultSet");
+            logTrace("Exiting Database#getResultSet");
             return parsedRs;
         } catch (Exception e) {
             throw new DatabaseException("Failed to extract data into a Recordset", e);
@@ -113,29 +114,29 @@ public abstract class Database {
     }
 
     private void loadDriver() {
-        TestReporter.logTrace("Entering Database#loadDriver");
+        logTrace("Entering Database#loadDriver");
         try {
-            TestReporter.logTrace("Attempting to load driver [ " + driver + " ]");
+            logTrace("Attempting to load driver [ " + driver + " ]");
             Class.forName(driver);
-            TestReporter.logTrace("Successfully loaded driver [ " + driver + " ]");
+            logTrace("Successfully loaded driver [ " + driver + " ]");
         } catch (ClassNotFoundException cnfe) {
             throw new DatabaseException("Error loading driver", cnfe);
         }
-        TestReporter.logTrace("Exiting Database#loadDriver");
+        logTrace("Exiting Database#loadDriver");
     }
 
     private static ResultSet runQuery(Connection connection, String query) {
-        TestReporter.logDebug("Entering Database#runQuery");
+        logDebug("Entering Database#runQuery");
         try {
-            TestReporter.logDebug("Attempting to create Database Statement object from current connection");
+            logDebug("Attempting to create Database Statement object from current connection");
             Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            TestReporter.logDebug("Successfully created Database Statement");
+            logDebug("Successfully created Database Statement");
 
-            TestReporter.logDebug("Attempting to execute query");
+            logDebug("Attempting to execute query");
             ResultSet resultSet = statement.executeQuery(query);
-            TestReporter.logDebug("Successfully executed query");
+            logDebug("Successfully executed query");
 
-            TestReporter.logDebug("Exiting Database#runQuery");
+            logDebug("Exiting Database#runQuery");
 
             return (resultSet);
 
@@ -147,7 +148,7 @@ public abstract class Database {
     /**
      * Returns an ArrayList of ArrayLists of Strings extracted from a
      * ResultSet retrieved from the database.
-     * 
+     *
      * @param resultSet
      *            ResultSet to extract Strings from
      * @return an ArrayList of ArrayLists of Strings
@@ -155,31 +156,31 @@ public abstract class Database {
      *             if an SQL exception occurs
      */
     private static Object[][] extract(ResultSet resultSet) {
-        TestReporter.logTrace("Entering Database#extract");
+        logTrace("Entering Database#extract");
         // get row and column count
         int rowCount = 0;
         try {
-            TestReporter.logTrace("Determining number of rows in results");
+            logTrace("Determining number of rows in results");
             resultSet.last();
             rowCount = resultSet.getRow();
             resultSet.beforeFirst();
-            TestReporter.logTrace("Rows to to be extracted [ " + rowCount + " ] ");
+            logTrace("Rows to to be extracted [ " + rowCount + " ] ");
         } catch (Exception ex) {
             rowCount = 0;
         }
         try {
 
-            TestReporter.logTrace("Determining number of columns in results");
+            logTrace("Determining number of columns in results");
             int columnCount = resultSet.getMetaData().getColumnCount();
-            TestReporter.logTrace("Columns to to be extracted [ " + columnCount + " ] ");
+            logTrace("Columns to to be extracted [ " + columnCount + " ] ");
 
-            TestReporter.logTrace("Generating Object array for the size of String[" + (rowCount + 1) + "][" + columnCount + "] (One row added for column headers)");
+            logTrace("Generating Object array for the size of String[" + (rowCount + 1) + "][" + columnCount + "] (One row added for column headers)");
             Object[][] table = new String[rowCount + 1][columnCount];
 
-            TestReporter.logTrace("Retrieve Result Set metadata");
+            logTrace("Retrieve Result Set metadata");
             ResultSetMetaData rsmd = resultSet.getMetaData();
 
-            TestReporter.logTrace("Extacting data from ResultSet and storing in Object[][]");
+            logTrace("Extacting data from ResultSet and storing in Object[][]");
             for (int rowNum = 0; rowNum <= rowCount; rowNum++) {
                 for (int colNum = 0, rsColumn = 1; colNum < columnCount; colNum++, rsColumn++) {
 
@@ -220,8 +221,8 @@ public abstract class Database {
                 resultSet.next();
             }
 
-            TestReporter.logTrace("Extraction complete");
-            TestReporter.logTrace("Exiting Database#extract");
+            logTrace("Extraction complete");
+            logTrace("Exiting Database#extract");
             return table;
         } catch (SQLException sql) {
             throw new DatabaseException("Failed to generate result set", sql);

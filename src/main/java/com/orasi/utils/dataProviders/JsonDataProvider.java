@@ -1,5 +1,7 @@
 package com.orasi.utils.dataProviders;
 
+import static com.orasi.utils.TestReporter.logTrace;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -10,7 +12,6 @@ import org.json.JSONObject;
 import com.orasi.api.restServices.exceptions.RestException;
 import com.orasi.exception.automation.DataProviderInputFileException;
 import com.orasi.exception.automation.DataProviderInputFileNotFound;
-import com.orasi.utils.TestReporter;
 import com.orasi.utils.io.FileLoader;
 
 public class JsonDataProvider {
@@ -73,15 +74,15 @@ public class JsonDataProvider {
      * &nbsp;&nbsp;&nbsp; ]
      * <br/>
      * &nbsp;&nbsp; }
-     * 
+     *
      * @param filePath
      *            filepath starting from src/main/resources
      * @return Object[][] for the dataprovider
      */
     public static Object[][] getData(String filePath) {
-        TestReporter.logTrace("Entering JsonDataProvider#getData");
+        logTrace("Entering JsonDataProvider#getData");
 
-        TestReporter.logTrace("Attempt to load json file");
+        logTrace("Attempt to load json file");
         String json = null;
         JSONArray testData = null;
 
@@ -93,18 +94,18 @@ public class JsonDataProvider {
             throw new RestException("Failed to read json file", ioe);
         }
 
-        TestReporter.logTrace("Json file loaded, attempt to parse");
+        logTrace("Json file loaded, attempt to parse");
         try {
             testData = new JSONObject(json).getJSONArray("testData");
         } catch (JSONException e) {
             throw new DataProviderInputFileException("First JSON object was not [ testData ]");
         }
 
-        TestReporter.logTrace("Determing dataprovider array rows");
+        logTrace("Determing dataprovider array rows");
         int rows = testData.length();
-        TestReporter.logTrace("Rows will be [ " + rows + " ]");
+        logTrace("Rows will be [ " + rows + " ]");
 
-        TestReporter.logTrace("Parsing data parameters");
+        logTrace("Parsing data parameters");
         JSONArray data;
         try {
             data = (JSONArray) testData.getJSONObject(0).get("data");
@@ -112,12 +113,12 @@ public class JsonDataProvider {
             throw new DataProviderInputFileException("Inner data JSON object was not found");
         }
 
-        TestReporter.logTrace("Determing dataprovider array columns");
+        logTrace("Determing dataprovider array columns");
         int columns = data.length() + 1;
-        TestReporter.logTrace("Columns will be [ " + columns + " ]");
+        logTrace("Columns will be [ " + columns + " ]");
 
         Object[][] dataArray = new String[rows][columns];
-        TestReporter.logTrace("Transferring data to Array");
+        logTrace("Transferring data to Array");
 
         int rowNum,
                 colNum,
@@ -134,13 +135,13 @@ public class JsonDataProvider {
                 throw new DataProviderInputFileException("TestData iteration [ " + (rowNum + 1) + " ] is missing it's [ iterationName ] object");
             }
 
-            TestReporter.logTrace("Storing data parameters for iteration name [ " + iterationName + " ]");
+            logTrace("Storing data parameters for iteration name [ " + iterationName + " ]");
             dataArray[rowNum][0] = iterationName;
 
             for (colNum = 1; colNum < columns; colNum++) {
                 try {
                     parameterName = ((JSONArray) testData.getJSONObject(rowNum).get("data")).getJSONObject(colNum - 1).get("name").toString();
-                    TestReporter.logTrace("Storing data parameter for iteration name [ " + iterationName + " ] and data parameter name [ " + parameterName + " ]");
+                    logTrace("Storing data parameter for iteration name [ " + iterationName + " ] and data parameter name [ " + parameterName + " ]");
                 } catch (JSONException e2) {
                     parameterName = null;
                 }
@@ -152,7 +153,7 @@ public class JsonDataProvider {
                     }
                     parameterValue = ((JSONArray) testData.getJSONObject(rowNum).get("data")).getJSONObject(colNum - 1).get("value").toString();
                     dataArray[rowNum][colNum] = parameterValue;
-                    TestReporter.logTrace("Storing data parameter for iteration name [ " + iterationName + " ] and data parameter name [ " + parameterName + " ] with value [ " + parameterValue + " ]");
+                    logTrace("Storing data parameter for iteration name [ " + iterationName + " ] and data parameter name [ " + parameterName + " ] with value [ " + parameterValue + " ]");
                 } catch (JSONException e) {
                     if (null == parameterName) {
                         throw new DataProviderInputFileException("Failed to find [ value ] in data iteration name [ " + iterationName + " ]");
@@ -164,7 +165,7 @@ public class JsonDataProvider {
 
         }
 
-        TestReporter.logTrace("Exitting JsonDataProvider#getData");
+        logTrace("Exitting JsonDataProvider#getData");
         return dataArray;
     }
 

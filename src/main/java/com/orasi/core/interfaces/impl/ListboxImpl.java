@@ -1,5 +1,8 @@
 package com.orasi.core.interfaces.impl;
 
+import static com.orasi.utils.TestReporter.interfaceLog;
+import static com.orasi.utils.TestReporter.logTrace;
+
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -9,7 +12,6 @@ import org.openqa.selenium.WebElement;
 import com.orasi.core.interfaces.Listbox;
 import com.orasi.exception.automation.OptionNotInListboxException;
 import com.orasi.utils.OrasiDriver;
-import com.orasi.utils.TestReporter;
 
 /**
  * Wrapper around a WebElement for the Select class in Selenium.
@@ -30,9 +32,9 @@ public class ListboxImpl extends ElementImpl implements Listbox {
     public ListboxImpl(OrasiDriver driver, By by) {
         super(driver, by);
         // element = driver.findWebElement(by);
-        TestReporter.logTrace("Entering ListboxImpl#init");
+        logTrace("Entering ListboxImpl#init");
         this.innerSelect = new org.openqa.selenium.support.ui.Select(driver.findWebElement(by));
-        TestReporter.logTrace("Exiting ListboxImpl#init");
+        logTrace("Exiting ListboxImpl#init");
     }
 
     /**
@@ -43,18 +45,18 @@ public class ListboxImpl extends ElementImpl implements Listbox {
      */
     @Override
     public void select(String text) {
-        TestReporter.logTrace("Entering ListboxImpl#select");
+        logTrace("Entering ListboxImpl#select");
         if (!text.isEmpty()) {
             try {
                 try {
                     innerSelect.selectByVisibleText(text);
                 } catch (RuntimeException rte) {
-                    TestReporter.interfaceLog("Select option [ <b>" + text.toString()
+                    interfaceLog("Select option [ <b>" + text.toString()
                             + "</b> ] from Listbox [  <b>" + getElementLocatorInfo() + " </b>]", true);
                     throw rte;
                 }
 
-                TestReporter.interfaceLog("Select option [ <b>" + text.toString()
+                interfaceLog("Select option [ <b>" + text.toString()
                         + "</b> ] from Listbox [  <b>" + getElementLocatorInfo() + " </b>]");
             } catch (NoSuchElementException e) {
                 String optionList = "";
@@ -62,17 +64,17 @@ public class ListboxImpl extends ElementImpl implements Listbox {
                 for (WebElement option : optionsList) {
                     optionList += option.getText() + " | ";
                 }
-                TestReporter.interfaceLog(" The value of <b>[ " + text + "</b> ] was not found in Listbox [  <b>"
+                interfaceLog(" The value of <b>[ " + text + "</b> ] was not found in Listbox [  <b>"
                         + getElementLocatorInfo() + " </b>]. Acceptable values are " + optionList + " ]");
-                TestReporter.logTrace("Exiting ListboxImpl#select");
+                logTrace("Exiting ListboxImpl#select");
                 throw new OptionNotInListboxException("The value of [ " + text + " ] was not found in Listbox [  "
                         + getElementLocatorInfo() + " ]. Acceptable values are " + optionList, getWrappedDriver());
             }
         } else {
-            TestReporter.interfaceLog("Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
+            interfaceLog("Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
         }
 
-        TestReporter.logTrace("Exiting ListboxImpl#select");
+        logTrace("Exiting ListboxImpl#select");
     }
 
     /**
@@ -83,18 +85,18 @@ public class ListboxImpl extends ElementImpl implements Listbox {
      */
     @Override
     public void selectValue(String value) {
-        TestReporter.logTrace("Entering ListboxImpl#selectValue");
+        logTrace("Entering ListboxImpl#selectValue");
         if (!value.isEmpty()) {
             try {
                 try {
                     innerSelect.selectByValue(value);
                 } catch (RuntimeException rte) {
-                    TestReporter.interfaceLog("Select option [ <b>" + value.toString()
+                    interfaceLog("Select option [ <b>" + value.toString()
                             + "</b> ] from Listbox [  <b>" + getElementLocatorInfo() + " </b>]", true);
                     throw rte;
                 }
 
-                TestReporter.interfaceLog("Select option [ <b>" + value.toString()
+                interfaceLog("Select option [ <b>" + value.toString()
                         + "</b> ] from Listbox [  <b>" + getElementLocatorInfo() + " </b>]");
             } catch (NoSuchElementException e) {
                 String optionList = "";
@@ -102,17 +104,16 @@ public class ListboxImpl extends ElementImpl implements Listbox {
                 for (WebElement option : optionsList) {
                     optionList += option.getAttribute("value") + " | ";
                 }
-                TestReporter
-                        .interfaceLog(" The value of <b>[ " + value + "</b> ] was not found in Listbox [  <b>"
-                                + getElementLocatorInfo() + " </b>]. Acceptable values are " + optionList + " ]");
-                TestReporter.logTrace("Exiting ListboxImpl#selectValue");
+                interfaceLog(" The value of <b>[ " + value + "</b> ] was not found in Listbox [  <b>"
+                        + getElementLocatorInfo() + " </b>]. Acceptable values are " + optionList + " ]");
+                logTrace("Exiting ListboxImpl#selectValue");
                 throw new OptionNotInListboxException("The value of [ " + value + " ] was not found in Listbox [  "
                         + getElementLocatorInfo() + " ]. Acceptable values are " + optionList, getWrappedDriver());
             }
         } else {
-            TestReporter.interfaceLog("Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
+            interfaceLog("Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
         }
-        TestReporter.logTrace("Exiting ListboxImpl#selectValue");
+        logTrace("Exiting ListboxImpl#selectValue");
     }
 
     /**
@@ -121,9 +122,9 @@ public class ListboxImpl extends ElementImpl implements Listbox {
      */
     @Override
     public void deselectAll() {
-        TestReporter.logTrace("Entering ListboxImpl#deselectAll");
+        logTrace("Entering ListboxImpl#deselectAll");
         innerSelect.deselectAll();
-        TestReporter.logTrace("Exiting ListboxImpl#deselectAll");
+        logTrace("Exiting ListboxImpl#deselectAll");
     }
 
     /**
@@ -133,9 +134,9 @@ public class ListboxImpl extends ElementImpl implements Listbox {
      */
     @Override
     public List<WebElement> getOptions() {
-        TestReporter.logTrace("Entering ListboxImpl#getOptions");
+        logTrace("Entering ListboxImpl#getOptions");
         List<WebElement> options = innerSelect.getOptions();
-        TestReporter.logTrace("Exiting ListboxImpl#getOptions");
+        logTrace("Exiting ListboxImpl#getOptions");
         return options;
     }
 
@@ -147,9 +148,9 @@ public class ListboxImpl extends ElementImpl implements Listbox {
      */
     @Override
     public void deselectByVisibleText(String text) {
-        TestReporter.logTrace("Entering ListboxImpl#deselectByVisibleText");
+        logTrace("Entering ListboxImpl#deselectByVisibleText");
         innerSelect.deselectByVisibleText(text);
-        TestReporter.logTrace("Exiting ListboxImpl#deselectByVisibleText");
+        logTrace("Exiting ListboxImpl#deselectByVisibleText");
     }
 
     /**
@@ -159,13 +160,13 @@ public class ListboxImpl extends ElementImpl implements Listbox {
      */
     @Override
     public WebElement getFirstSelectedOption() {
-        TestReporter.logTrace("Entering ListboxImpl#getFirstSelectedOption");
+        logTrace("Entering ListboxImpl#getFirstSelectedOption");
         try {
             WebElement option = innerSelect.getFirstSelectedOption();
-            TestReporter.logTrace("Exiting ListboxImpl#deselectByVisibleText");
+            logTrace("Exiting ListboxImpl#deselectByVisibleText");
             return option;
         } catch (NoSuchElementException nse) {
-            TestReporter.logTrace("Exiting ListboxImpl#deselectByVisibleText");
+            logTrace("Exiting ListboxImpl#deselectByVisibleText");
             return null;
         }
     }
@@ -175,31 +176,31 @@ public class ListboxImpl extends ElementImpl implements Listbox {
      */
     @Override
     public boolean isSelected(String option) {
-        TestReporter.logTrace("Entering ListboxImpl#isSelected");
+        logTrace("Entering ListboxImpl#isSelected");
         List<WebElement> selectedOptions = innerSelect.getAllSelectedOptions();
         for (WebElement selectOption : selectedOptions) {
             if (selectOption.getText().equals(option)) {
-                TestReporter.logTrace("Exiting ListboxImpl#isSelected");
+                logTrace("Exiting ListboxImpl#isSelected");
                 return true;
             }
         }
-        TestReporter.logTrace("Exiting ListboxImpl#isSelected");
+        logTrace("Exiting ListboxImpl#isSelected");
         return false;
     }
 
     @Override
     public List<WebElement> getAllSelectedOptions() {
-        TestReporter.logTrace("Entering ListboxImpl#getAllSelectedOptions");
+        logTrace("Entering ListboxImpl#getAllSelectedOptions");
         List<WebElement> options = innerSelect.getAllSelectedOptions();
-        TestReporter.logTrace("Exiting ListboxImpl#getAllSelectedOptions");
+        logTrace("Exiting ListboxImpl#getAllSelectedOptions");
         return options;
     }
 
     @Override
     public boolean isMultiple() {
-        TestReporter.logTrace("Entering ListboxImpl#isMultiple");
+        logTrace("Entering ListboxImpl#isMultiple");
         boolean multiple = innerSelect.isMultiple();
-        TestReporter.logTrace("Exiting ListboxImpl#isMultiple");
+        logTrace("Exiting ListboxImpl#isMultiple");
         return multiple;
     }
 }

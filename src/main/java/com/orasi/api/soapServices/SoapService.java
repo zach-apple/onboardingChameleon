@@ -1,5 +1,9 @@
 package com.orasi.api.soapServices;
 
+import static com.orasi.utils.TestReporter.logDebug;
+import static com.orasi.utils.TestReporter.logInfo;
+import static com.orasi.utils.TestReporter.logTrace;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,9 +40,9 @@ import com.orasi.exception.automation.XPathNullNodeValueException;
 import com.orasi.utils.ExcelDocumentReader;
 import com.orasi.utils.Randomness;
 import com.orasi.utils.Regex;
-import com.orasi.utils.TestReporter;
 import com.orasi.utils.XMLTools;
 import com.orasi.utils.dataProviders.CSVDataProvider;
+import com.orasi.utils.io.FileLoader;
 
 public abstract class SoapService {
     private String strServiceName;
@@ -59,7 +63,7 @@ public abstract class SoapService {
     /**
      * Takes the current Request XML Document stored in memory and
      * return it as a string for simple output
-     * 
+     *
      * @precondition Requires XML Document to be loaded by using
      *               {@link #setRequestDocument}
      * @author Justin Phlegar
@@ -67,16 +71,16 @@ public abstract class SoapService {
      * @return Will return the current Request XML as a string
      */
     public String getRequest() {
-        TestReporter.logTrace("Entering SoapService#getRequest");
+        logTrace("Entering SoapService#getRequest");
         String request = XMLTools.transformXmlToString(getRequestDocument());
-        TestReporter.logTrace("Exiting SoapService#getRequest");
+        logTrace("Exiting SoapService#getRequest");
         return request;
     }
 
     /**
      * Takes the current Response XML Document stored in memory and
      * return it as a string for simple output
-     * 
+     *
      * @precondition Requires XML Document to be loaded by using
      *               {@link #setResponseDocument}
      * @author Justin Phlegar
@@ -84,9 +88,9 @@ public abstract class SoapService {
      * @return Will return the current Response XML as a string
      */
     public String getResponse() {
-        TestReporter.logTrace("Entering SoapService#getResponse");
+        logTrace("Entering SoapService#getResponse");
         String response = XMLTools.transformXmlToString(getResponseDocument());
-        TestReporter.logTrace("Exiting SoapService#getResponse");
+        logTrace("Exiting SoapService#getResponse");
         return response;
     }
 
@@ -94,7 +98,7 @@ public abstract class SoapService {
      * After a service request has been sent, if the Status code of the
      * response has been stored, then this function can be used to
      * retrieve that status code
-     * 
+     *
      * @precondition The Response Status Code needs to be set by
      *               {@link #setRepsonseStatusCode(String)}
      * @author Justin Phlegar
@@ -107,7 +111,7 @@ public abstract class SoapService {
 
     /**
      * Return the URL of the service under test
-     * 
+     *
      * @precondition The Service URL needs to be set by
      *               {@link #setServiceURL(String)}
      * @author Justin Phlegar
@@ -120,7 +124,7 @@ public abstract class SoapService {
 
     /**
      * Return the Service Name of the service under test
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @return Returns the Service Name as a String
@@ -131,7 +135,7 @@ public abstract class SoapService {
 
     /**
      * Return the Service Operation Name of the service under test
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @return Returns the Service Operation Name as a String
@@ -143,7 +147,7 @@ public abstract class SoapService {
     /**
      * This is used to retrieve the current XML Document as it is in
      * memory.
-     * 
+     *
      * @precondition The XML Document needs to be set by
      *               {@link #setRequestDocument(Document)}
      * @author Justin Phlegar
@@ -157,7 +161,7 @@ public abstract class SoapService {
     /**
      * This is used to retrieve the current Response Document as it is
      * in memory
-     * 
+     *
      * @precondition The Response Document needs to be set by
      *               {@link #setResponseDocument(Document)}
      * @author Justin Phlegar
@@ -171,7 +175,7 @@ public abstract class SoapService {
     /**
      * Used to store the XML file as a Document object in memory. Can
      * be retrieved using {@link #getRequestDocument()}
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param doc
@@ -186,7 +190,7 @@ public abstract class SoapService {
      * retrieved and edited easily. Retrieve XML Document using
      * {@link #getResponseDocument()} or as a String using
      * {@link #getResponse()}
-     * 
+     *
      * @precondition Requires valid XML Document to be sent
      * @author Justin Phlegar
      * @version Created 08/28/2014
@@ -200,7 +204,7 @@ public abstract class SoapService {
     /**
      * Used to store URL of the Service Under Test in memory. Can be
      * retrieved using {@link #getServiceURL())}
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param url
@@ -213,7 +217,7 @@ public abstract class SoapService {
     /**
      * Used to store Service Name Under Test in memory. Can be
      * retrieved using {@link #getServiceName())}
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param url
@@ -226,7 +230,7 @@ public abstract class SoapService {
     /**
      * Used to store the Service Operation Name Under Test in memory. Can be
      * retrieved using {@link #getOperationName())}
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param url
@@ -239,7 +243,7 @@ public abstract class SoapService {
     /**
      * Used to define Soap Version to use. Default is 1.2
      * Can by changed using SOAPConstants.SOAP_1_1_PROTOCOL or SOAPConstants.SOAP_1_2_PROTOCOL
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 09/12/2016
      * @param version
@@ -271,7 +275,7 @@ public abstract class SoapService {
      *************************************
      * /**
      * Determine how many nodes exist using queried XPath in the Request
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 09/12/2016
      * @param xpath
@@ -279,19 +283,19 @@ public abstract class SoapService {
      * @return Number of node found on XPath. If XPath is not found, return 0
      */
     public int getNumberOfRequestNodesByXPath(String xpath) {
-        TestReporter.logTrace("Entering SoapService#getNumberOfRequestNodesByXPath");
+        logTrace("Entering SoapService#getNumberOfRequestNodesByXPath");
         int count = 0;
         try {
             count = XMLTools.getNodeList(getRequestDocument(), xpath).getLength();
         } catch (XPathNotFoundException e) {
         }
-        TestReporter.logTrace("Exiting SoapService#getNumberOfRequestNodesByXPath");
+        logTrace("Exiting SoapService#getNumberOfRequestNodesByXPath");
         return count;
     }
 
     /**
      * Determine how many nodes exist using queried XPath in the Response
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 09/12/2016
      * @param xpath
@@ -299,50 +303,50 @@ public abstract class SoapService {
      * @return Number of node found on XPath. If XPath is not found, return 0
      */
     public int getNumberOfResponseNodesByXPath(String xpath) {
-        TestReporter.logTrace("Entering SoapService#getNumberOfResponseNodesByXPath");
+        logTrace("Entering SoapService#getNumberOfResponseNodesByXPath");
         int count = 0;
         try {
             count = XMLTools.getNodeList(getResponseDocument(), xpath).getLength();
         } catch (XPathNotFoundException e) {
         }
-        TestReporter.logTrace("Exiting SoapService#getNumberOfResponseNodesByXPath");
+        logTrace("Exiting SoapService#getNumberOfResponseNodesByXPath");
         return count;
     }
 
     /**
      * Takes an xpath and return the value if found in the request
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param xpath
      *            String: xpath to evaluate
      */
     public String getRequestNodeValueByXPath(String xpath) {
-        TestReporter.logTrace("Entering SoapService#getRequestNodeValueByXPath");
+        logTrace("Entering SoapService#getRequestNodeValueByXPath");
         String value = XMLTools.getValueByXpath(getRequestDocument(), xpath);
-        TestReporter.logTrace("Exiting SoapService#getRequestNodeValueByXPath");
+        logTrace("Exiting SoapService#getRequestNodeValueByXPath");
         return value;
     }
 
     /**
      * Takes an xpath and return the value if found in the response
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param xpath
      *            String: xpath to evaluate
      */
     public String getResponseNodeValueByXPath(String xpath) {
-        TestReporter.logTrace("Entering SoapService#getResponseNodeValueByXPath");
+        logTrace("Entering SoapService#getResponseNodeValueByXPath");
         String value = XMLTools.getValueByXpath(getResponseDocument(), xpath);
-        TestReporter.logTrace("Exiting SoapService#getResponseNodeValueByXPath");
+        logTrace("Exiting SoapService#getResponseNodeValueByXPath");
         return value;
     }
 
     /**
      * Find and open the excel or csv file sent. If successful, look and find
      * the matching scenario name then return its xpath and value data.
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param file
@@ -351,30 +355,25 @@ public abstract class SoapService {
      * @param scenario
      *            String: Name of the scenario to poll data for
      */
-    protected Object[][] getTestScenario(String file, String scenario) {
-        TestReporter.logTrace("Entering SoapService#getTestScenario");
+    protected Object[][] getTestScenario(String filePath, String scenario) {
+        logTrace("Entering SoapService#getTestScenario");
         String[][] tabArray = null;
-        String filePath = "";
-        TestReporter.logTrace("Getting file from Resources");
+        logTrace("Getting file from Resources");
         int startCol, endRow, endCol, ci, cj;
-        filePath = getClass().getResource(file).getPath();
-
-        filePath = filePath.replace("%20", " ");
-        TestReporter.logTrace("Full file path [" + filePath + "]");
 
         Object[][] xlsSheet = null;
         if (filePath.toUpperCase().indexOf(".XLS") > 0) {
-            TestReporter.logTrace("Retrieving data from ExcelDocumentReader");
-            xlsSheet = new ExcelDocumentReader(filePath).readData("0", -1, 0);
+            logTrace("Retrieving data from ExcelDocumentReader");
+            xlsSheet = new ExcelDocumentReader(FileLoader.getAbosutePathForResource(filePath)).readData("0", -1, 0);
         } else {
-            TestReporter.logTrace("CSVDataProvider");
-            xlsSheet = CSVDataProvider.getData(filePath);
+            logTrace("CSVDataProvider");
+            xlsSheet = CSVDataProvider.getData(FileLoader.getAbosutePathForResource(filePath));
         }
-        TestReporter.logTrace("Successfully retrieved data");
+        logTrace("Successfully retrieved data");
 
         startCol = -1;
 
-        TestReporter.logTrace("Finding column with scenario [ " + scenario + " ]");
+        logTrace("Finding column with scenario [ " + scenario + " ]");
         for (int column = 0; column < xlsSheet[0].length; column++) {
             if (xlsSheet[0][column].toString().contains(scenario)) {
                 startCol = column;
@@ -385,41 +384,41 @@ public abstract class SoapService {
             throw new WebServiceException("Failed to find scenario [ " + scenario + " ] in CSV ");
         }
         endCol = startCol + 3;
-        TestReporter.logTrace("Found scenario [ " + scenario + " ]");
-        TestReporter.logTrace("Start Column [ " + startCol + " ] ");
-        TestReporter.logTrace("End Column [ " + (startCol + 3) + " ]");
+        logTrace("Found scenario [ " + scenario + " ]");
+        logTrace("Start Column [ " + startCol + " ] ");
+        logTrace("End Column [ " + (startCol + 3) + " ]");
 
-        TestReporter.logTrace("Determining last row of data in column [ " + (startCol + 1) + " ]");
+        logTrace("Determining last row of data in column [ " + (startCol + 1) + " ]");
         endRow = 0;
         for (endRow = xlsSheet.length; xlsSheet[endRow - 1][startCol + 1].toString().isEmpty(); endRow--) {
         }
-        TestReporter.logTrace("Found last row of data in column [ " + (startCol + 1) + " ]");
-        TestReporter.logTrace("End Row [ " + endRow + " ] ");
+        logTrace("Found last row of data in column [ " + (startCol + 1) + " ]");
+        logTrace("End Row [ " + endRow + " ] ");
 
         tabArray = new String[endRow - 1][2];
         ci = 0;
 
-        TestReporter.logTrace("Transfer data from excel sheet to array");
+        logTrace("Transfer data from excel sheet to array");
         for (int i = 1; i < endRow; i++, ci++) {
             cj = 0;
             for (int j = startCol + 1; j < endCol; j++, cj++) {
                 tabArray[ci][cj] = xlsSheet[i][j].toString();
             }
         }
-        TestReporter.logTrace("Successfully transfered data to array");
-        TestReporter.logTrace("Exiting SoapService#getTestScenario");
+        logTrace("Successfully transfered data to array");
+        logTrace("Exiting SoapService#getTestScenario");
         return (tabArray);
     }
 
     /**
      * Takes the pre-built Request XML in memory and sends to the
      * service
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      */
     public void sendRequest() {
-        TestReporter.logTrace("Entering SoapService#sendRequest");
+        logTrace("Entering SoapService#sendRequest");
         SOAPMessage request = null;
         SOAPMessage response = null;
         SOAPConnectionFactory connectionFactory = null;
@@ -428,38 +427,38 @@ public abstract class SoapService {
         MessageFactory messageFactory = null;
 
         try {
-            TestReporter.logTrace("Create Soap Message Factory");
+            logTrace("Create Soap Message Factory");
             messageFactory = MessageFactory.newInstance(soapVersion);
-            TestReporter.logTrace("Message Factory started");
+            logTrace("Message Factory started");
 
-            TestReporter.logTrace("Loading request XML into byte stream");
+            logTrace("Loading request XML into byte stream");
             InputStream in = new ByteArrayInputStream(getRequest().getBytes(Charset.defaultCharset()));
-            TestReporter.logTrace("Successfully loaded XML into stream");
-            TestReporter.logTrace("Loading byte stream into Message Factory");
+            logTrace("Successfully loaded XML into stream");
+            logTrace("Loading byte stream into Message Factory");
             request = messageFactory.createMessage(new MimeHeaders(), in);
-            TestReporter.logTrace("Successfully generated Soap Message");
+            logTrace("Successfully generated Soap Message");
 
             if (requestHeaders.size() > 0) {
-                TestReporter.logTrace("Additional headers to be added");
+                logTrace("Additional headers to be added");
                 for (String key : requestHeaders.keySet()) {
-                    TestReporter.logInfo("Adding header [" + key + " ] with value [" + requestHeaders.get(key) + " ]");
+                    logInfo("Adding header [" + key + " ] with value [" + requestHeaders.get(key) + " ]");
                     MimeHeaders soapHeader = request.getMimeHeaders();
                     soapHeader.addHeader(key, requestHeaders.get(key));
                 }
             }
 
-            TestReporter.logTrace("Create Soap Connection Factory");
+            logTrace("Create Soap Connection Factory");
             connectionFactory = SOAPConnectionFactory.newInstance();
 
-            TestReporter.logTrace("Create Soap Connection");
+            logTrace("Create Soap Connection");
             connection = connectionFactory.createConnection();
 
-            TestReporter.logTrace("Send request to service");
+            logTrace("Send request to service");
             response = connection.call(request, url);
 
             responseHeaders = response.getMimeHeaders();
 
-            TestReporter.logTrace("Successfully sent Soap Message. Normalizing response");
+            logTrace("Successfully sent Soap Message. Normalizing response");
             response.getSOAPBody().normalize();
             responseBody = response.getSOAPBody();
         } catch (UnsupportedOperationException uoe) {
@@ -471,7 +470,7 @@ public abstract class SoapService {
                     + ioe.getCause());
         }
 
-        TestReporter.logTrace("Checking for faults");
+        logTrace("Checking for faults");
         if (responseBody.hasFault()) {
             SOAPFault newFault = responseBody.getFault();
             intResponseStatusCode = newFault.getFaultCode();
@@ -480,19 +479,19 @@ public abstract class SoapService {
         }
 
         try {
-            TestReporter.logTrace("Closing Soap connection");
+            logTrace("Closing Soap connection");
             connection.close();
         } catch (SOAPException soape) {
             throw new SoapException("Failed to close Soap Connection", soape.getCause());
         }
 
-        TestReporter.logTrace("Convert response to XML document and store it");
+        logTrace("Convert response to XML document and store it");
         Document doc = XMLTools.makeXMLDocument(response);
         doc.normalize();
         setResponseDocument(doc);
 
-        TestReporter.logTrace("Successfully converted response to XML document");
-        TestReporter.logTrace("Exiting SoapService#sendRequest");
+        logTrace("Successfully converted response to XML document");
+        logTrace("Exiting SoapService#sendRequest");
     }
 
     /**
@@ -500,7 +499,7 @@ public abstract class SoapService {
      * is not limited to simple values, but may also call various
      * functions by adding "fx:" as a prefix. Please see
      * {@link #handleValueFunction} for more information
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param xpath
@@ -519,21 +518,21 @@ public abstract class SoapService {
      *             Could not match xPath to a node, element or attribute
      */
     protected void setRequestNodeValueByXPath(Document doc, String xpath, String value) {
-        TestReporter.logTrace("Entering SoapService#setRequestNodeValueByXPath");
+        logTrace("Entering SoapService#setRequestNodeValueByXPath");
         XPathFactory xPathFactory = XPathFactory.newInstance();
         XPath xPath = xPathFactory.newXPath();
         XPathExpression expr;
         NodeList nList = null;
 
         try {
-            TestReporter.logTrace("Checking validity of xpath [ " + xpath + " ]");
+            logTrace("Checking validity of xpath [ " + xpath + " ]");
             expr = xPath.compile(xpath);
             nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
         } catch (XPathExpressionException xpe) {
             throw new XPathInvalidExpression("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());
         }
 
-        TestReporter.logTrace("XPath is valid. Checking for nodes with desired xpath");
+        logTrace("XPath is valid. Checking for nodes with desired xpath");
         if (nList.item(0) == null) {
             throw new XPathNotFoundException(xpath);
         }
@@ -543,7 +542,7 @@ public abstract class SoapService {
         }
 
         if (value.contains("fx:")) {
-            TestReporter.logTrace("Executing runtime function [ " + value + " ]");
+            logTrace("Executing runtime function [ " + value + " ]");
             value = handleValueFunction(doc, value, xpath);
         }
 
@@ -554,14 +553,14 @@ public abstract class SoapService {
             } else if (value.equalsIgnoreCase("false")) {
                 value = "false";
             }
-            TestReporter.logTrace("Setting value [ " + value + " ] to xpath");
+            logTrace("Setting value [ " + value + " ] to xpath");
             nList.item(0).setTextContent(value);
         }
 
         // Store changes
         setRequestDocument(doc);
 
-        TestReporter.logTrace("Exiting SoapService#setRequestNodeValueByXPath");
+        logTrace("Exiting SoapService#setRequestNodeValueByXPath");
     }
 
     /**
@@ -569,7 +568,7 @@ public abstract class SoapService {
      * is not limited to simple values, but may also call various
      * functions by adding "fx:" as a prefix. Please see
      * {@link #handleValueFunction} for more information
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param xpath
@@ -598,7 +597,7 @@ public abstract class SoapService {
      * is not limited to simple values, but may also call various
      * functions by adding "fx:" as a prefix. Please see
      * {@link #handleValueFunction} for more information
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param xpath
@@ -620,7 +619,7 @@ public abstract class SoapService {
      */
     public void setRequestNodeValueByXPath(Object[][] scenarios) {
         for (int x = 0; x < scenarios.length; x++) {
-            TestReporter.logDebug("Set value [ " + scenarios[x][1].toString() + " ] to XPath [ " + scenarios[x][0].toString() + " ]");
+            logDebug("Set value [ " + scenarios[x][1].toString() + " ] to XPath [ " + scenarios[x][0].toString() + " ]");
             setRequestNodeValueByXPath(getRequestDocument(), scenarios[x][0].toString(),
                     scenarios[x][1].toString());
         }
@@ -628,7 +627,7 @@ public abstract class SoapService {
 
     /**
      * Validate XML Response and reports findings
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param doc
@@ -646,7 +645,7 @@ public abstract class SoapService {
      *            <b>value="value:abc"</b> -- Directly states that the node value will be validated and expected to be "abc"
      *            <br>
      *            <b>value="attribute:attrName,abc"</b> -- Directly states that the node attribute "attrName" will be validated and expected to be "abc"
-     * 
+     *
      */
     public boolean validateNodeValueByXPath(Document doc, Object[][] scenarios) {
         boolean status = true;
@@ -669,7 +668,7 @@ public abstract class SoapService {
 
     /**
      * Main validation function that validates and reports findings
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param doc
@@ -687,7 +686,7 @@ public abstract class SoapService {
      *            <b>value="value:abc"</b> -- Directly states that the node value will be validated and expected to be "abc"
      *            <br>
      *            <b>value="attribute:attrName,abc"</b> -- Directly states that the node attribute "attrName" will be validated and expected to be "abc"
-     * 
+     *
      */
     protected boolean validateNodeValueByXPath(Document doc, String xpath, String regexValue) {
         XPathFactory xPathFactory = XPathFactory.newInstance();
@@ -746,7 +745,7 @@ public abstract class SoapService {
 
     /**
      * Validate XML Response and reports findings
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param resourcePath:
@@ -769,7 +768,7 @@ public abstract class SoapService {
 
     /**
      * Call functions during setting of the xpath
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param xpath

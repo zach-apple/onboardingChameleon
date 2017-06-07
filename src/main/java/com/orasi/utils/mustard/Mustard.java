@@ -1,5 +1,8 @@
 package com.orasi.utils.mustard;
 
+import static com.orasi.utils.TestReporter.TRACE;
+import static com.orasi.utils.TestReporter.setDebugLevel;
+
 import java.util.ResourceBundle;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -11,7 +14,6 @@ import com.orasi.core.Beta;
 import com.orasi.utils.Base64Coder;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
-import com.orasi.utils.TestReporter;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 
 @Beta
@@ -60,7 +62,7 @@ public class Mustard {
             mustardResult.getResult().setStacktrace(ExceptionUtils.getFullStackTrace(result.getThrowable()));
         }
 
-        TestReporter.setDebugLevel(TestReporter.TRACE);
+        setDebugLevel(TRACE);
         request.sendPostRequest(mustardURL, HeaderType.JSON, RestService.getJsonFromObject(mustardResult));
 
     }

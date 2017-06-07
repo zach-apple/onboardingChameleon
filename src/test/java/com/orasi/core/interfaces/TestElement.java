@@ -128,15 +128,6 @@ public class TestElement extends TestEnvironment {
 
     @Features("Element Interfaces")
     @Stories("Element")
-    @Title("getElementIdentifier")
-    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
-    public void getElementIdentifier() {
-        Element element = getDriver().findElement(By.id("text1"));
-        Assert.assertTrue(element.getElementIdentifier().equals("text1"));
-    }
-
-    @Features("Element Interfaces")
-    @Stories("Element")
     @Title("getElementLocator")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
     public void getElementLocator() {
@@ -627,6 +618,15 @@ public class TestElement extends TestEnvironment {
     public void syncCssPropertyMatchesValueAdvancedNegative() {
         Element element = getDriver().findElement(By.id("buttonForText1"));
         Assert.assertFalse(element.syncCssPropertyMatchesValue("display", "(.*Inline-Block.*)", 2, false));
+    }
+
+    @Features("Element Interfaces")
+    @Stories("Element")
+    @Title("syncInFrame")
+    @Test(groups = { "regression" }, dependsOnGroups = "element", alwaysRun = true)
+    public void syncInFrame() {
+        getDriver().get("http://orasi.github.io/Chameleon/sites/unitTests/orasi/utils/frameHandler.html");
+        getDriver().findElement(By.id("button_frame1")).syncInFrame();
     }
 
 }

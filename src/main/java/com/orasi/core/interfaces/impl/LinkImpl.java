@@ -1,11 +1,13 @@
 package com.orasi.core.interfaces.impl;
 
+import static com.orasi.utils.TestReporter.interfaceLog;
+import static com.orasi.utils.TestReporter.logTrace;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import com.orasi.core.interfaces.Link;
 import com.orasi.utils.OrasiDriver;
-import com.orasi.utils.TestReporter;
 
 /**
  * Wraps a label on a html form with some behavior.
@@ -28,7 +30,7 @@ public class LinkImpl extends ElementImpl implements Link {
 
     @Override
     public void jsClick() {
-        TestReporter.logTrace("Entering LinkImpl#jsClick");
+        logTrace("Entering LinkImpl#jsClick");
 
         try {
             getWrappedDriver().executeJavaScript(
@@ -36,32 +38,32 @@ public class LinkImpl extends ElementImpl implements Link {
                             + ";arguments[0].dispatchEvent(click_ev);} else { arguments[0].click();}",
                     element);
         } catch (RuntimeException rte) {
-            TestReporter.interfaceLog(" Click Link [ <b>" + getElementLocatorInfo() + " </b> ]", true);
+            interfaceLog(" Click Link [ <b>" + getElementLocatorInfo() + " </b> ]", true);
             throw rte;
         }
-        TestReporter.interfaceLog(" Click Link [ <b>" + getElementLocatorInfo() + " </b> ]");
-        TestReporter.logTrace("Exiting CheckboxImpl#jsClick");
+        interfaceLog(" Click Link [ <b>" + getElementLocatorInfo() + " </b> ]");
+        logTrace("Exiting CheckboxImpl#jsClick");
 
     }
 
     @Override
     public void click() {
-        TestReporter.logTrace("Entering LinkImpl#click");
+        logTrace("Entering LinkImpl#click");
         try {
             getWrappedElement().click();
         } catch (RuntimeException rte) {
-            TestReporter.interfaceLog(" Click Link [ <b>" + getElementLocatorInfo() + " </b> ]", true);
+            interfaceLog(" Click Link [ <b>" + getElementLocatorInfo() + " </b> ]", true);
             throw rte;
         }
-        TestReporter.interfaceLog(" Click Link [ <b>" + getElementLocatorInfo() + " </b> ]");
-        TestReporter.logTrace("Exiting LinkImpl#click");
+        interfaceLog(" Click Link [ <b>" + getElementLocatorInfo() + " </b> ]");
+        logTrace("Exiting LinkImpl#click");
     }
 
     @Override
     public String getURL() {
-        TestReporter.logTrace("Entering LinkImpl#getURL");
+        logTrace("Entering LinkImpl#getURL");
         String url = getWrappedElement().getAttribute("href");
-        TestReporter.logTrace("Exiting LinkImpl#getURL");
+        logTrace("Exiting LinkImpl#getURL");
         return url;
     }
 }

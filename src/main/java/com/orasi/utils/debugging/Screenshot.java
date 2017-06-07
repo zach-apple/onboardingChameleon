@@ -1,5 +1,7 @@
 package com.orasi.utils.debugging;
 
+import static com.orasi.utils.TestReporter.logScreenshot;
+
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,7 +23,6 @@ import org.testng.xml.XmlSuite;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.TestEnvironment;
-import com.orasi.utils.TestReporter;
 import com.orasi.utils.mustard.Mustard;
 
 import ru.yandex.qatools.allure.annotations.Attachment;
@@ -67,7 +68,7 @@ public class Screenshot extends TestListenerAdapter implements IReporter {
             String destFile = dateFormat.format(new Date()) + ".png";
 
             // Capture a screenshot for TestNG reporting
-            TestReporter.logScreenshot(augmentDriver, destDir + slash + destFile, slash, runLocation);
+            logScreenshot(augmentDriver, destDir + slash + destFile, slash, runLocation);
         }
         // Capture a screenshot for Allure reporting
         // FailedScreenshot(augmentDriver);

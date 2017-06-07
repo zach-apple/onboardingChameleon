@@ -1,5 +1,10 @@
 package com.orasi.utils;
 
+import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BOOLEAN;
+import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_FORMULA;
+import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_NUMERIC;
+import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -13,6 +18,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.orasi.exception.AutomationException;
+import com.orasi.utils.io.FileLoader;
 
 public class ExcelDocumentReader {
     private Sheet excelWSheet;
@@ -31,7 +37,7 @@ public class ExcelDocumentReader {
     /**
      * This gets the test data from excel workbook by the sheet specified. It returns all the data
      * as a 2d array
-     * 
+     *
      * @param sheetName
      *            the excel sheet
      * @version 10/16/2014
@@ -63,12 +69,11 @@ public class ExcelDocumentReader {
 
         try {
 
-            FileInputStream excelFile = new FileInputStream(filepath);
-
             // Access the required test data sheet
             if (filepath.toUpperCase().indexOf(".XLSX") > 0) {
-                excelWBook = new XSSFWorkbook(filepath); // XLSX
+                excelWBook = new XSSFWorkbook(FileLoader.getAbosutePathForResource(filepath)); // XLSX
             } else {
+                FileInputStream excelFile = new FileInputStream(FileLoader.getAbosutePathForResource(filepath));
                 excelWBook = new HSSFWorkbook(excelFile); // XLS
             }
 
@@ -127,20 +132,20 @@ public class ExcelDocumentReader {
         }
         String cellData = "";
         switch (cell.getCellType()) {
-            case 0:
+            case CELL_TYPE_NUMERIC:
                 DataFormatter formatter = new DataFormatter();
                 cellData = formatter.formatCellValue(cell);
                 break;
 
-            case 1:
+            case CELL_TYPE_STRING:
                 cellData = cell.getStringCellValue();
                 break;
 
-            case 2:
+            case CELL_TYPE_FORMULA:
                 cellData = String.valueOf(cell.getCellFormula());
                 break;
 
-            case 4:
+            case CELL_TYPE_BOOLEAN:
                 cellData = String.valueOf(cell.getBooleanCellValue());
                 break;
 

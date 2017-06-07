@@ -1,7 +1,8 @@
 package com.orasi.core.interfaces.impl.internal;
 
+import static com.orasi.utils.TestReporter.logTrace;
+
 import com.orasi.core.interfaces.Element;
-import com.orasi.utils.TestReporter;
 
 /**
  * Processes the iface type into a useful class reference for wrapping WebElements.
@@ -21,14 +22,14 @@ public final class ImplementedByProcessor {
      */
     @SuppressWarnings("rawtypes")
     public static <T> Class getWrapperClass(Class<T> iface) {
-        TestReporter.logTrace("Entering ImplementedByProcessor#getWrapperClass");
-        TestReporter.logTrace("Validate Element Interface has ImplementedBy annotation ");
+        logTrace("Entering ImplementedByProcessor#getWrapperClass");
+        logTrace("Validate Element Interface has ImplementedBy annotation ");
         if (iface.isAnnotationPresent(ImplementedBy.class)) {
             ImplementedBy annotation = iface.getAnnotation(ImplementedBy.class);
             Class clazz = annotation.value();
             if (Element.class.isAssignableFrom(clazz)) {
-                TestReporter.logTrace("Validation successful");
-                TestReporter.logTrace("Exiting ImplementedByProcessor#getWrapperClass");
+                logTrace("Validation successful");
+                logTrace("Exiting ImplementedByProcessor#getWrapperClass");
                 return annotation.value();
             }
         }

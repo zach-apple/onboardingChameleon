@@ -1,7 +1,10 @@
 package com.orasi.core.interfaces.impl;
 
-import static com.orasi.utils.Constants.DEFAULT_SYNC_HANDLER;
 import static com.orasi.utils.Constants.MILLISECONDS_TO_POLL_FOR_ELEMENT;
+import static com.orasi.utils.OrasiDriver.DEFAULT_SYNC_HANDLER;
+import static com.orasi.utils.TestReporter.interfaceLog;
+import static com.orasi.utils.TestReporter.logInfo;
+import static com.orasi.utils.TestReporter.logTrace;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -44,7 +47,6 @@ import com.orasi.exception.automation.ElementNotVisibleException;
 import com.orasi.exception.automation.TextInElementNotPresentException;
 import com.orasi.utils.ExtendedExpectedConditions;
 import com.orasi.utils.OrasiDriver;
-import com.orasi.utils.TestReporter;
 import com.orasi.utils.debugging.Highlight;
 
 /**
@@ -69,32 +71,32 @@ public class ElementImpl implements Element {
         this.by = by;
         this.driver = driver;
         try {
-            TestReporter.logTrace("Entering ElementImpl#init");
-            TestReporter.logTrace("Inital search for element [ " + by + "]");
+            logTrace("Entering ElementImpl#init");
+            logTrace("Inital search for element [ " + by + "]");
             WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), 1);
             element = wait.until(ExpectedConditions.presenceOfElementLocated(by));
-            TestReporter.logTrace("Element [ " + by + "] found and stored");
+            logTrace("Element [ " + by + "] found and stored");
         } catch (WebDriverException throwAway) {
-            TestReporter.logTrace("Element [ " + by + "] NOT found intially, will search again later");
+            logTrace("Element [ " + by + "] NOT found intially, will search again later");
         }
-        TestReporter.logTrace("Exiting ElementImpl#init");
+        logTrace("Exiting ElementImpl#init");
     }
 
     public ElementImpl(final OrasiDriver driver, final ByNG by) {
         this.byNG = by;
         this.driver = driver;
         try {
-            TestReporter.logTrace("Entering ElementImpl#init");
-            TestReporter.logTrace("Inital search for element [ " + by + "]");
+            logTrace("Entering ElementImpl#init");
+            logTrace("Inital search for element [ " + by + "]");
             int tempTimeout = driver.getElementTimeout();
             driver.setElementTimeout(1);
             element = driver.findElement(by);
             driver.setElementTimeout(tempTimeout);
-            TestReporter.logTrace("Element [ " + by + "] found and stored");
+            logTrace("Element [ " + by + "] found and stored");
         } catch (NoSuchElementException | TimeoutException throwAway) {
-            TestReporter.logTrace("Element [ " + by + "] NOT found intially, will search again later");
+            logTrace("Element [ " + by + "] NOT found intially, will search again later");
         }
-        TestReporter.logTrace("Exiting ElementImpl#init");
+        logTrace("Exiting ElementImpl#init");
     }
 
     /**
@@ -102,44 +104,44 @@ public class ElementImpl implements Element {
      */
     @Override
     public void click() {
-        TestReporter.logTrace("Entering ElementImpl#click");
+        logTrace("Entering ElementImpl#click");
         try {
             getWrappedElement().click();
         } catch (RuntimeException rte) {
-            TestReporter.interfaceLog("Clicked [ <font size = 2 color=\"red\"><b> " + getElementLocatorInfo() + " </font></b>]");
+            interfaceLog("Clicked [ <font size = 2 color=\"red\"><b> " + getElementLocatorInfo() + " </font></b>]");
             throw rte;
         }
-        TestReporter.interfaceLog("Clicked [ <b>" + getElementLocatorInfo() + " </b>]");
-        TestReporter.logTrace("Exiting ElementImpl#click");
+        interfaceLog("Clicked [ <b>" + getElementLocatorInfo() + " </b>]");
+        logTrace("Exiting ElementImpl#click");
     }
 
     @Override
     public void jsClick() {
-        TestReporter.logTrace("Entering ElementImpl#jsClick");
+        logTrace("Entering ElementImpl#jsClick");
         getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();", getWrappedElement());
-        TestReporter.interfaceLog("Clicked [ <b>" + getElementLocatorInfo() + " </b>]");
-        TestReporter.logTrace("Exiting ElementImpl#jsClick");
+        interfaceLog("Clicked [ <b>" + getElementLocatorInfo() + " </b>]");
+        logTrace("Exiting ElementImpl#jsClick");
     }
 
     @Override
     public void focus() {
-        TestReporter.logTrace("Entering ElementImpl#focus");
+        logTrace("Entering ElementImpl#focus");
         new Actions(getWrappedDriver()).moveToElement(getWrappedElement()).perform();
-        TestReporter.interfaceLog("Focus on  [ <b>" + getElementLocatorInfo() + " </b>]");
-        TestReporter.logTrace("Exiting ElementImpl#focus");
+        interfaceLog("Focus on  [ <b>" + getElementLocatorInfo() + " </b>]");
+        logTrace("Exiting ElementImpl#focus");
     }
 
     @Override
     public void focusClick() {
-        TestReporter.logTrace("Entering ElementImpl#focusClick");
+        logTrace("Entering ElementImpl#focusClick");
         new Actions(getWrappedDriver()).moveToElement(getWrappedElement()).click().perform();
-        TestReporter.interfaceLog("Focus Clicked [ <b>" + getElementLocatorInfo() + " </b>]");
-        TestReporter.logTrace("Exiting ElementImpl#focusClick");
+        interfaceLog("Focus Clicked [ <b>" + getElementLocatorInfo() + " </b>]");
+        logTrace("Exiting ElementImpl#focusClick");
     }
 
     @Override
     public void onBlur() {
-        TestReporter.logTrace("Entering ElementImpl#onBlur");
+        logTrace("Entering ElementImpl#onBlur");
         String jsFireEvent = "if ('createEvent' in document) { " +
                 " var evt = document.createEvent('HTMLEvents'); " +
                 " evt.initEvent('change', false, true); " +
@@ -150,7 +152,7 @@ public class ElementImpl implements Element {
             getWrappedDriver().executeJavaScript(jsFireEvent, getWrappedElement());
         } catch (WebDriverException wde) {
         }
-        TestReporter.logTrace("Exiting ElementImpl#onBlur");
+        logTrace("Exiting ElementImpl#onBlur");
     }
 
     /**
@@ -158,10 +160,10 @@ public class ElementImpl implements Element {
      */
     @Override
     public Point getLocation() {
-        TestReporter.logTrace("Entering ElementImpl#getLocation");
+        logTrace("Entering ElementImpl#getLocation");
         Point point = getWrappedElement().getLocation();
-        TestReporter.logInfo("Location of element: X = [ " + point.getX() + " ], Y = [ " + point.getY() + " ] ");
-        TestReporter.logTrace("Exiting ElementImpl#getLocation");
+        logInfo("Location of element: X = [ " + point.getX() + " ], Y = [ " + point.getY() + " ] ");
+        logTrace("Exiting ElementImpl#getLocation");
         return point;
     }
 
@@ -170,9 +172,9 @@ public class ElementImpl implements Element {
      */
     @Override
     public void submit() {
-        TestReporter.logTrace("Entering ElementImpl#submit");
+        logTrace("Entering ElementImpl#submit");
         getWrappedElement().submit();
-        TestReporter.logTrace("Exiting ElementImpl#submit");
+        logTrace("Exiting ElementImpl#submit");
     }
 
     /**
@@ -180,10 +182,10 @@ public class ElementImpl implements Element {
      */
     @Override
     public String getAttribute(String name) {
-        TestReporter.logTrace("Entering ElementImpl#getAttribute");
+        logTrace("Entering ElementImpl#getAttribute");
         String value = getWrappedElement().getAttribute(name);
-        TestReporter.logInfo("Attribute value for [ " + name + " ] is [ " + value + " ]");
-        TestReporter.logTrace("Exiting ElementImpl#getAttribute");
+        logInfo("Attribute value for [ " + name + " ] is [ " + value + " ]");
+        logTrace("Exiting ElementImpl#getAttribute");
         return value;
     }
 
@@ -192,10 +194,10 @@ public class ElementImpl implements Element {
      */
     @Override
     public String getCssValue(String propertyName) {
-        TestReporter.logTrace("Entering ElementImpl#getCssValue");
+        logTrace("Entering ElementImpl#getCssValue");
         String value = getWrappedElement().getCssValue(propertyName);
-        TestReporter.logInfo("CSS property value for [ " + propertyName + " ] is [ " + value + " ]");
-        TestReporter.logTrace("Exiting ElementImpl#getCssValue");
+        logInfo("CSS property value for [ " + propertyName + " ] is [ " + value + " ]");
+        logTrace("Exiting ElementImpl#getCssValue");
         return value;
     }
 
@@ -204,10 +206,10 @@ public class ElementImpl implements Element {
      */
     @Override
     public Dimension getSize() {
-        TestReporter.logTrace("Entering ElementImpl#getSize");
+        logTrace("Entering ElementImpl#getSize");
         Dimension dimension = getWrappedElement().getSize();
-        TestReporter.logInfo("Location of element: height = [ " + dimension.getHeight() + " ], width = [ " + dimension.getWidth() + " ] ");
-        TestReporter.logTrace("Exiting ElementImpl#getSize");
+        logInfo("Location of element: height = [ " + dimension.getHeight() + " ], width = [ " + dimension.getWidth() + " ] ");
+        logTrace("Exiting ElementImpl#getSize");
         return dimension;
     }
 
@@ -216,9 +218,9 @@ public class ElementImpl implements Element {
      */
     @Override
     public List<WebElement> findElements(By by) {
-        TestReporter.logTrace("Entering ElementImpl#findElements");
+        logTrace("Entering ElementImpl#findElements");
         List<WebElement> elements = getWrappedElement().findElements(by);
-        TestReporter.logTrace("Exiting ElementImpl#findElements");
+        logTrace("Exiting ElementImpl#findElements");
         return elements;
     }
 
@@ -227,10 +229,10 @@ public class ElementImpl implements Element {
      */
     @Override
     public String getText() {
-        TestReporter.logTrace("Entering ElementImpl#getText");
+        logTrace("Entering ElementImpl#getText");
         String text = getWrappedElement().getText();
-        TestReporter.logInfo("Text found in element [ " + text + " ]");
-        TestReporter.logTrace("Exiting ElementImpl#getText");
+        logInfo("Text found in element [ " + text + " ]");
+        logTrace("Exiting ElementImpl#getText");
         return text;
     }
 
@@ -239,10 +241,10 @@ public class ElementImpl implements Element {
      */
     @Override
     public String getTagName() {
-        TestReporter.logTrace("Entering ElementImpl#getTagName");
+        logTrace("Entering ElementImpl#getTagName");
         String name = getWrappedElement().getTagName();
-        TestReporter.logInfo("Tagname of element [ " + name + " ]");
-        TestReporter.logTrace("Exiting ElementImpl#getTagName");
+        logInfo("Tagname of element [ " + name + " ]");
+        logTrace("Exiting ElementImpl#getTagName");
         return name;
     }
 
@@ -251,9 +253,9 @@ public class ElementImpl implements Element {
      */
     @Override
     public WebElement findElement(By by) {
-        TestReporter.logTrace("Entering ElementImpl#findElement");
+        logTrace("Entering ElementImpl#findElement");
         WebElement element = getWrappedElement().findElement(by);
-        TestReporter.logTrace("Exiting ElementImpl#findElement");
+        logTrace("Exiting ElementImpl#findElement");
         return element;
     }
 
@@ -262,9 +264,9 @@ public class ElementImpl implements Element {
      */
     @Override
     public boolean isEnabled() {
-        TestReporter.logTrace("Entering ElementImpl#isEnabled");
+        logTrace("Entering ElementImpl#isEnabled");
         boolean enabled = getWrappedElement().isEnabled();
-        TestReporter.logTrace("Exiting ElementImpl#isEnabled");
+        logTrace("Exiting ElementImpl#isEnabled");
         return enabled;
     }
 
@@ -273,9 +275,9 @@ public class ElementImpl implements Element {
      */
     @Override
     public boolean isDisplayed() {
-        TestReporter.logTrace("Entering ElementImpl#isDisplayed");
+        logTrace("Entering ElementImpl#isDisplayed");
         boolean displayed = getWrappedElement().isDisplayed();
-        TestReporter.logTrace("Exiting ElementImpl#isDisplayed");
+        logTrace("Exiting ElementImpl#isDisplayed");
         return displayed;
     }
 
@@ -284,9 +286,9 @@ public class ElementImpl implements Element {
      */
     @Override
     public boolean isSelected() {
-        TestReporter.logTrace("Entering ElementImpl#isSelected");
+        logTrace("Entering ElementImpl#isSelected");
         boolean selected = getWrappedElement().isSelected();
-        TestReporter.logTrace("Exiting ElementImpl#isSelected");
+        logTrace("Exiting ElementImpl#isSelected");
         return selected;
     }
 
@@ -295,10 +297,10 @@ public class ElementImpl implements Element {
      */
     @Override
     public void clear() {
-        TestReporter.logTrace("Entering ElementImpl#clear");
+        logTrace("Entering ElementImpl#clear");
         getWrappedElement().clear();
-        TestReporter.interfaceLog("Clear text from Element [ <b>" + getElementLocatorInfo() + " </b> ]");
-        TestReporter.logTrace("Exiting ElementImpl#clear");
+        interfaceLog("Clear text from Element [ <b>" + getElementLocatorInfo() + " </b> ]");
+        logTrace("Exiting ElementImpl#clear");
     }
 
     /**
@@ -306,7 +308,7 @@ public class ElementImpl implements Element {
      */
     @Override
     public void sendKeys(CharSequence... keysToSend) {
-        TestReporter.logTrace("Entering ElementImpl#sendKeys");
+        logTrace("Entering ElementImpl#sendKeys");
         String keys = "";
         if (keysToSend.toString() != "") {
             getWrappedElement().sendKeys(keysToSend);
@@ -327,54 +329,55 @@ public class ElementImpl implements Element {
                 }
             }
 
-            TestReporter.interfaceLog(" Send Keys [ <b>" + keys + "</b> ] to Textbox [ <b>"
+            interfaceLog(" Send Keys [ <b>" + keys + "</b> ] to Textbox [ <b>"
                     + getElementIdentifier() + " </b> ]");
         }
-        TestReporter.logTrace("Exiting ElementImpl#sendKeys");
+        logTrace("Exiting ElementImpl#sendKeys");
     }
 
     @Override
     public WebElement getWrappedElement() {
-        TestReporter.logTrace("Entering ElementImpl#getWrappedElement");
+        logTrace("Entering ElementImpl#getWrappedElement");
         WebElement tempElement = null;
         try {
-            TestReporter.logTrace("Validate element [ " + by.toString() + " ] is not null");
+            logTrace("Validate element [ " + by.toString() + " ] is not null");
             if (element == null) {
-                TestReporter.logTrace("Element [ " + by.toString() + " ] is null, attempt to reload the element");
+                logTrace("Element [ " + by.toString() + " ] is null, attempt to reload the element");
                 tempElement = reload();
-                TestReporter.logTrace("Successfully reloaded element [ " + by.toString() + " ]");
+                logTrace("Successfully reloaded element [ " + by.toString() + " ]");
             } else {
                 tempElement = element;
             }
 
-            TestReporter.logTrace("Validate element [ " + by.toString() + " ] is not stale");
+            logTrace("Validate element [ " + by.toString() + " ] is not stale");
             tempElement.isEnabled();
-            TestReporter.logTrace("Successfully validated element [ " + by.toString() + " ] is usable");
-            TestReporter.logTrace("Exiting ElementImpl#getWrappedElement");
+            logTrace("Successfully validated element [ " + by.toString() + " ] is usable");
+            logTrace("Exiting ElementImpl#getWrappedElement");
             return tempElement;
         } catch (StaleElementReferenceException | NullPointerException e) {
 
             try {
-                TestReporter.logTrace("Element [ " + by.toString() + " ] is stale, attempt to reload the element");
+                logTrace("Element [ " + by.toString() + " ] is stale, attempt to reload the element");
                 tempElement = reload();
-                TestReporter.logTrace("Successfully reloaded element [ " + by.toString() + " ]");
-                TestReporter.logTrace("Exiting ElementImpl#getWrappedElement");
+                logTrace("Successfully reloaded element [ " + by.toString() + " ]");
+                logTrace("Exiting ElementImpl#getWrappedElement");
                 return tempElement;
             } catch (NullPointerException sere) {
-                TestReporter.logTrace("Exiting ElementImpl#getWrappedElement");
+                logTrace("Exiting ElementImpl#getWrappedElement");
                 return element;
             }
         } catch (NoSuchElementException nsee) {
-            TestReporter.logTrace("Failed to reload element [ " + by.toString() + " ]");
-            TestReporter.logTrace("Exiting ElementImpl#getWrappedElement");
+            logTrace("Failed to reload element [ " + by.toString() + " ]");
+            logTrace("Exiting ElementImpl#getWrappedElement");
             throw nsee;
         }
     }
 
     @Override
     public OrasiDriver getWrappedDriver() {
-        if (driver != null)
+        if (driver != null) {
             return driver;
+        }
         WebDriver ldriver = null;
         Field privateStringField = null;
         if (element == null) {
@@ -432,8 +435,9 @@ public class ElementImpl implements Element {
      */
     @Override
     public By getElementLocator() {
-        if (by != null)
+        if (by != null) {
             return this.by;
+        }
         By by = null;
         String locator = "";
         try {
@@ -475,7 +479,6 @@ public class ElementImpl implements Element {
         }
     }
 
-    @Override
     public String getElementIdentifier() {
         String locator = "";
         int startPosition = 0;
@@ -573,24 +576,25 @@ public class ElementImpl implements Element {
 
     @Override
     public String getElementLocatorInfo() {
-        if (by != null)
+        if (by != null) {
             return by.toString();
+        }
         // else return getElementLocatorAsString() + " = " + getElementIdentifier();
         return getElementLocatorAsString() + " = " + getElementIdentifier();
     }
 
     @Override
     public void highlight() {
-        TestReporter.logTrace("Entering ElementImpl#highlight");
+        logTrace("Entering ElementImpl#highlight");
         Highlight.highlight(getWrappedDriver(), getWrappedElement());
-        TestReporter.logTrace("Exiting ElementImpl#highlight");
+        logTrace("Exiting ElementImpl#highlight");
     }
 
     @Override
     public void scrollIntoView() {
-        TestReporter.logTrace("Entering ElementImpl#scrollIntoView");
+        logTrace("Entering ElementImpl#scrollIntoView");
         getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);", element);
-        TestReporter.logTrace("Exiting ElementImpl#scrollIntoView");
+        logTrace("Exiting ElementImpl#scrollIntoView");
     }
 
     @SuppressWarnings("rawtypes")
@@ -626,7 +630,7 @@ public class ElementImpl implements Element {
      */
     @Override
     public boolean syncVisible(Object... args) {
-        TestReporter.logTrace("Entering ElementImpl#syncVisible");
+        logTrace("Entering ElementImpl#syncVisible");
         int timeout = getWrappedDriver().getElementTimeout();
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
         try {
@@ -639,7 +643,7 @@ public class ElementImpl implements Element {
         } catch (ArrayIndexOutOfBoundsException aiobe) {
         }
 
-        TestReporter.interfaceLog("<i>Syncing to element [<b>" + getElementLocatorInfo()
+        interfaceLog("<i>Syncing to element [<b>" + getElementLocatorInfo()
                 + "</b> ] to be <b>VISIBLE</b> within [ <b>" + timeout + "</b> ] seconds.</i>");
 
         StopWatch stopwatch = new StopWatch();
@@ -659,8 +663,8 @@ public class ElementImpl implements Element {
         stopwatch.reset();
 
         if (!found && failTestOnSync) {
-            TestReporter.logTrace("Element not <b>VISIBLE</b> and failTestOnSync is [ TRUE ]");
-            TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
+            logTrace("Element not <b>VISIBLE</b> and failTestOnSync is [ TRUE ]");
+            interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
                     + " </b>] is not <b>VISIBLE</b> on the page after [ "
                     + (timeLapse) / 1000.0 + " ] seconds.</i>");
             throw new ElementNotVisibleException(
@@ -668,18 +672,18 @@ public class ElementImpl implements Element {
                             + (timeLapse) / 1000.0 + " ] seconds.",
                     driver);
         } else if (!found) {
-            TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
+            interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
                     + " </b>] is not <b>VISIBLE</b> on the page after [ "
                     + (timeLapse) / 1000.0 + " ] seconds.</i>");
-            TestReporter.logTrace("Exiting ElementImpl#syncVisible");
+            logTrace("Exiting ElementImpl#syncVisible");
             return found;
         }
 
-        TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo() + " </b>] is <b>VISIBLE</b> on the page after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
+        interfaceLog("<i>Element [<b>" + getElementLocatorInfo() + " </b>] is <b>VISIBLE</b> on the page after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
         if (Highlight.getDebugMode()) {
             Highlight.highlightSuccess(driver, reload());
         }
-        TestReporter.logTrace("Exiting ElementImpl#syncVisible");
+        logTrace("Exiting ElementImpl#syncVisible");
         return found;
 
     }
@@ -703,7 +707,7 @@ public class ElementImpl implements Element {
      */
     @Override
     public boolean syncHidden(Object... args) {
-        TestReporter.logTrace("Entering ElementImpl#syncHidden");
+        logTrace("Entering ElementImpl#syncHidden");
         int timeout = getWrappedDriver().getElementTimeout();
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
         try {
@@ -717,7 +721,7 @@ public class ElementImpl implements Element {
         }
 
         StopWatch stopwatch = new StopWatch();
-        TestReporter.interfaceLog("<i>Syncing to element [<b>" + getElementLocatorInfo()
+        interfaceLog("<i>Syncing to element [<b>" + getElementLocatorInfo()
                 + "</b> ] to be <b>HIDDEN</b> within [ <b>" + timeout + "</b> ] seconds.</i>");
 
         boolean found = false;
@@ -736,8 +740,8 @@ public class ElementImpl implements Element {
         stopwatch.reset();
 
         if (!found && failTestOnSync) {
-            TestReporter.logTrace("Element not <b>HIDDEN</b> and failTestOnSync is [ TRUE ]");
-            TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
+            logTrace("Element not <b>HIDDEN</b> and failTestOnSync is [ TRUE ]");
+            interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
                     + " </b>] is not <b>HIDDEN</b> on the page after [ "
                     + (timeLapse) / 1000.0 + " ] seconds.</i>");
             throw new ElementNotHiddenException(
@@ -745,15 +749,15 @@ public class ElementImpl implements Element {
                             + (timeLapse) / 1000.0 + " ] seconds.",
                     driver);
         } else if (!found) {
-            TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
+            interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
                     + " </b>] is not <b>HIDDEN</b> on the page after [ "
                     + (timeLapse) / 1000.0 + " ] seconds.</i>");
-            TestReporter.logTrace("Exiting ElementImpl#syncHidden");
+            logTrace("Exiting ElementImpl#syncHidden");
             return found;
         }
 
-        TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo() + " </b>] is <b>HIDDEN</b> on the page after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
-        TestReporter.logTrace("Exiting ElementImpl#syncHidden");
+        interfaceLog("<i>Element [<b>" + getElementLocatorInfo() + " </b>] is <b>HIDDEN</b> on the page after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
+        logTrace("Exiting ElementImpl#syncHidden");
         return found;
     }
 
@@ -776,7 +780,7 @@ public class ElementImpl implements Element {
      */
     @Override
     public boolean syncEnabled(Object... args) {
-        TestReporter.logTrace("Entering ElementImpl#syncEnabled");
+        logTrace("Entering ElementImpl#syncEnabled");
         int requestedTimeout = getWrappedDriver().getElementTimeout();
         int currentElementTimeout = getWrappedDriver().getElementTimeout();
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
@@ -795,7 +799,7 @@ public class ElementImpl implements Element {
         boolean found = false;
         long timeLapse;
         StopWatch stopwatch = new StopWatch();
-        TestReporter.interfaceLog("<i>Syncing to element [<b>" + getElementLocatorInfo()
+        interfaceLog("<i>Syncing to element [<b>" + getElementLocatorInfo()
                 + "</b> ] to be <b>ENABLED</b> within [ <b>" + requestedTimeout + "</b> ] seconds.</i>");
         stopwatch.start();
         WebDriverWait wait = new WebDriverWait(driver, 1);
@@ -818,7 +822,7 @@ public class ElementImpl implements Element {
 
         if (!found && failTestOnSync) {
             Highlight.highlightError(driver, element);
-            TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
+            interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
                     + " </b>] is not <b>ENABLED</b> on the page after [ "
                     + (timeLapse) / 1000.0 + " ] seconds.</i>");
             throw new ElementNotEnabledException(
@@ -826,20 +830,20 @@ public class ElementImpl implements Element {
                             + (timeLapse) / 1000.0 + " ] seconds.",
                     driver);
         } else if (!found) {
-            TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
+            interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
                     + " </b>] is not <b>ENABLED</b> on the page after [ "
                     + (timeLapse) / 1000.0 + " ] seconds.</i>");
-            TestReporter.logTrace("Exiting ElementImpl#syncEnabled");
+            logTrace("Exiting ElementImpl#syncEnabled");
             return found;
         }
 
-        TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
+        interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
                 + " </b>] is <b>ENABLED</b> on the page after [ "
                 + (timeLapse) / 1000.0 + " ] seconds.</i>");
         if (Highlight.getDebugMode()) {
             Highlight.highlightSuccess(driver, reload());
         }
-        TestReporter.logTrace("Exiting ElementImpl#syncEnabled");
+        logTrace("Exiting ElementImpl#syncEnabled");
         return found;
     }
 
@@ -862,7 +866,7 @@ public class ElementImpl implements Element {
      */
     @Override
     public boolean syncDisabled(Object... args) {
-        TestReporter.logTrace("Entering ElementImpl#syncDisabled");
+        logTrace("Entering ElementImpl#syncDisabled");
         int timeout = getWrappedDriver().getElementTimeout();
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
         try {
@@ -878,7 +882,7 @@ public class ElementImpl implements Element {
         boolean found = false;
         long timeLapse;
         StopWatch stopwatch = new StopWatch();
-        TestReporter.interfaceLog("<i>Syncing to element [<b>" + getElementLocatorInfo()
+        interfaceLog("<i>Syncing to element [<b>" + getElementLocatorInfo()
                 + "</b> ] to be <b>DISABLED</b> within [ <b>" + timeout + "</b> ] seconds.</i>");
         stopwatch.start();
         WebDriverWait wait = new WebDriverWait(driver, 1);
@@ -899,7 +903,7 @@ public class ElementImpl implements Element {
 
         if (!found && failTestOnSync) {
             Highlight.highlightError(driver, reload());
-            TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
+            interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
                     + " </b>] is not <b>DISABLED</b> on the page after [ "
                     + (timeLapse) / 1000.0 + " ] seconds.</i>");
             throw new ElementNotDisabledException(
@@ -907,20 +911,20 @@ public class ElementImpl implements Element {
                             + (timeLapse) / 1000.0 + " ] seconds.",
                     driver);
         } else if (!found) {
-            TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
+            interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
                     + " </b>] is not <b>DISABLED</b> on the page after [ "
                     + (timeLapse) / 1000.0 + " ] seconds.</i>");
-            TestReporter.logTrace("Exiting ElementImpl#syncDisabled");
+            logTrace("Exiting ElementImpl#syncDisabled");
             return found;
         }
 
-        TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
+        interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
                 + " </b>] is <b>DISABLED</b> on the page after [ "
                 + (timeLapse) / 1000.0 + " ] seconds.</i>");
         if (Highlight.getDebugMode()) {
             Highlight.highlightSuccess(driver, reload());
         }
-        TestReporter.logTrace("Exiting ElementImpl#syncDisabled");
+        logTrace("Exiting ElementImpl#syncDisabled");
         return found;
     }
 
@@ -943,7 +947,7 @@ public class ElementImpl implements Element {
      */
     @Override
     public boolean syncTextInElement(String text, Object... args) {
-        TestReporter.logTrace("Entering ElementImpl#syncTextInElement");
+        logTrace("Entering ElementImpl#syncTextInElement");
         int timeout = getWrappedDriver().getElementTimeout();
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
         try {
@@ -959,7 +963,7 @@ public class ElementImpl implements Element {
         boolean found = false;
         long timeLapse;
         StopWatch stopwatch = new StopWatch();
-        TestReporter.interfaceLog("<i>Syncing to text [<b>" + text + "</b> ] in element [<b>"
+        interfaceLog("<i>Syncing to text [<b>" + text + "</b> ] in element [<b>"
                 + getElementLocatorInfo() + "</b> ] to be displayed within [ <b>" + timeout + "</b> ] seconds.</i>");
 
         WebDriverWait wait = new WebDriverWait(driver, 0);
@@ -987,7 +991,7 @@ public class ElementImpl implements Element {
 
         if (!found && failTestOnSync) {
             Highlight.highlightError(driver, element);
-            TestReporter.interfaceLog(
+            interfaceLog(
                     "<i>Element [<b>" + getElementLocatorInfo() + " </b>] did not contain the text [ " + text
                             + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
             throw new TextInElementNotPresentException(
@@ -995,19 +999,19 @@ public class ElementImpl implements Element {
                             + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.",
                     driver);
         } else if (!found) {
-            TestReporter.interfaceLog(
+            interfaceLog(
                     "<i>Element [<b>" + getElementLocatorInfo() + " </b>] did not contain the text [ " + text
                             + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
-            TestReporter.logTrace("Exiting ElementImpl#syncTextInElement");
+            logTrace("Exiting ElementImpl#syncTextInElement");
             return found;
         }
-        TestReporter.interfaceLog(
+        interfaceLog(
                 "<i>Element [<b>" + getElementLocatorInfo() + " </b>] contains the text [ " + text
                         + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
         if (Highlight.getDebugMode()) {
             Highlight.highlightSuccess(driver, reload());
         }
-        TestReporter.logTrace("Exiting ElementImpl#syncTextInElement");
+        logTrace("Exiting ElementImpl#syncTextInElement");
         return found;
     }
 
@@ -1030,7 +1034,7 @@ public class ElementImpl implements Element {
      */
     @Override
     public boolean syncTextMatchesInElement(String regex, Object... args) {
-        TestReporter.logTrace("Entering ElementImpl#syncTextMatchesInElement");
+        logTrace("Entering ElementImpl#syncTextMatchesInElement");
         int timeout = getWrappedDriver().getElementTimeout();
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
         try {
@@ -1046,7 +1050,7 @@ public class ElementImpl implements Element {
         boolean found = false;
         long timeLapse;
         StopWatch stopwatch = new StopWatch();
-        TestReporter.interfaceLog("<i>Syncing to text regular expression [<b>" + regex + "</b> ] in element [<b>"
+        interfaceLog("<i>Syncing to text regular expression [<b>" + regex + "</b> ] in element [<b>"
                 + getElementLocatorInfo() + "</b> ] to be displayed within [ <b>" + timeout + "</b> ] seconds.</i>");
         stopwatch.start();
         WebDriverWait wait = new WebDriverWait(driver, 0);
@@ -1073,7 +1077,7 @@ public class ElementImpl implements Element {
 
         if (!found && failTestOnSync) {
             Highlight.highlightError(driver, reload());
-            TestReporter.interfaceLog(
+            interfaceLog(
                     "<i>Element [<b>" + getElementLocatorInfo() + " </b>] did not contain the text [ " + regex
                             + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
             throw new TextInElementNotPresentException(
@@ -1081,20 +1085,20 @@ public class ElementImpl implements Element {
                             + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.",
                     driver);
         } else if (!found) {
-            TestReporter.interfaceLog(
+            interfaceLog(
                     "<i>Element [<b>" + getElementLocatorInfo() + " </b>] did not contain the text [ " + regex
                             + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
-            TestReporter.logTrace("Exiting ElementImpl#syncTextMatchesInElement");
+            logTrace("Exiting ElementImpl#syncTextMatchesInElement");
             return found;
         }
 
-        TestReporter.interfaceLog(
+        interfaceLog(
                 "<i>Element [<b>" + getElementLocatorInfo() + " </b>] contains the text [ " + regex
                         + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
         if (Highlight.getDebugMode()) {
             Highlight.highlightSuccess(driver, reload());
         }
-        TestReporter.logTrace("Exiting ElementImpl#syncTextMatchesInElement");
+        logTrace("Exiting ElementImpl#syncTextMatchesInElement");
         return found;
     }
 
@@ -1119,7 +1123,7 @@ public class ElementImpl implements Element {
      */
     @Override
     public boolean syncAttributeContainsValue(String attribute, String value, Object... args) {
-        TestReporter.logTrace("Entering ElementImpl#syncAttributeContainsValue");
+        logTrace("Entering ElementImpl#syncAttributeContainsValue");
         int timeout = getWrappedDriver().getElementTimeout();
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
         try {
@@ -1134,7 +1138,7 @@ public class ElementImpl implements Element {
         boolean found = false;
         long timeLapse;
         StopWatch stopwatch = new StopWatch();
-        TestReporter.interfaceLog("<i>Syncing to attribute [<b> " + attribute + "</b> ] to contain [<b> " + value + "</b> ] in element [<b>"
+        interfaceLog("<i>Syncing to attribute [<b> " + attribute + "</b> ] to contain [<b> " + value + "</b> ] in element [<b>"
                 + getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + timeout + "</b> ] seconds.</i>");
         stopwatch.start();
         WebDriverWait wait = new WebDriverWait(driver, 1);
@@ -1155,7 +1159,7 @@ public class ElementImpl implements Element {
 
         if (!found && failTestOnSync) {
             Highlight.highlightError(driver, reload());
-            TestReporter.interfaceLog(
+            interfaceLog(
                     "<i>Element [<b>" + getElementLocatorInfo() + " </b>] attribute [<b>" + attribute + "</b> ] did not contain the text [ " + value
                             + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
             throw new ElementAttributeValueNotMatchingException(
@@ -1163,20 +1167,20 @@ public class ElementImpl implements Element {
                             + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.",
                     driver);
         } else if (!found) {
-            TestReporter.interfaceLog(
+            interfaceLog(
                     "<i>Element [<b>" + getElementLocatorInfo() + " </b>] attribute [<b>" + attribute + "</b> ] did not contain the text [ " + value
                             + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
-            TestReporter.logTrace("Exiting ElementImpl#syncAttributeContainsValue");
+            logTrace("Exiting ElementImpl#syncAttributeContainsValue");
             return found;
         }
 
-        TestReporter.interfaceLog(
+        interfaceLog(
                 "<i>Element [<b>" + getElementLocatorInfo() + " </b>] attribute [<b>" + attribute + "</b> ] contains the text [ " + value
                         + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
         if (Highlight.getDebugMode()) {
             Highlight.highlightSuccess(driver, reload());
         }
-        TestReporter.logTrace("Exiting ElementImpl#syncAttributeContainsValue");
+        logTrace("Exiting ElementImpl#syncAttributeContainsValue");
         return found;
     }
 
@@ -1201,7 +1205,7 @@ public class ElementImpl implements Element {
      */
     @Override
     public boolean syncAttributeMatchesValue(String attribute, String regex, Object... args) {
-        TestReporter.logTrace("Entering ElementImpl#syncAttributeMatchesValue");
+        logTrace("Entering ElementImpl#syncAttributeMatchesValue");
         int timeout = getWrappedDriver().getElementTimeout();
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
         try {
@@ -1217,7 +1221,7 @@ public class ElementImpl implements Element {
         boolean found = false;
         long timeLapse;
         StopWatch stopwatch = new StopWatch();
-        TestReporter.interfaceLog("<i>Syncing to attribute [<b> " + attribute + "</b> ] to match the regular expression of [<b> " + regex + "</b> ] in element [<b>"
+        interfaceLog("<i>Syncing to attribute [<b> " + attribute + "</b> ] to match the regular expression of [<b> " + regex + "</b> ] in element [<b>"
                 + getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + timeout + "</b> ] seconds.</i>");
         WebDriverWait wait = new WebDriverWait(driver, 1);
 
@@ -1239,7 +1243,7 @@ public class ElementImpl implements Element {
 
         if (!found && failTestOnSync) {
             Highlight.highlightError(driver, reload());
-            TestReporter.interfaceLog(
+            interfaceLog(
                     "<i>Element [<b>" + getElementLocatorInfo() + " </b>] attribute [<b>" + attribute + "</b> ] did not match the regular expression of [ " + regex
                             + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
             throw new ElementAttributeValueNotMatchingException(
@@ -1247,19 +1251,19 @@ public class ElementImpl implements Element {
                             + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.",
                     driver);
         } else if (!found) {
-            TestReporter.interfaceLog(
+            interfaceLog(
                     "<i>Element [<b>" + getElementLocatorInfo() + " </b>] attribute [<b>" + attribute + "</b> ] did not match the regular expression of [ " + regex
                             + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
-            TestReporter.logTrace("Exiting ElementImpl#syncAttributeMatchesValue");
+            logTrace("Exiting ElementImpl#syncAttributeMatchesValue");
             return found;
         }
-        TestReporter.interfaceLog(
+        interfaceLog(
                 "<i>Element [<b>" + getElementLocatorInfo() + " </b>] attribute [<b>" + attribute + "</b> ] matches the regular expression of [ " + regex
                         + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
         if (Highlight.getDebugMode()) {
             Highlight.highlightSuccess(driver, reload());
         }
-        TestReporter.logTrace("Exiting ElementImpl#syncAttributeMatchesValue");
+        logTrace("Exiting ElementImpl#syncAttributeMatchesValue");
         return found;
     }
 
@@ -1284,7 +1288,7 @@ public class ElementImpl implements Element {
      */
     @Override
     public boolean syncCssPropertyContainsValue(String cssProperty, String value, Object... args) {
-        TestReporter.logTrace("Entering ElementImpl#syncCssPropertyContainsValue");
+        logTrace("Entering ElementImpl#syncCssPropertyContainsValue");
         int timeout = getWrappedDriver().getElementTimeout();
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
         try {
@@ -1300,7 +1304,7 @@ public class ElementImpl implements Element {
         boolean found = false;
         long timeLapse;
         StopWatch stopwatch = new StopWatch();
-        TestReporter.interfaceLog("<i>Syncing to CSS Property [<b> " + cssProperty + "</b> ] to contain [<b> " + value + "</b> ] in element [<b>"
+        interfaceLog("<i>Syncing to CSS Property [<b> " + cssProperty + "</b> ] to contain [<b> " + value + "</b> ] in element [<b>"
                 + getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + timeout + "</b> ] seconds.</i>");
 
         WebDriverWait wait = new WebDriverWait(driver, 1);
@@ -1322,26 +1326,26 @@ public class ElementImpl implements Element {
 
         if (!found && failTestOnSync) {
             Highlight.highlightError(driver, reload());
-            TestReporter.interfaceLog(
+            interfaceLog(
                     "<i>Element [<b>" + getElementLocatorInfo() + " </b>] CSS Property [<b>" + cssProperty + "</b> ] did not contain the text [ " + value
                             + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
             throw new ElementCssValueNotMatchingException("Element [ " + getElementLocatorInfo() + " ] CSS Property [" + cssProperty + " ] did not contain the text [ " + value
                     + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.", driver);
         } else if (!found) {
-            TestReporter.interfaceLog(
+            interfaceLog(
                     "<i>Element [<b>" + getElementLocatorInfo() + " </b>] CSS Property [<b>" + cssProperty + "</b> ] did not contain the text [ " + value
                             + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
-            TestReporter.logTrace("Exiting ElementImpl#syncCssPropertyContainsValue");
+            logTrace("Exiting ElementImpl#syncCssPropertyContainsValue");
             return found;
         }
 
-        TestReporter.interfaceLog(
+        interfaceLog(
                 "<i>Element [<b>" + getElementLocatorInfo() + " </b>] CSS Property [<b>" + cssProperty + "</b> ] contains the text [ " + value
                         + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
         if (Highlight.getDebugMode()) {
             Highlight.highlightSuccess(driver, reload());
         }
-        TestReporter.logTrace("Exiting ElementImpl#syncCssPropertyContainsValue");
+        logTrace("Exiting ElementImpl#syncCssPropertyContainsValue");
         return found;
     }
 
@@ -1366,7 +1370,7 @@ public class ElementImpl implements Element {
      */
     @Override
     public boolean syncCssPropertyMatchesValue(String cssProperty, String regex, Object... args) {
-        TestReporter.logTrace("Entering ElementImpl#syncCssPropertyMatchesValue");
+        logTrace("Entering ElementImpl#syncCssPropertyMatchesValue");
         int timeout = getWrappedDriver().getElementTimeout();
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
         try {
@@ -1382,7 +1386,7 @@ public class ElementImpl implements Element {
         boolean found = false;
         long timeLapse;
         StopWatch stopwatch = new StopWatch();
-        TestReporter.interfaceLog("<i>Syncing to CSS Property [<b> " + cssProperty + "</b> ] to contain [<b> " + regex + "</b> ] in element [<b>"
+        interfaceLog("<i>Syncing to CSS Property [<b> " + cssProperty + "</b> ] to contain [<b> " + regex + "</b> ] in element [<b>"
                 + getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + timeout + "</b> ] seconds.</i>");
         WebDriverWait wait = new WebDriverWait(driver, 0);
         stopwatch.start();
@@ -1403,7 +1407,7 @@ public class ElementImpl implements Element {
 
         if (!found && failTestOnSync) {
             Highlight.highlightError(driver, reload());
-            TestReporter.interfaceLog(
+            interfaceLog(
                     "<i>Element [<b>" + getElementLocatorInfo() + " </b>] CSS Property [<b>" + cssProperty + "</b> ] did not match the regular expression of [ " + regex
                             + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
             throw new ElementCssValueNotMatchingException(
@@ -1411,26 +1415,26 @@ public class ElementImpl implements Element {
                             + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.",
                     driver);
         } else if (!found) {
-            TestReporter.interfaceLog(
+            interfaceLog(
                     "<i>Element [<b>" + getElementLocatorInfo() + " </b>] CSS Property [<b>" + cssProperty + "</b> ] did not match the regular expression of [ " + regex
                             + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
-            TestReporter.logTrace("Exiting ElementImpl#syncCssPropertyMatchesValue");
+            logTrace("Exiting ElementImpl#syncCssPropertyMatchesValue");
             return found;
         }
-        TestReporter.interfaceLog(
+        interfaceLog(
                 "<i>Element [<b>" + getElementLocatorInfo() + " </b>] CSS Property [<b>" + cssProperty + "</b> ] matches the regular expression of [ " + regex
                         + " ] after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
         if (Highlight.getDebugMode()) {
             Highlight.highlightSuccess(driver, reload());
         }
-        TestReporter.logTrace("Exiting ElementImpl#syncCssPropertyMatchesValue");
+        logTrace("Exiting ElementImpl#syncCssPropertyMatchesValue");
         return found;
     }
 
     @Beta
     protected WebElement reload() {
-        TestReporter.logTrace("Entering ElementImpl#reload");
-        TestReporter.logTrace("Search DOM for element [ " + by.toString() + " ]");
+        logTrace("Entering ElementImpl#reload");
+        logTrace("Search DOM for element [ " + by.toString() + " ]");
         WebElement el = null;
         try {
             WebDriverWait wait = new WebDriverWait(getWrappedDriver().getWebDriver(), getWrappedDriver().getElementTimeout());
@@ -1438,15 +1442,15 @@ public class ElementImpl implements Element {
         } catch (WebDriverException wde) {
             throw new NoSuchElementException("Failed locate element [ " + by.toString() + " ]");
         }
-        TestReporter.logTrace("Found element [ " + by.toString() + " ]");
-        TestReporter.logTrace("Exiting ElementImpl#reload");
+        logTrace("Found element [ " + by.toString() + " ]");
+        logTrace("Exiting ElementImpl#reload");
         return el;
     }
 
     @Override
     @Beta
     public boolean syncInFrame(Object... args) {
-        TestReporter.logTrace("Entering ElementImpl#syncInFrame");
+        logTrace("Entering ElementImpl#syncInFrame");
         final String action = "<b>FOUND IN FRAME</b>";
         int originalDriverTimeout = getWrappedDriver().getElementTimeout();
         int timeout = getWrappedDriver().getElementTimeout();
@@ -1462,7 +1466,7 @@ public class ElementImpl implements Element {
         } catch (ArrayIndexOutOfBoundsException aiobe) {
         }
 
-        TestReporter.interfaceLog("<i>Syncing to element [<b>" + getElementLocatorInfo()
+        interfaceLog("<i>Syncing to element [<b>" + getElementLocatorInfo()
                 + "</b> ] to be " + action + " within [ <b>" + timeout + "</b> ] seconds.</i>");
 
         StopWatch stopwatch = new StopWatch();
@@ -1482,8 +1486,8 @@ public class ElementImpl implements Element {
         stopwatch.reset();
 
         if (!found && failTestOnSync) {
-            TestReporter.logTrace("Element not " + action + " and failTestOnSync is [ TRUE ]");
-            TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
+            logTrace("Element not " + action + " and failTestOnSync is [ TRUE ]");
+            interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
                     + " </b>] is not " + action + " on the page after [ "
                     + (timeLapse) / 1000.0 + " ] seconds.</i>");
             throw new ElementNotFoundInFrameException(
@@ -1491,17 +1495,17 @@ public class ElementImpl implements Element {
                             + (timeLapse) / 1000.0 + " ] seconds.",
                     driver);
         } else if (!found) {
-            TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
+            interfaceLog("<i>Element [<b>" + getElementLocatorInfo()
                     + " </b>] is not " + action + " on the page after [ "
                     + (timeLapse) / 1000.0 + " ] seconds.</i>");
-            TestReporter.logTrace("Exiting ElementImpl#syncInFrame");
+            logTrace("Exiting ElementImpl#syncInFrame");
             getWrappedDriver().setElementTimeout(originalDriverTimeout);
             return found;
         }
 
-        TestReporter.interfaceLog("<i>Element [<b>" + getElementLocatorInfo() + " </b>] is " + action + " on the page after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
+        interfaceLog("<i>Element [<b>" + getElementLocatorInfo() + " </b>] is " + action + " on the page after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
         getWrappedDriver().setElementTimeout(originalDriverTimeout);
-        TestReporter.logTrace("Exiting ElementImpl#syncInFrame");
+        logTrace("Exiting ElementImpl#syncInFrame");
         return found;
     }
 

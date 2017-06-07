@@ -1,22 +1,22 @@
 package com.orasi.utils.dataHelpers.personFactory;
 
-import java.util.ArrayList;
+import static com.orasi.utils.TestReporter.logTrace;
 
-import com.orasi.utils.TestReporter;
+import java.util.ArrayList;
 
 public class Party {
 
     private ArrayList<Person> party = new ArrayList<Person>();
 
     public Party(int numberOfPeople) {
-        TestReporter.logTrace("Entering Party#init with number of People");
-        TestReporter.logTrace("Creating party with [" + numberOfPeople + "] party");
+        logTrace("Entering Party#init with number of People");
+        logTrace("Creating party with [" + numberOfPeople + "] party");
 
         for (int x = 0; x < numberOfPeople; x++) {
-            TestReporter.logTrace("Generating Person [" + (x + 1) + "]");
+            logTrace("Generating Person [" + (x + 1) + "]");
             addPerson(new Person());
 
-            TestReporter.logTrace("Setting Person [" + (x + 1) + "] Address, Phone and Email to primary Person");
+            logTrace("Setting Person [" + (x + 1) + "] Address, Phone and Email to primary Person");
             party.get(x).getAllAddresses().get(0).setPrimary(true);
             party.get(x).getAllAddresses().get(0).setStreetName(party.get(0).primaryAddress().getStreetName());
             party.get(x).getAllAddresses().get(0).setStreetNumber(party.get(0).primaryAddress().getStreetNumber());
@@ -27,17 +27,17 @@ public class Party {
             party.get(x).getAllAddresses().get(0).setOptIn(true);
             party.get(x).getAllPhones().get(0).setPrimary(true);
             party.get(x).getAllEmails().get(0).setPrimary(true);
-            TestReporter.logTrace("\n" + party.get(x).toString().replace("<br/>", "\n"));
+            logTrace("\n" + party.get(x).toString().replace("<br/>", "\n"));
         }
 
-        TestReporter.logTrace("Set first Person as Primary Person");
+        logTrace("Set first Person as Primary Person");
         party.get(0).setPrimary(true);
-        TestReporter.logTrace("Ensure first Person is older than 18");
+        logTrace("Ensure first Person is older than 18");
         if (Integer.parseInt(party.get(0).getAge()) <= 18) {
             party.get(0).setAge("45");
             party.get(0).setBirthDate("1970-01-14");
         }
-        TestReporter.logTrace("Entering Party#init with number of Persons");
+        logTrace("Entering Party#init with number of Persons");
     }
 
     /**

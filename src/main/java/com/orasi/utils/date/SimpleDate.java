@@ -11,6 +11,9 @@ import java.util.Date;
  */
 public class SimpleDate {
 
+    public final static int CURRENT_YEAR = Calendar.getInstance().get(Calendar.YEAR);
+    public final static int CURRENT_MONTH = Calendar.getInstance().get(Calendar.MONTH);
+    public final static int CURRENT_DAY = Calendar.getInstance().get(Calendar.DATE);
     public static final String MONTHS[] = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
 
     private Calendar calendar = Calendar.getInstance();
