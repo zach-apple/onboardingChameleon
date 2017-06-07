@@ -11,7 +11,7 @@ Orasi is a software and professional services company focused on software qualit
 Licensed under [BSD License](/License)
 
 ## IDE Profiles
-It is recommend to use an IDE profile in order to promote code consistency and reduce unneeded code changes in your SCM. In the etc folder of this project exists profiles tailored to achieve this.
+It is recommend to use an IDE profile in order to promote code consistency and reduce unneeded code changes in your SCM. In the [etc folder](./etc) of this project exists profiles tailored to achieve this.
 
 ## Web Application Testing
 
@@ -33,11 +33,11 @@ All elements utilize the Orasi-developed [TestReporter](https://github.com/Orasi
 
 ## API Web Service Testing
 
-###SOAP Services 
+### SOAP Services 
  
 These libraries contain a SOAP API testing solution which leverages Java and W3C functionalities to dynamically build requests at runtime, modify the requests, transmit and receive SOAP messages, and parse responses for field-level values with which validation can be performed. 
 
-###REST Services  
+### REST Services  
   
 These libraries contain a SOAP API testing solution which leverages the Apache HttpClient libraries. Full XML and JSON support is included to parse responses for field-level values with which validation can be performed. 
 
@@ -127,9 +127,8 @@ The various parts are described below:
 
 ## Third Party Resources
 These resources are being used directly, or have been extended upon.
-* [Selenium 2.47.2](https://github.com/SeleniumHQ/selenium): The base library that allows for automation of web browsers.
-* [TestNG 6.8.21](https://github.com/cbeust/testng/): Test execution framework that extends JUnit tests and allows more flexibility for testing.
-* [Smartbear SoapUI 4.5.0](https://github.com/SmartBear/soapui): Allows consumer to build requests files at runtime and sends request through HTTPClient
-* [Sauce Labs 2.1.18](https://github.com/saucelabs/sauce-java): Facilitates the use of using the Sauce Lab VM farm as a remote Selenium grid on which to execute tests.
-* [Apache HttpClient 4.3.1](https://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/index.html) Used to transmit and receive SOAP and REST message requests and responses.
-* [Allure Reports for TestNG 1.4.13](http://allure.qatools.ru/): Generates high level executive reporting
+* [Selenium](https://github.com/SeleniumHQ/selenium): The base library that allows for automation of web browsers.
+* [TestNG](https://github.com/cbeust/testng/): Test execution framework that extends JUnit tests and allows more flexibility for testing.
+* [Sauce Labs](https://github.com/saucelabs/sauce-java): Facilitates the use of using the Sauce Lab VM farm as a remote Selenium grid on which to execute tests.
+* [Apache HttpClient](https://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/index.html) Used to transmit and receive SOAP and REST message requests and responses.
+* [Allure Reports for TestNG](http://allure.qatools.ru/): Generates high level executive reporting
