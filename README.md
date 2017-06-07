@@ -10,6 +10,9 @@ Orasi is a software and professional services company focused on software qualit
 # License
 Licensed under [BSD License](/License)
 
+## IDE Profiles
+It is recommend to use an IDE profile in order to promote code consistency and reduce unneeded code changes in your SCM. In the etc folder of this project exists profiles tailored to achieve this.
+
 ## Web Application Testing
 
 The core code uses the Java-based Selenium webdriver for GUI testing. It takes the standard Selenium-defined WebElement and divides them into more consumer-friendly Elements, whose names are commonly found in HTML DOMs. The following are Elements, and the prefixes used in the code to identify them, as well as examples using the naming conventions:
