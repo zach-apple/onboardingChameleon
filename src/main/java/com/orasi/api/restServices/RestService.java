@@ -85,14 +85,7 @@ public class RestService {
         HttpGet request = new HttpGet(url);
 
         if (params != null) {
-            String allParams = "";
-            for (NameValuePair param : params) {
-                allParams += "[" + param.getName() + ": " + param.getValue() + "] ";
-            }
-            logInfo("Adding Parameters " + allParams);
-            url = url + "?" + URLEncodedUtils.format(params, "utf-8");
-            logInfo("URL with params: " + url);
-            request = new HttpGet(url);
+            request = new HttpGet(createQueryParamUrl(url, params));
         }
 
         if (type != null) {
@@ -109,30 +102,17 @@ public class RestService {
         logTrace("Creating Http POST instance with URL of [ " + url + " ]");
         HttpPost httppost = new HttpPost(url);
 
-        try {
-            if (params != null) {
-                String allParams = "";
-                for (NameValuePair param : params) {
-                    allParams += "[" + param.getName() + ": " + param.getValue() + "] ";
-                }
-                logInfo("Adding Parameters " + allParams);
-                url = url + "?" + URLEncodedUtils.format(params, "utf-8");
-                logInfo("URL with params: " + url);
-                httppost = new HttpPost(url);
-            }
+        if (params != null) {
+            httppost = new HttpPost(createQueryParamUrl(url, params));
+        }
 
-            if (json != null) {
-                logInfo("Adding json " + json);
-                httppost.setEntity(new ByteArrayEntity(json.getBytes("UTF-8")));
-            }
+        if (json != null) {
+            logInfo("Adding json " + json);
+            httppost.setEntity(createJsonEntity(json));
+        }
 
-            if (type != null) {
-                httppost.setHeaders(Headers.createHeader(type));
-            }
-
-        } catch (UnsupportedEncodingException e) {
-            // This literally cannot be reached, but has to be checked anyway
-            throw new RestException(e.getMessage(), e);
+        if (type != null) {
+            httppost.setHeaders(Headers.createHeader(type));
         }
 
         RestResponse response = sendRequest(httppost);
@@ -179,29 +159,16 @@ public class RestService {
         logTrace("Creating Http PUT instance with URL of [ " + url + " ]");
         HttpPut httpPut = new HttpPut(url);
 
-        try {
-            if (params != null) {
-                String allParams = "";
-                for (NameValuePair param : params) {
-                    allParams += "[" + param.getName() + ": " + param.getValue() + "] ";
-                }
-                logInfo("Adding Parameters " + allParams);
-                url = url + "?" + URLEncodedUtils.format(params, "utf-8");
-                logInfo("URL with params: " + url);
-                httpPut = new HttpPut(url);
-            }
+        if (params != null) {
+            httpPut = new HttpPut(createQueryParamUrl(url, params));
+        }
 
-            if (json != null) {
-                logInfo("Adding json " + json);
-                httpPut.setEntity(new ByteArrayEntity(json.getBytes("UTF-8")));
-            }
-            if (type != null) {
-                httpPut.setHeaders(Headers.createHeader(type));
-            }
-
-        } catch (UnsupportedEncodingException e) {
-            // This literally cannot be reached, but has to be checked anyway
-            throw new RestException(e.getMessage(), e);
+        if (json != null) {
+            logInfo("Adding json " + json);
+            httpPut.setEntity(createJsonEntity(json));
+        }
+        if (type != null) {
+            httpPut.setHeaders(Headers.createHeader(type));
         }
 
         RestResponse response = sendRequest(httpPut);
@@ -245,28 +212,16 @@ public class RestService {
         logTrace("Creating Http PATCH instance with URL of [ " + url + " ]");
         HttpPatch httpPatch = new HttpPatch(url);
         if (params != null) {
-            String allParams = "";
-            for (NameValuePair param : params) {
-                allParams += "[" + param.getName() + ": " + param.getValue() + "] ";
-            }
-            logInfo("Adding Parameters " + allParams);
-            url = url + "?" + URLEncodedUtils.format(params, "utf-8");
-            logInfo("URL with params: " + url);
-            httpPatch = new HttpPatch(url);
+            httpPatch = new HttpPatch(createQueryParamUrl(url, params));
         }
 
         if (type != null) {
             httpPatch.setHeaders(Headers.createHeader(type));
         }
 
-        try {
-            if (json != null) {
-                logInfo("Adding json [" + json + "]");
-                httpPatch.setEntity(new ByteArrayEntity(json.getBytes("UTF-8")));
-            }
-        } catch (UnsupportedEncodingException e) {
-            // This literally cannot be reached, but has to be checked anyway
-            throw new RestException(e.getMessage(), e);
+        if (json != null) {
+            logInfo("Adding json [" + json + "]");
+            httpPatch.setEntity(createJsonEntity(json));
         }
 
         RestResponse response = sendRequest(httpPatch);
@@ -318,14 +273,7 @@ public class RestService {
         HttpDelete httpDelete = new HttpDelete(url);
 
         if (params != null) {
-            String allParams = "";
-            for (NameValuePair param : params) {
-                allParams += "[" + param.getName() + ": " + param.getValue() + "] ";
-            }
-            logInfo("Adding Parameters " + allParams);
-            url = url + "?" + URLEncodedUtils.format(params, "utf-8");
-            logInfo("URL with params: " + url);
-            httpDelete = new HttpDelete(url);
+            httpDelete = new HttpDelete(createQueryParamUrl(url, params));
         }
 
         if (type != null) {
@@ -434,5 +382,28 @@ public class RestService {
             throw new RestException("Failed to output JSON", e);
         }
         return map;
+    }
+
+    private String createQueryParamUrl(String url, List<NameValuePair> params) {
+        String allParams = "";
+        for (NameValuePair param : params) {
+            allParams += "[" + param.getName() + ": " + param.getValue() + "] ";
+        }
+        logInfo("Adding Parameters " + allParams);
+        url = url + "?" + URLEncodedUtils.format(params, "utf-8");
+        logInfo("URL with params: " + url);
+        return url;
+    }
+
+    private ByteArrayEntity createJsonEntity(String json) {
+        ByteArrayEntity entity = null;
+        try {
+            entity = new ByteArrayEntity(json.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            // This literally cannot be reached, but has to be checked anyway
+            throw new RestException(e.getMessage(), e);
+        }
+
+        return entity;
     }
 }

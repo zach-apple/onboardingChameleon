@@ -35,8 +35,6 @@ public class FileLoader {
     public static BufferedReader openTextFileFromProject(String filePath) throws IOException {
         logTrace("Entering FileLoader#openFileFromProject");
         filePath = filePath.replace("%20", " ");
-        BufferedReader bufferedReader = null;
-
         if (!filePath.startsWith("/")) {
             filePath = "/" + filePath;
         }
@@ -45,20 +43,16 @@ public class FileLoader {
         }
 
         logTrace("Attempting to load file from path [ " + filePath + " ]");
+        FileReader fileReader = new FileReader(getAbosutePathForResource(filePath));
+        logTrace("Successfully loaded file into FileReader");
 
-        logTrace("Loading file into FileReader");
-        try (FileReader fileReader = new FileReader(getAbosutePathForResource(filePath))) {
-            logTrace("Successfully loaded file into FileReader");
-
-            logTrace("Loading FileReader object into BufferedReader");
-            bufferedReader = new BufferedReader(fileReader);
-            logTrace("Successfully loaded FileReader object into BufferedReader");
-        }
+        logTrace("Loading FileReader object into BufferedReader");
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        logTrace("Successfully loaded FileReader object into BufferedReader");
 
         logTrace("File successfully loaded");
         logTrace("Exiting FileLoader#openFileFromProject");
         return bufferedReader;
-
     }
 
     public static boolean isReadableFile(String filePath) {

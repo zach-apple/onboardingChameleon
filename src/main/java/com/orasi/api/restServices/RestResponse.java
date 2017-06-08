@@ -1,5 +1,6 @@
 package com.orasi.api.restServices;
 
+import static com.orasi.api.restServices.ResponseCodes.NO_CONTENT;
 import static com.orasi.utils.TestReporter.logInfo;
 import static com.orasi.utils.TestReporter.logTrace;
 
@@ -76,7 +77,7 @@ public class RestResponse {
         logTrace("Successfully stored Response Format [ " + responseFormat + " ]");
 
         try {
-            if (statusCode != 204 || response.getEntity() != null) {
+            if (statusCode != NO_CONTENT || response.getEntity() != null) {
                 logTrace("Retrieve Response Body as String");
                 responseAsString = EntityUtils.toString(response.getEntity());
                 logInfo("Response Status returned [" + httpResponse.getStatusLine() + "]");
