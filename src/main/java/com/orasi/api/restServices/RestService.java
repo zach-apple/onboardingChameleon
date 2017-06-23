@@ -8,10 +8,11 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import org.apache.commons.lang3.time.StopWatch;
 import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpOptions;
@@ -21,6 +22,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.LaxRedirectStrategy;
 
@@ -35,16 +37,6 @@ import com.orasi.exception.automation.DataProviderInputFileNotFound;
 import com.orasi.utils.io.FileLoader;
 
 public class RestService {
-    private HttpClient httpClient = null;
-
-    // constructor
-    public RestService() {
-        logTrace("Entering RestService#init");
-        logTrace("Creating Http Client instance");
-        httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
-        logTrace("Successfully created Http Client instance");
-        logTrace("Exiting RestService#init");
-    }
 
     /**
      * Sends a GET request to a URL
@@ -336,9 +328,14 @@ public class RestService {
     private RestResponse sendRequest(HttpUriRequest request) {
         logTrace("Entering RestService#sendRequest");
         RestResponse response = null;
-        try {
+
+        try (CloseableHttpClient httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build()) {
             logTrace("Sending request");
-            response = new RestResponse(request, httpClient.execute(request));
+            StopWatch execution = StopWatch.createStarted();
+            HttpResponse httpResponse = httpClient.execute(request);
+            execution.stop();
+            String executionTime = execution.toString();
+            response = new RestResponse(request, httpResponse, executionTime);
         } catch (IOException e) {
             throw new RestException("Failed to send request to " + request.getURI().toString(), e);
         }

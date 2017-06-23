@@ -43,7 +43,7 @@ public class TestReporter {
     private static int debugLevel = 0;
 
     /**
-     * 
+     *
      * @param level
      *            - Options below <br/>
      *            TestReporter.NONE : (Default) - No additional info printed to console <br/>
@@ -155,7 +155,7 @@ public class TestReporter {
 
     /**
      * Use to output low-level granular steps
-     * 
+     *
      * @param message
      */
     public static void logTrace(String message) {
@@ -167,7 +167,7 @@ public class TestReporter {
 
     /**
      * Use to output useful information such as URL's, parameters, and RQ/RS
-     * 
+     *
      * @param message
      */
     public static void logInfo(String message) {
@@ -179,7 +179,7 @@ public class TestReporter {
 
     /**
      * Use to output useful information such as URL's, parameters, and RQ/RS
-     * 
+     *
      * @param message
      */
     public static void logDebug(String message) {
@@ -464,20 +464,20 @@ public class TestReporter {
         }
     }
 
-    public static void logAPI(boolean pass, String message, SoapService bs) {
+    public static void logAPI(boolean pass, String message, SoapService sp) {
         String failFormat = "";
         if (!pass) {
             failFormat = "<font size = 2 color=\"red\">";
             logFailure(message);
         }
-        String request = bs.getRequest().replaceAll("</*>", "</*>");
-        String response = bs.getResponse();
-        Reporter.log("<font size = 2><b>Endpoint: " + bs.getServiceURL() + "</b></font><br/>" + failFormat + "<b><br/> SOAP REQUEST [ " + bs.getServiceName() + "#" + bs.getOperationName() + " ] </b></font>");
+        String request = sp.getRequest().replaceAll("</*>", "</*>");
+        String response = sp.getResponse();
+        Reporter.log("<font size = 2><b>Endpoint: " + sp.getServiceURL() + "</b></font><br/>" + failFormat + "<b><br/> SOAP REQUEST [ " + sp.getServiceName() + "#" + sp.getOperationName() + " ] </b></font>");
         Reporter.setEscapeHtml(true);
         Reporter.log(request);
         Reporter.setEscapeHtml(false);
         Reporter.log("<br/><br/>");
-        Reporter.log(failFormat + "<b> SOAP RESPONSE [ " + bs.getServiceName() + "#" + bs.getOperationName() + " ] </b></font>");
+        Reporter.log(failFormat + "<b> SOAP RESPONSE [ " + sp.getServiceName() + "#" + sp.getOperationName() + " ]. Execution time: [ " + sp.getExecutionTime() + " ]</b></font>");
         Reporter.setEscapeHtml(true);
         Reporter.log(response);
         Reporter.setEscapeHtml(false);
@@ -499,7 +499,7 @@ public class TestReporter {
         Reporter.log(rs.getRequestBody().replaceAll("</*>", "</*>"));
         Reporter.setEscapeHtml(false);
         Reporter.log("<br/>");
-        Reporter.log(failFormat + "<br/><b>REST RESPONSE</b></font>");
+        Reporter.log(failFormat + "<br/><b>REST RESPONSE. Execution time: [ " + rs.getExecutionTime() + " ]</b></font>");
         Reporter.setEscapeHtml(true);
         Reporter.log(rs.getResponse());
         Reporter.setEscapeHtml(false);

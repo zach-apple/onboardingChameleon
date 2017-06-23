@@ -35,8 +35,9 @@ public class RestResponse {
     private String responseFormat = "";
     private String responseAsString = "";
     private String url = "";
+    private String executionTime = "";
 
-    public RestResponse(HttpUriRequest request, HttpResponse httpResponse) {
+    public RestResponse(HttpUriRequest request, HttpResponse httpResponse, String executionTime) {
         logTrace("Entering RestResponse#init");
         logTrace("Creating RestResponse based on original HttpRequest and HttpResponse");
 
@@ -128,6 +129,10 @@ public class RestResponse {
             }
         }
         return null;
+    }
+
+    public String getExecutionTime() {
+        return executionTime;
     }
 
     /**

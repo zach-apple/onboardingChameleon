@@ -27,6 +27,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.lang3.time.StopWatch;
 import org.testng.Reporter;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -55,6 +56,7 @@ public abstract class SoapService {
     private String soapVersion = SOAPConstants.SOAP_1_1_PROTOCOL;
     private Map<String, String> requestHeaders = new HashMap<String, String>();
     private MimeHeaders responseHeaders = null;
+    private String executionTime;
 
     /*****************************
      **** Start Gets and Sets ****
@@ -266,6 +268,10 @@ public abstract class SoapService {
         requestHeaders.put(header, value);
     }
 
+    public String getExecutionTime() {
+        return executionTime;
+    }
+
     /***************************
      **** End Gets and Sets ****
      ***************************/
@@ -454,7 +460,10 @@ public abstract class SoapService {
             connection = connectionFactory.createConnection();
 
             logTrace("Send request to service");
+            StopWatch execution = StopWatch.createStarted();
             response = connection.call(request, url);
+            execution.stop();
+            executionTime = execution.toString();
 
             responseHeaders = response.getMimeHeaders();
 
@@ -468,6 +477,8 @@ public abstract class SoapService {
         } catch (IOException ioe) {
             throw new SoapException("Failed to read the request properly"
                     + ioe.getCause());
+        } finally {
+            closeSoapConnection(connection);
         }
 
         logTrace("Checking for faults");
@@ -476,13 +487,6 @@ public abstract class SoapService {
             intResponseStatusCode = newFault.getFaultCode();
         } else {
             intResponseStatusCode = "200";
-        }
-
-        try {
-            logTrace("Closing Soap connection");
-            connection.close();
-        } catch (SOAPException soape) {
-            throw new SoapException("Failed to close Soap Connection", soape.getCause());
         }
 
         logTrace("Convert response to XML document and store it");
@@ -884,6 +888,16 @@ public abstract class SoapService {
 
             default:
                 throw new SoapException("The command [" + command + " ] is not a valid command");
+        }
+    }
+
+    private void closeSoapConnection(SOAPConnection connection) {
+        try {
+            logDebug("Closing Soap Connection");
+            connection.close();
+
+        } catch (SOAPException soape) {
+            throw new SoapException("Failed to close Soap Connection", soape.getCause());
         }
     }
 }
