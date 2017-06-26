@@ -1,4 +1,4 @@
-package com.orasi.utils.database;
+package com.orasi.utils.database.exceptions;
 
 public class DatabaseException extends RuntimeException {
     private static final long serialVersionUID = -2738970905210023091L;
