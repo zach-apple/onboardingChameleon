@@ -8,7 +8,7 @@
 	<parameter name="browserUnderTest" value="chrome" />
 	<parameter name="environment" value="blah" />
 	<parameter name="runLocation" value="sauce" />
-	<parameter name="browserVersion" value="57" />
+	<parameter name="browserVersion" value="52" />
 	<parameter name="operatingSystem" value="windows 10" />
     <test name="Element" parallel="methods" thread-count="10">
 		<classes>
@@ -73,6 +73,18 @@
 	<test name="ByAngular" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.core.angular.TestByAngular" />
+		</classes>
+	</test>
+	
+	<test name="CSVDataProvider" parallel="methods" thread-count="20">
+		<classes>
+			<class name="com.orasi.utils.dataProviders.TestCSVDataProvider" />
+		</classes>
+	</test>
+	
+	<test name="CreditCards" parallel="methods" thread-count="20">
+		<classes>
+			<class name="com.orasi.utils.dataHelpers.TestCreditCard" />
 		</classes>
 	</test>
 	

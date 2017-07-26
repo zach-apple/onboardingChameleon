@@ -1,13 +1,13 @@
 package com.orasi.core.by.angular.internal;
 
+import java.util.List;
+
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import com.orasi.core.Beta;
-
-import java.util.List;
 
 /*
  * Original Code from https://github.com/paul-hammant/ngWebDriver
@@ -69,8 +69,8 @@ public class ByAngularRepeaterCell extends ByAngular.BaseBy {
                         "  }\n" +
                         "}\n" +
                         "// We can only return one with webdriver.findElement.\n" +
-                        "return matches[0];"
-                , context);
+                        "return matches[0];",
+                context);
         errorIfNull(o);
         return (WebElement) o;
     }

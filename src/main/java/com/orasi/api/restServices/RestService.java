@@ -1,12 +1,18 @@
 package com.orasi.api.restServices;
 
+import static com.orasi.utils.TestReporter.logInfo;
+import static com.orasi.utils.TestReporter.logTrace;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+
+import org.apache.commons.lang3.time.StopWatch;
 import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpOptions;
@@ -16,363 +22,385 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.LaxRedirectStrategy;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.api.restServices.Headers.HeaderType;
 import com.orasi.api.restServices.exceptions.RestException;
-import com.orasi.utils.TestReporter;
+import com.orasi.exception.automation.DataProviderInputFileNotFound;
+import com.orasi.utils.io.FileLoader;
 
+public class RestService {
 
+    /**
+     * Sends a GET request to a URL
+     *
+     * @param URL
+     *            for the service you are testing
+     * @return response in string format
+     */
+    public RestResponse sendGetRequest(String url) {
+        return sendGetRequest(url, null, null);
+    }
 
-public class RestService {	
-	private HttpClient httpClient = null;
+    /**
+     * Sends a GET request
+     *
+     * @param url
+     *            for the service you are testing
+     * @return response in string format
+     * @throws ClientProtocolException
+     * @throws IOException
+     */
+    public RestResponse sendGetRequest(String url, HeaderType type) {
+        return sendGetRequest(url, type, null);
+    }
 
-	//constructor
-	public RestService() {
-		TestReporter.logTrace("Entering RestService#init");
-		TestReporter.logTrace("Creating Http Client instance");
-		httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
-		TestReporter.logTrace("Successfully created Http Client instance");
-		TestReporter.logTrace("Exiting RestService#init");
-	}
+    /**
+     * Sends a GET request
+     *
+     * @param url
+     *            for the service you are testing
+     * @return response in string format
+     * @throws ClientProtocolException
+     * @throws IOException
+     */
+    public RestResponse sendGetRequest(String url, HeaderType type, List<NameValuePair> params) {
+        logTrace("Entering RestService#sendGetRequest");
+        logTrace("Creating Http GET instance with URL of [ " + url + " ]");
+        HttpGet request = new HttpGet(url);
 
-	/**
-	 * Sends a GET request to a URL
-	 * 
-	 * @param 	URL for the service you are testing
-	 * @return 	response in string format
-	 */
-	public RestResponse sendGetRequest(String url) {
-		return sendGetRequest(url, null, null);
-	}
+        if (params != null) {
+            request = new HttpGet(createQueryParamUrl(url, params));
+        }
 
-	/**
-	 * Sends a GET request
-	 * 
-	 * @param 	url for the service you are testing
-	 * @return 	response in string format
-	 * @throws 	ClientProtocolException
-	 * @throws 	IOException
-	 */
-	public RestResponse sendGetRequest(String url, HeaderType type) {
-		return sendGetRequest(url, type, null);
-	}
+        if (type != null) {
+            request.setHeaders(Headers.createHeader(type));
+        }
 
-	/**
-	 * Sends a GET request
-	 * 
-	 * @param 	url for the service you are testing
-	 * @return 	response in string format
-	 * @throws 	ClientProtocolException
-	 * @throws 	IOException
-	 */
-	public RestResponse sendGetRequest(String url, HeaderType type,  List<NameValuePair> params) {
-		TestReporter.logTrace("Entering RestService#sendGetRequest");
-		TestReporter.logTrace("Creating Http GET instance with URL of [ "+url+" ]");
-		HttpGet request = new HttpGet(url);
+        RestResponse response = sendRequest(request);
+        logTrace("Exiting RestService#sendGetRequest");
+        return response;
+    }
 
-		if(params !=  null){
-			String allParams= "";
-			for (NameValuePair param : params){
-				allParams += "[" +param.getName() + ": " + param.getValue()+"] ";
-			}
-			TestReporter.logInfo("Adding Parameters " + allParams);
-			url = url+"?"+URLEncodedUtils.format(params, "utf-8");
-			TestReporter.logInfo("URL with params: " + url);
-			request = new HttpGet(url);
-		}
+    public RestResponse sendPostRequest(String url, HeaderType type, List<NameValuePair> params, String json) {
+        logTrace("Entering RestService#sendPostRequest");
+        logTrace("Creating Http POST instance with URL of [ " + url + " ]");
+        HttpPost httppost = new HttpPost(url);
 
-		if(type != null) {
-			request.setHeaders(Headers.createHeader(type));
-		}
+        if (params != null) {
+            httppost = new HttpPost(createQueryParamUrl(url, params));
+        }
 
-		RestResponse response = sendRequest(request);	    
-		TestReporter.logTrace("Exiting RestService#sendGetRequest");
-		return response;
-	}
+        if (json != null) {
+            logInfo("Adding json " + json);
+            httppost.setEntity(createJsonEntity(json));
+        }
 
-	public RestResponse sendPostRequest(String url, HeaderType type, List<NameValuePair> params, String json){
-		TestReporter.logTrace("Entering RestService#sendPostRequest");
-		TestReporter.logTrace("Creating Http POST instance with URL of [ "+url+" ]");
-		HttpPost httppost = new HttpPost(url);		
+        if (type != null) {
+            httppost.setHeaders(Headers.createHeader(type));
+        }
 
-		try {
-			if(params !=  null){
-				String allParams= "";
-				for (NameValuePair param : params){
-					allParams += "[" +param.getName() + ": " + param.getValue()+"] ";
-				}
-				TestReporter.logInfo("Adding Parameters " + allParams);
-				url = url+"?"+URLEncodedUtils.format(params, "utf-8");
-				TestReporter.logInfo("URL with params: " + url);
-				httppost = new HttpPost(url);
-			}
+        RestResponse response = sendRequest(httppost);
+        logTrace("Exiting RestService#sendPostRequest");
+        return response;
+    }
 
-			if(json !=  null){
-				TestReporter.logInfo("Adding json " + json );
-				httppost.setEntity( new ByteArrayEntity(json.getBytes("UTF-8")));
-			}
+    /**
+     * Sends a post (update) request, pass in the parameters for the json arguments to update
+     *
+     * @param url
+     *            for the service
+     * @param params
+     *            arguments to update
+     * @return response in string format
+     * @throws ClientProtocolException
+     * @throws IOException
+     */
+    public RestResponse sendPostRequest(String url, List<NameValuePair> params) {
+        return sendPostRequest(url, null, params, null);
+    }
 
-			if(type != null){
-				httppost.setHeaders(Headers.createHeader(type));
-			}
+    /**
+     * Sends a post (update) request, pass in the parameters for the json arguments to update
+     *
+     * @param url
+     *            for the service
+     * @param params
+     *            arguments to update
+     * @return response in string format
+     * @throws ClientProtocolException
+     * @throws IOException
+     */
+    public RestResponse sendPostRequest(String url, HeaderType headers, List<NameValuePair> params) {
+        return sendPostRequest(url, headers, params, null);
+    }
 
-		} catch (UnsupportedEncodingException e) {
-			//This literally cannot be reached, but has to be checked anyway
-			throw new RestException(e.getMessage(),e);
-		}
+    public RestResponse sendPostRequest(String url, HeaderType type, String body) {
+        return sendPostRequest(url, type, null, body);
+    }
 
-		RestResponse response = sendRequest(httppost);	    
-		TestReporter.logTrace("Exiting RestService#sendPostRequest");
-		return response;
-	}
+    public RestResponse sendPutRequest(String url, HeaderType type, List<NameValuePair> params, String json) {
+        logTrace("Entering RestService#sendGetRequest");
+        logTrace("Creating Http PUT instance with URL of [ " + url + " ]");
+        HttpPut httpPut = new HttpPut(url);
 
-	/**
-	 * Sends a post (update) request, pass in the parameters for the json arguments to update
-	 * 
-	 * @param 	url		for the service
-	 * @param 	params	arguments to update
-	 * @return 	response in string format
-	 * @throws 	ClientProtocolException
-	 * @throws 	IOException
-	 */
-	public RestResponse sendPostRequest(String url, List<NameValuePair> params){
-		return sendPostRequest(url, null, params, null);
-	}
+        if (params != null) {
+            httpPut = new HttpPut(createQueryParamUrl(url, params));
+        }
 
-	/**
-	 * Sends a post (update) request, pass in the parameters for the json arguments to update
-	 * 
-	 * @param 	url		for the service
-	 * @param 	params	arguments to update
-	 * @return 	response in string format
-	 * @throws 	ClientProtocolException
-	 * @throws 	IOException
-	 */
-	public RestResponse sendPostRequest(String url, HeaderType headers, List<NameValuePair> params) {
-		return sendPostRequest(url, headers, params, null);
-	}
+        if (json != null) {
+            logInfo("Adding json " + json);
+            httpPut.setEntity(createJsonEntity(json));
+        }
+        if (type != null) {
+            httpPut.setHeaders(Headers.createHeader(type));
+        }
 
+        RestResponse response = sendRequest(httpPut);
+        logTrace("Exiting RestService#sendPutRequest");
+        return response;
+    }
 
-	public RestResponse sendPostRequest(String url, HeaderType type, String body){
-		return sendPostRequest(url, type, null, body);
-	}
+    public RestResponse sendPutRequest(String url, HeaderType type, String json) {
+        return sendPutRequest(url, type, null, json);
+    }
 
-	public RestResponse sendPutRequest(String url, HeaderType type, List<NameValuePair> params, String json){
-		TestReporter.logTrace("Entering RestService#sendGetRequest");
-		TestReporter.logTrace("Creating Http PUT instance with URL of [ "+url+" ]");
-		HttpPut httpPut = new HttpPut(url);
+    /**
+     * Sends a put (create) request, pass in the parameters for the json arguments to create
+     *
+     * @param url
+     *            for the service
+     * @param params
+     *            arguments to update
+     * @return response in string format
+     * @throws ClientProtocolException
+     * @throws IOException
+     */
+    public RestResponse sendPutRequest(String url, HeaderType type, List<NameValuePair> params) {
+        return sendPutRequest(url, type, params, null);
+    }
 
-		try {
-			if(params !=  null){
-				String allParams= "";
-				for (NameValuePair param : params){
-					allParams += "[" +param.getName() + ": " + param.getValue()+"] ";
-				}
-				TestReporter.logInfo("Adding Parameters " + allParams);
-				url = url+"?"+URLEncodedUtils.format(params, "utf-8");
-				TestReporter.logInfo("URL with params: " + url);
-				httpPut = new HttpPut(url);
-			}
+    public RestResponse sendPutRequest(String url, HeaderType type) {
+        return sendPutRequest(url, type, null, null);
+    }
 
-			if(json !=  null){
-				TestReporter.logInfo("Adding json " + json );
-				httpPut.setEntity( new ByteArrayEntity(json.getBytes("UTF-8")));
-			}if(type != null){
-				httpPut.setHeaders(Headers.createHeader(type));
-			}
+    public RestResponse sendPutRequest(String url, List<NameValuePair> params) {
+        return sendPutRequest(url, null, params, null);
+    }
 
-		} catch (UnsupportedEncodingException e) {
-			//This literally cannot be reached, but has to be checked anyway
-			throw new RestException(e.getMessage(),e);
-		}
+    public RestResponse sendPutRequest(String url, String json) {
+        return sendPutRequest(url, null, json);
+    }
 
-		RestResponse response = sendRequest(httpPut);	    
-		TestReporter.logTrace("Exiting RestService#sendPutRequest");
-		return response;
-	}
+    public RestResponse sendPatchRequest(String url, HeaderType type, List<NameValuePair> params, String json) {
+        logTrace("Entering RestService#sendPatchRequest");
+        logTrace("Creating Http PATCH instance with URL of [ " + url + " ]");
+        HttpPatch httpPatch = new HttpPatch(url);
+        if (params != null) {
+            httpPatch = new HttpPatch(createQueryParamUrl(url, params));
+        }
 
-	public RestResponse sendPutRequest(String url, HeaderType type, String json) {
-		return sendPutRequest(url, type, null, json);
-	}
-	/**
-	 * Sends a put (create) request, pass in the parameters for the json arguments to create
-	 * 
-	 * @param 	url		for the service
-	 * @param 	params	arguments to update
-	 * @return 	response in string format
-	 * @throws 	ClientProtocolException
-	 * @throws 	IOException
-	 */
-	public RestResponse sendPutRequest(String url,HeaderType type, List<NameValuePair> params) {
-		return sendPutRequest(url, type , params, null);
-	}
+        if (type != null) {
+            httpPatch.setHeaders(Headers.createHeader(type));
+        }
 
-	public RestResponse sendPutRequest(String url, HeaderType type) {
-		return sendPutRequest(url,type, null, null);
-	}
+        if (json != null) {
+            logInfo("Adding json [" + json + "]");
+            httpPatch.setEntity(createJsonEntity(json));
+        }
 
-	public RestResponse sendPutRequest(String url,  List<NameValuePair> params){
-		return sendPutRequest(url, null, params, null);
-	}
+        RestResponse response = sendRequest(httpPatch);
+        logTrace("Exiting RestService#sendPatchRequest");
+        return response;
+    }
 
-	public RestResponse sendPutRequest(String url,  String json) {
-		return sendPutRequest(url, null, json);
-	}
+    /**
+     * Sends a patch (update) request, pass in the parameters for the json arguments to update
+     *
+     * @param url
+     *            for the service
+     * @param params
+     *            arguments to update
+     * @return response in string format
+     * @throws ClientProtocolException
+     * @throws IOException
+     */
+    public RestResponse sendPatchRequest(String url, HeaderType type, List<NameValuePair> params) {
+        return sendPatchRequest(url, type, params, null);
+    }
 
-	public RestResponse sendPatchRequest(String url,HeaderType type,  List<NameValuePair> params, String json){
-		TestReporter.logTrace("Entering RestService#sendPatchRequest");
-		TestReporter.logTrace("Creating Http PATCH instance with URL of [ "+url+" ]");
-		HttpPatch httpPatch = new HttpPatch(url);
-		if(params !=  null){
-			String allParams= "";
-			for (NameValuePair param : params){
-				allParams += "[" +param.getName() + ": " + param.getValue()+"] ";
-			}
-			TestReporter.logInfo("Adding Parameters " + allParams);
-			url = url+"?"+URLEncodedUtils.format(params, "utf-8");
-			TestReporter.logInfo("URL with params: " + url);
-			httpPatch = new HttpPatch(url);
-		}
+    public RestResponse sendPatchRequest(String url, List<NameValuePair> params, String json) {
+        return sendPatchRequest(url, null, params, json);
+    }
 
-		if(type != null){
-			httpPatch.setHeaders(Headers.createHeader(type));
-		}
+    /**
+     * Sends a patch (update) request, pass in the parameters for the json arguments to update
+     *
+     * @param url
+     *            for the service
+     * @param params
+     *            arguments to update
+     * @return response in string format
+     * @throws ClientProtocolException
+     * @throws IOException
+     */
+    public RestResponse sendPatchRequest(String url, List<NameValuePair> params) {
+        return sendPatchRequest(url, null, params, null);
+    }
 
+    public RestResponse sendPatchRequest(String url, HeaderType type, String json) {
+        return sendPatchRequest(url, type, null, json);
+    }
 
-		try {
-			if(json !=  null){
-				TestReporter.logInfo("Adding json [" + json + "]");
-				httpPatch.setEntity( new ByteArrayEntity(json.getBytes("UTF-8")));
-			}
-		} catch (UnsupportedEncodingException e) {
-			//This literally cannot be reached, but has to be checked anyway
-			throw new RestException(e.getMessage(),e);
-		}
+    public RestResponse sendDeleteRequest(String url, HeaderType type, List<NameValuePair> params) {
+        logTrace("Entering RestService#sendDeleteRequest");
+        logTrace("Creating Http DELETE instance with URL of [ " + url + " ]");
+        HttpDelete httpDelete = new HttpDelete(url);
 
-		RestResponse response = sendRequest(httpPatch);	    
-		TestReporter.logTrace("Exiting RestService#sendPatchRequest");
-		return response;
-	}
-	/**
-	 * Sends a patch (update) request, pass in the parameters for the json arguments to update
-	 * 
-	 * @param 	url		for the service
-	 * @param 	params	arguments to update
-	 * @return 	response in string format
-	 * @throws 	ClientProtocolException
-	 * @throws 	IOException
-	 */
-	public RestResponse sendPatchRequest(String url, HeaderType type, List<NameValuePair> params){
-		return sendPatchRequest(url, type, params, null);
-	}
+        if (params != null) {
+            httpDelete = new HttpDelete(createQueryParamUrl(url, params));
+        }
 
-	public RestResponse sendPatchRequest(String url, List<NameValuePair> params, String json){
-		return sendPatchRequest(url, null, params,json);
-	}
+        if (type != null) {
+            httpDelete.setHeaders(Headers.createHeader(type));
+        }
 
-	/**
-	 * Sends a patch (update) request, pass in the parameters for the json arguments to update
-	 * 
-	 * @param 	url		for the service
-	 * @param 	params	arguments to update
-	 * @return 	response in string format
-	 * @throws 	ClientProtocolException
-	 * @throws 	IOException
-	 */
-	public RestResponse sendPatchRequest(String url,  List<NameValuePair> params) {
-		return sendPatchRequest(url, null, params,null);
-	}
+        RestResponse response = sendRequest(httpDelete);
+        logTrace("Exiting RestService#sendDeleteRequest");
+        return response;
+    }
 
-	public RestResponse sendPatchRequest(String url, HeaderType type, String json) {
-		return sendPatchRequest(url, type, null, json);
-	}
+    /**
+     * Sends a delete request. Depends on the service if a response is returned.
+     * If no response is returned, will return null *
+     *
+     * @param url
+     *            for the service
+     * @return response in string format or null
+     * @throws ClientProtocolException
+     * @throws IOException
+     */
 
-	public RestResponse sendDeleteRequest(String url,HeaderType type, List<NameValuePair> params){
-		TestReporter.logTrace("Entering RestService#sendDeleteRequest");
-		TestReporter.logTrace("Creating Http DELETE instance with URL of [ "+url+" ]");
-		HttpDelete httpDelete = new HttpDelete(url);
+    public RestResponse sendDeleteRequest(String url, HeaderType type) {
+        return sendDeleteRequest(url, null, null);
+    }
 
-		if(params !=  null){
-			String allParams= "";
-			for (NameValuePair param : params){
-				allParams += "[" +param.getName() + ": " + param.getValue()+"] ";
-			}
-			TestReporter.logInfo("Adding Parameters " + allParams);
-			url = url+"?"+URLEncodedUtils.format(params, "utf-8");
-			TestReporter.logInfo("URL with params: " + url);
-			httpDelete = new HttpDelete(url);
-		}
+    public RestResponse sendDeleteRequest(String url) {
+        return sendDeleteRequest(url, null, null);
+    }
 
-		if(type != null){
-			httpDelete.setHeaders(Headers.createHeader(type));
-		}
+    /**
+     * Sends an options request. Options should give what the acceptable methods are for
+     * the service (GET, HEAD, PUT, POST, etc). There should be some sort of an ALLOW
+     * header that will give you the allowed methods. May or may not be a body to the response,
+     * depending on the service.
+     *
+     * This method will return all the headers and the test should parse through and find the header
+     * it needs, that will give the allowed methods, as the naming convention will be different for each service.
+     *
+     * @param URL
+     *            for the service
+     * @return returns an array of headers
+     * @throws ClientProtocolException
+     * @throws IOException
+     */
+    public Header[] sendOptionsRequest(String url) {
+        HttpOptions httpOptions = new HttpOptions(url);
+        return sendRequest(httpOptions).getHeaders();
+    }
 
-		RestResponse response = sendRequest(httpDelete);	    
-		TestReporter.logTrace("Exiting RestService#sendDeleteRequest");
-		return response;
-	}
+    public static String getJsonFromObject(Object request) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(request);
+        } catch (JsonProcessingException e) {
+            throw new RestException("Failed to convert object to json");
+        }
+    }
 
-	/**
-	 * Sends a delete request.  Depends on the service if a response is returned.
-	 * If no response is returned, will return null	 * 
-	 * 
-	 * @param 	url		for the service
-	 * @return 	response in string format or null
-	 * @throws 	ClientProtocolException
-	 * @throws 	IOException
-	 */
+    private RestResponse sendRequest(HttpUriRequest request) {
+        logTrace("Entering RestService#sendRequest");
+        RestResponse response = null;
 
-	public RestResponse sendDeleteRequest(String url,HeaderType type){
-		return sendDeleteRequest(url, null, null); 
-	}
+        try (CloseableHttpClient httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build()) {
+            logTrace("Sending request");
+            StopWatch execution = StopWatch.createStarted();
+            HttpResponse httpResponse = httpClient.execute(request);
+            execution.stop();
+            String executionTime = execution.toString();
+            response = new RestResponse(request, httpResponse, executionTime);
+        } catch (IOException e) {
+            throw new RestException("Failed to send request to " + request.getURI().toString(), e);
+        }
+        logTrace("Returning RestResponse to calling method");
+        logTrace("Exiting RestService#sendRequest");
+        return response;
+    }
 
-	public RestResponse sendDeleteRequest(String url ){
-		return sendDeleteRequest(url, null, null); 
-	}
-	/**
-	 * Sends an options request.  Options should give what the acceptable methods are for
-	 * the service (GET, HEAD, PUT, POST, etc).  There should be some sort of an ALLOW 
-	 * header that will give you the allowed methods.  May or may not be a body to the response, 
-	 * depending on the service.  
-	 * 
-	 * This method will return all the headers and the test should parse through and find the header 
-	 * it needs, that will give the allowed methods, as the naming convention will be different for each service.  
-	 * 
-	 * @param 	URL		for the service
-	 * @return 	returns an array of headers
-	 * @throws 	ClientProtocolException
-	 * @throws 	IOException
-	 */
-	public Header[] sendOptionsRequest(String url ) {
-		HttpOptions httpOptions=new HttpOptions(url);
-		return sendRequest(httpOptions).getHeaders();
-	}
+    public static <T> T readJsonFromFile(String filePath, Class<T> clazz) {
+        logTrace("Entering RestService#readJsonFromFile");
+        logTrace("Loading resource [ " + clazz.getClass().getResourceAsStream(filePath) + " ]");
+        String json = null;
 
-	public static String getJsonFromObject(Object request){
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(request);
-		} catch (JsonProcessingException e) {
-			throw new RestException("Failed to convert object to json");
-		}
-	}
+        try {
+            json = FileLoader.loadFileFromProjectAsString(filePath);
+        } catch (FileNotFoundException fnfe) {
+            throw new DataProviderInputFileNotFound("Failed to locate json file in path [ " + filePath + " ]");
+        } catch (IOException ioe) {
+            throw new RestException("Failed to read json file", ioe);
+        }
+        return mapJSONToObject(json, clazz);
+    }
 
-	private RestResponse sendRequest(HttpUriRequest request){
-		TestReporter.logTrace("Entering RestService#sendRequest");
-		RestResponse response = null;
-		try {
-			TestReporter.logTrace("Sending request");
-			response = new RestResponse(request, httpClient.execute(request));
-		} catch (IOException e) {
-			throw new RestException("Failed to send request to " + request.getURI().toString(), e);
-		}
-		TestReporter.logTrace("Returning RestResponse to calling method");
-		TestReporter.logTrace("Exiting RestService#sendRequest");
-		return response;
-	}
+    /**
+     * Can pass in any json as a string and map to object
+     *
+     * @param clazz
+     * @return
+     * @throws IOException
+     */
+    private static <T> T mapJSONToObject(String stringResponse, Class<T> clazz) {
+        ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        T map = null;
+        try {
+            map = mapper.readValue(stringResponse, clazz);
+        } catch (JsonParseException e) {
+            throw new RestException("Failed to parse JSON", e);
+        } catch (JsonMappingException e) {
+            throw new RestException("Failed to Map JSON", e);
+        } catch (IOException e) {
+            throw new RestException("Failed to output JSON", e);
+        }
+        return map;
+    }
 
+    private String createQueryParamUrl(String url, List<NameValuePair> params) {
+        String allParams = "";
+        for (NameValuePair param : params) {
+            allParams += "[" + param.getName() + ": " + param.getValue() + "] ";
+        }
+        logInfo("Adding Parameters " + allParams);
+        url = url + "?" + URLEncodedUtils.format(params, "utf-8");
+        logInfo("URL with params: " + url);
+        return url;
+    }
+
+    private ByteArrayEntity createJsonEntity(String json) {
+        ByteArrayEntity entity = null;
+        try {
+            entity = new ByteArrayEntity(json.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            // This literally cannot be reached, but has to be checked anyway
+            throw new RestException(e.getMessage(), e);
+        }
+
+        return entity;
+    }
 }

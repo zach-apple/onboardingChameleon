@@ -1,11 +1,11 @@
 package com.orasi.core.interfaces.impl.internal;
 
-import com.orasi.core.interfaces.impl.ElementImpl;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import com.orasi.core.interfaces.impl.ElementImpl;
 
 /**
  * Sets the default implementing class for the annotated interface.
@@ -17,5 +17,5 @@ public @interface ImplementedBy {
      * Class implementing the interface. (by default)
      */
     @SuppressWarnings("rawtypes")
-	Class value() default ElementImpl.class;
+    Class value() default ElementImpl.class;
 }

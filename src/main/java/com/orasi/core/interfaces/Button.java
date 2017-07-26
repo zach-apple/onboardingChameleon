@@ -8,18 +8,18 @@ import com.orasi.core.interfaces.impl.internal.ImplementedBy;
  */
 @ImplementedBy(ButtonImpl.class)
 public interface Button extends Element {
-	/**
-	 * @summary - Click the button using the default Selenium click
-	 */
-	@Override
-	public void click();
+    /**
+     * @summary - Click the button using the default Selenium click
+     */
+    @Override
+    public void click();
 
-	/**
-	 * @summary - Click the button using a JavascriptExecutor click
-	 * @param driver
-	 *            - Current active WebDriver object
-	 */
-	@Override
-	public void jsClick();
+    /**
+     * @summary - Click the button using a JavascriptExecutor click
+     * @param driver
+     *            - Current active WebDriver object
+     */
+    @Override
+    public void jsClick();
 
 }

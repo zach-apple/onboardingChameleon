@@ -1,5 +1,6 @@
 package com.orasi.core.by.angular.internal;
 
+import java.util.List;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
@@ -7,8 +8,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import com.orasi.core.Beta;
-
-import java.util.List;
 
 /*
  * Original Code from https://github.com/paul-hammant/ngWebDriver
@@ -28,7 +27,6 @@ public class ByAngularRepeaterRow extends ByAngular.BaseBy {
     public ByAngularRepeaterCell column(String column) {
         return new ByAngularRepeaterCell(jse, repeater, row, column);
     }
-
 
     @Override
     public WebElement findElement(SearchContext context) {
@@ -52,7 +50,8 @@ public class ByAngularRepeaterRow extends ByAngular.BaseBy {
                         "    }\n" +
                         "  }\n" +
                         "}\n" +
-                        "return rows[index - 1];", context);
+                        "return rows[index - 1];",
+                context);
         errorIfNull(o);
         return (WebElement) o;
     }

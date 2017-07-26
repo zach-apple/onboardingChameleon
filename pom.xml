@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.orasi</groupId>
 	<artifactId>Selenium-Java-Core</artifactId>
-	<version>1.1.2</version>
+	<version>1.1.1</version>
 	<packaging>jar</packaging>
 	<properties>
 		<testNGSourceDirectory>src/test/resources</testNGSourceDirectory>
@@ -126,11 +126,6 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>htmlunit-driver</artifactId>
-			<version>2.23.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>

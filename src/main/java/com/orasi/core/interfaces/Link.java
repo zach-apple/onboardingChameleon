@@ -9,17 +9,17 @@ import com.orasi.core.interfaces.impl.internal.ImplementedBy;
 @ImplementedBy(LinkImpl.class)
 public interface Link extends Element {
 
-	/**
-	 * @summary - Click the button using the default Selenium click
-	 */
-	@Override
-	public void click();
+    /**
+     * @summary - Click the button using the default Selenium click
+     */
+    @Override
+    public void click();
 
-	/**
-	 * @summary - Click the link using a JavascriptExecutor click
-	 */
-	@Override
-	public void jsClick();
+    /**
+     * @summary - Click the link using a JavascriptExecutor click
+     */
+    @Override
+    public void jsClick();
 
-	public String getURL();
+    public String getURL();
 }

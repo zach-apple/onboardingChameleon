@@ -1,12 +1,12 @@
 package com.orasi.core.by.angular.internal;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
-import java.lang.reflect.Field;
-import java.util.List;
 
 /*
  * Original Code from https://github.com/paul-hammant/ngWebDriver
@@ -29,11 +29,10 @@ public class ByAngularRepeater extends ByAngular.BaseBy {
         return new ByAngularRepeaterColumn(jse, repeater, column);
     }
 
-
-    private String makeJsBy(String oneOrAll) {    	
+    private String makeJsBy(String oneOrAll) {
         return
-              
-        		"var using = arguments[0] ||document;\n" +
+
+        "var using = arguments[0] ||document;\n" +
                 "var repeater = '" + repeater + "';\n" +
                 "\n" +
                 "var rows = [];\n" +
@@ -56,42 +55,41 @@ public class ByAngularRepeater extends ByAngular.BaseBy {
         if (context instanceof WebDriver) {
             context = null;
         }
-        
+
         Object o = jse.executeScript(makeJsBy("[0]"), context);
         errorIfNull(o);
         Field privateStringField = null;
         try {
-        	privateStringField = o.getClass().getDeclaredField("foundBy");
-        	privateStringField.setAccessible(true);
-        	privateStringField.set(o, o.toString().replace("unknown locator", "ng-repeater: " + repeater));
-		} catch (NoSuchFieldException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (SecurityException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IllegalArgumentException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-        
-      
+            privateStringField = o.getClass().getDeclaredField("foundBy");
+            privateStringField.setAccessible(true);
+            privateStringField.set(o, o.toString().replace("unknown locator", "ng-repeater: " + repeater));
+        } catch (NoSuchFieldException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        } catch (SecurityException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        } catch (IllegalArgumentException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        } catch (IllegalAccessException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
         return (WebElement) o;
     }
 
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     public List<WebElement> findElements(SearchContext searchContext) {
         if (searchContext instanceof WebDriver) {
             searchContext = null;
         }
-        
+
         Object o = jse.executeScript(makeJsBy(""), searchContext);
         errorIfNull(o);
-        
+
         return (List<WebElement>) o;
     }
 
