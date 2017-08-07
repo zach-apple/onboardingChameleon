@@ -589,6 +589,9 @@ public class TestEnvironment {
             throw new AutomationException("Problem with creatting the remote web driver: ", e);
 
         }
+        
+        //allows for local files to be uploaded via remote webdriver on grid machines
+      	getDriver().setFileDetector();
     }
 
     /**
