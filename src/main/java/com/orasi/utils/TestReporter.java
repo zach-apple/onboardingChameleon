@@ -525,7 +525,7 @@ public class TestReporter {
 		//Only capture logs for chrome browser
 		if (driver != null) {
 			if (driver.getDriverCapability().browserName().equalsIgnoreCase("chrome")){
-				Reporter.log("<br/><b><font size = 4> Console errors: </font></b><br/>");
+				Reporter.log("<br/><b><font size = 4>Chrome Browser Console errors: </font></b><br/>");
 				LogEntries logs = driver.manage().logs().get("browser");
 		    	List<LogEntry> logList = logs.getAll();
 		    	String color = "red";
