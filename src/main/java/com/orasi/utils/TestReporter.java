@@ -2,11 +2,15 @@ package com.orasi.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
 import org.testng.Assert;
 import org.testng.Reporter;
 
@@ -509,4 +513,40 @@ public class TestReporter {
             throw new RestException(message);
         }
     }
+    
+    /**
+	 * Logs any console errors with level of SEVERE to the test reporter
+	 * This functionality is only available in the chrome browser.  
+	 * IE browser and Firefox do not support at this time (07/21/2017)
+	 * @date 07/21/2017
+	 * @param driver
+	 */
+	public static void logConsoleErrors(OrasiDriver driver) {
+		//Only capture logs for chrome browser
+		if (driver != null) {
+			if (driver.getDriverCapability().browserName().equalsIgnoreCase("chrome")){
+				Reporter.log("<br/><b><font size = 4> Console errors: </font></b><br/>");
+				LogEntries logs = driver.manage().logs().get("browser");
+		    	List<LogEntry> logList = logs.getAll();
+		    	String color = "red";
+		    	//Go through all the log entries, and only output the severe level errors (rest are most likely warnings)
+		    	boolean flag = false;
+		    	for (LogEntry entry:logList) {
+		    		if (entry.getLevel()== Level.SEVERE){
+		    			Reporter.log(" <font size = 2 color=\"" + color + "\"><b> Level :: " +  entry.getLevel().getName() 
+			    				+ "</font></b><br />");
+			    		Reporter.log(" <font size = 2 color=\"" + color + "\"><b> Message :: "+ entry.getMessage() 
+			    				+ "</font></b><br />");	
+			    		flag = true;
+		    		}
+		    	}
+		    	
+		    	if (!flag) {
+		    		Reporter.log("NO ERRORS");
+		    	}
+			}
+		} else {
+			TestReporter.log("Driver was null, could not capture console errors");
+		}
+	}
 }

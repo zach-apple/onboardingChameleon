@@ -76,6 +76,9 @@ public class TestListener extends TestListenerAdapter implements IReporter {
         if (reportToMustard) {
             Mustard.postResultsToMustard(driver, result, runLocation);
         }
+        
+        // Log any console errors
+     	TestReporter.logConsoleErrors(driver);
     }
 
     @Override
