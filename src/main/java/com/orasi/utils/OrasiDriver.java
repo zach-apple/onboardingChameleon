@@ -18,6 +18,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteExecuteMethod;
 import org.openqa.selenium.remote.RemoteKeyboard;
@@ -957,6 +958,10 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
      */
     private RemoteWebDriver getRemoteWebDriver() {
         return ((RemoteWebDriver) driver);
+    }
+
+    public Actions actions() {
+        return new Actions(driver);
     }
 
     /**
