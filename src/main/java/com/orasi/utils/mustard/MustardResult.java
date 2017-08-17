@@ -53,14 +53,12 @@ public class MustardResult {
 
         @JsonProperty("stacktrace")
         private String stacktrace;
-        @JsonProperty("display_name")
-        private String displayName;
 
         @JsonProperty("link")
         private String link;
 
         /**
-         * 
+         *
          * @return
          *         The projectId
          */
@@ -69,7 +67,7 @@ public class MustardResult {
         }
 
         /**
-         * 
+         *
          * @param projectId
          *            The project_id
          */
@@ -78,7 +76,7 @@ public class MustardResult {
         }
 
         /**
-         * 
+         *
          * @return
          *         The resultType
          */
@@ -87,7 +85,7 @@ public class MustardResult {
         }
 
         /**
-         * 
+         *
          * @param resultType
          *            The result_type
          */
@@ -96,7 +94,7 @@ public class MustardResult {
         }
 
         /**
-         * 
+         *
          * @return
          *         The environmentId
          */
@@ -105,7 +103,7 @@ public class MustardResult {
         }
 
         /**
-         * 
+         *
          * @param environmentId
          *            The environment_id
          */
@@ -114,7 +112,7 @@ public class MustardResult {
         }
 
         /**
-         * 
+         *
          * @return
          *         The testcaseId
          */
@@ -123,7 +121,7 @@ public class MustardResult {
         }
 
         /**
-         * 
+         *
          * @param testcaseId
          *            The testcase_id
          */
@@ -132,7 +130,7 @@ public class MustardResult {
         }
 
         /**
-         * 
+         *
          * @return
          *         The status
          */
@@ -141,7 +139,7 @@ public class MustardResult {
         }
 
         /**
-         * 
+         *
          * @param status
          *            The status
          */
@@ -150,7 +148,7 @@ public class MustardResult {
         }
 
         /**
-         * 
+         *
          * @return
          *         The comment
          */
@@ -159,7 +157,7 @@ public class MustardResult {
         }
 
         /**
-         * 
+         *
          * @param comment
          *            The comment
          */
@@ -168,7 +166,7 @@ public class MustardResult {
         }
 
         /**
-         * 
+         *
          * @return
          *         The screenshot
          */
@@ -177,7 +175,7 @@ public class MustardResult {
         }
 
         /**
-         * 
+         *
          * @param screenshot
          *            The screenshot
          */
@@ -186,7 +184,7 @@ public class MustardResult {
         }
 
         /**
-         * 
+         *
          * @return
          *         The stacktrace
          */
@@ -195,7 +193,7 @@ public class MustardResult {
         }
 
         /**
-         * 
+         *
          * @param stacktrace
          *            The stacktrace
          */
@@ -204,25 +202,7 @@ public class MustardResult {
         }
 
         /**
-         * 
-         * @return
-         *         The displayName
-         */
-        public String getDisplayName() {
-            return displayName;
-        }
-
-        /**
-         * 
-         * @param displayName
-         *            The display_name
-         */
-        public void setDisplayName(String displayName) {
-            this.displayName = displayName;
-        }
-
-        /**
-         * 
+         *
          * @return
          *         The link
          */
@@ -231,7 +211,7 @@ public class MustardResult {
         }
 
         /**
-         * 
+         *
          * @param link
          *            The link
          */

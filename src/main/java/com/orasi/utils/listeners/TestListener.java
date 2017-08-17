@@ -1,12 +1,16 @@
 package com.orasi.utils.listeners;
 
+import static org.openqa.selenium.OutputType.BYTES;
+
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
-import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
@@ -53,6 +57,9 @@ public class TestListener extends TestListenerAdapter implements IReporter {
         String slash = Constants.DIR_SEPARATOR;
 
         String destDir = Constants.SCREENSHOT_FOLDER + slash + result.getInstanceName().replace(".", slash);
+        DateFormat dateFormat = new SimpleDateFormat("dd_MMM_yyyy_hh_mm_ssaa");
+
+        String destFile = destDir + slash + dateFormat.format(new Date()) + ".png";
 
         Reporter.setCurrentTestResult(result);
 
@@ -63,22 +70,33 @@ public class TestListener extends TestListenerAdapter implements IReporter {
             }
 
             new File(destDir).mkdirs();
-            DateFormat dateFormat = new SimpleDateFormat("dd_MMM_yyyy_hh_mm_ssaa");
-
-            String destFile = dateFormat.format(new Date()) + ".png";
 
             // Capture a screenshot for TestNG reporting
-            TestReporter.logScreenshot(augmentDriver, destDir + slash + destFile, slash, runLocation);
+            TestReporter.logScreenshot(augmentDriver, destFile, slash, runLocation);
             // Capture a screenshot for Allure reporting
             failedScreenshot(augmentDriver);
         }
 
         if (reportToMustard) {
-            Mustard.postResultsToMustard(driver, result, runLocation);
+            String screenshot = null;
+            File file = new File(destFile);
+
+            try (FileInputStream fileInputStreamReader = new FileInputStream(file);) {
+
+                byte[] bytes = new byte[(int) file.length()];
+
+                fileInputStreamReader.read(bytes);
+                screenshot = Base64.getEncoder().encodeToString(bytes);
+            } catch (IOException throwAway) {
+                // Screenshot attempt failed
+                TestReporter.logTrace("Failed to convert screenshot for mustard:" + throwAway.getMessage());
+            }
+
+            Mustard.postResultsToMustard(driver, result, runLocation, screenshot);
         }
-        
+
         // Log any console errors
-     	TestReporter.logConsoleErrors(driver);
+        TestReporter.logConsoleErrors(driver);
     }
 
     @Override
@@ -86,7 +104,7 @@ public class TestListener extends TestListenerAdapter implements IReporter {
         // will be called after test will be skipped
         init(result);
         if (reportToMustard) {
-            Mustard.postResultsToMustard(driver, result, runLocation);
+            Mustard.postResultsToMustard(driver, result, runLocation, null);
         }
     }
 
@@ -95,7 +113,7 @@ public class TestListener extends TestListenerAdapter implements IReporter {
         // will be called after test will pass
         init(result);
         if (reportToMustard) {
-            Mustard.postResultsToMustard(driver, result, runLocation);
+            Mustard.postResultsToMustard(driver, result, runLocation, null);
         }
     }
 
@@ -108,6 +126,6 @@ public class TestListener extends TestListenerAdapter implements IReporter {
 
     @Attachment(type = "image/png")
     public static byte[] failedScreenshot(WebDriver driver) {
-        return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+        return ((TakesScreenshot) driver).getScreenshotAs(BYTES);
     }
 }
