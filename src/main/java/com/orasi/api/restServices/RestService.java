@@ -8,9 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -95,9 +95,7 @@ public class RestService {
             request = new HttpGet(createQueryParamUrl(url, params));
         }
 
-        if (type != null) {
-            request.setHeaders(createHeaders(type));
-        }
+        request.setHeaders(createHeaders(type));
 
         RestResponse response = sendRequest(request);
         logTrace("Exiting RestService#sendGetRequest");
@@ -118,9 +116,7 @@ public class RestService {
             httppost.setEntity(createJsonEntity(json));
         }
 
-        if (type != null) {
-            httppost.setHeaders(createHeaders(type));
-        }
+        httppost.setHeaders(createHeaders(type));
 
         RestResponse response = sendRequest(httppost);
         logTrace("Exiting RestService#sendPostRequest");
@@ -174,9 +170,8 @@ public class RestService {
             logInfo("Adding json " + json);
             httpPut.setEntity(createJsonEntity(json));
         }
-        if (type != null) {
-            httpPut.setHeaders(createHeaders(type));
-        }
+
+        httpPut.setHeaders(createHeaders(type));
 
         RestResponse response = sendRequest(httpPut);
         logTrace("Exiting RestService#sendPutRequest");
@@ -222,9 +217,7 @@ public class RestService {
             httpPatch = new HttpPatch(createQueryParamUrl(url, params));
         }
 
-        if (type != null) {
-            httpPatch.setHeaders(createHeaders(type));
-        }
+        httpPatch.setHeaders(createHeaders(type));
 
         if (json != null) {
             logInfo("Adding json [" + json + "]");
@@ -283,9 +276,7 @@ public class RestService {
             httpDelete = new HttpDelete(createQueryParamUrl(url, params));
         }
 
-        if (type != null) {
-            httpDelete.setHeaders(createHeaders(type));
-        }
+        httpDelete.setHeaders(createHeaders(type));
 
         RestResponse response = sendRequest(httpDelete);
         logTrace("Exiting RestService#sendDeleteRequest");
@@ -397,11 +388,26 @@ public class RestService {
     }
 
     private Header[] createHeaders(HeaderType type) {
-        Header[] headers = Headers.createHeader(type);
+        Header[] headers = null;
+
+        if (type != null) {
+            headers = Headers.createHeader(type);
+        }
 
         if (customHeaders != null && !customHeaders.isEmpty()) {
+
+            int start = 0;
+            if (headers == null) {
+                headers = new Header[customHeaders.size()];
+            } else {
+                start = headers.length;
+                headers = Arrays.copyOf(headers, headers.length + customHeaders.size());
+            }
+
+            int x = 0;
             for (BasicHeader header : customHeaders) {
-                ArrayUtils.add(headers, header);
+                headers[start + x] = header;
+                x++;
             }
         }
 

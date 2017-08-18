@@ -25,10 +25,26 @@ public class Mustard {
 
     @Beta
     public static void postResultsToMustard(OrasiDriver driver, ITestResult result, String runLocation, String base64Screenshot) {
+        String device_id = driver.getDriverCapability().platform().name() + "_" + driver.getDriverCapability().browserName() + "_" + driver.getDriverCapability().browserVersion().replace(".", "_");
+        MustardResult mustardResult = new MustardResult();
 
+        if ("sauce".equalsIgnoreCase(runLocation)) {
+            String sauceURL = appURLRepository.getString("SAUCELABS_URL") + driver.getSessionId();
+            mustardResult.getResult().setLink(sauceURL);
+        }
+
+        sendResult(device_id, result, base64Screenshot, mustardResult);
+    }
+
+    @Beta
+    public static void postResultsToMustard(ITestResult result) {
+        MustardResult mustardResult = new MustardResult();
+        sendResult("API", result, null, mustardResult);
+    }
+
+    private static void sendResult(String device_id, ITestResult result, String base64Screenshot, MustardResult mustardResult) {
         RestService request = new RestService();
 
-        String device_id = driver.getDriverCapability().platform().name() + "_" + driver.getDriverCapability().browserName() + "_" + driver.getDriverCapability().browserVersion().replace(".", "_");
         String test_name = result.getTestClass().getName();
         test_name = test_name.substring(test_name.lastIndexOf('.') + 1, test_name.length()) + "_" + result.getMethod().getMethodName();
         String status = "";
@@ -41,19 +57,11 @@ public class Mustard {
             status = "fail";
         }
 
-        String sauceURL = "";
-        MustardResult mustardResult = new MustardResult();
-
         mustardResult.getResult().setProjectId(mustardKey);
         mustardResult.getResult().setResultType("automated");
         mustardResult.getResult().setEnvironmentId(device_id);
         mustardResult.getResult().setTestcaseId(test_name);
         mustardResult.getResult().setStatus(status);
-
-        if ("sauce".equalsIgnoreCase(runLocation)) {
-            sauceURL = appURLRepository.getString("SAUCELABS_URL") + driver.getSessionId();
-            mustardResult.getResult().setLink(sauceURL);
-        }
 
         if ("fail".equalsIgnoreCase(status)) {
             mustardResult.getResult().setComment(result.getThrowable().getMessage());
