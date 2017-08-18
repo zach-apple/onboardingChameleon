@@ -41,7 +41,7 @@ public class XMLTools {
 
     /**
      * Adds an Attribute to the node on the location of the xpath
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param doc
@@ -84,7 +84,7 @@ public class XMLTools {
 
     /**
      * Removes an Attribute to the node on the location of the xpath
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param doc
@@ -127,7 +127,7 @@ public class XMLTools {
 
     /**
      * Adds an Namespace to the node on the location of the xpath
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param doc
@@ -176,7 +176,7 @@ public class XMLTools {
 
     /**
      * Takes an xpath and adds a node to the location of the xpath and name of tagName
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param doc
@@ -225,7 +225,7 @@ public class XMLTools {
 
     /**
      * Takes an xpath and removes a node to the location of the xpath
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param doc
@@ -266,7 +266,7 @@ public class XMLTools {
 
     /**
      * Takes an xpath and return the value found
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014 *
      * @param doc
@@ -305,7 +305,7 @@ public class XMLTools {
 
     /**
      * Generate an XML Document from SOAPMessage
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param soapXML
@@ -347,7 +347,7 @@ public class XMLTools {
 
     /**
      * Generate an XML Document from String
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param xml
@@ -386,7 +386,7 @@ public class XMLTools {
 
     /**
      * Generate an XML Document from String
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param xml
@@ -421,7 +421,7 @@ public class XMLTools {
 
     /**
      * Transform a XML Document to String
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param doc
@@ -437,7 +437,7 @@ public class XMLTools {
         try {
             transformer = tf.newTransformer();
         } catch (TransformerConfigurationException e) {
-            throw new SoapException("Failed to create XML Transformer", e.getCause());
+            throw new SoapException("Failed to create XML Transformer", e);
         }
 
         TestReporter.logTrace("Adding XML transformer properties");
@@ -445,6 +445,7 @@ public class XMLTools {
         transformer.setOutputProperty(OutputKeys.METHOD, "xml");
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 
         try {
 
@@ -464,7 +465,7 @@ public class XMLTools {
 
     /**
      * A recursive method that will iterate through all nodes and delete Comment nodes
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param node
@@ -487,7 +488,7 @@ public class XMLTools {
 
     /**
      * Iterate through all nodes and remove white space lines
-     * 
+     *
      * @author Justin Phlegar
      * @version Created: 08/28/2014
      * @param doc
@@ -519,7 +520,7 @@ public class XMLTools {
 
     /**
      * Transform a XML Document to String
-     * 
+     *
      * @author Waightstill Avery
      * @version Created: 08/28/2016
      * @param doc
@@ -556,7 +557,7 @@ public class XMLTools {
 
     /**
      * Transform a XML Document to String
-     * 
+     *
      * @author Waightstill Avery
      * @version Created: 08/28/2016
      * @param nodeList
@@ -592,7 +593,7 @@ public class XMLTools {
 
     /**
      * Transform a XML Document to String
-     * 
+     *
      * @author Waightstill Avery
      * @version Created: 08/28/2016
      * @param nodeList
