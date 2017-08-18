@@ -2,16 +2,20 @@ package com.orasi.api.restServices;
 
 import static com.orasi.utils.TestReporter.logInfo;
 import static com.orasi.utils.TestReporter.logTrace;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.time.StopWatch;
 import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpOptions;
@@ -21,8 +25,10 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.LaxRedirectStrategy;
+import org.apache.http.message.BasicHeader;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -35,15 +41,16 @@ import com.orasi.exception.automation.DataProviderInputFileNotFound;
 import com.orasi.utils.io.FileLoader;
 
 public class RestService {
-    private HttpClient httpClient = null;
+    private List<BasicHeader> customHeaders = null;
 
-    // constructor
-    public RestService() {
-        logTrace("Entering RestService#init");
-        logTrace("Creating Http Client instance");
-        httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
-        logTrace("Successfully created Http Client instance");
-        logTrace("Exiting RestService#init");
+    public void addCustomHeaders(String header, String value) {
+        if (customHeaders == null) {
+            customHeaders = new ArrayList<>();
+        } else if (isEmpty(header) || isEmpty(value)) {
+            throw new RestException("Header name and value cannot be null: Header: [ " + header + " ] Value: [ " + value + " ]");
+        }
+
+        customHeaders.add(new BasicHeader(header, value));
     }
 
     /**
@@ -88,9 +95,7 @@ public class RestService {
             request = new HttpGet(createQueryParamUrl(url, params));
         }
 
-        if (type != null) {
-            request.setHeaders(Headers.createHeader(type));
-        }
+        request.setHeaders(createHeaders(type));
 
         RestResponse response = sendRequest(request);
         logTrace("Exiting RestService#sendGetRequest");
@@ -111,9 +116,7 @@ public class RestService {
             httppost.setEntity(createJsonEntity(json));
         }
 
-        if (type != null) {
-            httppost.setHeaders(Headers.createHeader(type));
-        }
+        httppost.setHeaders(createHeaders(type));
 
         RestResponse response = sendRequest(httppost);
         logTrace("Exiting RestService#sendPostRequest");
@@ -167,9 +170,8 @@ public class RestService {
             logInfo("Adding json " + json);
             httpPut.setEntity(createJsonEntity(json));
         }
-        if (type != null) {
-            httpPut.setHeaders(Headers.createHeader(type));
-        }
+
+        httpPut.setHeaders(createHeaders(type));
 
         RestResponse response = sendRequest(httpPut);
         logTrace("Exiting RestService#sendPutRequest");
@@ -215,9 +217,7 @@ public class RestService {
             httpPatch = new HttpPatch(createQueryParamUrl(url, params));
         }
 
-        if (type != null) {
-            httpPatch.setHeaders(Headers.createHeader(type));
-        }
+        httpPatch.setHeaders(createHeaders(type));
 
         if (json != null) {
             logInfo("Adding json [" + json + "]");
@@ -276,9 +276,7 @@ public class RestService {
             httpDelete = new HttpDelete(createQueryParamUrl(url, params));
         }
 
-        if (type != null) {
-            httpDelete.setHeaders(Headers.createHeader(type));
-        }
+        httpDelete.setHeaders(createHeaders(type));
 
         RestResponse response = sendRequest(httpDelete);
         logTrace("Exiting RestService#sendDeleteRequest");
@@ -297,7 +295,7 @@ public class RestService {
      */
 
     public RestResponse sendDeleteRequest(String url, HeaderType type) {
-        return sendDeleteRequest(url, null, null);
+        return sendDeleteRequest(url, type, null);
     }
 
     public RestResponse sendDeleteRequest(String url) {
@@ -329,16 +327,21 @@ public class RestService {
         try {
             return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(request);
         } catch (JsonProcessingException e) {
-            throw new RestException("Failed to convert object to json");
+            throw new RestException("Failed to convert object to json", e);
         }
     }
 
     private RestResponse sendRequest(HttpUriRequest request) {
         logTrace("Entering RestService#sendRequest");
         RestResponse response = null;
-        try {
+
+        try (CloseableHttpClient httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build()) {
             logTrace("Sending request");
-            response = new RestResponse(request, httpClient.execute(request));
+            StopWatch execution = StopWatch.createStarted();
+            HttpResponse httpResponse = httpClient.execute(request);
+            execution.stop();
+            String executionTime = execution.toString();
+            response = new RestResponse(request, httpResponse, executionTime);
         } catch (IOException e) {
             throw new RestException("Failed to send request to " + request.getURI().toString(), e);
         }
@@ -355,7 +358,7 @@ public class RestService {
         try {
             json = FileLoader.loadFileFromProjectAsString(filePath);
         } catch (FileNotFoundException fnfe) {
-            throw new DataProviderInputFileNotFound("Failed to locate json file in path [ " + filePath + " ]");
+            throw new DataProviderInputFileNotFound("Failed to locate json file in path [ " + filePath + " ]", fnfe);
         } catch (IOException ioe) {
             throw new RestException("Failed to read json file", ioe);
         }
@@ -382,6 +385,33 @@ public class RestService {
             throw new RestException("Failed to output JSON", e);
         }
         return map;
+    }
+
+    private Header[] createHeaders(HeaderType type) {
+        Header[] headers = null;
+
+        if (type != null) {
+            headers = Headers.createHeader(type);
+        }
+
+        if (customHeaders != null && !customHeaders.isEmpty()) {
+
+            int start = 0;
+            if (headers == null) {
+                headers = new Header[customHeaders.size()];
+            } else {
+                start = headers.length;
+                headers = Arrays.copyOf(headers, headers.length + customHeaders.size());
+            }
+
+            int x = 0;
+            for (BasicHeader header : customHeaders) {
+                headers[start + x] = header;
+                x++;
+            }
+        }
+
+        return headers;
     }
 
     private String createQueryParamUrl(String url, List<NameValuePair> params) {

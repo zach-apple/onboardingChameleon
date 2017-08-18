@@ -35,10 +35,10 @@ public class RestResponse {
     private String responseFormat = "";
     private String responseAsString = "";
     private String url = "";
+    private String executionTime = "";
 
-    public RestResponse(HttpUriRequest request, HttpResponse httpResponse) {
+    public RestResponse(HttpUriRequest request, HttpResponse httpResponse, String executionTime) {
         logTrace("Entering RestResponse#init");
-        logTrace("Creating RestResponse based on original HttpRequest and HttpResponse");
 
         logTrace("Storing orignal request for later usage");
         this.originalRequest = request;
@@ -47,8 +47,6 @@ public class RestResponse {
             HttpEntity entity = ((HttpEntityEnclosingRequest) request).getEntity();
 
             if (entity != null) {
-                logTrace("Successfully extracted body entity");
-                logTrace("Attempting to get body entity as String");
                 try {
                     originalRequestBody = EntityUtils.toString(entity);
                     logTrace("Successfully retrieved body and stored");
@@ -58,27 +56,22 @@ public class RestResponse {
             }
         }
 
-        logTrace("Retrieve Request URI");
         url = request.getURI().toString();
         logTrace("Successfully stored URI [ " + url + " ]");
 
-        logTrace("Retrieve Request Method");
         method = request.getMethod();
         logTrace("Successfully stored Request Method [ " + method + " ]");
 
         response = httpResponse;
 
-        logTrace("Retrieve Response Status Code");
         statusCode = response.getStatusLine().getStatusCode();
         logTrace("Successfully stored Response Status Code [ " + statusCode + " ]");
 
-        logTrace("Retrieve Response Format");
         responseFormat = ContentType.getOrDefault(response.getEntity()).getMimeType().replace("application/", "");
         logTrace("Successfully stored Response Format [ " + responseFormat + " ]");
 
         try {
             if (statusCode != NO_CONTENT || response.getEntity() != null) {
-                logTrace("Retrieve Response Body as String");
                 responseAsString = EntityUtils.toString(response.getEntity());
                 logInfo("Response Status returned [" + httpResponse.getStatusLine() + "]");
             }
@@ -128,6 +121,10 @@ public class RestResponse {
             }
         }
         return null;
+    }
+
+    public String getExecutionTime() {
+        return executionTime;
     }
 
     /**

@@ -20,6 +20,7 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteExecuteMethod;
 import org.openqa.selenium.remote.RemoteKeyboard;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -254,6 +255,16 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
     public int getElementTimeout() {
         return currentElementTimeout;
     }
+    
+	/**
+	 * Used when you want to upload a local file to the remote webdriver for use
+	 * on the selenium grid nodes.  
+	 * You would then just use your normal sendKeys() method to populate the upload 
+	 * input with a local file and selenium will transfer file across the wire to the grid
+	 */
+	public void setFileDetector() {
+		((RemoteWebDriver)driver).setFileDetector(new LocalFileDetector());
+	}
 
     /*
      * public List<Element> findElements(By by) { List<WebElement> webElements =

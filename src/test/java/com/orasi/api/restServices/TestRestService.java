@@ -11,12 +11,13 @@ import org.testng.annotations.Test;
 import com.orasi.api.restServices.Headers.HeaderType;
 import com.orasi.api.restServices.exceptions.RestException;
 import com.orasi.api.restServices.helpers.PostRequest;
+import com.orasi.utils.TestEnvironment;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestRestService {
+public class TestRestService extends TestEnvironment {
     public final static String basePostsUrl = "https://jsonplaceholder.typicode.com/posts";
 
     @Features("API")
@@ -308,5 +309,16 @@ public class TestRestService {
     public void getJsonFromObjectExpectError() {
         RestService rest = new RestService();
         RestService.getJsonFromObject(rest);
+    }
+
+    @Features("API")
+    @Stories("RestServices")
+    @Title("addCustomHeaders")
+    @Test
+    public void addCustomHeaders() {
+        RestService rest = new RestService();
+        rest.addCustomHeaders("blah", "blahValue");
+        RestResponse response = rest.sendGetRequest("http://google.com", HeaderType.BASIC_CONVO);
+        Assert.assertTrue("blahValue".equals(response.getRequest().getFirstHeader("blah").getValue()));
     }
 }

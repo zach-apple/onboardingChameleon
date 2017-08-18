@@ -2,11 +2,15 @@ package com.orasi.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
 import org.testng.Assert;
 import org.testng.Reporter;
 
@@ -43,7 +47,7 @@ public class TestReporter {
     private static int debugLevel = 0;
 
     /**
-     * 
+     *
      * @param level
      *            - Options below <br/>
      *            TestReporter.NONE : (Default) - No additional info printed to console <br/>
@@ -155,7 +159,7 @@ public class TestReporter {
 
     /**
      * Use to output low-level granular steps
-     * 
+     *
      * @param message
      */
     public static void logTrace(String message) {
@@ -167,7 +171,7 @@ public class TestReporter {
 
     /**
      * Use to output useful information such as URL's, parameters, and RQ/RS
-     * 
+     *
      * @param message
      */
     public static void logInfo(String message) {
@@ -179,7 +183,7 @@ public class TestReporter {
 
     /**
      * Use to output useful information such as URL's, parameters, and RQ/RS
-     * 
+     *
      * @param message
      */
     public static void logDebug(String message) {
@@ -464,20 +468,20 @@ public class TestReporter {
         }
     }
 
-    public static void logAPI(boolean pass, String message, SoapService bs) {
+    public static void logAPI(boolean pass, String message, SoapService sp) {
         String failFormat = "";
         if (!pass) {
             failFormat = "<font size = 2 color=\"red\">";
             logFailure(message);
         }
-        String request = bs.getRequest().replaceAll("</*>", "</*>");
-        String response = bs.getResponse();
-        Reporter.log("<font size = 2><b>Endpoint: " + bs.getServiceURL() + "</b></font><br/>" + failFormat + "<b><br/> SOAP REQUEST [ " + bs.getServiceName() + "#" + bs.getOperationName() + " ] </b></font>");
+        String request = sp.getRequest().replaceAll("</*>", "</*>");
+        String response = sp.getResponse();
+        Reporter.log("<font size = 2><b>Endpoint: " + sp.getServiceURL() + "</b></font><br/>" + failFormat + "<b><br/> SOAP REQUEST [ " + sp.getServiceName() + "#" + sp.getOperationName() + " ] </b></font>");
         Reporter.setEscapeHtml(true);
         Reporter.log(request);
         Reporter.setEscapeHtml(false);
         Reporter.log("<br/><br/>");
-        Reporter.log(failFormat + "<b> SOAP RESPONSE [ " + bs.getServiceName() + "#" + bs.getOperationName() + " ] </b></font>");
+        Reporter.log(failFormat + "<b> SOAP RESPONSE [ " + sp.getServiceName() + "#" + sp.getOperationName() + " ]. Execution time: [ " + sp.getExecutionTime() + " ]</b></font>");
         Reporter.setEscapeHtml(true);
         Reporter.log(response);
         Reporter.setEscapeHtml(false);
@@ -499,7 +503,7 @@ public class TestReporter {
         Reporter.log(rs.getRequestBody().replaceAll("</*>", "</*>"));
         Reporter.setEscapeHtml(false);
         Reporter.log("<br/>");
-        Reporter.log(failFormat + "<br/><b>REST RESPONSE</b></font>");
+        Reporter.log(failFormat + "<br/><b>REST RESPONSE. Execution time: [ " + rs.getExecutionTime() + " ]</b></font>");
         Reporter.setEscapeHtml(true);
         Reporter.log(rs.getResponse());
         Reporter.setEscapeHtml(false);
@@ -509,4 +513,40 @@ public class TestReporter {
             throw new RestException(message);
         }
     }
+    
+    /**
+	 * Logs any console errors with level of SEVERE to the test reporter
+	 * This functionality is only available in the chrome browser.  
+	 * IE browser and Firefox do not support at this time (07/21/2017)
+	 * @date 07/21/2017
+	 * @param driver
+	 */
+	public static void logConsoleErrors(OrasiDriver driver) {
+		//Only capture logs for chrome browser
+		if (driver != null) {
+			if (driver.getDriverCapability().browserName().equalsIgnoreCase("chrome")){
+				Reporter.log("<br/><b><font size = 4>Chrome Browser Console errors: </font></b><br/>");
+				LogEntries logs = driver.manage().logs().get("browser");
+		    	List<LogEntry> logList = logs.getAll();
+		    	String color = "red";
+		    	//Go through all the log entries, and only output the severe level errors (rest are most likely warnings)
+		    	boolean flag = false;
+		    	for (LogEntry entry:logList) {
+		    		if (entry.getLevel()== Level.SEVERE){
+		    			Reporter.log(" <font size = 2 color=\"" + color + "\"><b> Level :: " +  entry.getLevel().getName() 
+			    				+ "</font></b><br />");
+			    		Reporter.log(" <font size = 2 color=\"" + color + "\"><b> Message :: "+ entry.getMessage() 
+			    				+ "</font></b><br />");	
+			    		flag = true;
+		    		}
+		    	}
+		    	
+		    	if (!flag) {
+		    		Reporter.log("NO ERRORS");
+		    	}
+			}
+		} else {
+			TestReporter.log("Driver was null, could not capture console errors");
+		}
+	}
 }

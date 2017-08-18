@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 
+import com.orasi.utils.database.exceptions.DatabaseException;
+
 public abstract class Database {
 
     protected String driver = null;
@@ -77,39 +79,20 @@ public abstract class Database {
         logTrace("Entering Database#getResultSet");
         loadDriver();
 
-        Connection connection = null;
-        try {
-            logTrace("Attempt to connect to database [ " + connectionString + " ]");
-            connection = DriverManager.getConnection(connectionString, dbUser, dbPassword);
+        logTrace("Attempt to connect to database [ " + connectionString + " ]");
+        try (Connection connection = DriverManager.getConnection(connectionString, dbUser, dbPassword);) {
             logTrace("Connection successful");
-        } catch (SQLException e) {
-            throw new DatabaseException("Failed to establish database connection to " + connectionString, e);
-        }
 
-        logTrace("Running query");
-        logTrace(query);
-        ResultSet rs = null;
-        try {
-            rs = runQuery(connection, query);
-            logTrace("Query results returned with no errors. Parsing results");
-            Object[][] parsedRs = extract(rs);
-            logTrace("Exiting Database#getResultSet");
-            return parsedRs;
+            logTrace("Running query");
+            logTrace(query);
+            try (ResultSet rs = runQuery(connection, query)) {
+                logTrace("Query results returned with no errors. Parsing results");
+                Object[][] parsedRs = extract(rs);
+                logTrace("Exiting Database#getResultSet");
+                return parsedRs;
+            }
         } catch (Exception e) {
             throw new DatabaseException("Failed to extract data into a Recordset", e);
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (Exception e) {
-                    /* ignored */ }
-            }
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (Exception e) {
-                    /* ignored */ }
-            }
         }
     }
 
@@ -191,8 +174,6 @@ public abstract class Database {
                         table[rowNum][colNum] = "NULL";
                     } else {
                         try {
-
-                            //
                             switch (rsmd.getColumnType(rsColumn)) {
 
                                 case Types.DATE:
@@ -214,8 +195,6 @@ public abstract class Database {
                         } catch (Exception e) {
                             table[rowNum][colNum] = resultSet.getString(rsColumn).intern();
                         }
-                        // System.out.println(resultSet.getString(c).intern());
-                        // table[rowNum][colNum] = resultSet.getString(colNum+1).intern();
                     }
                 }
                 resultSet.next();

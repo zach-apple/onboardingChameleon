@@ -49,7 +49,12 @@ public class Headers {
             case BASIC_CONVO:
                 logDebug("Creating headers for [BASIC_CONVO]");
                 headers = new Header[] {
-                        new BasicHeader("Content-type", "application/json;charset=utf-8"), new BasicHeader("Accept", "application/json"), new BasicHeader("username", "test.user"), new BasicHeader("messageId", Randomness.generateMessageId()), new BasicHeader("Connection", "keep-alive"), new BasicHeader("requestedTimestamp", Randomness.generateCurrentXMLDatetime() + ".000-04:00")
+                        new BasicHeader("Content-type", "application/json;charset=utf-8"),
+                        new BasicHeader("Accept", "application/json"),
+                        new BasicHeader("username", "test.user"),
+                        new BasicHeader("messageId", Randomness.generateMessageId()),
+                        new BasicHeader("Connection", "keep-alive"),
+                        new BasicHeader("requestedTimestamp", Randomness.generateCurrentXMLDatetime() + ".000-04:00")
                 };
                 break;
             case JSON:

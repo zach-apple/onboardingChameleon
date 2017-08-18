@@ -103,7 +103,7 @@ public class TestEnvironment {
 
     /**
      * General constructor for setting up driver for remote or local execution
-     * 
+     *
      * @param application
      * @param browserUnderTest
      * @param browserVersion
@@ -304,7 +304,7 @@ public class TestEnvironment {
 
     /**
      * Launches the application under test using a URL passed into method
-     * 
+     *
      * @version 12/16/2014
      * @author Justin Phlegar
      * @return Nothing
@@ -317,7 +317,7 @@ public class TestEnvironment {
      * Launches the application under test using the URL grabbed from the EnvironmentURLs properties file
      * It will look for a key in the properties file with the
      * prefix of the application under test + "_" + the environment being tested.
-     * 
+     *
      * @version 12/16/2014
      * @author Justin Phlegar
      * @return Nothing
@@ -334,7 +334,7 @@ public class TestEnvironment {
      * setPageURL("http://urlforthepage.com"). Unless you are wanting the test to start from a specific
      * page in the application under test, you will not set that field & will instead just use the base
      * URL from the properties file
-     * 
+     *
      * @version 12/16/2014
      * @author Jessica Marshall
      */
@@ -401,7 +401,7 @@ public class TestEnvironment {
     /**
      * Ends the test for a sauce labs run by passing in the test results (pass/fail)
      * and quits
-     * 
+     *
      * @param result
      */
     private void reportToSauceLabs(int result) {
@@ -419,7 +419,7 @@ public class TestEnvironment {
 
     /**
      * Sets up the driver type, location, browser under test, os
-     * 
+     *
      * @param None
      * @version 12/16/2014
      * @author Justin Phlegar
@@ -460,7 +460,7 @@ public class TestEnvironment {
      * Creates a local web driver instance based on browser, browser version (required only for firefox).
      * It uses driver servers for each browser that are stored within the project.
      * For firefox versions greater than 46, you will need to use the marionette/gecko driver.
-     * 
+     *
      * @author jessica.marshall
      * @date 9/13/2016
      */
@@ -541,7 +541,7 @@ public class TestEnvironment {
     /**
      * Creates the remote webdriver instance based on browser, browser version
      * OS, and the remote grid URL
-     * 
+     *
      * @author jessica.marshall
      * @date 9/13/2016
      */
@@ -589,6 +589,9 @@ public class TestEnvironment {
             throw new AutomationException("Problem with creatting the remote web driver: ", e);
 
         }
+
+        // allows for local files to be uploaded via remote webdriver on grid machines
+        getDriver().setFileDetector();
     }
 
     /**
@@ -601,7 +604,7 @@ public class TestEnvironment {
      * browserUnderTest -- Name of mobile web browser to automate. Should be an empty string if automating an app instead
      * mobileAppPath -- The absolute local path or remote http URL to an .ipa or .apk file, or a .zip containing one of these.
      * Leave browserUnderTest blank/null if using this
-     * 
+     *
      * @date 9/28/2016
      * @author jessica.marshall
      */
@@ -632,7 +635,7 @@ public class TestEnvironment {
 
     /**
      * Used to get the Platform used by Selenium
-     * 
+     *
      * @param os
      * @return
      */
