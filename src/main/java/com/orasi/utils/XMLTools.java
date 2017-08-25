@@ -439,7 +439,7 @@ public class XMLTools {
         try {
             transformer = tf.newTransformer();
         } catch (TransformerConfigurationException e) {
-            throw new SoapException("Failed to create XML Transformer", e.getCause());
+            throw new SoapException("Failed to create XML Transformer", e);
         }
 
         logTrace("Adding XML transformer properties");
@@ -447,6 +447,7 @@ public class XMLTools {
         transformer.setOutputProperty(OutputKeys.METHOD, "xml");
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 
         String xml;
         try (StringWriter sw = new StringWriter()) {

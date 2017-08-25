@@ -90,7 +90,7 @@ public class TestFrameHandler extends TestEnvironment {
     @Title("testMoveToParentFrame")
     @Test(groups = { "regression", "utils", "dev" }, dependsOnMethods = "testMoveToChildFrameWithLocator")
     public void testMoveToParentFrame() {
-        if (this.browserUnderTest.toLowerCase().contains("safari") || driver.toString().contains("safari")) {
+        if (this.browserUnderTest.toLowerCase().contains("safari") || getDriver().toString().contains("safari")) {
             throw new SkipException("Test not valid for SafariDriver");
         }
         FrameHandler.moveToParentFrame(getDriver());
@@ -103,7 +103,7 @@ public class TestFrameHandler extends TestEnvironment {
     @Title("testMoveToSiblingFrameWithName")
     @Test(groups = { "regression", "utils", "dev" }, dependsOnMethods = "testMoveToParentFrame")
     public void testMoveToSiblingFrameWithName() {
-        if (this.browserUnderTest.toLowerCase().contains("safari") || driver.toString().contains("safari")) {
+        if (this.browserUnderTest.toLowerCase().contains("safari") || getDriver().toString().contains("safari")) {
             throw new SkipException("Test not valid for SafariDriver");
         }
         FrameHandler.moveToChildFrame(getDriver(), "main_frame1");
@@ -117,7 +117,7 @@ public class TestFrameHandler extends TestEnvironment {
     @Title("testMoveToSiblingFrameWithLocator")
     @Test(groups = { "regression", "utils", "dev" }, dependsOnMethods = "testMoveToSiblingFrameWithName")
     public void testMoveToSiblingFrameWithLocator() {
-        if (this.browserUnderTest.toLowerCase().contains("safari") || driver.toString().contains("safari")) {
+        if (this.browserUnderTest.toLowerCase().contains("safari") || getDriver().toString().contains("safari")) {
             throw new SkipException("Test not valid for SafariDriver");
         }
         By locator = By.name("main_frame1");

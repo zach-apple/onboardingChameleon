@@ -40,8 +40,8 @@ public class TestWindowHandler extends TestEnvironment {
     @Title("waitUntilNumberOfWindowsAre")
     @Test(groups = { "regression", "smoke" })
     public void waitUntilNumberOfWindowsAre() {
-        driver.executeJavaScript("window.open('http://bluesourcestaging.herokuapp.com', 'BLAH', 'height=800,width=800');");
-        Assert.assertTrue(WindowHandler.waitUntilNumberOfWindowsAre(driver, 2));
+        getDriver().executeJavaScript("window.open('http://bluesourcestaging.herokuapp.com', 'BLAH', 'height=800,width=800');");
+        Assert.assertTrue(WindowHandler.waitUntilNumberOfWindowsAre(getDriver(), 2));
     }
 
     @Features("Utilities")
@@ -49,7 +49,7 @@ public class TestWindowHandler extends TestEnvironment {
     @Title("waitUntilWindowExistsWithTitle")
     @Test(groups = { "regression", "smoke" }, dependsOnMethods = "waitUntilNumberOfWindowsAre")
     public void waitUntilWindowExistsWithTitle() {
-        Assert.assertTrue(WindowHandler.waitUntilWindowExistsWithTitle(driver, "BlueSource"));
+        Assert.assertTrue(WindowHandler.waitUntilWindowExistsWithTitle(getDriver(), "BlueSource"));
     }
 
     @Features("Utilities")
@@ -57,7 +57,7 @@ public class TestWindowHandler extends TestEnvironment {
     @Title("waitUntilWindowExistsTitleContains")
     @Test(groups = { "regression", "smoke" }, dependsOnMethods = "waitUntilNumberOfWindowsAre")
     public void waitUntilWindowExistsTitleContains() {
-        Assert.assertTrue(WindowHandler.waitUntilWindowExistsTitleContains(driver, "Blue"));
+        Assert.assertTrue(WindowHandler.waitUntilWindowExistsTitleContains(getDriver(), "Blue"));
     }
 
     @Features("Utilities")
@@ -65,7 +65,7 @@ public class TestWindowHandler extends TestEnvironment {
     @Title("waitUntilWindowExistsTitleMatches")
     @Test(groups = { "regression", "smoke" }, dependsOnMethods = "waitUntilNumberOfWindowsAre")
     public void waitUntilWindowExistsTitleMatches() {
-        Assert.assertTrue(WindowHandler.waitUntilWindowExistsTitleMatches(driver, "(?i:.*source)"));
+        Assert.assertTrue(WindowHandler.waitUntilWindowExistsTitleMatches(getDriver(), "(?i:.*source)"));
     }
 
 }

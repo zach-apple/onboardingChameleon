@@ -220,7 +220,7 @@ public class TestOrasiDriver extends TestEnvironment {
     @Features("Utilities")
     @Stories("OrasiDriver")
     @Title("getDriver")
-    @Test(groups = { "regression", "utils", "orasidriver" })
+    @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "setScriptTimeout")
     public void testGetDriver() {
         Assert.assertNotNull(driver.getWebDriver());
     }

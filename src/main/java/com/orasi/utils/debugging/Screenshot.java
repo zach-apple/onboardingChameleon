@@ -73,7 +73,7 @@ public class Screenshot extends TestListenerAdapter implements IReporter {
         // Capture a screenshot for Allure reporting
         // FailedScreenshot(augmentDriver);
         if (reportToMustard) {
-            Mustard.postResultsToMustard(driver, result, runLocation);
+            Mustard.postResultsToMustard(driver, result, runLocation, null);
         }
     }
 
@@ -85,7 +85,7 @@ public class Screenshot extends TestListenerAdapter implements IReporter {
             return;
         }
         if (reportToMustard) {
-            Mustard.postResultsToMustard(driver, result, runLocation);
+            Mustard.postResultsToMustard(driver, result, runLocation, null);
         }
     }
 
@@ -97,7 +97,7 @@ public class Screenshot extends TestListenerAdapter implements IReporter {
             return;
         }
         if (reportToMustard) {
-            Mustard.postResultsToMustard(driver, result, runLocation);
+            Mustard.postResultsToMustard(driver, result, runLocation, null);
         }
     }
 

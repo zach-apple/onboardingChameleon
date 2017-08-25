@@ -24,14 +24,9 @@ public class ListboxImpl extends ElementImpl implements Listbox {
      * @param element
      *            - element to wrap up
      */
-    public ListboxImpl(WebElement element) {
-        super(element);
-        this.innerSelect = new org.openqa.selenium.support.ui.Select(element);
-    }
 
     public ListboxImpl(OrasiDriver driver, By by) {
         super(driver, by);
-        // element = driver.findWebElement(by);
         logTrace("Entering ListboxImpl#init");
         this.innerSelect = new org.openqa.selenium.support.ui.Select(driver.findWebElement(by));
         logTrace("Exiting ListboxImpl#init");

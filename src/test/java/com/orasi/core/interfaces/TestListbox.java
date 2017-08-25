@@ -49,16 +49,16 @@ public class TestListbox extends TestEnvironment {
     @Title("constructor")
     @Test(groups = { "regression", "interfaces", "listbox" })
     public void constructorWithElement() {
-        Assert.assertNotNull((new ListboxImpl(getDriver().findWebElement((By.id("singleSelect"))))));
+        Assert.assertNotNull((new ListboxImpl(getDriver(), (By.id("singleSelect")))));
     }
 
     /*
      * @Features("Element Interfaces")
-     * 
+     *
      * @Stories("Listbox")
-     * 
+     *
      * @Title("constructorWithElementAndDriver")
-     * 
+     *
      * @Test(groups ={"regression", "interfaces", "listbox"})
      * public void constructorWithElementAndDriver(){
      * Assert.assertNotNull((new ListboxImpl(getDriver().findWebElement((By.id("singleSelect"))), getDriver())));

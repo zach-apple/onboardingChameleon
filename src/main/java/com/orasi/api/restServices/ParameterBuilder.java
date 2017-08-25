@@ -7,6 +7,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 public class ParameterBuilder {
+    @SuppressWarnings("unused")
     private List<NameValuePair> params = new ArrayList<>();
 
     public ParameterBuilder() {

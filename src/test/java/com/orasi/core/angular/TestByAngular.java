@@ -57,7 +57,7 @@ public class TestByAngular extends TestEnvironment {
     @Title("constructor")
     @Test(groups = { "regression", "interfaces", "ByAngularModel" })
     public void byAngular() {
-        ByAngular angular = new ByAngular(driver);
+        ByAngular angular = new ByAngular(getDriver());
         Assert.assertNotNull(angular);
     }
 
@@ -66,7 +66,7 @@ public class TestByAngular extends TestEnvironment {
     @Title("Model")
     @Test(groups = { "regression", "interfaces", "ByAngularModel" })
     public void byAngularModel() {
-        ByAngularModel model = new ByAngularModel((JavascriptExecutor) driver.getWebDriver(), "user.name");
+        ByAngularModel model = new ByAngularModel((JavascriptExecutor) getDriver().getWebDriver(), "user.name");
         Assert.assertNotNull(model);
     }
 
@@ -75,11 +75,11 @@ public class TestByAngular extends TestEnvironment {
     @Title("Model")
     @Test(groups = { "regression", "interfaces", "ByAngularModel" })
     public void byAngularButtonText() {
-        ByAngularButtonText buttonText = new ByAngularButtonText((JavascriptExecutor) driver.getWebDriver(), "Login");
+        ByAngularButtonText buttonText = new ByAngularButtonText((JavascriptExecutor) getDriver().getWebDriver(), "Login");
         Assert.assertNotNull(buttonText);
-        driver.findTextbox(ByNG.model("user.name")).set("Luke");
-        driver.findTextbox(ByNG.model("user.password")).set("Skywalker");
-        driver.findTextbox(ByNG.buttonText("Login")).click();
+        getDriver().findTextbox(ByNG.model("user.name")).set("Luke");
+        getDriver().findTextbox(ByNG.model("user.password")).set("Skywalker");
+        getDriver().findTextbox(ByNG.buttonText("Login")).click();
 
     }
 
@@ -88,7 +88,7 @@ public class TestByAngular extends TestEnvironment {
     @Title("waitForAgnularRequestsToFinish")
     @Test(groups = { "regression", "interfaces", "WaitForAngularRequestsToFinish" }, dependsOnMethods = "byAngularButtonText")
     public void waitForAngularRequestsToFinish() {
-        WaitForAngularRequestsToFinish.waitForAngularRequestsToFinish(driver);
+        WaitForAngularRequestsToFinish.waitForAngularRequestsToFinish(getDriver());
     }
 
     @Features("Element Interfaces")
@@ -96,7 +96,7 @@ public class TestByAngular extends TestEnvironment {
     @Title("controller")
     @Test(groups = { "regression", "interfaces", "byAngularController" }, dependsOnMethods = "byAngularButtonText")
     public void byAngularController() {
-        ByAngularController controller = new ByAngularController((JavascriptExecutor) driver.getWebDriver(), "HeaderController");
+        ByAngularController controller = new ByAngularController((JavascriptExecutor) getDriver().getWebDriver(), "HeaderController");
         Assert.assertNotNull(controller);
     }
 
@@ -105,7 +105,7 @@ public class TestByAngular extends TestEnvironment {
     @Title("repeater")
     @Test(groups = { "regression", "interfaces", "byAngularController" }, dependsOnMethods = "byAngularButtonText")
     public void byAngularRepeater() {
-        ByAngularRepeater repeat = new ByAngularRepeater((JavascriptExecutor) driver.getWebDriver(), "employee in employees");
+        ByAngularRepeater repeat = new ByAngularRepeater((JavascriptExecutor) getDriver().getWebDriver(), "employee in employees");
         Assert.assertNotNull(repeat);
     }
 

@@ -18,7 +18,9 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteExecuteMethod;
 import org.openqa.selenium.remote.RemoteKeyboard;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -62,9 +64,9 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
     private static final long serialVersionUID = -657563735440878909L;
     private WebDriver driver;
     private DataWarehouse dataWarehouse;
-    private int currentPageTimeout = Constants.PAGE_TIMEOUT;
-    private int currentElementTimeout = Constants.ELEMENT_TIMEOUT;
-    private int currentScriptTimeout = Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT;
+    private int currentPageTimeout;
+    private int currentElementTimeout;
+    private int currentScriptTimeout;
     public static boolean DEFAULT_SYNC_HANDLER = true;
 
     public OrasiDriver() {
@@ -78,6 +80,9 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
      *            - Selenium desired capabilities, used to configure the OrasiDriver
      */
     public OrasiDriver(DesiredCapabilities caps) {
+        currentPageTimeout = Constants.PAGE_TIMEOUT;
+        currentElementTimeout = Constants.ELEMENT_TIMEOUT;
+        currentScriptTimeout = Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT;
         setDriverWithCapabilties(caps);
     }
 
@@ -91,6 +96,9 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
      *            -
      */
     public OrasiDriver(DesiredCapabilities caps, URL url) {
+        currentPageTimeout = Constants.PAGE_TIMEOUT;
+        currentElementTimeout = Constants.ELEMENT_TIMEOUT;
+        currentScriptTimeout = Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT;
         driver = new RemoteWebDriver(url, caps);
     }
 
@@ -252,6 +260,16 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
      */
     public int getElementTimeout() {
         return currentElementTimeout;
+    }
+
+    /**
+     * Used when you want to upload a local file to the remote webdriver for use
+     * on the selenium grid nodes.
+     * You would then just use your normal sendKeys() method to populate the upload
+     * input with a local file and selenium will transfer file across the wire to the grid
+     */
+    public void setFileDetector() {
+        ((RemoteWebDriver) driver).setFileDetector(new LocalFileDetector());
     }
 
     /*
@@ -957,6 +975,10 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
      */
     private RemoteWebDriver getRemoteWebDriver() {
         return ((RemoteWebDriver) driver);
+    }
+
+    public Actions actions() {
+        return new Actions(driver);
     }
 
     /**
