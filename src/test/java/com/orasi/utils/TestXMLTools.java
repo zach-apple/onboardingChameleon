@@ -118,7 +118,7 @@ public class TestXMLTools extends TestEnvironment {
     public void transformXmlToString() {
         String xml = "<catalog><book><author>Gambardella, Matthew</author><title>XML Developers Guide</title><genre>Computer</genre><price>44.95</price></book></catalog>";
         Document doc = XMLTools.makeXMLDocument(xml);
-        Assert.assertTrue(XMLTools.transformXmlToString(doc).replaceAll("\\r|\\n", "").contains(xml));
+        Assert.assertTrue(XMLTools.transformXmlToString(doc).replaceAll("\\r|\\n|\\t| ", "").contains(xml.replaceAll(" ", "")));
     }
 
     @Features("Utilities")

@@ -3,7 +3,7 @@ package com.orasi.core.interfaces;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.ITestContext;
-import org.testng.annotations.AfterTest;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
@@ -35,7 +35,7 @@ public class TestWebtable extends TestEnvironment {
         testStart("TestWebtable");
     }
 
-    @AfterTest(groups = { "regression", "interfaces", "webtable", "dev" })
+    @AfterClass(groups = { "regression", "interfaces", "webtable", "dev" })
     public void close(ITestContext testResults) {
         endTest("TestAlert", testResults);
     }
@@ -45,20 +45,8 @@ public class TestWebtable extends TestEnvironment {
     @Title("constructor")
     @Test(groups = { "regression", "interfaces", "webtable" })
     public void constructorWithElement() {
-        Assert.assertNotNull((new WebtableImpl(getDriver().findWebElement((By.xpath(xpath))))));
+        Assert.assertNotNull((new WebtableImpl(getDriver(), (By.xpath(xpath)))));
     }
-    /*
-     * @Features("Element Interfaces")
-     * 
-     * @Stories("Webtable")
-     * 
-     * @Title("constructorWithElement")
-     * 
-     * @Test(groups ={"regression", "interfaces", "webtable"})
-     * public void constructorWithElementAndDriver(){
-     * Assert.assertNotNull((new WebtableImpl(getDriver().findWebElement((By.xpath(xpath))), getDriver())));
-     * }
-     */
 
     @Features("Element Interfaces")
     @Stories("Webtable")
@@ -67,7 +55,6 @@ public class TestWebtable extends TestEnvironment {
     public void clickCell() {
         Webtable webtable = getDriver().findWebtable(By.xpath(xpath));
         webtable.clickCell(1, 1);
-        // Assert.assertTrue(getDriver().findElement(By.id("LastName")).getAttribute("value").equals("clicked"));
     }
 
     @Features("Element Interfaces")

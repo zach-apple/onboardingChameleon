@@ -44,8 +44,8 @@ public class TestLink extends TestEnvironment {
     @Title("constructor")
     @Test(groups = { "regression", "interfaces", "link" })
     public void constructorWithElement() {
-        Assert.assertNotNull((new LinkImpl(getDriver().findWebElement(By.xpath("//a[@href='testLinks.html']")))));
-        Assert.assertNotNull((new LinkImpl(getDriver().findLink(By.xpath("//a[@href='testLinks.html']")))));
+        Assert.assertNotNull((new LinkImpl(getDriver(), By.xpath("//a[@href='testLinks.html']"))));
+        Assert.assertNotNull((new LinkImpl(getDriver(), By.xpath("//a[@href='testLinks.html']"))));
     }
 
     @Features("Element Interfaces")
@@ -64,7 +64,7 @@ public class TestLink extends TestEnvironment {
     @Test(groups = { "regression", "interfaces", "link" }, dependsOnMethods = "click")
     public void clickNegative() {
 
-        if (driver.getDriverCapability().browserName().contains("explorer") || getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty()) {
+        if (getDriver().getDriverCapability().browserName().contains("explorer") || getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty()) {
             throw new SkipException("Test not valid for Internet Explorer");
         }
         if (getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty()) {
@@ -95,7 +95,7 @@ public class TestLink extends TestEnvironment {
     @Title("jsClickNegative")
     @Test(groups = { "regression", "interfaces", "link" }, dependsOnMethods = "jsClick")
     public void jsClickNegative() {
-        if (driver.getDriverCapability().browserName().contains("explorer")) {
+        if (getDriver().getDriverCapability().browserName().contains("explorer")) {
             throw new SkipException("Test not valid for Internet Explorer");
         }
         Link link = getDriver().findLink(By.xpath("//a[@href='hiddenLink.html']"));

@@ -1,7 +1,6 @@
 package com.orasi.core.interfaces.impl;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 import com.orasi.core.interfaces.Label;
 import com.orasi.utils.OrasiDriver;
@@ -16,13 +15,9 @@ public class LabelImpl extends ElementImpl implements Label {
      * @param element
      *            element to wrap up
      */
-    public LabelImpl(WebElement element) {
-        super(element);
-    }
 
     public LabelImpl(OrasiDriver driver, By by) {
         super(driver, by);
-        // element = driver.findWebElement(by);
     }
 
     @Override

@@ -60,13 +60,6 @@ public class ElementImpl implements Element {
     protected ByNG byNG;
     protected OrasiDriver driver;
 
-    public ElementImpl(final WebElement element) {
-        this.element = element;
-        driver = getWrappedDriver();
-        by = getElementLocator();
-
-    }
-
     public ElementImpl(final OrasiDriver driver, final By by) {
         this.by = by;
         this.driver = driver;

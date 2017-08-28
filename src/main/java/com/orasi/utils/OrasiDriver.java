@@ -64,9 +64,9 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
     private static final long serialVersionUID = -657563735440878909L;
     private WebDriver driver;
     private DataWarehouse dataWarehouse;
-    private int currentPageTimeout = Constants.PAGE_TIMEOUT;
-    private int currentElementTimeout = Constants.ELEMENT_TIMEOUT;
-    private int currentScriptTimeout = Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT;
+    private int currentPageTimeout;
+    private int currentElementTimeout;
+    private int currentScriptTimeout;
     public static boolean DEFAULT_SYNC_HANDLER = true;
 
     public OrasiDriver() {
@@ -80,6 +80,9 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
      *            - Selenium desired capabilities, used to configure the OrasiDriver
      */
     public OrasiDriver(DesiredCapabilities caps) {
+        currentPageTimeout = Constants.PAGE_TIMEOUT;
+        currentElementTimeout = Constants.ELEMENT_TIMEOUT;
+        currentScriptTimeout = Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT;
         setDriverWithCapabilties(caps);
     }
 
@@ -93,6 +96,9 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
      *            -
      */
     public OrasiDriver(DesiredCapabilities caps, URL url) {
+        currentPageTimeout = Constants.PAGE_TIMEOUT;
+        currentElementTimeout = Constants.ELEMENT_TIMEOUT;
+        currentScriptTimeout = Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT;
         driver = new RemoteWebDriver(url, caps);
     }
 
