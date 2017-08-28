@@ -1,5 +1,7 @@
 package com.orasi.utils;
 
+import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -49,9 +51,9 @@ public class TestEnvironment {
      * WebDriver Fields
      */
     protected OrasiDriver driver;
-    protected ThreadLocal<OrasiDriver> threadedDriver = new ThreadLocal<OrasiDriver>();
+    protected ThreadLocal<OrasiDriver> threadedDriver = new ThreadLocal<>();
     private boolean setThreadDriver = false;
-    protected ThreadLocal<String> sessionId = new ThreadLocal<String>();
+    protected ThreadLocal<String> sessionId = new ThreadLocal<>();
 
     /*
      * URL and Credential Repository Field
@@ -367,12 +369,9 @@ public class TestEnvironment {
             reportToSauceLabs(testResults.getStatus());
         }
         // quit driver
-        if (getDriver() != null && getDriver().getWindowHandles().size() > 0) {
-            if (!getDriver().toString().contains("null")) {
-                getDriver().quit();
-            }
+        if (getDriver() != null && isNotEmpty(getDriver().getWindowHandles()) && !getDriver().toString().contains("null")) {
+            getDriver().quit();
         }
-
     }
 
     /**
@@ -405,7 +404,7 @@ public class TestEnvironment {
      * @param result
      */
     private void reportToSauceLabs(int result) {
-        Map<String, Object> updates = new HashMap<String, Object>();
+        Map<String, Object> updates = new HashMap<>();
         updates.put("name", getTestName());
 
         if (result == ITestResult.FAILURE) {
@@ -513,14 +512,9 @@ public class TestEnvironment {
                                 .exec(new String[] { "/bin/bash", "-c", "chmod 777 " + file.getAbsolutePath() });
                         proc.waitFor();
 
-                    } catch (IllegalStateException ise) {
-                        ise.printStackTrace();
+                    } catch (IllegalStateException | IOException | InterruptedException ise) {
                         throw new IllegalStateException(
-                                "This has been seen to occur when the chromedriver file does not have executable permissions. In a terminal, navigate to the directory to which Maven pulls the drivers at runtime (e.g \"/target/classes/drivers/\") and execute the following command: chmod +rx chromedriver");
-                    } catch (IOException ioe) {
-                        ioe.printStackTrace();
-                    } catch (InterruptedException ie) {
-                        ie.printStackTrace();
+                                "This has been seen to occur when the chromedriver file does not have executable permissions. In a terminal, navigate to the directory to which Maven pulls the drivers at runtime (e.g \"/target/classes/drivers/\") and execute the following command: chmod +rx chromedriver", ise);
                     }
                 }
 

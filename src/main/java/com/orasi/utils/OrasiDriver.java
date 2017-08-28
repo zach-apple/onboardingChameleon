@@ -255,16 +255,16 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
     public int getElementTimeout() {
         return currentElementTimeout;
     }
-    
-	/**
-	 * Used when you want to upload a local file to the remote webdriver for use
-	 * on the selenium grid nodes.  
-	 * You would then just use your normal sendKeys() method to populate the upload 
-	 * input with a local file and selenium will transfer file across the wire to the grid
-	 */
-	public void setFileDetector() {
-		((RemoteWebDriver)driver).setFileDetector(new LocalFileDetector());
-	}
+
+    /**
+     * Used when you want to upload a local file to the remote webdriver for use
+     * on the selenium grid nodes.
+     * You would then just use your normal sendKeys() method to populate the upload
+     * input with a local file and selenium will transfer file across the wire to the grid
+     */
+    public void setFileDetector() {
+        ((RemoteWebDriver) driver).setFileDetector(new LocalFileDetector());
+    }
 
     /*
      * public List<Element> findElements(By by) { List<WebElement> webElements =
@@ -668,53 +668,6 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
     }
 
     /**
-     * Method to clone this class
-     *
-     * @return Object clone of the current state of this class
-     * @throws CloneNotSupportedException
-     * @see http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#clone()
-     */
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-
-    /**
-     * Method to determine if an object is equal to an instance of this class
-     *
-     * @param obj
-     *            - object with which to compare
-     * @return -boolean true if the two objects are equal, false otherwise
-     * @see http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
-    }
-
-    /**
-     * Method to dispose of system resources
-     *
-     * @throws Throwable
-     * @see http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#finalize()
-     */
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-    }
-
-    /**
-     * Method to return the hascode for an instance of this class
-     *
-     * @return hashcode for an instance of this class as an integer
-     * @see http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#hashCode--
-     */
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    /**
      * Method to return a current instance of this class as a String
      *
      * @return - current instance of this class as a String
@@ -1057,19 +1010,6 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
             PageLoaded.isAngularComplete(getOrasiDriver());
         }
 
-        /*
-         * isDomComplete
-         */
-        /**
-         * Method that determines when/if the DOM is complete
-         * Example usage: getDriver().page().isDomComplete();
-         *
-         * @return - boolean true if complete, false otherwise
-         */
-        public boolean isDomComplete() {
-            return PageLoaded.isDomComplete(getOrasiDriver());
-        }
-
         /**
          * Method that determines when/if the DOM is complete
          * Example usage: getDriver().page().isDomComplete(oDriver);
@@ -1078,7 +1018,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
          *            - current OrasiDriver
          * @return - boolean true if complete, false otherwise
          */
-        public boolean isDomComplete(OrasiDriver oDriver) {
+        public boolean isDomComplete() {
             return PageLoaded.isDomComplete(getOrasiDriver());
         }
 
@@ -1093,7 +1033,7 @@ public class OrasiDriver implements WebDriver, JavaScriptExecutor, TakesScreensh
          * @return - boolean true if complete, false otherwise
          * @return
          */
-        public boolean isDomComplete(OrasiDriver oDriver, int timeout) {
+        public boolean isDomComplete(int timeout) {
             return PageLoaded.isDomComplete(getOrasiDriver(), timeout);
         }
 

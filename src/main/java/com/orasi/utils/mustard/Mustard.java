@@ -17,6 +17,8 @@ import com.orasi.utils.OrasiDriver;
 
 @Beta
 public class Mustard {
+    private Mustard() {
+    }
 
     private static ResourceBundle appURLRepository = ResourceBundle.getBundle(Constants.ENVIRONMENT_URL_PATH);
 
