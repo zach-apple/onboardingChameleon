@@ -79,7 +79,7 @@ public class TestListener extends TestListenerAdapter implements IReporter {
                 new File(destDir).mkdirs();
 
                 // Capture a screenshot for TestNG reporting
-                TestReporter.logScreenshot(augmentDriver, destFile, slash, runLocation);
+                TestReporter.logScreenshot(augmentDriver, destFile, slash);
                 // Capture a screenshot for Allure reporting
                 failedScreenshot(augmentDriver);
             }

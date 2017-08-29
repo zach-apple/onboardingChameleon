@@ -12,7 +12,7 @@
  
 	<test name="Textbox" parallel="methods" thread-count="20">
 		<classes>
-			<class name="com.orasi.core.interfaces.TestWebtable" />
+			<class name="com.orasi.utils.TestTestReporter" />
 		</classes>
 	</test>
 </suite> <!-- Suite -->
