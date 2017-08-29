@@ -20,7 +20,7 @@ public class TestRegex extends TestEnvironment {
     @Features("Utilities")
     @Stories("Regex")
     @Title("constructor")
-    @Test(groups = { "regression", "interfaces", "Regex" })
+    @Test(groups = { "regression", "utils", "Regex" })
     public void constructorWithElement() {
         Assert.assertNotNull((new Regex()));
     }
