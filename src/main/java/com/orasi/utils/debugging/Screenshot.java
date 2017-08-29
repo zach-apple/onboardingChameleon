@@ -68,7 +68,7 @@ public class Screenshot extends TestListenerAdapter implements IReporter {
             String destFile = dateFormat.format(new Date()) + ".png";
 
             // Capture a screenshot for TestNG reporting
-            logScreenshot(augmentDriver, destDir + slash + destFile, slash, runLocation);
+            logScreenshot(augmentDriver, destDir + slash + destFile, slash);
         }
         // Capture a screenshot for Allure reporting
         // FailedScreenshot(augmentDriver);

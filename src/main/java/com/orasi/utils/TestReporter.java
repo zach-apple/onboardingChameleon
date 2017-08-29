@@ -1,7 +1,12 @@
 package com.orasi.utils;
 
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -84,16 +89,8 @@ public class TestReporter {
                 if (x == 0 || x == 1 || x == 2) {
                     x++;
                     continue;
-                } else if (!filename.contains("sun.reflect") &&
-                        !filename.contains("com.orasi.utils.TestReporter") &&
-                        !filename.contains("com.orasi.utils.PageLoaded") &&
-                        !filename.contains("java.lang.reflect") &&
-                        !filename.contains("java.lang.Thread") &&
-                        // !filename.contains("com.orasi.core.interfaces") &&
-                        !filename.contains("com.sun.proxy") && //
-                        !filename.contains("org.testng.internal") &&
-                        !filename.contains("java.util.concurrent.ThreadPoolExecutor") &&
-                        !filename.contains("com.orasi.utils.debugging")) {
+                } else if (!filename.matches("sun.reflect|com.orasi.utils.TestReporter|com.orasi.utils.TestReporter|com.orasi.utils.PageLoaded|java.lang.reflect|"
+                        + "java.lang.Thread|com.sun.proxy|org.testng.internal|java.util.concurrent.ThreadPoolExecutor|com.orasi.utils.debugging")) {
                     path = element.getClassName() + "#" + element.getMethodName();
                     break;
                 }
@@ -439,7 +436,17 @@ public class TestReporter {
         }
     }
 
-    public static void logScreenshot(WebDriver driver, String fileLocation, String slash, String runLocation) {
+    public static void logScreenshot(WebDriver driver, String fileName) {
+        String slash = Constants.DIR_SEPARATOR;
+
+        String destDir = Constants.SCREENSHOT_FOLDER + slash + fileName.replace(".", slash);
+        DateFormat dateFormat = new SimpleDateFormat("dd_MMM_yyyy_hh_mm_ssaa");
+
+        String destFile = destDir + slash + dateFormat.format(new Date()) + ".png";
+        logScreenshot(driver, destFile, slash);
+    }
+
+    public static void logScreenshot(WebDriver driver, String fileLocation, String slash) {
         File file = new File("");
 
         try {
@@ -449,11 +456,11 @@ public class TestReporter {
             throw new AutomationException("Failed to capture screenshot", e);
         }
 
-        String jenkinsPath = System.getenv("JOB_URL");
-        String jenkinsName = System.getenv("JOB_NAME");
-        String jenkinsWorkspace = System.getenv("HOME") + slash + "workspace" + slash;
+        String jenkinsPath = System.getProperty("jenkinsJobUrl");
+        String jenkinsName = System.getProperty("jenkinsJobName");
+        String jenkinsWorkspace = System.getProperty("jenkinsHome") + slash + "workspace" + slash;
 
-        if (jenkinsPath != null && !jenkinsPath.isEmpty()) {
+        if (isNotEmpty(jenkinsPath)) {
             TestReporter.logTrace("Jenkins URL [ " + jenkinsPath + " ]");
             TestReporter.logTrace("Job URL [ " + jenkinsName + " ]");
             TestReporter.logTrace("Jenkins workspace Path [ " + jenkinsWorkspace + " ]");
@@ -513,40 +520,41 @@ public class TestReporter {
             throw new RestException(message);
         }
     }
-    
+
     /**
-	 * Logs any console errors with level of SEVERE to the test reporter
-	 * This functionality is only available in the chrome browser.  
-	 * IE browser and Firefox do not support at this time (07/21/2017)
-	 * @date 07/21/2017
-	 * @param driver
-	 */
-	public static void logConsoleErrors(OrasiDriver driver) {
-		//Only capture logs for chrome browser
-		if (driver != null) {
-			if (driver.getDriverCapability().browserName().equalsIgnoreCase("chrome")){
-				Reporter.log("<br/><b><font size = 4>Chrome Browser Console errors: </font></b><br/>");
-				LogEntries logs = driver.manage().logs().get("browser");
-		    	List<LogEntry> logList = logs.getAll();
-		    	String color = "red";
-		    	//Go through all the log entries, and only output the severe level errors (rest are most likely warnings)
-		    	boolean flag = false;
-		    	for (LogEntry entry:logList) {
-		    		if (entry.getLevel()== Level.SEVERE){
-		    			Reporter.log(" <font size = 2 color=\"" + color + "\"><b> Level :: " +  entry.getLevel().getName() 
-			    				+ "</font></b><br />");
-			    		Reporter.log(" <font size = 2 color=\"" + color + "\"><b> Message :: "+ entry.getMessage() 
-			    				+ "</font></b><br />");	
-			    		flag = true;
-		    		}
-		    	}
-		    	
-		    	if (!flag) {
-		    		Reporter.log("NO ERRORS");
-		    	}
-			}
-		} else {
-			TestReporter.log("Driver was null, could not capture console errors");
-		}
-	}
+     * Logs any console errors with level of SEVERE to the test reporter
+     * This functionality is only available in the chrome browser.
+     * IE browser and Firefox do not support at this time (07/21/2017)
+     *
+     * @date 07/21/2017
+     * @param driver
+     */
+    public static void logConsoleErrors(OrasiDriver driver) {
+        // Only capture logs for chrome browser
+        if (driver != null) {
+            if (driver.getDriverCapability().browserName().equalsIgnoreCase("chrome")) {
+                Reporter.log("<br/><b><font size = 4>Chrome Browser Console errors: </font></b><br/>");
+                LogEntries logs = driver.manage().logs().get("browser");
+                List<LogEntry> logList = logs.getAll();
+                String color = "red";
+                // Go through all the log entries, and only output the severe level errors (rest are most likely warnings)
+                boolean flag = false;
+                for (LogEntry entry : logList) {
+                    if (entry.getLevel() == Level.SEVERE) {
+                        Reporter.log(" <font size = 2 color=\"" + color + "\"><b> Level :: " + entry.getLevel().getName()
+                                + "</font></b><br />");
+                        Reporter.log(" <font size = 2 color=\"" + color + "\"><b> Message :: " + entry.getMessage()
+                                + "</font></b><br />");
+                        flag = true;
+                    }
+                }
+
+                if (!flag) {
+                    Reporter.log("NO ERRORS");
+                }
+            }
+        } else {
+            TestReporter.log("Driver was null, could not capture console errors");
+        }
+    }
 }
