@@ -23,19 +23,15 @@ public class WebtableImpl extends ElementImpl implements Webtable {
      * @param element
      *            to wrap up
      */
-    public WebtableImpl(WebElement element) {
-        super(element);
-    }
 
     public WebtableImpl(OrasiDriver driver, By by) {
         super(driver, by);
-        // element = driver.findWebElement(by);
     }
 
     private List<WebElement> getRowCollection() {
         logTrace("Entering WebtableImpl#getRowCollection");
         getWrappedDriver().setElementTimeout(1, TimeUnit.SECONDS);
-        List<WebElement> rowCollection = this.element.findElements(By.xpath("tr|tbody/tr"));
+        List<WebElement> rowCollection = reload().findElements(By.xpath("tr|tbody/tr"));
         getWrappedDriver().setElementTimeout(getWrappedDriver().getElementTimeout(), TimeUnit.SECONDS);
         logTrace("Exiting WebtableImpl#getRowCollection");
         return rowCollection;

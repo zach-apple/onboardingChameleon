@@ -5,7 +5,6 @@ import static com.orasi.utils.TestReporter.logFailure;
 import static com.orasi.utils.TestReporter.logTrace;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 import com.orasi.core.by.angular.ByNG;
 import com.orasi.core.interfaces.Button;
@@ -16,26 +15,19 @@ import com.orasi.utils.OrasiDriver;
  * Wraps a label on a html form with some behavior.
  */
 public class ButtonImpl extends ElementImpl implements Button {
-    // private java.util.Date date= new java.util.Date();
     /**
      * Creates a Element for a given WebElement.
      *
      * @param element
      *            - element to wrap up
      */
-    public ButtonImpl(WebElement element) {
-        super(element);
-
-    }
 
     public ButtonImpl(OrasiDriver driver, By by) {
         super(driver, by);
-        // element = driver.findWebElement(by);
     }
 
     public ButtonImpl(OrasiDriver driver, ByNG by) {
         super(driver, by);
-        // element = driver.findWebElement(by);
     }
 
     @Override

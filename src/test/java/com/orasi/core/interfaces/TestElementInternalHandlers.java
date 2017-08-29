@@ -58,7 +58,7 @@ public class TestElementInternalHandlers extends TestEnvironment {
     @Title("factory")
     @Test(groups = { "regression", "interfaces", "button" })
     public void factory() {
-        ElementFactory.initElements(driver, this);
+        ElementFactory.initElements(getDriver(), this);
         btn1.getWrappedElement();
         btn1.click();
     }

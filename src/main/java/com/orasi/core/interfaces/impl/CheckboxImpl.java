@@ -4,7 +4,6 @@ import static com.orasi.utils.TestReporter.interfaceLog;
 import static com.orasi.utils.TestReporter.logTrace;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 import com.orasi.core.interfaces.Checkbox;
 import com.orasi.utils.OrasiDriver;
@@ -13,20 +12,15 @@ import com.orasi.utils.OrasiDriver;
  * Wrapper class like Select that wraps basic checkbox functionality.
  */
 public class CheckboxImpl extends ElementImpl implements Checkbox {
-    // private java.util.Date dateAfter= new java.util.Date();
     /**
      * Wraps a WebElement with checkbox functionality.
      *
      * @param element
      *            to wrap up
      */
-    public CheckboxImpl(WebElement element) {
-        super(element);
-    }
 
     public CheckboxImpl(OrasiDriver driver, By by) {
         super(driver, by);
-        // element = driver.findWebElement(by);
     }
 
     @Override

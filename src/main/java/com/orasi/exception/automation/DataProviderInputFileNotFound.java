@@ -8,4 +8,8 @@ public class DataProviderInputFileNotFound extends AutomationException {
     public DataProviderInputFileNotFound(String message) {
         super(message);
     }
+
+    public DataProviderInputFileNotFound(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

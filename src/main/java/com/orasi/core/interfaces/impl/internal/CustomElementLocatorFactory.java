@@ -10,12 +10,15 @@ import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
 
 import com.orasi.core.by.angular.AngularElementLocator;
 import com.orasi.core.by.angular.FindByNG;
+import com.orasi.exception.automation.NullDriverException;
 import com.orasi.utils.OrasiDriver;
 
 public class CustomElementLocatorFactory implements ElementLocatorFactory {
     private final OrasiDriver driver;
 
     public CustomElementLocatorFactory(final OrasiDriver driver) {
+        if(driver == null)
+            throw new NullDriverException();
         this.driver = driver;
     }
 

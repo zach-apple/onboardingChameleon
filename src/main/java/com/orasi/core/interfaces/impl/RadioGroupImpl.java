@@ -34,28 +34,10 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
      *            - element to wrap up
      * @throws NoSuchAttributeException
      */
-    public RadioGroupImpl(final WebElement element) {
-        super(element);
-        logTrace("Entering RadioGroupImpl#init");
-        int timeout = getWrappedDriver().getElementTimeout();
-        getWrappedDriver().setElementTimeout(0);
-        this.radioButtons = element.findElements(By.tagName("input"));
-        if (radioButtons.size() == 0) {
-            radioButtons = getWrappedDriver().findElements(getElementLocator());
-        }
-        getWrappedDriver().setElementTimeout(timeout);
-        getNumberOfRadioButtons();
-        getAllOptions();
-        Assert.assertNotEquals(radioButtons.size(), 0,
-                "No radio buttons were found for the element [" + element + "].");
-        currentIndex = getCurrentIndex();
-        logTrace("Exiting RadioGroupImpl#init");
-    }
 
     public RadioGroupImpl(OrasiDriver driver, By by) {
         super(driver, by);
         logTrace("Entering RadioGroupImpl#init");
-        // element = driver.findWebElement(by);
         int timeout = driver.getElementTimeout();
         driver.setElementTimeout(0);
         this.radioButtons = element.findElements(By.tagName("input"));

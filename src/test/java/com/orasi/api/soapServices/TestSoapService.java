@@ -172,7 +172,7 @@ public class TestSoapService {
     public void setRequestNodeValueByXPath_HandleValueFunctions_AddNodes() {
         GetInfoByZip getInfo = new GetInfoByZip();
         getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP", "fx:addnodes;blah/blah2/blah3");
-        Assert.assertTrue(getInfo.getRequest().replace(System.getProperty("line.separator"), "").contains("<blah><blah2><blah3/></blah2></blah>"));
+        Assert.assertTrue(getInfo.getRequest().replace(System.getProperty("line.separator"), "").replaceAll(" ", "").contains("<blah><blah2><blah3/></blah2></blah>"));
     }
 
     @Features("API")

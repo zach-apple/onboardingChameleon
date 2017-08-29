@@ -43,7 +43,7 @@ public class TestLabel extends TestEnvironment {
     @Title("constructor")
     @Test(groups = { "regression", "interfaces", "label" })
     public void constructorWithElement() {
-        Assert.assertNotNull((new LabelImpl(getDriver().findWebElement((By.xpath("//*[@id='radioForm']/label[1]"))))));
+        Assert.assertNotNull((new LabelImpl(getDriver(), (By.xpath("//*[@id='radioForm']/label[1]")))));
     }
 
     @Features("Element Interfaces")
