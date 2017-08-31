@@ -6,8 +6,9 @@ import com.orasi.utils.dataHelpers.personFactory.Person;
 
 /**
  * Container class to store credit cards and easily retrieve them
- * Test are considered test cards for PayPal as listed below, but card
- * number info still not plaintext to encourage data masking
+ * The credit cards in this class are considered test cards for PayPal
+ * as listed below, but cardnumber info still not plaintext to 
+ * encourage data masking and safety
  *
  * @author justin.phlegar@orasi.com
  * @see https://www.paypalobjects.com/en_US/vhelp/paypalmanager_help/credit_card_numbers.htm
@@ -27,12 +28,12 @@ public class CreditCards {
     }
 
     /**
-     * Allow tester to reuse a pre-defined and associate that persons address info to the card
-     * Will check for a "Billing" type of address exists. If Billing exists, associate that address
+     * Allow tester to reuse a pre-defined Person and associate that persons address info to the card
+     * Will check for a "Billing" type of address first. If Billing exists, associate that address
      * to card. If Billing does NOT exist, then use the persons primary address
      *
-     * This is done for cases where apps may have business rules that billing address info entered must
-     * match records on file. By using the Person factory, that make this easier to do.
+     * This is done for cases where there may be business rules that billing address info entered must
+     * match a persons records on file. By using the Person factory, that make this easier to do.
      *
      * @param person
      */
