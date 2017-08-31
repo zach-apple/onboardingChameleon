@@ -1,13 +1,13 @@
 package com.orasi.utils.dataHelpers;
 
-import static com.orasi.utils.dataHelpers.creditCards.CreditCards.VISA;
-
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
 import com.orasi.exception.AutomationException;
 import com.orasi.utils.dataHelpers.creditCards.CreditCard;
 import com.orasi.utils.dataHelpers.creditCards.CreditCards;
+import com.orasi.utils.dataHelpers.personFactory.Address;
+import com.orasi.utils.dataHelpers.personFactory.Person;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
@@ -15,13 +15,36 @@ import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestCreditCard {
     private CreditCard card;
+    private Person person = new Person();
 
     @Features("Utilities")
     @Stories("CreditCard")
     @Title("creditCardsConstructor")
     @Test(groups = { "regression", "utils", "CreditCard" })
     public void creditCardConstructor() {
-        card = VISA();
+        CreditCard card = CreditCards.VISA();
+        Assert.assertNotNull(card);
+    }
+
+    @Features("Utilities")
+    @Stories("CreditCard")
+    @Title("creditCardsConstructor")
+    @Test(groups = { "regression", "utils", "CreditCard" })
+    public void creditCardPersonConstructor() {
+        card = new CreditCards(person).VISA();
+        Assert.assertNotNull(card);
+    }
+
+    @Features("Utilities")
+    @Stories("CreditCard")
+    @Title("creditCardsConstructor")
+    @Test(groups = { "regression", "utils", "CreditCard" })
+    public void creditCardPersonWillBillingConstructor() {
+        Person peep = new Person();
+        Address address = new Address();
+        address.setType("Billing");
+        peep.addAddress(address);
+        CreditCard card = new CreditCards(peep).VISA();
         Assert.assertNotNull(card);
     }
 
@@ -30,7 +53,7 @@ public class TestCreditCard {
     @Title("getBillingCity")
     @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
     public void getBillingCity() {
-        Assert.assertTrue(card.getBillingCity().equals("Orlando"));
+        Assert.assertTrue(card.getBillingCity().equals(person.primaryAddress().getCity()));
     }
 
     @Features("Utilities")
@@ -38,7 +61,7 @@ public class TestCreditCard {
     @Title("getBillingCountry")
     @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
     public void getBillingCountry() {
-        Assert.assertTrue(card.getBillingCountry().equals("USA"));
+        Assert.assertTrue(card.getBillingCountry().equals(person.primaryAddress().getCountryAbbv()));
     }
 
     @Features("Utilities")
@@ -46,7 +69,7 @@ public class TestCreditCard {
     @Title("getBillingState")
     @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
     public void getBillingState() {
-        Assert.assertTrue(card.getBillingState().equals("FL"));
+        Assert.assertTrue(card.getBillingState().equals(person.primaryAddress().getStateAbbv()));
     }
 
     @Features("Utilities")
@@ -54,7 +77,7 @@ public class TestCreditCard {
     @Title("getBillingStreet")
     @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
     public void getBillingStreet() {
-        Assert.assertTrue(card.getBillingStreet().equals("123 Test Lane"));
+        Assert.assertTrue(card.getBillingStreet().equals(person.primaryAddress().getAddress1()));
     }
 
     @Features("Utilities")
@@ -62,7 +85,7 @@ public class TestCreditCard {
     @Title("getBillingStreet2")
     @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
     public void getBillingStreet2() {
-        Assert.assertTrue(card.getBillingStreet2().equals(""));
+        Assert.assertTrue(card.getBillingStreet2().equals(person.primaryAddress().getAddress2()));
     }
 
     @Features("Utilities")
@@ -70,7 +93,7 @@ public class TestCreditCard {
     @Title("getBillingZip")
     @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
     public void getBillingZip() {
-        Assert.assertTrue(card.getBillingZip().equals("32830"));
+        Assert.assertTrue(card.getBillingZip().equals(person.primaryAddress().getZipCode()));
     }
 
     @Features("Utilities")
@@ -78,7 +101,7 @@ public class TestCreditCard {
     @Title("getCardNumber")
     @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
     public void getCardNumber() {
-        Assert.assertTrue(card.getCardNumber().equals("4266902036250643"));
+        Assert.assertTrue(card.getCardNumber().equals("4012888888881881"));
     }
 
     @Features("Utilities")
@@ -110,7 +133,7 @@ public class TestCreditCard {
     @Title("getNameOnCard")
     @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
     public void getNameOnCard() {
-        Assert.assertTrue(card.getNameOnCard().equals("Niki OReilly"));
+        Assert.assertTrue(card.getNameOnCard().equals(person.getFullName()));
     }
 
     @Features("Utilities")
@@ -147,6 +170,28 @@ public class TestCreditCard {
     @Stories("CreditCard")
     @Title("getCreditCardByType_DISC")
     @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
+    public void getCreditCardByType_DINERS() {
+        String type = "DINERSCLUB";
+        CreditCard card = CreditCards.getCreditCardByType("DINERS");
+        Assert.assertNotNull(card);
+        Assert.assertTrue(card.getCardType().equalsIgnoreCase(type));
+    }
+
+    @Features("Utilities")
+    @Stories("CreditCard")
+    @Title("getCreditCardByType_DISCOVER")
+    @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
+    public void getCreditCardByType_DINERSCLUB() {
+        String type = "DINERSCLUB";
+        CreditCard card = CreditCards.getCreditCardByType(type);
+        Assert.assertNotNull(card);
+        Assert.assertTrue(card.getCardType().equalsIgnoreCase(type));
+    }
+
+    @Features("Utilities")
+    @Stories("CreditCard")
+    @Title("getCreditCardByType_DISC")
+    @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
     public void getCreditCardByType_DISC() {
         String type = "DISCOVER";
         CreditCard card = CreditCards.getCreditCardByType("DISC");
@@ -161,6 +206,17 @@ public class TestCreditCard {
     public void getCreditCardByType_DISCOVER() {
         String type = "DISCOVER";
         CreditCard card = CreditCards.getCreditCardByType(type);
+        Assert.assertNotNull(card);
+        Assert.assertTrue(card.getCardType().equalsIgnoreCase(type));
+    }
+
+    @Features("Utilities")
+    @Stories("CreditCard")
+    @Title("getCreditCardByType_DISC")
+    @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
+    public void getCreditCardByType_JCB() {
+        String type = "JCB";
+        CreditCard card = CreditCards.getCreditCardByType("JCB");
         Assert.assertNotNull(card);
         Assert.assertTrue(card.getCardType().equalsIgnoreCase(type));
     }
@@ -211,9 +267,17 @@ public class TestCreditCard {
 
     @Features("Utilities")
     @Stories("CreditCard")
-    @Title("getCreditCardByType_VISA_EXPIRED")
+    @Title("getCreditCardByType_InvalidCard")
     @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" }, expectedExceptions = AutomationException.class)
     public void getCreditCardByType_InvalidCard() {
         CreditCard card = CreditCards.getCreditCardByType("BLAH");
+    }
+
+    @Features("Utilities")
+    @Stories("CreditCard")
+    @Title("testToString")
+    @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
+    public void testToString() {
+        Assert.assertTrue(card.toString().contains("[CreditCard cardType=VISA"));
     }
 }

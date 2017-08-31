@@ -1,5 +1,7 @@
 package com.orasi.utils.dataHelpers.creditCards;
 
+import org.testng.collections.Objects;
+
 import com.orasi.utils.Base64Coder;
 
 public class CreditCard {
@@ -83,7 +85,19 @@ public class CreditCard {
 
     @Override
     public String toString() {
-        return String.format("Generating Credit card with the following info:%nCard Type:%n%s%n%nName on Card:%n%s%n%nAddress Info:%n%s%n%s, %s %s%n%s",
-                cardType, nameOnCard, billingStreet, billingCity, billingState, billingCountry, billingZip);
+        return Objects.toStringHelper(this.getClass())
+                .add("cardType", cardType)
+                .add("nameOnCard", nameOnCard)
+                .add("cardNumber", cardNumber)
+                .add("securityCode", securityCode)
+                .add("expireMonth", expireMonth)
+                .add("expireYear", expireYear)
+                .add("billingStreet", billingStreet)
+                .add("billingStreet2", billingStreet2)
+                .add("billingCity", billingCity)
+                .add("billingState", billingState)
+                .add("billingCountry", billingCountry)
+                .add("billingZip", billingZip)
+                .toString();
     }
 }
