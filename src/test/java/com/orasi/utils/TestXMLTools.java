@@ -18,15 +18,16 @@ import org.testng.annotations.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import com.orasi.exception.AutomationException;
-import com.orasi.exception.automation.XPathInvalidExpression;
-import com.orasi.exception.automation.XPathNotFoundException;
+import com.orasi.AutomationException;
+import com.orasi.selenium.WebBaseTest;
+import com.orasi.utils.exception.XPathInvalidExpression;
+import com.orasi.utils.exception.XPathNotFoundException;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestXMLTools extends TestEnvironment {
+public class TestXMLTools extends WebBaseTest {
     @BeforeTest
     public void setup() {
         setReportToMustard(false);

@@ -8,16 +8,16 @@ import org.apache.http.message.BasicNameValuePair;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.orasi.api.APIBaseTest;
 import com.orasi.api.restServices.Headers.HeaderType;
 import com.orasi.api.restServices.exceptions.RestException;
 import com.orasi.api.restServices.helpers.PostRequest;
-import com.orasi.utils.TestEnvironment;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestRestService extends TestEnvironment {
+public class TestRestService extends APIBaseTest {
     public final static String basePostsUrl = "https://jsonplaceholder.typicode.com/posts";
 
     @Features("API")

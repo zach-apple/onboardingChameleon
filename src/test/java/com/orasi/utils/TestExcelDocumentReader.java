@@ -1,20 +1,17 @@
 package com.orasi.utils;
 
 import org.junit.Assert;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.orasi.exception.AutomationException;
+import com.orasi.AutomationException;
+import com.orasi.selenium.WebBaseTest;
+import com.orasi.utils.io.ExcelDocumentReader;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestExcelDocumentReader extends TestEnvironment {
-    @BeforeTest
-    public void setup() {
-        setReportToMustard(false);
-    }
+public class TestExcelDocumentReader extends WebBaseTest {
 
     @Features("Utilities")
     @Stories("ExcelDocumentReader")

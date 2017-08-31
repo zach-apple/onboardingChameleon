@@ -8,11 +8,13 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.orasi.selenium.WebBaseTest;
+
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestBase64Encoder extends TestEnvironment {
+public class TestBase64Encoder extends WebBaseTest {
     char[] testByteChars = null;
     byte[] testByteBytes = null;
     byte[] testByteArraytoTest = new byte[] { 43, 23, 64, 78, 24, 14, 124, 12, 23, 47, 43, 21, 23, 14, 45, 68, 84, 93, 2, 23, 114, 45, 35, 35, 23, 3, 32, 34 };

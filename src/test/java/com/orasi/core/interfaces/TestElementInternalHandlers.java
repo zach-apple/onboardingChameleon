@@ -7,19 +7,18 @@ import org.testng.ITestContext;
 import org.testng.SkipException;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.orasi.core.by.angular.FindByNG;
-import com.orasi.core.interfaces.impl.internal.ElementFactory;
-import com.orasi.utils.TestEnvironment;
+import com.orasi.selenium.WebBaseTest;
+import com.orasi.selenium.by.angular.FindByNG;
+import com.orasi.selenium.webelements.Button;
+import com.orasi.selenium.webelements.impl.internal.ElementFactory;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestElementInternalHandlers extends TestEnvironment {
+public class TestElementInternalHandlers extends WebBaseTest {
     @FindBy(id = "click")
     private Button btn1;
     @FindBys({ @FindBy(id = "click"), @FindBy(id = "click") })
@@ -30,21 +29,11 @@ public class TestElementInternalHandlers extends TestEnvironment {
     private Button btn4;
 
     @BeforeTest(groups = { "regression", "interfaces", "internal", "dev" })
-    @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
-            "operatingSystem", "environment" })
-    public void setup(@Optional String runLocation, String browserUnderTest,
-            String browserVersion, String operatingSystem, String environment) {
-        setApplicationUnderTest("Test App");
-        setReportToMustard(false);
-        setBrowserUnderTest(browserUnderTest);
-        setBrowserVersion(browserVersion);
-        setOperatingSystem(operatingSystem);
-        setRunLocation(runLocation);
+    public void setup() {
         if (getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty()) {
             throw new SkipException("Test not valid for HTMLUnitDriver");
         }
         setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/button.html");
-        setTestEnvironment(environment);
         testStart("TestButton");
     }
 

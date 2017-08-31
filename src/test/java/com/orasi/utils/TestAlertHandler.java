@@ -6,26 +6,18 @@ import org.testng.ITestContext;
 import org.testng.SkipException;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+
+import com.orasi.selenium.AlertHandler;
+import com.orasi.selenium.WebBaseTest;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestAlertHandler extends TestEnvironment {
+public class TestAlertHandler extends WebBaseTest {
     @BeforeTest(groups = { "regression", "utils", "dev", "framehandler" })
-    @Parameters({ "runLocation", "browserUnderTest", "browserVersion", "operatingSystem", "environment" })
-    public void setup(@Optional String runLocation, String browserUnderTest, String browserVersion,
-            String operatingSystem, String environment) {
-        setApplicationUnderTest("Test Site");
-        setBrowserUnderTest(browserUnderTest);
-        setBrowserVersion(browserVersion);
-        setOperatingSystem(operatingSystem);
-        setRunLocation(runLocation);
-        setTestEnvironment(environment);
-        setReportToMustard(false);
+    public void setup() {
         if (getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty()) {
             throw new SkipException("Test not valid for HTMLUnitDriver");
         }

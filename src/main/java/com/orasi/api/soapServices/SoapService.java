@@ -35,14 +35,14 @@ import org.w3c.dom.NodeList;
 import com.orasi.api.soapServices.exceptions.HeaderNotFoundException;
 import com.orasi.api.soapServices.exceptions.MissingFunctionParameterValueException;
 import com.orasi.api.soapServices.exceptions.SoapException;
-import com.orasi.exception.automation.XPathInvalidExpression;
-import com.orasi.exception.automation.XPathNotFoundException;
-import com.orasi.exception.automation.XPathNullNodeValueException;
-import com.orasi.utils.ExcelDocumentReader;
 import com.orasi.utils.Randomness;
 import com.orasi.utils.Regex;
 import com.orasi.utils.XMLTools;
 import com.orasi.utils.dataProviders.CSVDataProvider;
+import com.orasi.utils.exception.XPathInvalidExpression;
+import com.orasi.utils.exception.XPathNotFoundException;
+import com.orasi.utils.exception.XPathNullNodeValueException;
+import com.orasi.utils.io.ExcelDocumentReader;
 import com.orasi.utils.io.FileLoader;
 
 public abstract class SoapService {

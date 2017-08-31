@@ -3,7 +3,7 @@ package com.orasi.utils.dataProviders;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.orasi.exception.automation.DataProviderInputFileNotFound;
+import com.orasi.utils.exception.DataProviderInputFileNotFound;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;

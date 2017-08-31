@@ -10,8 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.orasi.api.restServices.exceptions.RestException;
-import com.orasi.exception.automation.DataProviderInputFileException;
-import com.orasi.exception.automation.DataProviderInputFileNotFound;
+import com.orasi.utils.exception.DataProviderInputFileException;
+import com.orasi.utils.exception.DataProviderInputFileNotFound;
 import com.orasi.utils.io.FileLoader;
 
 public class JsonDataProvider {

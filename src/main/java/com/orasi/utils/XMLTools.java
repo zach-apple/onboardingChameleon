@@ -34,11 +34,11 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.orasi.AutomationException;
 import com.orasi.api.soapServices.exceptions.MissingFunctionParameterValueException;
 import com.orasi.api.soapServices.exceptions.SoapException;
-import com.orasi.exception.AutomationException;
-import com.orasi.exception.automation.XPathInvalidExpression;
-import com.orasi.exception.automation.XPathNotFoundException;
+import com.orasi.utils.exception.XPathInvalidExpression;
+import com.orasi.utils.exception.XPathNotFoundException;
 
 public class XMLTools {
 

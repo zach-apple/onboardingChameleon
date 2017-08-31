@@ -22,18 +22,21 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.orasi.core.by.angular.ByNG;
-import com.orasi.core.interfaces.Button;
-import com.orasi.core.interfaces.Checkbox;
-import com.orasi.core.interfaces.Element;
-import com.orasi.core.interfaces.Label;
-import com.orasi.core.interfaces.Link;
-import com.orasi.core.interfaces.Listbox;
-import com.orasi.core.interfaces.RadioGroup;
-import com.orasi.core.interfaces.Textbox;
-import com.orasi.core.interfaces.Webtable;
-import com.orasi.exception.automation.KeyExistsException;
-import com.orasi.exception.automation.NoKeyFoundException;
+import com.orasi.selenium.OrasiDriver;
+import com.orasi.selenium.PageLoaded;
+import com.orasi.selenium.WebBaseTest;
+import com.orasi.selenium.by.angular.ByNG;
+import com.orasi.selenium.webelements.Button;
+import com.orasi.selenium.webelements.Checkbox;
+import com.orasi.selenium.webelements.Element;
+import com.orasi.selenium.webelements.Label;
+import com.orasi.selenium.webelements.Link;
+import com.orasi.selenium.webelements.Listbox;
+import com.orasi.selenium.webelements.RadioGroup;
+import com.orasi.selenium.webelements.Textbox;
+import com.orasi.selenium.webelements.Webtable;
+import com.orasi.utils.exception.KeyExistsException;
+import com.orasi.utils.exception.NoKeyFoundException;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.saucerest.SauceREST;
 
@@ -41,7 +44,7 @@ import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestOrasiDriver extends TestEnvironment {
+public class TestOrasiDriver extends WebBaseTest {
 
     protected ResourceBundle appURLRepository = ResourceBundle.getBundle(Constants.ENVIRONMENT_URL_PATH);
     protected SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(
@@ -112,7 +115,7 @@ public class TestOrasiDriver extends TestEnvironment {
             }
             driver = new OrasiDriver(caps);
         } else {
-            TestEnvironment te = new TestEnvironment("", this.browserUnderTest, browserVersion, operatingSystem,
+            WebBaseTest te = new WebBaseTest("", getBrowserUnderTest(), browserVersion, operatingSystem,
                     runLocation, environment);
             try {
                 driver = new OrasiDriver(caps, new URL(te.getRemoteURL()));

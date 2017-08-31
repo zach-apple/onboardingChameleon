@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.orasi.api.APIBaseTest;
 import com.orasi.api.restServices.Headers.HeaderType;
 import com.orasi.api.restServices.exceptions.RestException;
 import com.orasi.api.restServices.helpers.PostRequest;
@@ -13,7 +14,7 @@ import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestRestResponse {
+public class TestRestResponse extends APIBaseTest {
     public final static String basePostsUrl = "https://jsonplaceholder.typicode.com/posts";
     private RestResponse response;
 

@@ -25,10 +25,11 @@ import org.testng.TestListenerAdapter;
 import org.testng.internal.ConstructorOrMethod;
 import org.testng.xml.XmlSuite;
 
+import com.orasi.BaseTest;
+import com.orasi.selenium.OrasiDriver;
+import com.orasi.selenium.WebBaseTest;
 import com.orasi.utils.Constants;
-import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.Preamble;
-import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.mustard.Mustard;
 
@@ -44,14 +45,15 @@ public class TestListener extends TestListenerAdapter implements IReporter {
     private void init(ITestResult result) {
 
         Object currentClass = result.getInstance();
-        reportToMustard = ((TestEnvironment) currentClass).isReportingToMustard();
+
         try {
-            runLocation = ((TestEnvironment) currentClass).getRunLocation().toLowerCase();
+            reportToMustard = ((BaseTest) currentClass).isReportingToMustard();
+            runLocation = ((BaseTest) currentClass).getRunLocation().toLowerCase();
         } catch (Exception e) {
         }
 
         try {
-            driver = ((TestEnvironment) currentClass).getDriver();
+            driver = ((WebBaseTest) currentClass).getDriver();
         } catch (Exception e) {
         }
 

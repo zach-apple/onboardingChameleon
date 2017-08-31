@@ -3,21 +3,22 @@ package com.orasi.api.soapServices;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.orasi.api.APIBaseTest;
 import com.orasi.api.soapServices.exceptions.HeaderNotFoundException;
 import com.orasi.api.soapServices.exceptions.MissingFunctionParameterValueException;
 import com.orasi.api.soapServices.exceptions.SoapException;
 import com.orasi.api.soapServices.helpers.GetInfoByZip;
 import com.orasi.api.soapServices.helpers.USZipService;
-import com.orasi.exception.automation.XPathInvalidExpression;
-import com.orasi.exception.automation.XPathNotFoundException;
-import com.orasi.exception.automation.XPathNullNodeValueException;
 import com.orasi.utils.Sleeper;
+import com.orasi.utils.exception.XPathInvalidExpression;
+import com.orasi.utils.exception.XPathNotFoundException;
+import com.orasi.utils.exception.XPathNullNodeValueException;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestSoapService {
+public class TestSoapService extends APIBaseTest {
     @Features("API")
     @Stories("SoapServices")
     @Title("createService")

@@ -6,15 +6,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Random;
+import java.util.UUID;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
 public class Randomness {
 
     public static String generateMessageId() {
-        return randomAlphaNumeric(8) + "-" + randomAlphaNumeric(6) + "-"
-                + randomAlphaNumeric(6) + "-" + randomAlphaNumeric(6) + "-"
-                + randomAlphaNumeric(10);
+        return UUID.randomUUID().toString();
     }
 
     public static String generateCurrentDatetime() {
@@ -69,7 +68,6 @@ public class Randomness {
     }
 
     public static String randomNumber(int length) {
-        new RandomStringUtils();
         return RandomStringUtils.randomNumeric(length);
     }
 
@@ -78,12 +76,10 @@ public class Randomness {
     }
 
     public static String randomString(int length) {
-        new RandomStringUtils();
         return RandomStringUtils.randomAlphabetic(length);
     }
 
     public static String randomAlphaNumeric(int length) {
-        new RandomStringUtils();
         return RandomStringUtils.randomAlphanumeric(length);
     }
 

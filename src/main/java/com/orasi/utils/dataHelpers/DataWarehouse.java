@@ -4,8 +4,8 @@ import static com.orasi.utils.TestReporter.log;
 
 import java.util.HashMap;
 
-import com.orasi.exception.automation.KeyExistsException;
-import com.orasi.exception.automation.NoKeyFoundException;
+import com.orasi.utils.exception.KeyExistsException;
+import com.orasi.utils.exception.NoKeyFoundException;
 
 public class DataWarehouse {
 

@@ -6,34 +6,27 @@ import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.orasi.exception.automation.ElementAttributeValueNotMatchingException;
-import com.orasi.exception.automation.ElementCssValueNotMatchingException;
-import com.orasi.exception.automation.ElementNotDisabledException;
-import com.orasi.exception.automation.ElementNotEnabledException;
-import com.orasi.exception.automation.ElementNotHiddenException;
-import com.orasi.exception.automation.ElementNotVisibleException;
-import com.orasi.exception.automation.TextInElementNotPresentException;
-import com.orasi.utils.TestEnvironment;
+import com.orasi.selenium.WebBaseTest;
+import com.orasi.selenium.exceptions.ElementAttributeValueNotMatchingException;
+import com.orasi.selenium.exceptions.ElementCssValueNotMatchingException;
+import com.orasi.selenium.exceptions.ElementNotDisabledException;
+import com.orasi.selenium.exceptions.ElementNotEnabledException;
+import com.orasi.selenium.exceptions.ElementNotHiddenException;
+import com.orasi.selenium.exceptions.ElementNotVisibleException;
+import com.orasi.selenium.exceptions.TextInElementNotPresentException;
+import com.orasi.selenium.webelements.Element;
+import com.orasi.selenium.webelements.Textbox;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestElement extends TestEnvironment {
+public class TestElement extends WebBaseTest {
     @BeforeTest(groups = { "regression", "interfaces", "element", "dev" })
-    @Parameters({ "runLocation", "browserUnderTest", "browserVersion", "operatingSystem", "environment" })
-    public void setup(@Optional String runLocation, String browserUnderTest, String browserVersion,
-            String operatingSystem, String environment) {
+    public void setup() {
         setApplicationUnderTest("Test Site");
-        setBrowserUnderTest(browserUnderTest);
-        setBrowserVersion(browserVersion);
-        setOperatingSystem(operatingSystem);
-        setRunLocation(runLocation);
-        setTestEnvironment(environment);
         setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/element.html");
         testStart("TestElement");
         getDriver().findWebElement(By.id("text1")).sendKeys("blah");

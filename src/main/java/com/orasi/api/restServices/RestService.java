@@ -37,7 +37,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.api.restServices.Headers.HeaderType;
 import com.orasi.api.restServices.exceptions.RestException;
-import com.orasi.exception.automation.DataProviderInputFileNotFound;
+import com.orasi.utils.exception.DataProviderInputFileNotFound;
 import com.orasi.utils.io.FileLoader;
 
 public class RestService {

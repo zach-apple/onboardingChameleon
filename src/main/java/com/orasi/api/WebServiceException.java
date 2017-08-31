@@ -1,6 +1,8 @@
 package com.orasi.api;
 
-public class WebServiceException extends RuntimeException {
+import com.orasi.AutomationException;
+
+public class WebServiceException extends AutomationException {
     private static final long serialVersionUID = -8710980695994382082L;
 
     public WebServiceException() {
