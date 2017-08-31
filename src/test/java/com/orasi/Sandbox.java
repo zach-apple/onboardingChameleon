@@ -9,8 +9,8 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.orasi.selenium.FrameHandler;
-import com.orasi.selenium.WebBaseTest;
+import com.orasi.web.FrameHandler;
+import com.orasi.web.WebBaseTest;
 
 public class Sandbox extends WebBaseTest {
     @BeforeTest(groups = { "regression", "utils", "dev", "framehandler" })

@@ -7,8 +7,8 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.orasi.selenium.WebBaseTest;
-import com.orasi.selenium.webelements.Button;
+import com.orasi.web.WebBaseTest;
+import com.orasi.web.webelements.Button;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;

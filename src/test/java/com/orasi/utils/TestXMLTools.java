@@ -19,9 +19,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import com.orasi.AutomationException;
-import com.orasi.selenium.WebBaseTest;
 import com.orasi.utils.exception.XPathInvalidExpression;
 import com.orasi.utils.exception.XPathNotFoundException;
+import com.orasi.web.WebBaseTest;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;

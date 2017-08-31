@@ -26,12 +26,12 @@ import org.testng.internal.ConstructorOrMethod;
 import org.testng.xml.XmlSuite;
 
 import com.orasi.BaseTest;
-import com.orasi.selenium.OrasiDriver;
-import com.orasi.selenium.WebBaseTest;
 import com.orasi.utils.Constants;
 import com.orasi.utils.Preamble;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.mustard.Mustard;
+import com.orasi.web.OrasiDriver;
+import com.orasi.web.WebBaseTest;
 
 import ru.yandex.qatools.allure.annotations.Attachment;
 import ru.yandex.qatools.allure.annotations.Stories;

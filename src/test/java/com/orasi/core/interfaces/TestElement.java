@@ -8,16 +8,16 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.orasi.selenium.WebBaseTest;
-import com.orasi.selenium.exceptions.ElementAttributeValueNotMatchingException;
-import com.orasi.selenium.exceptions.ElementCssValueNotMatchingException;
-import com.orasi.selenium.exceptions.ElementNotDisabledException;
-import com.orasi.selenium.exceptions.ElementNotEnabledException;
-import com.orasi.selenium.exceptions.ElementNotHiddenException;
-import com.orasi.selenium.exceptions.ElementNotVisibleException;
-import com.orasi.selenium.exceptions.TextInElementNotPresentException;
-import com.orasi.selenium.webelements.Element;
-import com.orasi.selenium.webelements.Textbox;
+import com.orasi.web.WebBaseTest;
+import com.orasi.web.exceptions.ElementAttributeValueNotMatchingException;
+import com.orasi.web.exceptions.ElementCssValueNotMatchingException;
+import com.orasi.web.exceptions.ElementNotDisabledException;
+import com.orasi.web.exceptions.ElementNotEnabledException;
+import com.orasi.web.exceptions.ElementNotHiddenException;
+import com.orasi.web.exceptions.ElementNotVisibleException;
+import com.orasi.web.exceptions.TextInElementNotPresentException;
+import com.orasi.web.webelements.Element;
+import com.orasi.web.webelements.Textbox;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;

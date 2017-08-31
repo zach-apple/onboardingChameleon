@@ -8,8 +8,8 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.orasi.selenium.FrameHandler;
-import com.orasi.selenium.WebBaseTest;
+import com.orasi.web.FrameHandler;
+import com.orasi.web.WebBaseTest;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;

@@ -9,10 +9,10 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.orasi.selenium.WebBaseTest;
-import com.orasi.selenium.exceptions.OptionNotInListboxException;
-import com.orasi.selenium.webelements.Listbox;
-import com.orasi.selenium.webelements.impl.ListboxImpl;
+import com.orasi.web.WebBaseTest;
+import com.orasi.web.exceptions.OptionNotInListboxException;
+import com.orasi.web.webelements.Listbox;
+import com.orasi.web.webelements.impl.ListboxImpl;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;

@@ -24,8 +24,8 @@ import com.orasi.api.restServices.RestResponse;
 import com.orasi.api.restServices.exceptions.RestException;
 import com.orasi.api.soapServices.SoapService;
 import com.orasi.api.soapServices.exceptions.SoapException;
-import com.orasi.selenium.OrasiDriver;
 import com.orasi.utils.date.SimpleDate;
+import com.orasi.web.OrasiDriver;
 
 public class TestReporter {
     private static boolean printToConsole = true;

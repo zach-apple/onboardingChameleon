@@ -16,8 +16,8 @@ import com.orasi.api.restServices.RestService;
 import com.orasi.api.restServices.exceptions.RestException;
 import com.orasi.api.soapServices.exceptions.SoapException;
 import com.orasi.api.soapServices.helpers.GetInfoByZip;
-import com.orasi.selenium.OrasiDriver;
-import com.orasi.selenium.WebBaseTest;
+import com.orasi.web.OrasiDriver;
+import com.orasi.web.WebBaseTest;
 
 public class TestTestReporter extends WebBaseTest {
     OrasiDriver driver = null;
