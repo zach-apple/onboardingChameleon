@@ -1,11 +1,13 @@
 package com.orasi.utils.dataHelpers.creditCards;
 
+import com.orasi.exception.AutomationException;
+
 /**
  * Container class to store credit cards and easily retrieve them
- * 
+ *
  * @author justin.phlegar@orasi.com
  *
- * 
+ *
  */
 public class CreditCards {
     /*
@@ -25,6 +27,38 @@ public class CreditCards {
      * billingZipCode
      * );
      */
+
+    public final static CreditCard AMEX() {
+        return new CreditCard(
+                "AMEX",
+                "Bernard Calderon",
+                "MzcxNDQ5NjM1Mzk4NDMx",
+                "MzI2NQ==",
+                "12",
+                "20",
+                "333 Branson Landing",
+                "",
+                "Branson",
+                "MO",
+                "USA",
+                "65616");
+    }
+
+    public final static CreditCard DISCOVER() {
+        return new CreditCard(
+                "DISCOVER",
+                "Will Lund",
+                "NjAxMTA5OTkwMDE5ODU0Ng==",
+                "NzE4",
+                "12",
+                "20",
+                "1500 Polaris Parkway",
+                "",
+                "Columbus",
+                "OH",
+                "USA",
+                "43240");
+    }
 
     public final static CreditCard MASTERCARD() {
         return new CreditCard(
@@ -72,5 +106,46 @@ public class CreditCards {
                 "FL",
                 "USA",
                 "32830");
+    }
+
+    /**
+     * This method allows you to enter the type of card you want
+     *
+     * @param type
+     * @return
+     */
+    public static CreditCard getCreditCardByType(String type) {
+        switch (type.toLowerCase().replaceAll("\\s+|_", "")) {
+
+            case "amex":
+            case "americanexpress":
+                return AMEX();
+
+            case "disc":
+            case "discover":
+                return DISCOVER();
+
+            case "mc":
+            case "mastercard":
+                return MASTERCARD();
+
+            case "visa":
+                return VISA();
+
+            case "visaexpired":
+                return VISA_EXPIRED();
+
+            /*
+             * case "gc":
+             * case "gift":
+             * case "giftcard":
+             * // return GIFTCARD(); for later storage
+             * break;
+             */
+
+        }
+
+        // Should not be at this point unless card was not found above
+        throw new AutomationException("Credit Card type of [ " + type + " ] was not valid or availible");
     }
 }
