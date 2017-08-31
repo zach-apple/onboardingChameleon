@@ -5,7 +5,9 @@ import static com.orasi.utils.dataHelpers.creditCards.CreditCards.VISA;
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
+import com.orasi.exception.AutomationException;
 import com.orasi.utils.dataHelpers.creditCards.CreditCard;
+import com.orasi.utils.dataHelpers.creditCards.CreditCards;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
@@ -119,4 +121,99 @@ public class TestCreditCard {
         Assert.assertTrue(card.getSecurityCode().equals("980"));
     }
 
+    @Features("Utilities")
+    @Stories("CreditCard")
+    @Title("getCreditCardByType_AMEX")
+    @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
+    public void getCreditCardByType_AMEX() {
+        String type = "AMEX";
+        CreditCard card = CreditCards.getCreditCardByType(type);
+        Assert.assertNotNull(card);
+        Assert.assertTrue(card.getCardType().equalsIgnoreCase(type));
+    }
+
+    @Features("Utilities")
+    @Stories("CreditCard")
+    @Title("getCreditCardByType_AMERICANEXPRESS")
+    @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
+    public void getCreditCardByType_AMERICANEXPRESS() {
+        String type = "AMEX";
+        CreditCard card = CreditCards.getCreditCardByType("American Express");
+        Assert.assertNotNull(card);
+        Assert.assertTrue(card.getCardType().equalsIgnoreCase(type));
+    }
+
+    @Features("Utilities")
+    @Stories("CreditCard")
+    @Title("getCreditCardByType_DISC")
+    @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
+    public void getCreditCardByType_DISC() {
+        String type = "DISCOVER";
+        CreditCard card = CreditCards.getCreditCardByType("DISC");
+        Assert.assertNotNull(card);
+        Assert.assertTrue(card.getCardType().equalsIgnoreCase(type));
+    }
+
+    @Features("Utilities")
+    @Stories("CreditCard")
+    @Title("getCreditCardByType_DISCOVER")
+    @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
+    public void getCreditCardByType_DISCOVER() {
+        String type = "DISCOVER";
+        CreditCard card = CreditCards.getCreditCardByType(type);
+        Assert.assertNotNull(card);
+        Assert.assertTrue(card.getCardType().equalsIgnoreCase(type));
+    }
+
+    @Features("Utilities")
+    @Stories("CreditCard")
+    @Title("getCreditCardByType_MC")
+    @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
+    public void getCreditCardByType_MC() {
+        String type = "MASTERCARD";
+        CreditCard card = CreditCards.getCreditCardByType("MC");
+        Assert.assertNotNull(card);
+        Assert.assertTrue(card.getCardType().equalsIgnoreCase(type));
+    }
+
+    @Features("Utilities")
+    @Stories("CreditCard")
+    @Title("getCreditCardByType_MASTERCARD")
+    @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
+    public void getCreditCardByType_MASTERCARD() {
+        String type = "MASTERCARD";
+        CreditCard card = CreditCards.getCreditCardByType(type);
+        Assert.assertNotNull(card);
+        Assert.assertTrue(card.getCardType().equalsIgnoreCase(type));
+    }
+
+    @Features("Utilities")
+    @Stories("CreditCard")
+    @Title("getCreditCardByType_VISA")
+    @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
+    public void getCreditCardByType_VISA() {
+        String type = "VISA";
+        CreditCard card = CreditCards.getCreditCardByType(type);
+        Assert.assertNotNull(card);
+        Assert.assertTrue(card.getCardType().equalsIgnoreCase(type));
+    }
+
+    @Features("Utilities")
+    @Stories("CreditCard")
+    @Title("getCreditCardByType_VISA_EXPIRED")
+    @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" })
+    public void getCreditCardByType_VISA_EXPIRED() {
+        String type = "VISA_EXPIRED";
+        CreditCard card = CreditCards.getCreditCardByType(type);
+        Assert.assertNotNull(card);
+        Assert.assertTrue(card.getCardType().equalsIgnoreCase(type));
+    }
+
+    @Features("Utilities")
+    @Stories("CreditCard")
+    @Title("getCreditCardByType_VISA_EXPIRED")
+    @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardConstructor" }, expectedExceptions = AutomationException.class)
+    public void getCreditCardByType_InvalidCard() {
+        CreditCard card = CreditCards.getCreditCardByType("BLAH");
+    }
 }
