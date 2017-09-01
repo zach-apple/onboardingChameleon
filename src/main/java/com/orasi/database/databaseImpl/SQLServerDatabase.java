@@ -1,6 +1,6 @@
-package com.orasi.utils.database.databaseImpl;
+package com.orasi.database.databaseImpl;
 
-import com.orasi.utils.database.Database;
+import com.orasi.database.Database;
 
 public class SQLServerDatabase extends Database {
     public SQLServerDatabase(String host, String port, String dbName) {

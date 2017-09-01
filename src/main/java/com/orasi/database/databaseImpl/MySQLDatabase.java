@@ -1,6 +1,6 @@
-package com.orasi.utils.database.databaseImpl;
+package com.orasi.database.databaseImpl;
 
-import com.orasi.utils.database.Database;
+import com.orasi.database.Database;
 
 public class MySQLDatabase extends Database {
     public MySQLDatabase(String host, String port, String dbName) {

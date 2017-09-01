@@ -1,4 +1,4 @@
-package com.orasi.utils.database;
+package com.orasi.database;
 
 import static java.lang.String.format;
 

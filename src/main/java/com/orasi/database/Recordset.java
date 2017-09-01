@@ -1,4 +1,4 @@
-package com.orasi.utils.database;
+package com.orasi.database;
 
 public class Recordset {
     private int columnRow = 0;

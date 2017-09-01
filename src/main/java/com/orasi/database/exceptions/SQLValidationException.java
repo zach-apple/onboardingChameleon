@@ -1,4 +1,4 @@
-package com.orasi.utils.database.exceptions;
+package com.orasi.database.exceptions;
 
 public class SQLValidationException extends RuntimeException {
     private static final long serialVersionUID = -2738970905210023091L;

@@ -1,4 +1,4 @@
-package com.orasi.utils.database;
+package com.orasi.database;
 
 import static com.orasi.utils.TestReporter.logDebug;
 import static com.orasi.utils.TestReporter.logTrace;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 
-import com.orasi.utils.database.exceptions.DatabaseException;
+import com.orasi.database.exceptions.DatabaseException;
 
 public abstract class Database {
 
