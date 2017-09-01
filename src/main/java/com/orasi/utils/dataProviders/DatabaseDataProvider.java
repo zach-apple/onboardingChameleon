@@ -1,9 +1,9 @@
 package com.orasi.utils.dataProviders;
 
-import com.orasi.utils.database.Database;
-import com.orasi.utils.database.Recordset;
-import com.orasi.utils.database.databaseImpl.MySQLDatabase;
-import com.orasi.utils.database.databaseImpl.OracleDatabase;
+import com.orasi.database.Database;
+import com.orasi.database.Recordset;
+import com.orasi.database.databaseImpl.MySQLDatabase;
+import com.orasi.database.databaseImpl.OracleDatabase;
 
 @SuppressWarnings("unused")
 public class DatabaseDataProvider {

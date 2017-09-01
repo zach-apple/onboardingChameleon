@@ -1,13 +1,13 @@
 package com.orasi.utils.dataHelpers.creditCards;
 
-import com.orasi.exception.AutomationException;
+import com.orasi.AutomationException;
 import com.orasi.utils.dataHelpers.personFactory.Address;
 import com.orasi.utils.dataHelpers.personFactory.Person;
 
 /**
  * Container class to store credit cards and easily retrieve them
  * The credit cards in this class are considered test cards for PayPal
- * as listed below, but cardnumber info still not plaintext to 
+ * as listed below, but cardnumber info still not plaintext to
  * encourage data masking and safety
  *
  * @author justin.phlegar@orasi.com
