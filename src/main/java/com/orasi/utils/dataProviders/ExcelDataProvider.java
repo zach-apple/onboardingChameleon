@@ -2,8 +2,8 @@ package com.orasi.utils.dataProviders;
 
 import java.net.URL;
 
-import com.orasi.exception.automation.DataProviderInputFileNotFound;
-import com.orasi.utils.ExcelDocumentReader;
+import com.orasi.utils.exception.DataProviderInputFileNotFound;
+import com.orasi.utils.io.ExcelDocumentReader;
 
 public class ExcelDataProvider {
     private String filePath;

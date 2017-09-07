@@ -8,29 +8,19 @@ import org.testng.ITestContext;
 import org.testng.SkipException;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.orasi.utils.TestEnvironment;
+import com.orasi.web.WebBaseTest;
+import com.orasi.web.webelements.RadioGroup;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestRadioButton extends TestEnvironment {
-    // private String xpath = "//form/fieldset[1]";
+public class TestRadioButton extends WebBaseTest {
     @BeforeTest(groups = { "regression", "interfaces", "radiogroup", "dev" })
-    @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
-            "operatingSystem", "environment" })
-    public void setup(@Optional String runLocation, String browserUnderTest,
-            String browserVersion, String operatingSystem, String environment) {
+    public void setup() {
         setApplicationUnderTest("Test Site");
-        setBrowserUnderTest(browserUnderTest);
-        setBrowserVersion(browserVersion);
-        setOperatingSystem(operatingSystem);
-        setRunLocation(runLocation);
-        setTestEnvironment(environment);
         setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/radioGroup.html");
         testStart("TestRadiogroup");
     }

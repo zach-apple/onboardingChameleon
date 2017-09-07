@@ -8,11 +8,13 @@ import java.util.Map;
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
+import com.orasi.web.WebBaseTest;
+
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestJavaUtilities extends TestEnvironment {
+public class TestJavaUtilities extends WebBaseTest {
 
     @Features("Utilities")
     @Stories("JavaUtilities")

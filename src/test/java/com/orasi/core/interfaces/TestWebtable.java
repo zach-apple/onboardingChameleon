@@ -5,32 +5,22 @@ import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.orasi.core.interfaces.impl.WebtableImpl;
-import com.orasi.utils.TestEnvironment;
+import com.orasi.web.WebBaseTest;
+import com.orasi.web.webelements.Webtable;
+import com.orasi.web.webelements.impl.WebtableImpl;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestWebtable extends TestEnvironment {
+public class TestWebtable extends WebBaseTest {
 
     private String xpath = "//div[6]/table";
 
     @BeforeTest(groups = { "regression", "interfaces", "webtable", "dev" })
-    @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
-            "operatingSystem", "environment" })
-    public void setup(@Optional String runLocation, String browserUnderTest,
-            String browserVersion, String operatingSystem, String environment) {
-        setApplicationUnderTest("Bluesource");
-        setBrowserUnderTest(browserUnderTest);
-        setBrowserVersion(browserVersion);
-        setOperatingSystem(operatingSystem);
-        setRunLocation(runLocation);
-        setTestEnvironment(environment);
+    public void setup() {
         setPageURL("http://www.iupui.edu/~webtrain/tutorials/tables.html");
         testStart("TestWebtable");
     }

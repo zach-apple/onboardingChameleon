@@ -9,10 +9,10 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.orasi.utils.FrameHandler;
-import com.orasi.utils.TestEnvironment;
+import com.orasi.web.FrameHandler;
+import com.orasi.web.WebBaseTest;
 
-public class Sandbox extends TestEnvironment {
+public class Sandbox extends WebBaseTest {
     @BeforeTest(groups = { "regression", "utils", "dev", "framehandler" })
     @Parameters({ "runLocation", "browserUnderTest", "browserVersion", "operatingSystem", "environment" })
     public void setup(@Optional String runLocation, String browserUnderTest, String browserVersion,
@@ -22,7 +22,7 @@ public class Sandbox extends TestEnvironment {
         setBrowserVersion(browserVersion);
         setOperatingSystem(operatingSystem);
         setRunLocation(runLocation);
-        setTestEnvironment(environment);
+        setEnvironment(environment);
         setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/utils/frameHandler.html");
         testStart("TestFrame");
     }

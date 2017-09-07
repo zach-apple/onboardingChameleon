@@ -8,8 +8,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.orasi.exception.AutomationException;
-import com.orasi.exception.automation.DataProviderInputFileNotFound;
+import com.orasi.AutomationException;
+import com.orasi.utils.exception.DataProviderInputFileNotFound;
 import com.orasi.utils.io.FileLoader;
 
 public class CSVDataProvider {

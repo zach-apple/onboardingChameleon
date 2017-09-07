@@ -16,8 +16,10 @@ import com.orasi.api.restServices.RestService;
 import com.orasi.api.restServices.exceptions.RestException;
 import com.orasi.api.soapServices.exceptions.SoapException;
 import com.orasi.api.soapServices.helpers.GetInfoByZip;
+import com.orasi.web.OrasiDriver;
+import com.orasi.web.WebBaseTest;
 
-public class TestTestReporter extends TestEnvironment {
+public class TestTestReporter extends WebBaseTest {
     OrasiDriver driver = null;
 
     @AfterClass
@@ -264,6 +266,7 @@ public class TestTestReporter extends TestEnvironment {
 
     @Test(dependsOnMethods = { "testSetDebugLevel" })
     public void testInterfaceLog() {
+        TestReporter.setDebugLevel(2);
         String log = "testInterfaceLog";
         TestReporter.interfaceLog(log);
         Assert.assertTrue(logHelper(Reporter.getOutput(), log));
@@ -271,6 +274,7 @@ public class TestTestReporter extends TestEnvironment {
 
     @Test(dependsOnMethods = { "testSetDebugLevel" })
     public void testInterfaceLogNoFail() {
+        TestReporter.setDebugLevel(2);
         String log = "testInterfaceLognoFail";
         TestReporter.interfaceLog(log, false);
         Assert.assertTrue(logHelper(Reporter.getOutput(), log));
@@ -278,6 +282,7 @@ public class TestTestReporter extends TestEnvironment {
 
     @Test(dependsOnMethods = { "testSetDebugLevel" })
     public void testInterfaceLogFail() {
+        TestReporter.setDebugLevel(2);
         String log = "testInterfaceLogFail";
         TestReporter.interfaceLog(log, true);
         Assert.assertTrue(logHelper(Reporter.getOutput(), log));
@@ -299,6 +304,7 @@ public class TestTestReporter extends TestEnvironment {
 
     @Test(dependsOnMethods = { "testSetDebugLevel" })
     public void testLogFailure() {
+        TestReporter.setDebugLevel(2);
         String log = "testLogFailure";
         TestReporter.logFailure(log);
         Assert.assertTrue(logHelper(Reporter.getOutput(), log));
@@ -380,6 +386,7 @@ public class TestTestReporter extends TestEnvironment {
 
     @Test(dependsOnMethods = { "testLogConsoleLogsNoErrors" })
     public void testLogConsoleLogsWithErrors() {
+        TestReporter.setDebugLevel(2);
         String log = "Chrome Browser Console errors";
         driver.executeJavaScript("console.error('blah')");
         TestReporter.logConsoleErrors(driver);
@@ -418,7 +425,7 @@ public class TestTestReporter extends TestEnvironment {
         TestReporter.logAPI(false, log, response);
     }
 
-    private boolean logHelper(List<String> logs, String log) {
+    private synchronized boolean logHelper(final List<String> logs, String log) {
         return logs.parallelStream().anyMatch(str -> str.contains(log));
     }
 }

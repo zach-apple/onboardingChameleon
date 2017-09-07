@@ -3,7 +3,7 @@ package com.orasi.utils.dataHelpers;
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
-import com.orasi.exception.AutomationException;
+import com.orasi.AutomationException;
 import com.orasi.utils.dataHelpers.creditCards.CreditCard;
 import com.orasi.utils.dataHelpers.creditCards.CreditCards;
 import com.orasi.utils.dataHelpers.personFactory.Address;

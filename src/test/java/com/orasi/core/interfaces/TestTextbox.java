@@ -5,30 +5,20 @@ import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.orasi.core.interfaces.impl.TextboxImpl;
-import com.orasi.utils.TestEnvironment;
+import com.orasi.web.WebBaseTest;
+import com.orasi.web.webelements.Textbox;
+import com.orasi.web.webelements.impl.TextboxImpl;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestTextbox extends TestEnvironment {
+public class TestTextbox extends WebBaseTest {
 
     @BeforeTest(groups = { "regression", "interfaces", "textbox", "dev" })
-    @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
-            "operatingSystem", "environment" })
-    public void setup(@Optional String runLocation, String browserUnderTest,
-            String browserVersion, String operatingSystem, String environment) {
-        setApplicationUnderTest("Test Site");
-        setBrowserUnderTest(browserUnderTest);
-        setBrowserVersion(browserVersion);
-        setOperatingSystem(operatingSystem);
-        setRunLocation(runLocation);
-        setTestEnvironment(environment);
+    public void setup() {
         setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/textbox.html");
         testStart("TestTextbox");
     }

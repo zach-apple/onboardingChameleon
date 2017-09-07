@@ -19,12 +19,13 @@ import org.openqa.selenium.logging.LogEntry;
 import org.testng.Assert;
 import org.testng.Reporter;
 
+import com.orasi.AutomationException;
 import com.orasi.api.restServices.RestResponse;
 import com.orasi.api.restServices.exceptions.RestException;
 import com.orasi.api.soapServices.SoapService;
 import com.orasi.api.soapServices.exceptions.SoapException;
-import com.orasi.exception.AutomationException;
 import com.orasi.utils.date.SimpleDate;
+import com.orasi.web.OrasiDriver;
 
 public class TestReporter {
     private static boolean printToConsole = true;
@@ -49,7 +50,7 @@ public class TestReporter {
      */
     public static final int TRACE = 3;
 
-    private static int debugLevel = 0;
+    private static ThreadLocal<Integer> debugLevel = new ThreadLocal<>();
 
     /**
      *
@@ -61,11 +62,11 @@ public class TestReporter {
      *            TestReporter.TRACE: Will print low level information to console from the framework<br/>
      */
     public static void setDebugLevel(int level) {
-        debugLevel = level;
+        debugLevel.set(level);
     }
 
     public static int getDebugLevel() {
-        return debugLevel;
+        return debugLevel.get() == null ? 0 : debugLevel.get();
     }
 
     private static String getTimestamp() {
@@ -160,7 +161,7 @@ public class TestReporter {
      * @param message
      */
     public static void logTrace(String message) {
-        if (debugLevel >= TRACE) {
+        if (getDebugLevel() >= TRACE) {
             Reporter.log(getTimestamp() + "TRACE :: " + getClassPath() + message + "<br />");
             System.out.println(getTimestamp() + "TRACE :: " + getClassPath() + (trimHtml(message).trim()));
         }
@@ -172,7 +173,7 @@ public class TestReporter {
      * @param message
      */
     public static void logInfo(String message) {
-        if (debugLevel >= INFO) {
+        if (getDebugLevel() >= INFO) {
             Reporter.log(getTimestamp() + " INFO :: " + getClassPath() + message + "<br />");
             System.out.println(getTimestamp() + " INFO :: " + getClassPath() + trimHtml(message).trim());
         }
@@ -184,7 +185,7 @@ public class TestReporter {
      * @param message
      */
     public static void logDebug(String message) {
-        if (debugLevel >= DEBUG) {
+        if (getDebugLevel() >= DEBUG) {
             Reporter.log(getTimestamp() + "DEBUG :: " + getClassPath() + message + "<br />");
             System.out.println(getTimestamp() + "DEBUG :: " + getClassPath() + trimHtml(message).trim());
         }

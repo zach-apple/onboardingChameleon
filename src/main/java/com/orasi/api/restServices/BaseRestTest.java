@@ -2,9 +2,10 @@ package com.orasi.api.restServices;
 
 import static com.orasi.api.restServices.ResponseCodes.OK;
 
+import com.orasi.api.APIBaseTest;
 import com.orasi.utils.TestReporter;
 
-public class BaseRestTest {
+public class BaseRestTest extends APIBaseTest {
 
     protected void validateResponse(RestResponse response) {
         validateResponse(response, OK, null);

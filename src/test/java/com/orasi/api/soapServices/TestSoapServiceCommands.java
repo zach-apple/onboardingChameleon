@@ -3,17 +3,13 @@ package com.orasi.api.soapServices;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.orasi.utils.TestEnvironment;
+import com.orasi.api.APIBaseTest;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestSoapServiceCommands extends TestEnvironment {
-
-    public void setup() {
-        setReportToMustard(false);
-    }
+public class TestSoapServiceCommands extends APIBaseTest {
 
     @Features("API")
     @Stories("SoapServiceCommands")

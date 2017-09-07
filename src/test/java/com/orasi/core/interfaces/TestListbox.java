@@ -7,34 +7,23 @@ import org.testng.ITestContext;
 import org.testng.SkipException;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.orasi.core.interfaces.impl.ListboxImpl;
-import com.orasi.exception.automation.OptionNotInListboxException;
-import com.orasi.utils.TestEnvironment;
+import com.orasi.web.WebBaseTest;
+import com.orasi.web.exceptions.OptionNotInListboxException;
+import com.orasi.web.webelements.Listbox;
+import com.orasi.web.webelements.impl.ListboxImpl;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestListbox extends TestEnvironment {
+public class TestListbox extends WebBaseTest {
     WebDriver driver = null;
 
-    // private String multiSelectXpath = "//*[@id='page']/div[2]/div/select";
-    // private String listboxXpath = "//*[@id='para1']/select";
     @BeforeTest(alwaysRun = true)
-    @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
-            "operatingSystem", "environment" })
-    public void setup(@Optional String runLocation, String browserUnderTest,
-            String browserVersion, String operatingSystem, String environment) {
+    public void setup() {
         setApplicationUnderTest("Test Site");
-        setBrowserUnderTest(browserUnderTest);
-        setBrowserVersion(browserVersion);
-        setOperatingSystem(operatingSystem);
-        setRunLocation(runLocation);
-        setTestEnvironment(environment);
         setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/listbox.html");
         testStart("TestListbox");
     }

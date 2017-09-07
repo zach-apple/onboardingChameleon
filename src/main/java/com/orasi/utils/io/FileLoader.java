@@ -10,7 +10,7 @@ import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
 
-import com.orasi.exception.automation.InvalidFileException;
+import com.orasi.utils.exception.InvalidFileException;
 
 public class FileLoader {
 

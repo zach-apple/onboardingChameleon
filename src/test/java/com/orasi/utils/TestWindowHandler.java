@@ -4,28 +4,20 @@ import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+
+import com.orasi.web.WebBaseTest;
+import com.orasi.web.WindowHandler;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
-public class TestWindowHandler extends TestEnvironment {
+public class TestWindowHandler extends WebBaseTest {
 
     @BeforeTest(groups = { "regression", "utils", "dev" })
-    @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
-            "operatingSystem", "environment" })
-    public void setup(@Optional String runLocation, String browserUnderTest, String browserVersion,
-            String operatingSystem, String environment) {
+    public void setup() {
         setApplicationUnderTest("Test Site");
-        setBrowserUnderTest(browserUnderTest);
-        setBrowserVersion(browserVersion);
-        setOperatingSystem(operatingSystem);
-        setRunLocation(runLocation);
-        setTestEnvironment(environment);
-
         setPageURL("http://google.com");
         testStart("TestWindowHandler");
     }
