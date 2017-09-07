@@ -2,9 +2,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
 <suite name="Core-Regression"  parallel="tests" thread-count="20">
-	<!-- <listeners>
-		<listener class-name="com.orasi.utils.debugging.Screenshot" />
-	</listeners> -->
 	<parameter name="browserUnderTest" value="Chrome" />
 	<parameter name="environment" value="blah" />
 	<parameter name="runLocation" value="sauce" />
