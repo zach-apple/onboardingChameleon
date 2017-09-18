@@ -2,12 +2,28 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.orasi</groupId>
-	<artifactId>Selenium-Java-Core</artifactId>
+	<artifactId>Chameleon</artifactId>
 	<version>1.1.2</version>
 	<packaging>jar</packaging>
 	<properties>
+		<aspectj.version>1.8.5</aspectj.version>    
+		<jenkinsBuildId>${env.BUILD_ID}</jenkinsBuildId>
+		<jenkinsBuildNumber>${env.BUILD_NUMBER}</jenkinsBuildNumber>
+		<jenkinsBuildTag>${env.BUILD_TAG}</jenkinsBuildTag>
+		<jenkinsCvsBranch>${env.CVS_BRANCH}</jenkinsCvsBranch>
+		<jenkinsExecutorNumber>${env.EXECUTOR_NUMBER}</jenkinsExecutorNumber>
+		<jenkinsHome>${env.HOME}</jenkinsHome>
+		<jenkinsJavaHome>${env.JAVA_HOME}</jenkinsJavaHome>
+		<jenkinsJenkinsUrl>${env.JENKINS_URL}</jenkinsJenkinsUrl>
+		<jenkinsJobName>${env.JOB_NAME}</jenkinsJobName>
+		<jenkinsJobUrl>${env.JOB_URL}</jenkinsJobUrl>
+		<jenkinsSvnRevision>${env.SVN_REVISION}</jenkinsSvnRevision>
+		<jenkinsWorkspace>${env.WORKSPACE}</jenkinsWorkspace>
+		<jenkinsOperatingSystem>${operatingSystem}</jenkinsOperatingSystem>
+		<jenkinsBrowser>${browser}</jenkinsBrowser>
+		<jenkinsBrowserVersion>${browserVersion}</jenkinsBrowserVersion>
+		<jenkinsRunLocation>${runLocation}</jenkinsRunLocation>
 		<testNGSourceDirectory>src/test/resources</testNGSourceDirectory>
-		<aspectj.version>1.8.5</aspectj.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -47,7 +63,7 @@
 						-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
 					</argLine>
 					<suiteXmlFiles>
-				 		<suiteXmlFile>${testNGSourceDirectory}/regression.xml</suiteXmlFile> 
+						<suiteXmlFile>${testNGSourceDirectory}/regression.xml</suiteXmlFile> 
 					</suiteXmlFiles>
 					<systemPropertyVariables>
 						<jenkinsOperatingSystem>${operatingSystem}</jenkinsOperatingSystem>
@@ -90,8 +106,10 @@
 				</configuration>
 				<executions>
 					<execution>
-						<id>make-assembly</id> <!-- this is used for inheritance merges -->
-						<phase>package</phase> <!-- bind to the packaging phase -->
+						<id>make-assembly</id>
+						<!-- this is used for inheritance merges -->
+						<phase>package</phase>
+						<!-- bind to the packaging phase -->
 						<goals>
 							<goal>single</goal>
 						</goals>
@@ -115,7 +133,7 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>3.3.1</version>
+			<version>3.5.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.testng</groupId>
@@ -129,13 +147,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>htmlunit-driver</artifactId>
-			<version>2.23.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-support</artifactId>
-			<version>3.3.1</version>
+			<version>3.5.3</version>
 		</dependency>
 
 		<!-- End Selenium requirements -->
@@ -187,7 +200,7 @@
 		<!-- End Sauce Labs requirements -->
 
 		<!-- Start HTML Unit Driver requirements: Up-to-date as of 10-20-2015 -->
-		
+
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>htmlunit-driver</artifactId>
@@ -218,7 +231,7 @@
 			<artifactId>htmlunit</artifactId>
 			<version>2.25</version>
 		</dependency>
-		
+
 		<!-- End HTML Unit Driver requirements: Up-to-date as of 6-11-2015 -->
 
 		<!-- Start General requirements -->
@@ -273,7 +286,7 @@
 		<!-- End REST Core requirements -->
 
 		<!-- Start Soap Core requirements: Up-to-date as of 6-11-2015 -->
-	
+
 		<dependency>
 			<groupId>com.fifesoft</groupId>
 			<artifactId>languagesupport</artifactId>

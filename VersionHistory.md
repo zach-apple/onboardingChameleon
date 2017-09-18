@@ -1,6 +1,44 @@
 # Version History
 
-##Version 1.1.2 - 04/08/2017
+## Version 1.1.2 - 09/18/2017
+* **POM.xml**
+  * Updating to Selenium 3.5.3
+  * Adding properties to access Jenkins Environment variables
+* **General**
+  * Doing code cleanup, introducing better code standards, removing unused methods, enhancements
+     * Added Eclipse Profile to auto-format for consistancy. Added to project in /etc/ideProfiles/eclipse
+     * Reorganized class structure for better readability and expandability.
+       * /src/main/java/com/orasi/core is now /src/main/java/com/orasi/web
+       * Selenium specific classes that were in utils package have been moved to /src/main/java/com/orasi/web
+         * AlertHandler
+         * ExtendedExpectedConditions
+         * FrameHandler
+         * OrasiDriver
+         * PageLoaded
+         * WebBaseTest (was TestEnvironment)
+         * WindowHandler
+     * /src/main/java/com/orasi/core/interfaces is now /src/main/java/com/orasi/web/webelements
+     * /com/orasi/utils/database is now /com/orasi/database
+     * Created initial packages for UI and Mobile expansion
+     * Updating many connections and streams to incorperate try-with-resources ensure closure
+     * Reworked Angular section to reduce require code.
+     * Added ability to enable gather ChromeDriver console log errors
+     * Added ability to upload files to remote grid and nodes
+     
+* **New Utilities**
+  * **CreditCard**
+    * A CreditCard helper utility that contains test cards listed by Paypal in a easy, consumable format.
+  * **FileLoader**
+    * A utility that has various methods for loading (and reading) a file from local or project resources. Existing classes such as ExcelDocumentReader and the DataProviders were updated to use FileLoader
+  * **JSONDataProvider**
+    * Added a DataProvider to read JSON objects to drive tests. Please see JsonDataProvider javadoc for usage. https://github.com/Orasi/Chameleon/blob/master/src/main/java/com/orasi/utils/dataProviders/JsonDataProvider.java
+  * **Element**
+    * Added a *syncInFrame* which will search all frames on a page for an element.
+  * **Mustard**
+    * Added initial functionality to send results to the Orasi result storage app, **Mustard**. https://github.com/Orasi/Mustard-Seed
+  * **TestListener**
+    * Created dedicated TestListener class 
+## Version 1.1.2 - 04/08/2017
 * [**com.orasi.core.by.angular**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/core/by/angular)
   * Doing initial rework of Angular locators
 * [**com.orasi.api.soapService**](https://github.com/Orasi/Chameleon/tree/master/src/main/java/com/orasi/api/soapServices)
