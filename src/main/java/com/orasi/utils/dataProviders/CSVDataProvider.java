@@ -33,10 +33,9 @@ public class CSVDataProvider {
         String[] rowSplit;
         int columnCount = 0;
         int rowCount = 0;
-        String os = System.getProperty("os.name").toLowerCase();
 
         // Get the file location from the project main/resources folder
-        if (!(filePath.contains(":") || (os.contains("unix") && filePath.startsWith("/")))) {
+        if (!(filePath.contains(":") || filePath.startsWith("/"))) {
             URL file = CSVDataProvider.class.getResource(filePath);
             if (file == null) {
                 throw new DataProviderInputFileNotFound("No file was found on path [ " + filePath + " ]");
