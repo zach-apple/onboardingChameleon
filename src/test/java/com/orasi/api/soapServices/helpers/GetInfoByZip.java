@@ -22,15 +22,15 @@ public class GetInfoByZip extends USZipService {
         setRequestDocument(XMLTools.makeXMLDocument(xml));
         switch (fileType.toLowerCase()) {
             case "csv":
-                setRequestNodeValueByXPath(getTestScenario("/excelsheets/getInfoByZipRequest_csv.csv", scenario));
+                setRequestNodeValueByXPath(getTestScenario("/excelsheets/GetInfoByZipRequest_csv.csv", scenario));
                 break;
 
             case "xls":
-                setRequestNodeValueByXPath(getTestScenario("/excelsheets/getInfoByZipRequest_xls.xls", scenario));
+                setRequestNodeValueByXPath(getTestScenario("/excelsheets/GetInfoByZipRequest_xls.xls", scenario));
                 break;
 
             case "xlsx":
-                setRequestNodeValueByXPath(getTestScenario("/excelsheets/getInfoByZipRequest_xlsx.xlsx", scenario));
+                setRequestNodeValueByXPath(getTestScenario("/excelsheets/GetInfoByZipRequest_xlsx.xlsx", scenario));
                 break;
 
             default:
