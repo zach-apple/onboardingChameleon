@@ -1,6 +1,6 @@
 # Version History
 
-## Version 1.1.3 - 09/18/2017
+## Version 1.1.2 - 09/18/2017
 * **POM.xml**
   * Updating to Selenium 3.5.3
   * Adding properties to access Jenkins Environment variables
