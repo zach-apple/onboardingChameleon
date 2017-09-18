@@ -109,4 +109,7 @@ public final class PrettyPrinter {
         return value == null ? DEFAULT_AS_NULL : printer.print(value);
     }
 
+    public interface Printer<T> {
+        String print(T obj);
+    }
 }
