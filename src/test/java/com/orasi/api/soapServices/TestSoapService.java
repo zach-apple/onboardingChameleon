@@ -461,7 +461,7 @@ public class TestSoapService extends APIBaseTest {
         sleep();
         GetInfoByZip getInfo = new GetInfoByZip();
         getInfo.sendRequest();
-        Assert.assertTrue(getInfo.validateResponse("/excelsheets/getInfoByZipResponse_csv.csv", "Main"));
+        Assert.assertTrue(getInfo.validateResponse("/excelsheets/GetInfoByZipResponse_csv.csv", "Main"));
     }
 
     @Features("API")
@@ -472,7 +472,7 @@ public class TestSoapService extends APIBaseTest {
         sleep();
         GetInfoByZip getInfo = new GetInfoByZip();
         getInfo.sendRequest();
-        Assert.assertTrue(getInfo.validateResponse("/excelsheets/getInfoByZipResponse_xls.xls", "Main"));
+        Assert.assertTrue(getInfo.validateResponse("/excelsheets/GetInfoByZipResponse_xls.xls", "Main"));
     }
 
     @Features("API")
@@ -483,7 +483,7 @@ public class TestSoapService extends APIBaseTest {
         sleep();
         GetInfoByZip getInfo = new GetInfoByZip();
         getInfo.sendRequest();
-        Assert.assertTrue(getInfo.validateResponse("/excelsheets/getInfoByZipResponse_xlsx.xlsx", "Main"));
+        Assert.assertTrue(getInfo.validateResponse("/excelsheets/GetInfoByZipResponse_xlsx.xlsx", "Main"));
     }
 
     @Features("API")
@@ -494,7 +494,7 @@ public class TestSoapService extends APIBaseTest {
         sleep();
         GetInfoByZip getInfo = new GetInfoByZip();
         getInfo.sendRequest();
-        Assert.assertFalse(getInfo.validateResponse("/excelsheets/getInfoByZipResponse_ExpectErrors.csv", "Main"));
+        Assert.assertFalse(getInfo.validateResponse("/excelsheets/GetInfoByZipResponse_ExpectErrors.csv", "Main"));
     }
 
     private void sleep() {
