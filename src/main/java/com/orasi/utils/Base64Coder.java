@@ -35,7 +35,7 @@ public class Base64Coder {
 
     public static void main(String[] args) {
         byte[] toEncode = "Test5120.user".getBytes();
-        System.out.println(decodeString("NDI2NjkwMjAzNjI1MDY0Mw==")); // Display the string.
+        System.out.println(decodeString("VGVzdDgwMC51c2Vy")); // Display the string.
     }
 
     // Mapping table from 6-bit nibbles to Base64 characters.

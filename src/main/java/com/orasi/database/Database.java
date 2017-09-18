@@ -10,66 +10,73 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import com.orasi.database.exceptions.DatabaseException;
 
 public abstract class Database {
 
     protected String driver = null;
-    private String dbHost = null;
-    private String dbPort = null;
-    private String dbService = null;
-    private String dbUser = null;
-    private String dbPassword = null;
+    private String host = null;
+    private String port = null;
+    private String service = null;
+    private String username = null;
+    private String password = null;
     protected String connectionString = null;
 
-    protected abstract void setDbDriver(String driver);
+    protected void setDbDriver(String driver) {
+        this.driver = driver;
+    }
 
     protected String getDbDriver() {
-        return driver;
+        return this.driver;
     }
 
     protected void setDbHost(String host) {
-        dbHost = host;
+        this.host = host;
     }
 
     protected String getDbHost() {
-        return dbHost;
+        return this.host;
     }
 
     protected void setDbPort(String port) {
-        dbPort = port;
+        this.port = port;
     }
 
     protected String getDbPort() {
-        return dbPort;
+        return this.port;
     }
 
-    protected void setDbService(String serivce) {
-        dbService = serivce;
+    protected void setDbService(String service) {
+        this.service = service;
     }
 
     protected String getDbService() {
-        return dbService;
+        return this.service;
     }
 
-    public void setDbUserName(String user) {
-        dbUser = user;
+    public void setDbUserName(String username) {
+        this.username = username;
     }
 
     protected String getDbUserName() {
-        return dbUser;
+        return this.username;
     }
 
-    public void setDbPassword(String pass) {
-        dbPassword = pass;
+    public void setDbPassword(String password) {
+        this.password = password;
     }
 
     protected String getDbPassword() {
-        return dbPassword;
+        return this.password;
     }
 
-    protected abstract void setDbConnectionString(String connection);
+    protected void setDbConnectionString(String connection) {
+        this.connectionString = connection;
+    }
 
     protected String getDbConnectionString() {
         return connectionString;
@@ -80,7 +87,7 @@ public abstract class Database {
         loadDriver();
 
         logTrace("Attempt to connect to database [ " + connectionString + " ]");
-        try (Connection connection = DriverManager.getConnection(connectionString, dbUser, dbPassword);) {
+        try (Connection connection = DriverManager.getConnection(connectionString, username, password);) {
             logTrace("Connection successful");
 
             logTrace("Running query");
@@ -206,6 +213,12 @@ public abstract class Database {
         } catch (SQLException sql) {
             throw new DatabaseException("Failed to generate result set", sql);
         }
+    }
+
+    public Object[][] getResultSetAsDataProvider(String query) {
+        List<Object[]> list = new ArrayList<>(Arrays.asList(getResultSet(query)));
+        list.remove(0);
+        return list.toArray(new Object[][] {});
     }
 
 }
