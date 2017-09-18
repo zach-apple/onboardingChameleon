@@ -104,31 +104,24 @@ public class ElementDecorator implements FieldDecorator {
     }
 
     private boolean isDecoratableList(Field field) {
-        // logTrace("Entering ElementDecorator#isDecoratableList");
-        // logTrace("Validate element is assignable from Field");
         if (!List.class.isAssignableFrom(field.getType())) {
             return false;
         }
 
-        // logTrace("Validate element is Erasure");
         @SuppressWarnings("rawtypes")
         Class erasureClass = getErasureClass(field);
         if (erasureClass == null) {
             return false;
         }
 
-        // logTrace("Validate element is assignable from erasure");
         if (!WebElement.class.isAssignableFrom(erasureClass)) {
             return false;
         }
 
-        // logTrace("Validate element FindBy is valid");
         if (field.getAnnotation(FindBy.class) == null && field.getAnnotation(FindBys.class) == null && field.getAnnotation(FindByNG.class) == null) {
             return false;
         }
 
-        // logTrace("Successfully validated element");
-        // logTrace("Exiting ElementDecorator#isDecoratableList");
         return true;
     }
 

@@ -1,4 +1,4 @@
-package com.orasi.web.by.angular;
+package com.orasi.web.by.common;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -8,15 +8,15 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 @SuppressWarnings("unused")
-public class AngularElementLocator implements ElementLocator {
+public class CommonElementLocator implements ElementLocator {
     private final WebDriver driver;
-    private final ByNG by;
+    private final ByCommon by;
 
-    public AngularElementLocator(final WebDriver driver, final Field field) {
-        this(driver, new NGAnnotations(field));
+    public CommonElementLocator(final WebDriver driver, final Field field) {
+        this(driver, new CommonAnnotations(field));
     }
 
-    public AngularElementLocator(final WebDriver driver, final NGAnnotations field) {
+    public CommonElementLocator(final WebDriver driver, final CommonAnnotations field) {
         this.driver = driver;
         this.by = field.buildBy();
     }

@@ -25,6 +25,11 @@ public class TextboxImpl extends ElementImpl implements Textbox {
     public TextboxImpl(OrasiDriver driver, By by) {
         super(driver, by);
     }
+    /*
+     * public TextboxImpl(OrasiDriver driver, ByNG byNg) {
+     * super(driver, byNg);
+     * }
+     */
 
     /**
      * @summary - Gets the value of an input field. Overrides default clear().

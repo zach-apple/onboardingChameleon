@@ -1,4 +1,4 @@
-package com.orasi.web.by.angular;
+package com.orasi.web.by.common;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,16 +7,12 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface FindByNG {
-    HowNG howNG() default HowNG.ID;
+public @interface FindByCommon {
+    HowCommon howNG() default HowCommon.ID;
 
     String using() default "";
 
-    String ngController() default "";
+    String textValueContains() default "";
 
-    String ngModel() default "";
-
-    String ngRepeater() default "";
-
-    String ngShow() default "";
+    String textValue() default "";
 }

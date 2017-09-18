@@ -8,7 +8,6 @@ import org.openqa.selenium.By;
 
 import com.orasi.web.OrasiDriver;
 import com.orasi.web.WebException;
-import com.orasi.web.by.angular.ByNG;
 import com.orasi.web.webelements.Button;
 
 /**
@@ -23,10 +22,6 @@ public class ButtonImpl extends ElementImpl implements Button {
      */
 
     public ButtonImpl(OrasiDriver driver, By by) {
-        super(driver, by);
-    }
-
-    public ButtonImpl(OrasiDriver driver, ByNG by) {
         super(driver, by);
     }
 

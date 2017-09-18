@@ -11,14 +11,17 @@ import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
 import com.orasi.web.OrasiDriver;
 import com.orasi.web.by.angular.AngularElementLocator;
 import com.orasi.web.by.angular.FindByNG;
+import com.orasi.web.by.common.CommonElementLocator;
+import com.orasi.web.by.common.FindByCommon;
 import com.orasi.web.exceptions.NullDriverException;
 
 public class CustomElementLocatorFactory implements ElementLocatorFactory {
     private final OrasiDriver driver;
 
     public CustomElementLocatorFactory(final OrasiDriver driver) {
-        if(driver == null)
+        if (driver == null) {
             throw new NullDriverException();
+        }
         this.driver = driver;
     }
 
@@ -29,6 +32,12 @@ public class CustomElementLocatorFactory implements ElementLocatorFactory {
             logTrace("Attempting to create Angular Element Locator");
             AngularElementLocator element = new AngularElementLocator(driver, field);
             logTrace("Successfully created Angular Element Locator");
+            logTrace("Exiting CustomElementLocatorFactory#createLocator");
+            return element;
+        } else if (field.isAnnotationPresent(FindByCommon.class)) {
+            logTrace("Attempting to create Common Element Locator");
+            CommonElementLocator element = new CommonElementLocator(driver, field);
+            logTrace("Successfully created Common Element Locator");
             logTrace("Exiting CustomElementLocatorFactory#createLocator");
             return element;
         } else {

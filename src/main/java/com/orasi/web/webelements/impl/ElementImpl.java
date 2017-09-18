@@ -25,7 +25,6 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.htmlunit.HtmlUnitWebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.internal.Locatable;
@@ -36,8 +35,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.orasi.Beta;
 import com.orasi.web.ExtendedExpectedConditions;
 import com.orasi.web.OrasiDriver;
-import com.orasi.web.WebException;
-import com.orasi.web.by.angular.ByNG;
 import com.orasi.web.debugging.Highlight;
 import com.orasi.web.exceptions.ElementAttributeValueNotMatchingException;
 import com.orasi.web.exceptions.ElementCssValueNotMatchingException;
@@ -57,7 +54,6 @@ public class ElementImpl implements Element {
 
     protected WebElement element;
     protected By by;
-    protected ByNG byNG;
     protected OrasiDriver driver;
 
     public ElementImpl(final OrasiDriver driver, final By by) {
@@ -66,27 +62,10 @@ public class ElementImpl implements Element {
         try {
             logTrace("Entering ElementImpl#init");
             logTrace("Inital search for element [ " + by + "]");
-            WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), 1);
+            WebDriverWait wait = new WebDriverWait(driver, 1);
             element = wait.until(ExpectedConditions.presenceOfElementLocated(by));
             logTrace("Element [ " + by + "] found and stored");
         } catch (WebDriverException throwAway) {
-            logTrace("Element [ " + by + "] NOT found intially, will search again later");
-        }
-        logTrace("Exiting ElementImpl#init");
-    }
-
-    public ElementImpl(final OrasiDriver driver, final ByNG by) {
-        this.byNG = by;
-        this.driver = driver;
-        try {
-            logTrace("Entering ElementImpl#init");
-            logTrace("Inital search for element [ " + by + "]");
-            int tempTimeout = driver.getElementTimeout();
-            driver.setElementTimeout(1);
-            element = driver.findElement(by);
-            driver.setElementTimeout(tempTimeout);
-            logTrace("Element [ " + by + "] found and stored");
-        } catch (NoSuchElementException | TimeoutException throwAway) {
             logTrace("Element [ " + by + "] NOT found intially, will search again later");
         }
         logTrace("Exiting ElementImpl#init");
@@ -420,160 +399,18 @@ public class ElementImpl implements Element {
         return (getWrappedElement() != null);
     }
 
-    /**
-     * Get the By Locator object used to create this element
-     *
-     * @author Justin
-     * @return {@link By} Return the By object to reuse
-     */
-    @Override
-    public By getElementLocator() {
-        if (by != null) {
-            return this.by;
-        }
-        By by = null;
-        String locator = "";
-        try {
-            locator = getElementLocatorAsString();
-            switch (locator.toLowerCase().replace(" ", "")) {
-                case "classname":
-                    by = By.className(getElementIdentifier());
-                    break;
-                case "cssselector":
-                    by = By.cssSelector(getElementIdentifier());
-                    break;
-                case "id":
-                    by = By.id(getElementIdentifier());
-                    break;
-                case "linktext":
-                    by = By.linkText(getElementIdentifier());
-                    break;
-                case "name":
-                    by = By.name(getElementIdentifier());
-                    break;
-                case "tagname":
-                    by = By.tagName(getElementIdentifier());
-                    break;
-                case "xpath":
-                    by = By.xpath(getElementIdentifier());
-                    break;
-                case "ng-modal":
-                case "buttontext":
-                case "ng-controller":
-                case "ng-repeater":
-                    return null;
-                default:
-                    throw new WebException("Unknown Element Locator sent in: " + locator, getWrappedDriver());
-            }
-            return by;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public String getElementIdentifier() {
         String locator = "";
         int startPosition = 0;
-        int endPosition = 0;
-        if (by == null) {
-            if (element instanceof HtmlUnitWebElement) {
-                startPosition = element.toString().indexOf("=\"") + 2;
-                endPosition = element.toString().indexOf("\"", element.toString().indexOf("=\"") + 3);
-                if (startPosition == -1 || endPosition == -1) {
-                    locator = element.toString();
-                } else {
-                    locator = element.toString().substring(startPosition, endPosition);
-                }
-            } else if (element instanceof ElementImpl) {
-
-                WebElement wrappedElement = ((WrapsElement) element).getWrappedElement();
-                startPosition = wrappedElement.toString().lastIndexOf(": ") + 2;
-                if (startPosition == 1) {
-                    startPosition = wrappedElement.toString().indexOf("=\"") + 2;
-                    endPosition = wrappedElement.toString().indexOf("\"", wrappedElement.toString().indexOf("=\"") + 3);
-                    if (startPosition == -1 || endPosition == -1) {
-                        locator = wrappedElement.toString();
-                    } else {
-                        locator = wrappedElement.toString().substring(startPosition, endPosition);
-                    }
-                } else {
-                    locator = wrappedElement.toString().substring(startPosition, wrappedElement.toString().lastIndexOf("]"));
-                }
-
-            } else {
-                startPosition = element.toString().lastIndexOf(": ") + 2;
-                locator = element.toString().substring(startPosition, element.toString().lastIndexOf("]"));
-            }
-        } else {
-            startPosition = by.toString().lastIndexOf(": ") + 2;
-            locator = by.toString().substring(startPosition, by.toString().length());
-            return locator.trim();
-        }
-
+        startPosition = by.toString().lastIndexOf(": ") + 2;
+        locator = by.toString().substring(startPosition, by.toString().length());
         return locator.trim();
-    }
-
-    /**
-     * Get the By Locator object used to create this element
-     *
-     * @author Justin
-     * @return {@link By} Return the By object to reuse
-     */
-    private String getElementLocatorAsString() {
-        int startPosition = 0;
-        String locator = "";
-        if (by == null) {
-            if (element instanceof HtmlUnitWebElement) {
-                startPosition = element.toString().indexOf(" ");
-                if (startPosition == -1) {
-                    locator = element.toString();
-                } else {
-                    locator = element.toString().substring(startPosition, element.toString().indexOf("="));
-                }
-            } else if (element instanceof ElementImpl) {
-                // Field elementField = null;
-                // try {
-                WebElement wrappedElement = ((WrapsElement) element).getWrappedElement();
-
-                startPosition = wrappedElement.toString().lastIndexOf("->") + 3;
-                if (startPosition == 2) {
-                    startPosition = wrappedElement.toString().indexOf(" ");
-                    if (startPosition == -1) {
-                        locator = wrappedElement.toString();
-                    } else {
-                        locator = wrappedElement.toString().substring(startPosition, wrappedElement.toString().indexOf("="));
-                    }
-                } else {
-                    locator = wrappedElement.toString().substring(startPosition,
-                            wrappedElement.toString().lastIndexOf(":"));
-                }
-                // } catch (IllegalAccessException | SecurityException e) {
-                // e.printStackTrace();
-                // }
-
-            } else {
-
-                // if (element instanceof HtmlUnitWebElement)
-                startPosition = getWrappedElement().toString().lastIndexOf("->") + 3;
-                locator = element.toString().substring(startPosition, element.toString().lastIndexOf(":"));
-            }
-        } else {
-            locator = by.toString().substring(3, by.toString().lastIndexOf(":"));
-            return locator.trim();
-        }
-        locator = locator.trim();
-        return locator;
 
     }
 
     @Override
     public String getElementLocatorInfo() {
-        if (by != null) {
-            return by.toString();
-        }
-        // else return getElementLocatorAsString() + " = " + getElementIdentifier();
-        return getElementLocatorAsString() + " = " + getElementIdentifier();
+        return by.toString();
     }
 
     @Override
@@ -1427,8 +1264,9 @@ public class ElementImpl implements Element {
     @Beta
     protected WebElement reload() {
         logTrace("Entering ElementImpl#reload");
-        logTrace("Search DOM for element [ " + by.toString() + " ]");
         WebElement el = null;
+        logTrace("Search DOM for element [ " + by.toString() + " ]");
+
         try {
             WebDriverWait wait = new WebDriverWait(getWrappedDriver().getWebDriver(), getWrappedDriver().getElementTimeout());
             el = wait.until(ExpectedConditions.presenceOfElementLocated(by));

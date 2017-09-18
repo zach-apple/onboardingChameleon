@@ -16,7 +16,6 @@ import org.openqa.selenium.support.pagefactory.ElementLocator;
 import com.orasi.web.OrasiDriver;
 import com.orasi.web.WebException;
 import com.orasi.web.by.angular.AngularElementLocator;
-import com.orasi.web.by.angular.ByNG;
 import com.orasi.web.webelements.Element;
 
 /**
@@ -64,18 +63,13 @@ public class ElementHandler implements InvocationHandler {
         logTrace("Attempting to invoke method [ " + method.getName() + " ]");
 
         By by = null;
-        ByNG byNg = null;
         Field elementField = null;
 
         logTrace("Get locator By information");
         try {
             elementField = locator.getClass().getDeclaredField("by");
             elementField.setAccessible(true);
-            if (locator instanceof AngularElementLocator) {
-                byNg = (ByNG) elementField.get(locator);
-            } else {
-                by = (By) elementField.get(locator);
-            }
+            by = (By) elementField.get(locator);
         } catch (Exception e) {
             throw new WebException("Failed to obtain element locator", driver);
         }
@@ -92,16 +86,13 @@ public class ElementHandler implements InvocationHandler {
 
         logTrace("Generate constructor for element");
         Constructor cons = null;
-        if (locator instanceof AngularElementLocator) {
-            cons = wrappingType.getConstructor(OrasiDriver.class, ByNG.class);
-        } else {
-            cons = wrappingType.getConstructor(OrasiDriver.class, By.class);
-        }
+        cons = wrappingType.getConstructor(OrasiDriver.class, By.class);
         logTrace("Successfully created constructor");
+
         logTrace("Creating new instance of element");
         Object thing = null;
         if (locator instanceof AngularElementLocator) {
-            thing = cons.newInstance(driver, byNg);
+            thing = cons.newInstance(driver, by);
         } else {
             thing = cons.newInstance(driver, by);
         }

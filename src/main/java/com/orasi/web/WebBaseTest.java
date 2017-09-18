@@ -516,7 +516,7 @@ public class WebBaseTest extends BaseTest {
 
                 break;
             case "html":
-                caps = DesiredCapabilities.htmlUnitWithJs();
+                caps = DesiredCapabilities.htmlUnit();
                 break;
             case "safari":
                 caps = DesiredCapabilities.safari();
@@ -564,7 +564,7 @@ public class WebBaseTest extends BaseTest {
         }
 
         // Operating System
-        caps.setCapability(CapabilityType.PLATFORM, getGridPlatformByOS(operatingSystem));
+        caps.setCapability(CapabilityType.PLATFORM, Platform.fromString(operatingSystem));
 
         // IE specific capabilities
         if (browserUnderTest.toLowerCase().contains("ie")
@@ -629,48 +629,51 @@ public class WebBaseTest extends BaseTest {
      * @param os
      * @return
      */
-    private Platform getGridPlatformByOS(String os) {
-        switch (os.toLowerCase()) {
-            case "android":
-                return Platform.ANDROID;
-            case "windows":
-                return Platform.WINDOWS;
-            case "win7":
-            case "windows 7":
-                return Platform.VISTA;
-            case "windows 8":
-            case "win8":
-                return Platform.WIN8;
-            case "windows 8.1":
-            case "win8.1":
-                return Platform.WIN8_1;
-            case "win10":
-            case "windows 10":
-                return Platform.WIN10;
-            case "xp":
-                return Platform.XP;
-            case "linux":
-                return Platform.LINUX;
-            case "mac":
-                return Platform.MAC;
-            case "el capitan":
-            case "el_capitan":
-                return Platform.EL_CAPITAN;
-            case "mavericks":
-                return Platform.MAVERICKS;
-            case "mountain lion":
-            case "mountain_lion":
-                return Platform.MOUNTAIN_LION;
-            case "sierra":
-                return Platform.SIERRA;
-            case "snow leopard":
-            case "snow_leopard":
-                return Platform.SNOW_LEOPARD;
-            case "yosemite":
-                return Platform.YOSEMITE;
-            default:
-                throw new AutomationException("OS is not in supported list of platforms: " + os);
-        }
-    }
+    /*
+     * private Platform getGridPlatformByOS(String os) {
+     * Platform.fromString(os);
+     * switch (os.toLowerCase()) {
+     * case "android":
+     * return Platform.ANDROID;
+     * case "windows":
+     * return Platform.WINDOWS;
+     * case "win7":
+     * case "windows 7":
+     * return Platform.VISTA;
+     * case "windows 8":
+     * case "win8":
+     * return Platform.WIN8;
+     * case "windows 8.1":
+     * case "win8.1":
+     * return Platform.WIN8_1;
+     * case "win10":
+     * case "windows 10":
+     * return Platform.WIN10;
+     * case "xp":
+     * return Platform.XP;
+     * case "linux":
+     * return Platform.LINUX;
+     * case "mac":
+     * return Platform.MAC;
+     * case "el capitan":
+     * case "el_capitan":
+     * return Platform.EL_CAPITAN;
+     * case "mavericks":
+     * return Platform.MAVERICKS;
+     * case "mountain lion":
+     * case "mountain_lion":
+     * return Platform.MOUNTAIN_LION;
+     * case "sierra":
+     * return Platform.SIERRA;
+     * case "snow leopard":
+     * case "snow_leopard":
+     * return Platform.SNOW_LEOPARD;
+     * case "yosemite":
+     * return Platform.YOSEMITE;
+     * default:
+     * throw new AutomationException("OS is not in supported list of platforms: " + os);
+     * }
+     * }
+     */
 
 }

@@ -1,7 +1,5 @@
 package com.orasi;
 
-import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -9,8 +7,12 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.orasi.web.FrameHandler;
+import com.orasi.utils.TestReporter;
 import com.orasi.web.WebBaseTest;
+import com.orasi.web.by.angular.ByNG;
+import com.orasi.web.by.angular.FindByNG;
+import com.orasi.web.webelements.Label;
+import com.orasi.web.webelements.impl.internal.ElementFactory;
 
 public class Sandbox extends WebBaseTest {
     @BeforeTest(groups = { "regression", "utils", "dev", "framehandler" })
@@ -23,21 +25,25 @@ public class Sandbox extends WebBaseTest {
         setOperatingSystem(operatingSystem);
         setRunLocation(runLocation);
         setEnvironment(environment);
-        setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/utils/frameHandler.html");
+        setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/angular/angularPage.html");
         testStart("TestFrame");
     }
+
+    @FindByNG(ngRepeater = "x in names | orderBy:'country'")
+    public Label name2;
 
     @AfterTest(groups = { "regression", "utils", "dev" })
     public void close(ITestContext testResults) {
         endTest("TestFrame", testResults);
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     public void findAndSwitchToFrameFromOutsideFrame() {
+        TestReporter.setDebugLevel(3);
+        Label name = getDriver().findLabel(ByNG.repeater("x in names | orderBy:'country'"));
+        ElementFactory.initElements(getDriver(), this);
+        name.highlight();
 
-        FrameHandler.findAndSwitchToFrame(getDriver(), "menu_page");
-        Assert.assertTrue("Link was not found in 'menu_page'",
-                getDriver().findElement(By.id("googleLink")).isDisplayed());
+        name2.syncTextMatchesInElement("(.*Joe, Denmark.*)");
     }
 }
