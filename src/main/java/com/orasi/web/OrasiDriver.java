@@ -690,12 +690,12 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
     }
 
     /**
-     * Method that return the <b><i>Page</i></b> class
+     * Method that return the <b><i>PageLoaded</i></b> class
      *
-     * @return <b><i>Page</i></b> class
+     * @return <b><i>PageLoaded</i></b> class
      */
-    public Page page() {
-        return new Page();
+    public PageLoaded page() {
+        return new PageLoaded();
     }
 
     /*
@@ -729,117 +729,6 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
 
     public Actions actions() {
         return new Actions(driver);
-    }
-
-    /**
-     * This class contains methods that hook into the PageLoaded class, allowing for compact usage with the driver
-     * Example usages provided with each method contained within.
-     *
-     * @author Waightstill W Avery
-     */
-    class Page {
-
-        /**
-         * @summary loops for a predetermined amount of time (defined by
-         *          OrasiDriver.getElementTimeout()) to determine if the
-         *          Element is not null
-         * @return boolean: true is the DOM is completely loaded, false otherwise
-         */
-        public boolean pageLoaded() {
-            return PageLoaded.isDomComplete(getOrasiDriver());
-        }
-
-        /**
-         * @summary loops for a predetermined amount of time (defined by
-         *          OrasiDriver.getElementTimeout()) to determine if the
-         *          Element is not null
-         * @return boolean: true is the DOM is completely loaded, false otherwise
-         * @param clazz
-         *            - page class that is calling this method
-         * @param element
-         *            - element with which to determine if a page is loaded
-         */
-        public boolean pageLoaded(Class<?> clazz, Element element) {
-            return PageLoaded.isElementLoaded(clazz, getOrasiDriver(), element);
-        }
-
-        /*
-         * isDomInteractive
-         */
-        /**
-         * Method that determines when/if the DOM is interactive
-         * Example usage: getDriver().page().isDomInteractive()
-         *
-         * @return - boolean true if interactive, false otherwise
-         */
-        public boolean isDomInteractive() {
-            return PageLoaded.isDomInteractive(getOrasiDriver());
-        }
-
-        /**
-         * Method that determines when/if the DOM is interactive
-         * Example usage: getDriver().page().isDomComplete(oDriver);
-         *
-         * @param oDriver
-         *            - current OrasiDriver
-         * @return - boolean true if interactive, false otherwise
-         */
-        public boolean isDomInteractive(OrasiDriver oDriver) {
-            return PageLoaded.isDomInteractive(oDriver);
-        }
-
-        /**
-         * Method that determines when/if the DOM is interactive
-         * Example usage: getDriver().page().initializePage(oDriver, timeout);
-         *
-         * @param oDriver
-         *            - current OrasiDriver
-         * @param timeout
-         *            - user-defined timeout to allow the DOM to become interactive
-         * @return - boolean true if interactive, false otherwise
-         */
-        public boolean isDomInteractive(OrasiDriver oDriver, int timeout) {
-            return PageLoaded.isDomInteractive(oDriver, timeout);
-        }
-
-        /*
-         * isAngularComplete
-         */
-        /**
-         * Method that determine when/if an AngularJS page is complete
-         * Example usage: getDriver().page().isAngularComplete();
-         */
-        public void isAngularComplete() {
-            PageLoaded.isAngularComplete(getOrasiDriver());
-        }
-
-        /**
-         * Method that determines when/if the DOM is complete
-         * Example usage: getDriver().page().isDomComplete(oDriver);
-         *
-         * @param oDriver
-         *            - current OrasiDriver
-         * @return - boolean true if complete, false otherwise
-         */
-        public boolean isDomComplete() {
-            return PageLoaded.isDomComplete(getOrasiDriver());
-        }
-
-        /**
-         * Method that determines when/if the DOM is complete
-         * Example usage: getDriver().page().isDomComplete(oDriver, timeout);
-         *
-         * @param oDriver
-         *            - current OrasiDriver
-         * @param timeout
-         *            - user-defined timeout to allow the DOM to become interactive
-         * @return - boolean true if complete, false otherwise
-         * @return
-         */
-        public boolean isDomComplete(int timeout) {
-            return PageLoaded.isDomComplete(getOrasiDriver(), timeout);
-        }
-
     }
 
     public Debug debug() {

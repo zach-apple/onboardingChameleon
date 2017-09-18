@@ -11,7 +11,6 @@ import org.openqa.selenium.WebDriverException;
 import com.orasi.utils.Sleeper;
 import com.orasi.web.exceptions.PageInitialization;
 import com.orasi.web.webelements.Element;
-import com.orasi.web.webelements.impl.internal.ElementFactory;
 
 /**
  * Several different methods of waiting for a page to finish loading.
@@ -73,10 +72,9 @@ public class PageLoaded {
             while (!obj.elementWired()) {
                 if (count == timeout) {
                     break;
-                } else {
-                    count++;
-                    initializePage(clazz, oDriver);
                 }
+                count++;
+
             }
 
         } catch (NullPointerException | NoSuchElementException | StaleElementReferenceException | PageInitialization e) {
@@ -88,9 +86,10 @@ public class PageLoaded {
 
         if (count < timeout) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
+
     }
 
     /**
@@ -132,18 +131,18 @@ public class PageLoaded {
                     "var result = document.readyState; return (result == 'complete' || result == 'interactive');");
             if (count == timeout) {
                 break;
-            } else {
-                Sleeper.sleep(500);
-                count++;
-
             }
+            Sleeper.sleep(500);
+            count++;
+
         } while (obj.equals(false));
 
-        if (count < timeout * 2) {
+        if (count < (timeout * 2)) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
+
     }
 
     /**
@@ -221,25 +220,4 @@ public class PageLoaded {
             return false;
         }
     }
-
-    /**
-     * @summary Used to create all page objects WebElements as proxies (not
-     *          actual objects, but rather placeholders) or to reinitialize all
-     *          page object WebElements to allow for the state of a page to
-     *          change and not fail a test
-     * @return N/A
-     * @param clazz
-     *            - page class that is calling this method for which to initialize elements
-     *
-     * @param oDriver
-     *            - The webDriver
-     */
-    public static void initializePage(Class<?> clazz, OrasiDriver oDriver) {
-        try {
-            ElementFactory.initElements(oDriver, clazz.getConstructor(WebBaseTest.class));
-        } catch (NoSuchMethodException | SecurityException e) {
-            throw new PageInitialization("Unable to initialize page", oDriver);
-        }
-    }
-
 }
