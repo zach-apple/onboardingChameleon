@@ -78,7 +78,7 @@
 
 	<test name="ByAngular" parallel="methods" thread-count="20">
 		<classes>
-			<class name="com.orasi.web.by.angular.TestByAngular" />
+			<class name="com.orasi.web.by.angular.TestAngular" />
 		</classes>
 	</test>
 	
