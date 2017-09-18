@@ -1,6 +1,6 @@
 #  Orasi Chameleon Project
 
-<img src="http://ruraldirectory.orasi.com/images/chameleonSmall.png"/>
+<img src="/img/logo_full.png"/>
 
 This is the homepage for the Orasi Selenium Core libraries. These libraries contain both original code created by Orasi developers
 and open source code from various other projects which are listed further down. With these libraries, consumers have access to extended 
