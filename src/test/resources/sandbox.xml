@@ -4,13 +4,13 @@
 	
 	<parameter name="browserUnderTest" value="chrome" />
 	<parameter name="environment" value="staging" />
-	<parameter name="runLocation" value="sauce" />
+	<parameter name="runLocation" value="local" />
 	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="windows 10" />
  
 	<test name="Textbox" parallel="methods" thread-count="20">
 		<classes>
-			<class name="com.orasi.web.webelements.TestElement" />
+			<class name="com.orasi.web.webelements.TestElementInternalHandlers" />
 		</classes>
 	</test>
 </suite> <!-- Suite -->
