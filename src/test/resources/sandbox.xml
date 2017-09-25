@@ -6,13 +6,13 @@
 	</listeners>
 	<parameter name="browserUnderTest" value="chrome" />
 	<parameter name="environment" value="staging" />
-	<parameter name="runLocation" value="sauce" />
+	<parameter name="runLocation" value="local" />
 	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="windows 10" />
  
 	<test name="Testbox Test" parallel="methods" thread-count="20">
 		<classes>
-			<class name="com.orasi.web.by.common.TestCommon" />
+			<class name="com.orasi.web.webelements.TestElementInternalHandlers" />
 		</classes>
 	</test>
 	
