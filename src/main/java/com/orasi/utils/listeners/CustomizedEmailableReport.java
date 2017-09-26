@@ -27,6 +27,9 @@ public class CustomizedEmailableReport implements IReporter {
 	private static final String SUMMARY_ROW_TEMPLATE = "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>";
 	//Formatter for the suite summary total table row
 	private static final String SUMMARY_TOTAL_ROW_TEMPLATE = "<tr class= \"lead\" style=\"background-color:LightGrey\"><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>";
+	//constants for template report & finalized report
+	private static final String FINISHED_REPORT_NAME = "automation-email-report";
+	private static final String REPORT_TEMPLATE_NAME_PATH = "src/main/resources/html/reportTemplate.html";
 	
 	//Lists to hold the table rows
 	private List<String> suiteSummaryRows = new ArrayList<String>();
@@ -40,19 +43,24 @@ public class CustomizedEmailableReport implements IReporter {
 	 */
 	@Override
 	public void generateReport(List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
+		//Get the initial html template
 		String reportTemplate = initReportTemplate();
 		String htmlString;
 		
+		//Get all the summary section and detail section details for reporting
 		getTestSuiteDetails(suites);
 		
+		//get the suite summary rows list and combine as a string
 		htmlString = suiteSummaryRows.stream().collect(Collectors.joining());
+		//add the table rows to the summary table in html report
 		reportTemplate = reportTemplate.replaceFirst("<tbody id=\"suiteSummaryTable\">", String.format("%s</tbody>", htmlString));
+		//get the suite detail rows list and combine as a string
 		htmlString = suiteDetailRows.stream().collect(Collectors.joining());
+		//add the table rows to the detail table in html report
 		reportTemplate = reportTemplate.replaceFirst("<tbody id=\"suiteDetailTable\">", String.format("%s</tbody>", htmlString));
-		
 		//Add Date & time to report
 		reportTemplate = reportTemplate.replaceFirst("<h2 id=\"dateTimeStamp\">", "<h2 id=\"dateTimeStamp\">" + DateTimeConversion.convert(SimpleDate.getTimestamp(),"MM/dd/yyyy hh:mm aa"));
-		
+		//Update the report template and publish the finalized report in path specified
 		updateReportTemplate(outputDirectory, reportTemplate);
 	}
 	
@@ -201,7 +209,7 @@ public class CustomizedEmailableReport implements IReporter {
 		String template = null;
 		byte[] reportTemplate;
 		try {
-			reportTemplate = Files.readAllBytes(Paths.get("src/main/resources/html/reportTemplate.html"));
+			reportTemplate = Files.readAllBytes(Paths.get(REPORT_TEMPLATE_NAME_PATH));
 			template = new String(reportTemplate, "UTF-8");
 		} catch (IOException e) {
 			throw new AutomationException("Could not find the report template file to convert to string.  Error: " + e.getMessage());
@@ -219,14 +227,11 @@ public class CustomizedEmailableReport implements IReporter {
 	 */
 	private void updateReportTemplate(String outputDirectory, String reportTemplate) {
 		new File(outputDirectory).mkdirs();
-		try {
-			PrintWriter reportWriter = new PrintWriter(new BufferedWriter(new FileWriter(new File(outputDirectory, "automation-email-report.html"))));
-			reportWriter.println(reportTemplate);
-			reportWriter.flush();
-			reportWriter.close();
-		} catch (IOException e) {
-			throw new AutomationException("Could not write to report template.  Error: " + e.getMessage());
-		}
+		try (PrintWriter reportWriter = new PrintWriter(new BufferedWriter(new FileWriter(new File(outputDirectory, FINISHED_REPORT_NAME + ".html"))), true)){            
+            reportWriter.println(reportTemplate);
+        } catch (IOException e) {
+            throw new AutomationException("Could not write to report template.  Error: " + e.getMessage());
+        }
 	}
 
 }
