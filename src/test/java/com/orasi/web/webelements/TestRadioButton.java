@@ -5,13 +5,14 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.ITestContext;
+import org.testng.ITestResult;
 import org.testng.SkipException;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.orasi.web.WebBaseTest;
-import com.orasi.web.webelements.RadioGroup;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
@@ -23,6 +24,11 @@ public class TestRadioButton extends WebBaseTest {
         setApplicationUnderTest("Test Site");
         setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/radioGroup.html");
         testStart("TestRadiogroup");
+    }
+
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
     }
 
     @AfterTest(groups = { "regression", "interfaces", "radiogroup", "dev" })

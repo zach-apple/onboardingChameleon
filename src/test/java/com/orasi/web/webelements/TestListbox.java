@@ -4,14 +4,15 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.ITestContext;
+import org.testng.ITestResult;
 import org.testng.SkipException;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.orasi.web.WebBaseTest;
 import com.orasi.web.exceptions.OptionNotInListboxException;
-import com.orasi.web.webelements.Listbox;
 import com.orasi.web.webelements.impl.ListboxImpl;
 
 import ru.yandex.qatools.allure.annotations.Features;
@@ -26,6 +27,11 @@ public class TestListbox extends WebBaseTest {
         setApplicationUnderTest("Test Site");
         setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/listbox.html");
         testStart("TestListbox");
+    }
+
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
     }
 
     @AfterTest(alwaysRun = true)

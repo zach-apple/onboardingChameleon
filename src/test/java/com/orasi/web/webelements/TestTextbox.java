@@ -3,12 +3,13 @@ package com.orasi.web.webelements;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.ITestContext;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.orasi.web.WebBaseTest;
-import com.orasi.web.webelements.Textbox;
 import com.orasi.web.webelements.impl.TextboxImpl;
 
 import ru.yandex.qatools.allure.annotations.Features;
@@ -21,6 +22,11 @@ public class TestTextbox extends WebBaseTest {
     public void setup() {
         setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/textbox.html");
         testStart("TestTextbox");
+    }
+
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
     }
 
     @AfterTest(groups = { "regression", "interfaces", "textbox", "dev" })

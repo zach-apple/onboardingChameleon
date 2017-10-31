@@ -8,8 +8,10 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.ITestResult;
 import org.testng.Reporter;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import com.orasi.api.restServices.RestResponse;
@@ -27,6 +29,11 @@ public class TestTestReporter extends WebBaseTest {
     public void cleanup() {
         TestReporter.setDebugLevel(0);
         driver.quit();
+    }
+
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
     }
 
     @Test

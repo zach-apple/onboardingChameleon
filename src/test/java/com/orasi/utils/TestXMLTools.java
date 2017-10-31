@@ -13,6 +13,8 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
 import org.junit.Assert;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
@@ -31,6 +33,11 @@ public class TestXMLTools extends WebBaseTest {
     @BeforeTest
     public void setup() {
         setReportToMustard(false);
+    }
+
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
     }
 
     @Features("Utilities")

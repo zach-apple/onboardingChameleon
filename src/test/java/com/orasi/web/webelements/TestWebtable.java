@@ -3,12 +3,13 @@ package com.orasi.web.webelements;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.ITestContext;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.orasi.web.WebBaseTest;
-import com.orasi.web.webelements.Webtable;
 import com.orasi.web.webelements.impl.WebtableImpl;
 
 import ru.yandex.qatools.allure.annotations.Features;
@@ -23,6 +24,11 @@ public class TestWebtable extends WebBaseTest {
     public void setup() {
         setPageURL("http://www.iupui.edu/~webtrain/tutorials/tables.html");
         testStart("TestWebtable");
+    }
+
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
     }
 
     @AfterClass(groups = { "regression", "interfaces", "webtable", "dev" })

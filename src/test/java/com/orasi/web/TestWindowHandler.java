@@ -2,12 +2,11 @@ package com.orasi.web;
 
 import org.testng.Assert;
 import org.testng.ITestContext;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-
-import com.orasi.web.WebBaseTest;
-import com.orasi.web.WindowHandler;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
@@ -20,6 +19,11 @@ public class TestWindowHandler extends WebBaseTest {
         setApplicationUnderTest("Test Site");
         setPageURL("http://google.com");
         testStart("TestWindowHandler");
+    }
+
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
     }
 
     @AfterTest(groups = { "regression", "utils", "dev" })

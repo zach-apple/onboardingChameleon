@@ -3,7 +3,9 @@ package com.orasi.web.webelements;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.ITestContext;
+import org.testng.ITestResult;
 import org.testng.SkipException;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -23,6 +25,11 @@ public class TestLink extends WebBaseTest {
         setApplicationUnderTest("Test Site");
         setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/link.html");
         testStart("TestLink");
+    }
+
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
     }
 
     @AfterTest(groups = { "regression", "interfaces", "link", "dev" })

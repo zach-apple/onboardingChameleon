@@ -16,6 +16,7 @@ import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.SkipException;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
@@ -128,6 +129,11 @@ public class TestOrasiDriver extends WebBaseTest {
         driver.get("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/testsite.html");
 
         // testStart("TestOrasiDriver");
+    }
+
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
     }
 
     private void endSauceTest(int result) {

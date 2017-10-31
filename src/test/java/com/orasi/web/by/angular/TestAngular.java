@@ -2,6 +2,8 @@ package com.orasi.web.by.angular;
 
 import org.testng.Assert;
 import org.testng.ITestContext;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -39,6 +41,11 @@ public class TestAngular extends WebBaseTest {
         testStart("TestAngular");
     }
 
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
+    }
+
     @AfterTest(groups = { "regression", "interfaces", "angular", "dev" })
     public void close(ITestContext testResults) {
         endTest("TestAngular", testResults);
@@ -68,6 +75,7 @@ public class TestAngular extends WebBaseTest {
     public void driverFindNGModel() {
         Element model = getDriver().findElement(ByNG.model("lastName"));
         Assert.assertTrue(model.elementWired());
+
     }
 
     @Features("Element Interfaces")

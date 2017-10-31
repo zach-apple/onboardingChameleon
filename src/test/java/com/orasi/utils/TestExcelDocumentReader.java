@@ -1,6 +1,8 @@
 package com.orasi.utils;
 
 import org.junit.Assert;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import com.orasi.AutomationException;
@@ -12,6 +14,11 @@ import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestExcelDocumentReader extends WebBaseTest {
+
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
+    }
 
     @Features("Utilities")
     @Stories("ExcelDocumentReader")

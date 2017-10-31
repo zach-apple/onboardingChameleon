@@ -1,6 +1,8 @@
 package com.orasi.utils;
 
 import org.junit.Assert;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -17,6 +19,11 @@ public class TestRegex extends WebBaseTest {
     @BeforeTest
     public void setup() {
         setReportToMustard(false);
+    }
+
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
     }
 
     @Features("Utilities")

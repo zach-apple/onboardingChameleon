@@ -4,6 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
 import org.testng.Assert;
 import org.testng.ITestContext;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -30,6 +32,11 @@ public class TestElement extends WebBaseTest {
         getDriver().findWebElement(By.id("text1")).sendKeys("blah");
     }
 
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
+    }
+
     @AfterTest(groups = { "regression", "interfaces", "element", "dev" })
     public void close(ITestContext testResults) {
         endTest("TestAlert", testResults);
@@ -42,6 +49,7 @@ public class TestElement extends WebBaseTest {
     public void reload() {
         Element element = getDriver().findElement(By.id("text1"));
         getDriver().get(pageUrl);
+        getDriver().debug().setHighlightOnSync(true);
         Assert.assertTrue(element.isEnabled());
     }
 

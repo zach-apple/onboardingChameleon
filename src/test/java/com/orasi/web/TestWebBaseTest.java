@@ -1,9 +1,9 @@
 package com.orasi.web;
 
 import org.testng.Assert;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
-
-import com.orasi.web.WebBaseTest;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
@@ -18,6 +18,11 @@ public class TestWebBaseTest extends WebBaseTest {
     private String testingEnvironment = "stage";
     private String testingName = "TestEnvironment";
     private String pageURL = "http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/element.html";
+
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
+    }
 
     @Features("Utilities")
     @Stories("TestEnvironment")

@@ -16,6 +16,8 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.safari.SafariOptions;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
@@ -25,6 +27,7 @@ import com.orasi.BaseTest;
 import com.orasi.utils.Base64Coder;
 import com.orasi.utils.Constants;
 import com.orasi.utils.TestReporter;
+import com.orasi.web.debugging.Highlight;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.saucerest.SauceREST;
 
@@ -240,11 +243,12 @@ public class WebBaseTest extends BaseTest {
      * @param operatingSystem
      */
     @Parameters({ "browserUnderTest", "browserVersion", "operatingSystem" })
-    @BeforeTest
+    @BeforeTest(alwaysRun = true)
     public void beforeWebTest(String browserUnderTest, String browserVersion, String operatingSystem) {
         setBrowserUnderTest(browserUnderTest);
         setBrowserVersion(browserVersion);
         setOperatingSystem(operatingSystem);
+        Highlight.setDebugMode(true);
     }
 
     /**
@@ -255,11 +259,23 @@ public class WebBaseTest extends BaseTest {
      * @param operatingSystem
      */
     @Parameters({ "browserUnderTest", "browserVersion", "operatingSystem" })
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void beforeWebMethod(String browserUnderTest, String browserVersion, String operatingSystem) {
         setBrowserUnderTest(browserUnderTest);
         setBrowserVersion(browserVersion);
         setOperatingSystem(operatingSystem);
+    }
+
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
+        endTest(getTestName(), testResults);
+    }
+
+    @AfterClass(alwaysRun = true)
+    public void afterClass(ITestContext testResults) {
+        if (getDriver() != null && getDriver().getWindowHandles().size() > 0) {
+            endTest(getTestName(), testResults);
+        }
     }
 
     /*
@@ -365,7 +381,7 @@ public class WebBaseTest extends BaseTest {
             reportToSauceLabs(testResults.getStatus());
         }
         // quit driver
-        if (getDriver() != null && isNotEmpty(getDriver().getWindowHandles()) && !getDriver().toString().contains("null")) {
+        if (getDriver() != null && !getDriver().toString().contains("null") && isNotEmpty(getDriver().getWindowHandles())) {
             getDriver().quit();
         }
     }
@@ -378,15 +394,16 @@ public class WebBaseTest extends BaseTest {
      * before closing test if reporting to sauce labs
      */
     protected void endTest(String testName, ITestContext testResults) {
-        if (getRunLocation().equalsIgnoreCase("sauce")) {
-            if (testResults.getFailedTests().size() == 0) {
-                reportToSauceLabs(ITestResult.SUCCESS);
-            } else {
-                reportToSauceLabs(ITestResult.FAILURE);
+        if (getDriver().getWebDriver() != null && !getDriver().getWebDriver().toString().contains("null") && getDriver().getWebDriver().getWindowHandles().size() > 0) {
+            if (getRunLocation().equalsIgnoreCase("sauce")) {
+                if (testResults.getFailedTests().size() == 0) {
+                    reportToSauceLabs(ITestResult.SUCCESS);
+                } else {
+                    reportToSauceLabs(ITestResult.FAILURE);
+                }
             }
-        }
-        // quit driver
-        if (getDriver() != null && getDriver().getWindowHandles().size() > 0) {
+            // quit driver
+
             if (!getDriver().toString().contains("null")) {
                 getDriver().quit();
             }
