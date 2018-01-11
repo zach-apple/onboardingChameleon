@@ -435,11 +435,13 @@ public class Person {
         addAddress(new Address());
         addPhone(new Phone());
         addEmail(new Email());
+        addCreditCard();
         addresses.get(0).setPrimary(true);
         phones.get(0).setPrimary(true);
         emails.get(0).setPrimary(true);
         emails.get(0).setEmail(
                 getFirstName() + "." + getLastName() + "@AutomatedTesting.com");
+        creditcards.get(0).setPrimary(true);
     }
 
 }
