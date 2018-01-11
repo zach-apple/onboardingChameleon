@@ -8,6 +8,8 @@ import java.util.Locale;
 import java.util.Random;
 
 import com.orasi.utils.Randomness;
+import com.orasi.utils.dataHelpers.creditCards.CreditCard;
+import com.orasi.utils.dataHelpers.creditCards.CreditCards;
 import com.orasi.utils.dataHelpers.personFactory.seeds.FemaleFirstNames;
 import com.orasi.utils.dataHelpers.personFactory.seeds.LastNames;
 import com.orasi.utils.dataHelpers.personFactory.seeds.MaleFirstNames;
@@ -18,6 +20,7 @@ public class Person {
     private ArrayList<Address> addresses = new ArrayList<Address>();
     private ArrayList<Phone> phones = new ArrayList<Phone>();
     private ArrayList<Email> emails = new ArrayList<Email>();
+    private ArrayList<CreditCard> creditcards = new ArrayList<CreditCard>();
     private boolean isPrimary = false;
     private String title = "";
     private String firstName = "";
@@ -250,7 +253,40 @@ public class Person {
     public void addEmail(Email email) {
         emails.add(email);
     }
+    
+    //--------------------John M--------------------------------
+    /**
+     * Return all credit cards associated to the Guest
+     * 
+     * @author John Martin
+     * @version 01/11/2018 John Martin - original
+     * @return all credit cards as an ArrayList
+     */
+    public ArrayList<CreditCard> getAllCreditCards() {
+    	return creditcards;
+    }
+    
+    /**
+     * Associate a new Credit Card to the guest using preset Visa type
+     * 
+     * @author John Martin
+     * @version 01/11/2018 John Martin - original
+     */
+    public void addCreditCard( ) {
+    	creditcards.add(CreditCards.getCreditCardByType("VISA"));
+    }
+    
+    /**
+     * Associate a new Credit Card to the guest using preset data
+     * 
+     * @author John Martin
+     * @version 01/11/2018 John Martin - original
+     */
+    public void addCreditCard(CreditCard creditcard) {
+    	creditcards.add(creditcard);
+    }
 
+    
     public boolean isPrimary() {
         return isPrimary;
     }
@@ -314,6 +350,26 @@ public class Person {
         }
 
         return primaryEmail;
+    }
+    
+  //--------------------John M--------------------------------
+    /**
+     * Return the Credit Card marked as Primary
+     * 
+     * @author John Martin
+     * @version 01/11/2018 John Martin - original
+     * @return the Guest's primary Credit Card
+     */
+    public CreditCard primaryCreditCard() {
+    	CreditCard primaryCreditCard = null;
+    	
+    	for (CreditCard card : creditcards) {
+    		if (card.isPrimary()) {
+    			primaryCreditCard = card;
+    		}
+    	}
+    	
+    	return primaryCreditCard;
     }
 
     @Override
