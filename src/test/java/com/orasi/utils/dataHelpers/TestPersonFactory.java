@@ -3,6 +3,7 @@ package com.orasi.utils.dataHelpers;
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
+import com.orasi.utils.dataHelpers.creditCards.CardTypes;
 import com.orasi.utils.dataHelpers.creditCards.CreditCard;
 import com.orasi.utils.dataHelpers.creditCards.CreditCards;
 import com.orasi.utils.dataHelpers.personFactory.Address;
@@ -570,7 +571,6 @@ public class TestPersonFactory {
         Assert.assertTrue(party.primaryPerson().primaryEmail().isOptIn());
     }
     
-    //-----------------John M---------------------
     @Features("Utilities")
     @Stories("PersonFactory")
     @Title("personAllCreditCards")
@@ -590,12 +590,22 @@ public class TestPersonFactory {
     
     @Features("Utilities")
     @Stories("PersonFactory")
-    @Title("personAddCreditCard")
+    @Title("personAddCreditCardByString")
     @Test(groups = { "regression", "utils", "Party" }, dependsOnMethods = "personAddCreditCardDefault")
     public void personAddCreditCardConstructor() {
         CreditCard creditcard = CreditCards.getCreditCardByType("AMEX");
     	party.primaryPerson().addCreditCard(creditcard);
     	Assert.assertTrue(party.primaryPerson().getAllCreditCards().size() == 3);
+    }
+
+    @Features("Utilities")
+    @Stories("PersonFactory")
+    @Title("personAddCreditCardByType")
+    @Test(groups = { "regression", "utils", "Party" }, dependsOnMethods = "personAddCreditCardDefault")
+    public void personAddCreditCardConstructorEnum() {
+        CreditCard creditcard = CreditCards.getCreditCardByType(CardTypes.DISCOVER);
+    	party.primaryPerson().addCreditCard(creditcard);
+    	Assert.assertTrue(party.primaryPerson().getAllCreditCards().size() == 4);
     }
     
     @Features("Utilities")
@@ -604,5 +614,6 @@ public class TestPersonFactory {
     @Test(groups = { "regression", "utils", "Party" }, dependsOnMethods = "personAddCreditCardConstructor")
     public void personCreditCardPrimary() {
     	Assert.assertNotNull(party.primaryPerson().primaryCreditCard());
+    	Assert.assertTrue(party.primaryPerson().primaryCreditCard().getCardType().equalsIgnoreCase("Visa"));
     }
 }
