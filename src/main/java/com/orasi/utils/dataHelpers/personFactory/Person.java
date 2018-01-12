@@ -254,7 +254,6 @@ public class Person {
         emails.add(email);
     }
     
-    //--------------------John M--------------------------------
     /**
      * Return all credit cards associated to the Guest
      * 
@@ -272,8 +271,10 @@ public class Person {
      * @author John Martin
      * @version 01/11/2018 John Martin - original
      */
-    public void addCreditCard( ) {
-    	creditcards.add(CreditCards.getCreditCardByType("VISA"));
+    @SuppressWarnings("static-access")
+	public void addCreditCard( ) {
+    	CreditCards cards = new CreditCards(this);
+    	creditcards.add(cards.VISA());
     }
     
     /**
@@ -352,7 +353,6 @@ public class Person {
         return primaryEmail;
     }
     
-  //--------------------John M--------------------------------
     /**
      * Return the Credit Card marked as Primary
      * 

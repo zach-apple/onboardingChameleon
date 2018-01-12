@@ -48,7 +48,7 @@ public class CreditCards {
         }
 
         if (!billingFound) {
-            address.set(person.primaryAddress());
+            address.set(person.getAllAddresses().get(0));
         }
     }
 
