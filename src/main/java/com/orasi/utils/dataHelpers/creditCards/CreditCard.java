@@ -17,6 +17,7 @@ public class CreditCard {
     private String billingState;
     private String billingCountry;
     private String billingZip;
+    private boolean isPrimary = false;
 
     public CreditCard(String cardType, String nameOnCard, String cardNumber, String securityCode, String expireMonth, String expireYear,
             String billingStreet, String billingStreet2, String billingCity, String billingState, String billingCountry, String billingZip) {
@@ -33,6 +34,14 @@ public class CreditCard {
         this.billingState = billingState;
         this.billingCountry = billingCountry;
         this.billingZip = billingZip;
+    }
+    
+    public boolean isPrimary() {
+        return isPrimary;
+    }
+
+    public void setPrimary(boolean isPrimary) {
+        this.isPrimary = isPrimary;
     }
 
     public String getNameOnCard() {
