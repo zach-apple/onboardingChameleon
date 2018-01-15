@@ -196,10 +196,20 @@ public class ElementImpl implements Element {
      * @see org.openqa.selenium.WebElement#findElement(By)
      */
     @Override
-    public List<WebElement> findElements(By by) {
+    public List<Element> findElements(By by) {
         logTrace("Entering ElementImpl#findElements");
-        List<WebElement> elements = getWrappedElement().findElements(by);
+        List<Element> elements = getWrappedElement().findElements(by);
         logTrace("Exiting ElementImpl#findElements");
+        return elements;
+    }
+    
+    /**
+     * @see org.openqa.selenium.WebElement#findElement(By)
+     */
+    public List<WebElement> findWebElements(By by) {
+        logTrace("Entering ElementImpl#findWebElements");
+        List<WebElement> elements = getWrappedElement().findElements(by);
+        logTrace("Exiting ElementImpl#findWebElements");
         return elements;
     }
 
@@ -235,6 +245,17 @@ public class ElementImpl implements Element {
         logTrace("Entering ElementImpl#findElement");
         Element element = new ElementImpl(this.driver,by);
         logTrace("Exiting ElementImpl#findElement");
+        return element;
+    }
+    
+    /**
+     * @see org.openqa.selenium.WebElement#findElement(By)
+     */
+    @Override
+    public WebElement findWebElement(By by) {
+        logTrace("Entering ElementImpl#findWebElement");
+        WebElement element = new ElementImpl(this.driver,by);
+        logTrace("Exiting ElementImpl#findWebElement");
         return element;
     }
 
