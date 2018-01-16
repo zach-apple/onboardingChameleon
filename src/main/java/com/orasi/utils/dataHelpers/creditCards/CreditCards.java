@@ -48,7 +48,7 @@ public class CreditCards {
         }
 
         if (!billingFound) {
-            address.set(person.primaryAddress());
+            address.set(person.getAllAddresses().get(0));
         }
     }
 
@@ -183,50 +183,33 @@ public class CreditCards {
     }
 
     /**
-     * This method allows you to enter the type of card you want
+     * This method allows you to enter the type of card you want by string
      *
      * @param type
      * @return
      */
     public static CreditCard getCreditCardByType(String type) {
-        switch (type.toLowerCase().replaceAll("\\s+|_", "")) {
-
-            case "amex":
-            case "americanexpress":
-                return AMEX();
-
-            case "diners":
-            case "dinersclub":
-                return DINERSCLUB();
-
-            case "disc":
-            case "discover":
-                return DISCOVER();
-
-            case "jcb":
-                return JCB();
-
-            case "mc":
-            case "mastercard":
-                return MASTERCARD();
-
-            case "visa":
-                return VISA();
-
-            case "visaexpired":
-                return VISA_EXPIRED();
-
-            /*
-             * case "gc":
-             * case "gift":
-             * case "giftcard":
-             * // return GIFTCARD(); for later storage
-             * break;
-             */
-
-        }
-
-        // Should not be at this point unless card was not found above
+    	return getCreditCardByType(CardTypes.fromString(type));
+    }
+    
+    /**
+     * This method allows you to enter the type of card you want by enum
+     * 
+     * @param type
+     * @return
+     */
+    public static CreditCard getCreditCardByType(CardTypes type) {
+    	switch (type) {
+    		case AMEX: return AMEX();
+    		case DINERS_CLUB: return DINERSCLUB();
+    		case DISCOVER: return DISCOVER();
+    		case JCB: return JCB();
+    		case MC: return MASTERCARD();
+    		case VISA: return VISA();
+    		case VISAEXPIRED: return VISA_EXPIRED();
+    	}
+    	
+    	// Should not be at this point unless card was not found above
         throw new AutomationException("Credit Card type of [ " + type + " ] was not valid or availible");
     }
 }
