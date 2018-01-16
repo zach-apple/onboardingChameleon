@@ -197,10 +197,12 @@ public class ElementImpl implements Element {
      */
     @Override
     public List<Element> findElements(By by) {
-        logTrace("Entering ElementImpl#findElements");
-        List<Element> elements = getWrappedElement().findElements(by);
+    	logTrace("Entering ElementImpl#findElements");
+        List<WebElement> elements = getWrappedElement().findElements(by);
+        List<Element> elementList = new ArrayList<>();
+        elements.forEach(element -> elementList.add(new ElementImpl(getWrappedDriver(), by, element)));
         logTrace("Exiting ElementImpl#findElements");
-        return elements;
+        return elementList;
     }
     
     /**
@@ -240,7 +242,8 @@ public class ElementImpl implements Element {
     /**
      * @see org.openqa.selenium.WebElement#findElement(By)
      */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Element findElement(By by) {
         logTrace("Entering ElementImpl#findElement");
         Element element = new ElementImpl(this.driver,by);
@@ -254,10 +257,10 @@ public class ElementImpl implements Element {
     @Override
     public WebElement findWebElement(By by) {
         logTrace("Entering ElementImpl#findWebElement");
-        WebElement element = new ElementImpl(this.driver,by);
+        WebElement element = this.driver.getWebDriver().findElement(by);
         logTrace("Exiting ElementImpl#findWebElement");
         return element;
-    }
+    }  
 
     /**
      * @see org.openqa.selenium.WebElement#isEnabled()

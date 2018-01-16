@@ -1,7 +1,10 @@
 package com.orasi.web.webelements;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
@@ -70,6 +73,36 @@ public class TestElement extends WebBaseTest {
     public void findElement() {
         Element element = getDriver().findElement(By.id("radiogroup")).findElement(By.name("sex"));
         element.highlight();
+        Assert.assertTrue(element instanceof Element);
+    }
+    
+    @Features("Element Interfaces")
+    @Stories("Element")
+    @Title("clear")
+    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
+    public void findWebElement() {
+        WebElement webElement = getDriver().findWebElement(By.id("radiogroup"));
+        Assert.assertTrue(webElement instanceof WebElement);
+    }
+    
+    @Features("Element Interfaces")
+    @Stories("Element")
+    @Title("clear")
+    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
+    public void findElements() {
+        List<Element> elements = getDriver().findElement(By.id("radiogroup")).findElements(By.name("sex"));
+        Assert.assertTrue(elements.get(0) instanceof Element);
+        Assert.assertTrue(elements.size() == 2);
+    }
+    
+    @Features("Element Interfaces")
+    @Stories("Element")
+    @Title("clear")
+    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
+    public void findWebElements() {
+        List<WebElement> webElements = getDriver().findWebElements(By.name("sex"));
+        Assert.assertTrue(webElements.get(0) instanceof WebElement);
+        Assert.assertTrue(webElements.size() == 2);
     }
 
     @Features("Element Interfaces")
@@ -558,7 +591,7 @@ public class TestElement extends WebBaseTest {
     @Features("Element Interfaces")
     @Stories("Element")
     @Title("syncCssPropertyContainsValueBasic")
-    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
+    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = { "reload", "highlight" }, alwaysRun = true)
     public void syncCssPropertyContainsValueBasic() {
         Element element = getDriver().findElement(By.id("buttonForText1"));
         Assert.assertTrue(element.syncCssPropertyContainsValue("display", "inline"));
@@ -568,7 +601,7 @@ public class TestElement extends WebBaseTest {
     @Features("Element Interfaces")
     @Stories("Element")
     @Title("syncCssPropertyContainsValueBasicNegative")
-    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true, expectedExceptions = ElementCssValueNotMatchingException.class)
+    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods ={ "reload", "highlight" }, alwaysRun = true, expectedExceptions = ElementCssValueNotMatchingException.class)
     public void syncCssPropertyContainsValueBasicNegative() {
         Element element = getDriver().findElement(By.id("buttonForText1"));
         element.syncCssPropertyContainsValue("display", "Inline");
@@ -577,7 +610,7 @@ public class TestElement extends WebBaseTest {
     @Features("Element Interfaces")
     @Stories("Element")
     @Title("syncCssPropertyContainsValueAdvanced")
-    @Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun = true)
+    @Test(groups = { "regression", "element" }, dependsOnMethods = { "reload", "highlight" }, alwaysRun = true)
     public void syncCssPropertyContainsValueAdvanced() {
         Element element = getDriver().findElement(By.id("buttonForText1"));
         Assert.assertTrue(element.syncCssPropertyContainsValue("display", "inline", 5, false));
@@ -599,7 +632,7 @@ public class TestElement extends WebBaseTest {
     @Features("Element Interfaces")
     @Stories("Element")
     @Title("syncCssPropertyMatchesValueBasic")
-    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
+    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods ={ "reload", "highlight" }, alwaysRun = true)
     public void syncCssPropertyMatchesValueBasic() {
         Element element = getDriver().findElement(By.id("buttonForText1"));
         Assert.assertTrue(element.syncCssPropertyMatchesValue("display", "(.*inline.*)"));
@@ -608,7 +641,7 @@ public class TestElement extends WebBaseTest {
     @Features("Element Interfaces")
     @Stories("Element")
     @Title("syncCssPropertyMatchesValueBasicNegative")
-    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true, expectedExceptions = ElementCssValueNotMatchingException.class)
+    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods ={ "reload", "highlight" }, alwaysRun = true, expectedExceptions = ElementCssValueNotMatchingException.class)
     public void syncCssPropertyMatchesValueBasicNegative() {
         Element element = getDriver().findElement(By.id("buttonForText1"));
         element.syncCssPropertyMatchesValue("display", "(.*Inline.*)");
@@ -617,7 +650,7 @@ public class TestElement extends WebBaseTest {
     @Features("Element Interfaces")
     @Stories("Element")
     @Title("syncCssPropertyMatchesValueAdvanced")
-    @Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun = true)
+    @Test(groups = { "regression", "element" }, dependsOnMethods = { "reload", "highlight" }, alwaysRun = true)
     public void syncCssPropertyMatchesValueAdvanced() {
         Element element = getDriver().findElement(By.id("buttonForText1"));
         Assert.assertTrue(element.syncCssPropertyMatchesValue("display", "(.*inline.*)", 2, false));
@@ -626,7 +659,7 @@ public class TestElement extends WebBaseTest {
     @Features("Element Interfaces")
     @Stories("Element")
     @Title("syncCssPropertyMatchesValueAdvancedNegative")
-    @Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun = true)
+    @Test(groups = { "regression", "element" }, dependsOnMethods = { "reload", "highlight" }, alwaysRun = true)
     public void syncCssPropertyMatchesValueAdvancedNegative() {
         Element element = getDriver().findElement(By.id("buttonForText1"));
         Assert.assertFalse(element.syncCssPropertyMatchesValue("display", "(.*Inline-Block.*)", 2, false));
