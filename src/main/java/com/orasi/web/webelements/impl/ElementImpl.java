@@ -246,7 +246,8 @@ public class ElementImpl implements Element {
 	@Override
     public Element findElement(By by) {
         logTrace("Entering ElementImpl#findElement");
-        Element element = new ElementImpl(this.driver,by);
+        WebElement webElement = getWrappedElement().findElement(by);
+        Element element = new ElementImpl(this.driver,by,webElement);
         logTrace("Exiting ElementImpl#findElement");
         return element;
     }
@@ -257,7 +258,7 @@ public class ElementImpl implements Element {
     @Override
     public WebElement findWebElement(By by) {
         logTrace("Entering ElementImpl#findWebElement");
-        WebElement element = this.driver.getWebDriver().findElement(by);
+        WebElement element = getWrappedElement().findElement(by);
         logTrace("Exiting ElementImpl#findWebElement");
         return element;
     }  
