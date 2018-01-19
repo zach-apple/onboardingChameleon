@@ -673,6 +673,10 @@ public class ElementImpl implements Element {
                 }
                 found = wait.pollingEvery(MILLISECONDS_TO_POLL_FOR_ELEMENT, TimeUnit.MILLISECONDS).until(ExpectedConditions.elementToBeClickable(reload())) != null;
             } catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te) {
+            } catch (WebDriverException we) {
+                if (!we.getMessage().toLowerCase().contains("is not clickable at point")) {
+                    throw we;
+                }
             }
         }
 
@@ -756,6 +760,10 @@ public class ElementImpl implements Element {
                 }
                 found = wait.pollingEvery(MILLISECONDS_TO_POLL_FOR_ELEMENT, TimeUnit.MILLISECONDS).until(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(reload()))) != null;
             } catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te) {
+            } catch (WebDriverException we) {
+                if (!we.getMessage().toLowerCase().contains("is not clickable at point")) {
+                    throw we;
+                }
             }
         }
 
