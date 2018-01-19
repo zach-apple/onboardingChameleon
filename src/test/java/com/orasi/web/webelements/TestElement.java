@@ -3,6 +3,7 @@ package com.orasi.web.webelements;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
@@ -105,24 +106,20 @@ public class TestElement extends WebBaseTest {
         Assert.assertTrue(webElements.size() == 2);
     }
     
-    //-------------------------------------------------------
     @Features("Element Interfaces")
     @Stories("Element")
     @Title("findElement Negative")
-    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
+    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true, expectedExceptions = NoSuchElementException.class)
     public void negativeFindElement() {
-        Element element = getDriver().findElement(By.id("radiogroup")).findElement(By.name("sex"));
-        element.highlight();
-        Assert.assertTrue(element instanceof Element);
+        Element element = getDriver().findElement(By.id("radiogroup")).findElement(By.name("foolocator123"));
     }
     
     @Features("Element Interfaces")
     @Stories("Element")
     @Title("findWebElement Negative")
-    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
+    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true, expectedExceptions = NoSuchElementException.class)
     public void negativeFindWebElement() {
-        WebElement webElement = getDriver().findWebElement(By.id("radiogroup"));
-        Assert.assertTrue(webElement instanceof WebElement);
+        WebElement webElement = getDriver().findWebElement(By.id("foolocator123"));
     }
     
     @Features("Element Interfaces")
@@ -130,9 +127,8 @@ public class TestElement extends WebBaseTest {
     @Title("findElements Negative")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void negativeFindElements() {
-        List<Element> elements = getDriver().findElement(By.id("radiogroup")).findElements(By.name("sex"));
-        Assert.assertTrue(elements.get(0) instanceof Element);
-        Assert.assertTrue(elements.size() == 2);
+        List<Element> elements = getDriver().findElement(By.id("radiogroup")).findElements(By.name("foolocator123"));
+        Assert.assertTrue(elements.isEmpty());
     }
     
     @Features("Element Interfaces")
@@ -140,11 +136,9 @@ public class TestElement extends WebBaseTest {
     @Title("findWebElements Negative")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void negativeFindWebElements() {
-        List<WebElement> webElements = getDriver().findWebElements(By.name("sex"));
-        Assert.assertTrue(webElements.get(0) instanceof WebElement);
-        Assert.assertTrue(webElements.size() == 2);
+        List<WebElement> webElements = getDriver().findWebElements(By.name("foolocator123"));
+        Assert.assertTrue(webElements.isEmpty());
     }
-    //------------------------------------------------------------------------
 
     @Features("Element Interfaces")
     @Stories("Element")
