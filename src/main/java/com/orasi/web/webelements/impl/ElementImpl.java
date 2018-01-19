@@ -468,11 +468,13 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncVisible(Object... args) {
         logTrace("Entering ElementImpl#syncVisible");
-        int timeout = getWrappedDriver().getElementTimeout();
+        int requestedTimeout = driver.getElementTimeout();
+        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
+        
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
         try {
             if (args[0] != null) {
-                timeout = Integer.valueOf(args[0].toString());
+            	requestedTimeout = Integer.valueOf(args[0].toString());
             }
             if (args[1] != null) {
                 failTestOnSync = Boolean.parseBoolean(args[1].toString());
@@ -481,15 +483,16 @@ public class ElementImpl implements Element {
         }
 
         interfaceLog("<i>Syncing to element [<b>" + getElementLocatorInfo()
-                + "</b> ] to be <b>VISIBLE</b> within [ <b>" + timeout + "</b> ] seconds.</i>");
+                + "</b> ] to be <b>VISIBLE</b> within [ <b>" + requestedTimeout + "</b> ] seconds.</i>");
 
         StopWatch stopwatch = new StopWatch();
         boolean found = false;
         long timeLapse;
-
+        
+        driver.setElementTimeout(0);
         WebDriverWait wait = new WebDriverWait(driver, 1);
         stopwatch.start();
-        while (((stopwatch.getTime()) / 1000.0) < timeout && !found) {
+        while (((stopwatch.getTime()) / 1000.0) < requestedTimeout && !found) {
             try {
                 found = wait.pollingEvery(MILLISECONDS_TO_POLL_FOR_ELEMENT, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.elementToBeVisible(reload()));
             } catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te) {
@@ -498,6 +501,7 @@ public class ElementImpl implements Element {
         stopwatch.stop();
         timeLapse = stopwatch.getTime();
         stopwatch.reset();
+        driver.setElementTimeout(originalTimeout);
 
         if (!found && failTestOnSync) {
             logTrace("Element not <b>VISIBLE</b> and failTestOnSync is [ TRUE ]");
@@ -545,11 +549,13 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncHidden(Object... args) {
         logTrace("Entering ElementImpl#syncHidden");
-        int timeout = getWrappedDriver().getElementTimeout();
+        int requestedTimeout = driver.getElementTimeout();
+        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
+        
         try {
             if (args[0] != null) {
-                timeout = Integer.valueOf(args[0].toString());
+            	requestedTimeout = Integer.valueOf(args[0].toString());
             }
             if (args[1] != null) {
                 failTestOnSync = Boolean.parseBoolean(args[1].toString());
@@ -559,13 +565,14 @@ public class ElementImpl implements Element {
 
         StopWatch stopwatch = new StopWatch();
         interfaceLog("<i>Syncing to element [<b>" + getElementLocatorInfo()
-                + "</b> ] to be <b>HIDDEN</b> within [ <b>" + timeout + "</b> ] seconds.</i>");
+                + "</b> ] to be <b>HIDDEN</b> within [ <b>" + requestedTimeout + "</b> ] seconds.</i>");
 
         boolean found = false;
         long timeLapse;
+        driver.setElementTimeout(0);
         stopwatch.start();
         WebDriverWait wait = new WebDriverWait(driver, 1);
-        while (((stopwatch.getTime()) / 1000.0) < timeout && !found) {
+        while (((stopwatch.getTime()) / 1000.0) < requestedTimeout && !found) {
             try {
                 found = wait.pollingEvery(MILLISECONDS_TO_POLL_FOR_ELEMENT, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.elementToBeHidden(reload()));
             } catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te) {
@@ -575,6 +582,7 @@ public class ElementImpl implements Element {
         stopwatch.stop();
         timeLapse = stopwatch.getTime();
         stopwatch.reset();
+        driver.setElementTimeout(originalTimeout);
 
         if (!found && failTestOnSync) {
             logTrace("Element not <b>HIDDEN</b> and failTestOnSync is [ TRUE ]");
@@ -618,11 +626,10 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncEnabled(Object... args) {
         logTrace("Entering ElementImpl#syncEnabled");
-        int requestedTimeout = getWrappedDriver().getElementTimeout();
-        int currentElementTimeout = getWrappedDriver().getElementTimeout();
+        int requestedTimeout = driver.getElementTimeout();
+        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
-        driver.setElementTimeout(1);
-
+        
         try {
             if (args[0] != null) {
                 requestedTimeout = Integer.valueOf(args[0].toString());
@@ -635,6 +642,7 @@ public class ElementImpl implements Element {
 
         boolean found = false;
         long timeLapse;
+        driver.setElementTimeout(0);
         StopWatch stopwatch = new StopWatch();
         interfaceLog("<i>Syncing to element [<b>" + getElementLocatorInfo()
                 + "</b> ] to be <b>ENABLED</b> within [ <b>" + requestedTimeout + "</b> ] seconds.</i>");
@@ -655,11 +663,10 @@ public class ElementImpl implements Element {
             }
         }
 
-        driver.setElementTimeout(currentElementTimeout);
-
         stopwatch.stop();
         timeLapse = stopwatch.getTime();
         stopwatch.reset();
+        driver.setElementTimeout(originalTimeout);
 
         if (!found && failTestOnSync) {
             Highlight.highlightError(driver, element);
@@ -708,11 +715,12 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncDisabled(Object... args) {
         logTrace("Entering ElementImpl#syncDisabled");
-        int timeout = getWrappedDriver().getElementTimeout();
+        int requestedTimeout = driver.getElementTimeout();
+        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
         try {
             if (args[0] != null) {
-                timeout = Integer.valueOf(args[0].toString());
+            	requestedTimeout = Integer.valueOf(args[0].toString());
             }
             if (args[1] != null) {
                 failTestOnSync = Boolean.parseBoolean(args[1].toString());
@@ -722,13 +730,14 @@ public class ElementImpl implements Element {
 
         boolean found = false;
         long timeLapse;
+        driver.setElementTimeout(0);
         StopWatch stopwatch = new StopWatch();
         interfaceLog("<i>Syncing to element [<b>" + getElementLocatorInfo()
-                + "</b> ] to be <b>DISABLED</b> within [ <b>" + timeout + "</b> ] seconds.</i>");
+                + "</b> ] to be <b>DISABLED</b> within [ <b>" + requestedTimeout + "</b> ] seconds.</i>");
         stopwatch.start();
         WebDriverWait wait = new WebDriverWait(driver, 1);
 
-        while (((stopwatch.getTime()) / 1000.0) < timeout && !found) {
+        while (((stopwatch.getTime()) / 1000.0) < requestedTimeout && !found) {
             try {
                 if (Highlight.getDebugMode()) {
                     Highlight.highlightDebug(driver, reload());
@@ -745,6 +754,7 @@ public class ElementImpl implements Element {
         stopwatch.stop();
         timeLapse = stopwatch.getTime();
         stopwatch.reset();
+        driver.setElementTimeout(originalTimeout);
 
         if (!found && failTestOnSync) {
             Highlight.highlightError(driver, reload());
@@ -793,11 +803,12 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncTextInElement(String text, Object... args) {
         logTrace("Entering ElementImpl#syncTextInElement");
-        int timeout = getWrappedDriver().getElementTimeout();
+        int requestedTimeout = driver.getElementTimeout();
+        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
         try {
             if (args[0] != null) {
-                timeout = Integer.valueOf(args[0].toString());
+            	requestedTimeout = Integer.valueOf(args[0].toString());
             }
             if (args[1] != null) {
                 failTestOnSync = Boolean.parseBoolean(args[1].toString());
@@ -809,8 +820,9 @@ public class ElementImpl implements Element {
         long timeLapse;
         StopWatch stopwatch = new StopWatch();
         interfaceLog("<i>Syncing to text [<b>" + text + "</b> ] in element [<b>"
-                + getElementLocatorInfo() + "</b> ] to be displayed within [ <b>" + timeout + "</b> ] seconds.</i>");
+                + getElementLocatorInfo() + "</b> ] to be displayed within [ <b>" + requestedTimeout + "</b> ] seconds.</i>");
 
+        driver.setElementTimeout(0);
         WebDriverWait wait = new WebDriverWait(driver, 0);
         stopwatch.start();
         if (Highlight.getDebugMode()) {
@@ -828,11 +840,12 @@ public class ElementImpl implements Element {
                 }
             } catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te) {
             }
-        } while (stopwatch.getTime() / 1000.0 < timeout);
+        } while (stopwatch.getTime() / 1000.0 < requestedTimeout);
 
         stopwatch.stop();
         timeLapse = stopwatch.getTime();
         stopwatch.reset();
+        driver.setElementTimeout(originalTimeout);
 
         if (!found && failTestOnSync) {
             Highlight.highlightError(driver, element);
@@ -880,11 +893,13 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncTextMatchesInElement(String regex, Object... args) {
         logTrace("Entering ElementImpl#syncTextMatchesInElement");
-        int timeout = getWrappedDriver().getElementTimeout();
+        int requestedTimeout = driver.getElementTimeout();
+        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
+        
         try {
             if (args[0] != null) {
-                timeout = Integer.valueOf(args[0].toString());
+            	requestedTimeout = Integer.valueOf(args[0].toString());
             }
             if (args[1] != null) {
                 failTestOnSync = Boolean.parseBoolean(args[1].toString());
@@ -894,11 +909,13 @@ public class ElementImpl implements Element {
 
         boolean found = false;
         long timeLapse;
+        driver.setElementTimeout(0);
         StopWatch stopwatch = new StopWatch();
         interfaceLog("<i>Syncing to text regular expression [<b>" + regex + "</b> ] in element [<b>"
-                + getElementLocatorInfo() + "</b> ] to be displayed within [ <b>" + timeout + "</b> ] seconds.</i>");
+                + getElementLocatorInfo() + "</b> ] to be displayed within [ <b>" + requestedTimeout + "</b> ] seconds.</i>");
         stopwatch.start();
         WebDriverWait wait = new WebDriverWait(driver, 0);
+        
         do {
 
             try {
@@ -915,10 +932,12 @@ public class ElementImpl implements Element {
                 }
             } catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException e) {
             }
-        } while (stopwatch.getTime() / 1000.0 < timeout);
+        } while (stopwatch.getTime() / 1000.0 < requestedTimeout);
+        
         stopwatch.stop();
         timeLapse = stopwatch.getTime();
         stopwatch.reset();
+        driver.setElementTimeout(originalTimeout);
 
         if (!found && failTestOnSync) {
             Highlight.highlightError(driver, reload());
@@ -969,26 +988,30 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncAttributeContainsValue(String attribute, String value, Object... args) {
         logTrace("Entering ElementImpl#syncAttributeContainsValue");
-        int timeout = getWrappedDriver().getElementTimeout();
+        int requestedTimeout = driver.getElementTimeout();
+        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
+        
         try {
             if (args[0] != null) {
-                timeout = Integer.valueOf(args[0].toString());
+            	requestedTimeout = Integer.valueOf(args[0].toString());
             }
             if (args[1] != null) {
                 failTestOnSync = Boolean.parseBoolean(args[1].toString());
             }
         } catch (ArrayIndexOutOfBoundsException aiobe) {
         }
+        
         boolean found = false;
         long timeLapse;
+        driver.setElementTimeout(0);
         StopWatch stopwatch = new StopWatch();
         interfaceLog("<i>Syncing to attribute [<b> " + attribute + "</b> ] to contain [<b> " + value + "</b> ] in element [<b>"
-                + getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + timeout + "</b> ] seconds.</i>");
+                + getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + requestedTimeout + "</b> ] seconds.</i>");
         stopwatch.start();
         WebDriverWait wait = new WebDriverWait(driver, 1);
 
-        while (((stopwatch.getTime()) / 1000.0) < timeout && !found) {
+        while (((stopwatch.getTime()) / 1000.0) < requestedTimeout && !found) {
             try {
                 if (Highlight.getDebugMode()) {
                     Highlight.highlightDebug(driver, reload());
@@ -1001,6 +1024,7 @@ public class ElementImpl implements Element {
         stopwatch.stop();
         timeLapse = stopwatch.getTime();
         stopwatch.reset();
+        driver.setElementTimeout(originalTimeout);
 
         if (!found && failTestOnSync) {
             Highlight.highlightError(driver, reload());
@@ -1051,11 +1075,12 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncAttributeMatchesValue(String attribute, String regex, Object... args) {
         logTrace("Entering ElementImpl#syncAttributeMatchesValue");
-        int timeout = getWrappedDriver().getElementTimeout();
+        int requestedTimeout = driver.getElementTimeout();
+        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
         try {
             if (args[0] != null) {
-                timeout = Integer.valueOf(args[0].toString());
+            	requestedTimeout = Integer.valueOf(args[0].toString());
             }
             if (args[1] != null) {
                 failTestOnSync = Boolean.parseBoolean(args[1].toString());
@@ -1065,13 +1090,14 @@ public class ElementImpl implements Element {
 
         boolean found = false;
         long timeLapse;
+        driver.setElementTimeout(0);
         StopWatch stopwatch = new StopWatch();
         interfaceLog("<i>Syncing to attribute [<b> " + attribute + "</b> ] to match the regular expression of [<b> " + regex + "</b> ] in element [<b>"
-                + getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + timeout + "</b> ] seconds.</i>");
+                + getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + requestedTimeout + "</b> ] seconds.</i>");
         WebDriverWait wait = new WebDriverWait(driver, 1);
 
         stopwatch.start();
-        while (((stopwatch.getTime()) / 1000.0) < timeout && !found) {
+        while (((stopwatch.getTime()) / 1000.0) < requestedTimeout && !found) {
             try {
                 if (Highlight.getDebugMode()) {
                     Highlight.highlightDebug(driver, reload());
@@ -1085,6 +1111,7 @@ public class ElementImpl implements Element {
         stopwatch.stop();
         timeLapse = stopwatch.getTime();
         stopwatch.reset();
+        driver.setElementTimeout(originalTimeout);
 
         if (!found && failTestOnSync) {
             Highlight.highlightError(driver, reload());
@@ -1134,11 +1161,13 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncCssPropertyContainsValue(String cssProperty, String value, Object... args) {
         logTrace("Entering ElementImpl#syncCssPropertyContainsValue");
-        int timeout = getWrappedDriver().getElementTimeout();
+        int requestedTimeout = driver.getElementTimeout();
+        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
+        
         try {
             if (args[0] != null) {
-                timeout = Integer.valueOf(args[0].toString());
+            	requestedTimeout = Integer.valueOf(args[0].toString());
             }
             if (args[1] != null) {
                 failTestOnSync = Boolean.parseBoolean(args[1].toString());
@@ -1148,13 +1177,14 @@ public class ElementImpl implements Element {
 
         boolean found = false;
         long timeLapse;
+        driver.setElementTimeout(0);
         StopWatch stopwatch = new StopWatch();
         interfaceLog("<i>Syncing to CSS Property [<b> " + cssProperty + "</b> ] to contain [<b> " + value + "</b> ] in element [<b>"
-                + getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + timeout + "</b> ] seconds.</i>");
-
+                + getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + requestedTimeout + "</b> ] seconds.</i>");
         WebDriverWait wait = new WebDriverWait(driver, 1);
         stopwatch.start();
-        while (((stopwatch.getTime()) / 1000.0) < timeout && !found) {
+        
+        while (((stopwatch.getTime()) / 1000.0) < requestedTimeout && !found) {
             try {
                 if (Highlight.getDebugMode()) {
                     Highlight.highlightDebug(driver, reload());
@@ -1168,6 +1198,7 @@ public class ElementImpl implements Element {
         stopwatch.stop();
         timeLapse = stopwatch.getTime();
         stopwatch.reset();
+        driver.setElementTimeout(originalTimeout);
 
         if (!found && failTestOnSync) {
             Highlight.highlightError(driver, reload());
@@ -1216,11 +1247,13 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncCssPropertyMatchesValue(String cssProperty, String regex, Object... args) {
         logTrace("Entering ElementImpl#syncCssPropertyMatchesValue");
-        int timeout = getWrappedDriver().getElementTimeout();
+        int requestedTimeout = driver.getElementTimeout();
+        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
+        
         try {
             if (args[0] != null) {
-                timeout = Integer.valueOf(args[0].toString());
+            	requestedTimeout = Integer.valueOf(args[0].toString());
             }
             if (args[1] != null) {
                 failTestOnSync = Boolean.parseBoolean(args[1].toString());
@@ -1230,12 +1263,13 @@ public class ElementImpl implements Element {
 
         boolean found = false;
         long timeLapse;
+        driver.setElementTimeout(0);
         StopWatch stopwatch = new StopWatch();
         interfaceLog("<i>Syncing to CSS Property [<b> " + cssProperty + "</b> ] to contain [<b> " + regex + "</b> ] in element [<b>"
-                + getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + timeout + "</b> ] seconds.</i>");
+                + getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + requestedTimeout + "</b> ] seconds.</i>");
         WebDriverWait wait = new WebDriverWait(driver, 0);
         stopwatch.start();
-        while (((stopwatch.getTime()) / 1000.0) < timeout && !found) {
+        while (((stopwatch.getTime()) / 1000.0) < requestedTimeout && !found) {
             try {
                 if (Highlight.getDebugMode()) {
                     Highlight.highlightDebug(driver, reload());
@@ -1249,6 +1283,7 @@ public class ElementImpl implements Element {
         stopwatch.stop();
         timeLapse = stopwatch.getTime();
         stopwatch.reset();
+        driver.setElementTimeout(originalTimeout);
 
         if (!found && failTestOnSync) {
             Highlight.highlightError(driver, reload());
@@ -1298,13 +1333,13 @@ public class ElementImpl implements Element {
     public boolean syncInFrame(Object... args) {
         logTrace("Entering ElementImpl#syncInFrame");
         final String action = "<b>FOUND IN FRAME</b>";
-        int originalDriverTimeout = getWrappedDriver().getElementTimeout();
-        int timeout = getWrappedDriver().getElementTimeout();
+        int requestedTimeout = driver.getElementTimeout();
+        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
-        getWrappedDriver().setElementTimeout(0);
+        
         try {
             if (args[0] != null) {
-                timeout = Integer.valueOf(args[0].toString());
+            	requestedTimeout = Integer.valueOf(args[0].toString());
             }
             if (args[1] != null) {
                 failTestOnSync = Boolean.parseBoolean(args[1].toString());
@@ -1313,15 +1348,14 @@ public class ElementImpl implements Element {
         }
 
         interfaceLog("<i>Syncing to element [<b>" + getElementLocatorInfo()
-                + "</b> ] to be " + action + " within [ <b>" + timeout + "</b> ] seconds.</i>");
-
+                + "</b> ] to be " + action + " within [ <b>" + requestedTimeout + "</b> ] seconds.</i>");
         StopWatch stopwatch = new StopWatch();
         boolean found = false;
         long timeLapse;
-
         WebDriverWait wait = new WebDriverWait(driver, 1);
+        driver.setElementTimeout(0);
         stopwatch.start();
-        while (((stopwatch.getTime()) / 1000.0) < timeout && !found) {
+        while (((stopwatch.getTime()) / 1000.0) < requestedTimeout && !found) {
             try {
                 found = wait.pollingEvery(MILLISECONDS_TO_POLL_FOR_ELEMENT, TimeUnit.MILLISECONDS).until(ExtendedExpectedConditions.elementToFoundInFrame(by));
             } catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te) {
@@ -1330,6 +1364,7 @@ public class ElementImpl implements Element {
         stopwatch.stop();
         timeLapse = stopwatch.getTime();
         stopwatch.reset();
+        driver.setElementTimeout(originalTimeout);
 
         if (!found && failTestOnSync) {
             logTrace("Element not " + action + " and failTestOnSync is [ TRUE ]");
@@ -1345,12 +1380,10 @@ public class ElementImpl implements Element {
                     + " </b>] is not " + action + " on the page after [ "
                     + (timeLapse) / 1000.0 + " ] seconds.</i>");
             logTrace("Exiting ElementImpl#syncInFrame");
-            getWrappedDriver().setElementTimeout(originalDriverTimeout);
             return found;
         }
 
         interfaceLog("<i>Element [<b>" + getElementLocatorInfo() + " </b>] is " + action + " on the page after [ " + (timeLapse) / 1000.0 + " ] seconds.</i>");
-        getWrappedDriver().setElementTimeout(originalDriverTimeout);
         logTrace("Exiting ElementImpl#syncInFrame");
         return found;
     }
