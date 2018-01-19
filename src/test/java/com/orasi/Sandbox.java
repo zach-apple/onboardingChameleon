@@ -1,37 +1,48 @@
 package com.orasi;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
+import org.testng.ITestContext;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.orasi.utils.date.DateTimeConversion;
+import com.orasi.web.OrasiDriver;
+import com.orasi.web.WebBaseTest;
+import com.orasi.web.webelements.Listbox;
+import com.orasi.web.webelements.impl.internal.ElementFactory;
 
-public class Sandbox {
-    /*
-     * @BeforeTest(groups = { "regression", "utils", "dev", "framehandler" })
-     *
-     * @Parameters({ "runLocation", "browserUnderTest", "browserVersion", "operatingSystem", "environment" })
-     * public void setup(@Optional String runLocation, String browserUnderTest, String browserVersion,
-     * String operatingSystem, String environment) {
-     * setApplicationUnderTest("Test Site");
-     * setBrowserUnderTest(browserUnderTest);
-     * setBrowserVersion(browserVersion);
-     * setOperatingSystem(operatingSystem);
-     * setRunLocation(runLocation);
-     * setEnvironment(environment);
-     * setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/angular/angularPage.html");
-     * testStart("TestFrame");
-     * }
-     *
-     * @FindByNG(ngRepeater = "x in names | orderBy:'country'")
-     * public Label name2;
-     *
-     * @AfterTest(groups = { "regression", "utils", "dev" })
-     * public void close(ITestContext testResults) {
-     * endTest("TestFrame", testResults);
-     * }
-     */
+public class Sandbox extends WebBaseTest{
+    
+    @FindBy(id = "wrongid")
+    private Listbox lstWrongID;
+    
+    @BeforeTest(alwaysRun = true)
+    public void setup() {
+        setApplicationUnderTest("Test Site");
+        setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/listbox.html");
+        testStart("TestListbox");
+    }
+	@Test
+    public void getAllSelectedOptions() {
+		
+		ElementFactory.initElements(getDriver(), this);
+		lstWrongID.select("wrong value");
+      
+    }
+	
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
+    }
 
-    @Test
-    public void findAndSwitchToFrameFromOutsideFrame() {
-        System.out.println(DateTimeConversion.convert("10/11/2017", "MM/dd/yyyy", "MMM dd, yyyy"));
+    @AfterTest(alwaysRun = true)
+    public void close(ITestContext testResults) {
+        endTest("TestListbox", testResults);
     }
 }

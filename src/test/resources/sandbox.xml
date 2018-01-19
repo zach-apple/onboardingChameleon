@@ -12,19 +12,7 @@
  
 	<test name="Testbox Test" parallel="methods" thread-count="20">
 		<classes>
-			<class name="com.orasi.web.webelements.TestElementInternalHandlers" />
-		</classes>
-	</test>
-	
-	<test name="Angular Test" parallel="methods" thread-count="20">
-		<classes>
-			<class name="com.orasi.web.by.angular.TestAngular" />
-		</classes>
-	</test>
-	
-	<test name="Failed Test Examples" parallel="methods" thread-count="20">
-		<classes>
-			<class name="com.orasi.sandbox.FailedTestExample" />
+			<class name="com.orasi.Sandbox" />
 		</classes>
 	</test>
 	
