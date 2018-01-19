@@ -68,7 +68,7 @@ public class TestElement extends WebBaseTest {
 
     @Features("Element Interfaces")
     @Stories("Element")
-    @Title("clear")
+    @Title("findElement")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void findElement() {
         Element element = getDriver().findElement(By.id("radiogroup")).findElement(By.name("sex"));
@@ -78,7 +78,7 @@ public class TestElement extends WebBaseTest {
     
     @Features("Element Interfaces")
     @Stories("Element")
-    @Title("clear")
+    @Title("findWebElement")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void findWebElement() {
         WebElement webElement = getDriver().findWebElement(By.id("radiogroup"));
@@ -87,7 +87,7 @@ public class TestElement extends WebBaseTest {
     
     @Features("Element Interfaces")
     @Stories("Element")
-    @Title("clear")
+    @Title("findElements")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void findElements() {
         List<Element> elements = getDriver().findElement(By.id("radiogroup")).findElements(By.name("sex"));
@@ -97,13 +97,54 @@ public class TestElement extends WebBaseTest {
     
     @Features("Element Interfaces")
     @Stories("Element")
-    @Title("clear")
+    @Title("findWebElements")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void findWebElements() {
         List<WebElement> webElements = getDriver().findWebElements(By.name("sex"));
         Assert.assertTrue(webElements.get(0) instanceof WebElement);
         Assert.assertTrue(webElements.size() == 2);
     }
+    
+    //-------------------------------------------------------
+    @Features("Element Interfaces")
+    @Stories("Element")
+    @Title("findElement Negative")
+    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
+    public void negativeFindElement() {
+        Element element = getDriver().findElement(By.id("radiogroup")).findElement(By.name("sex"));
+        element.highlight();
+        Assert.assertTrue(element instanceof Element);
+    }
+    
+    @Features("Element Interfaces")
+    @Stories("Element")
+    @Title("findWebElement Negative")
+    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
+    public void negativeFindWebElement() {
+        WebElement webElement = getDriver().findWebElement(By.id("radiogroup"));
+        Assert.assertTrue(webElement instanceof WebElement);
+    }
+    
+    @Features("Element Interfaces")
+    @Stories("Element")
+    @Title("findElements Negative")
+    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
+    public void negativeFindElements() {
+        List<Element> elements = getDriver().findElement(By.id("radiogroup")).findElements(By.name("sex"));
+        Assert.assertTrue(elements.get(0) instanceof Element);
+        Assert.assertTrue(elements.size() == 2);
+    }
+    
+    @Features("Element Interfaces")
+    @Stories("Element")
+    @Title("findWebElements Negative")
+    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
+    public void negativeFindWebElements() {
+        List<WebElement> webElements = getDriver().findWebElements(By.name("sex"));
+        Assert.assertTrue(webElements.get(0) instanceof WebElement);
+        Assert.assertTrue(webElements.size() == 2);
+    }
+    //------------------------------------------------------------------------
 
     @Features("Element Interfaces")
     @Stories("Element")
