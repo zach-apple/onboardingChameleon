@@ -196,10 +196,22 @@ public class ElementImpl implements Element {
      * @see org.openqa.selenium.WebElement#findElement(By)
      */
     @Override
-    public List<WebElement> findElements(By by) {
-        logTrace("Entering ElementImpl#findElements");
+    public List<Element> findElements(By by) {
+    	logTrace("Entering ElementImpl#findElements");
         List<WebElement> elements = getWrappedElement().findElements(by);
+        List<Element> elementList = new ArrayList<>();
+        elements.forEach(element -> elementList.add(new ElementImpl(getWrappedDriver(), by, element)));
         logTrace("Exiting ElementImpl#findElements");
+        return elementList;
+    }
+    
+    /**
+     * @see org.openqa.selenium.WebElement#findElement(By)
+     */
+    public List<WebElement> findWebElements(By by) {
+        logTrace("Entering ElementImpl#findWebElements");
+        List<WebElement> elements = getWrappedElement().findElements(by);
+        logTrace("Exiting ElementImpl#findWebElements");
         return elements;
     }
 
@@ -230,13 +242,26 @@ public class ElementImpl implements Element {
     /**
      * @see org.openqa.selenium.WebElement#findElement(By)
      */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Element findElement(By by) {
         logTrace("Entering ElementImpl#findElement");
-        Element element = new ElementImpl(this.driver,by);
+        WebElement webElement = getWrappedElement().findElement(by);
+        Element element = new ElementImpl(this.driver,by,webElement);
         logTrace("Exiting ElementImpl#findElement");
         return element;
     }
+    
+    /**
+     * @see org.openqa.selenium.WebElement#findElement(By)
+     */
+    @Override
+    public WebElement findWebElement(By by) {
+        logTrace("Entering ElementImpl#findWebElement");
+        WebElement element = getWrappedElement().findElement(by);
+        logTrace("Exiting ElementImpl#findWebElement");
+        return element;
+    }  
 
     /**
      * @see org.openqa.selenium.WebElement#isEnabled()
