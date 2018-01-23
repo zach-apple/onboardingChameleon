@@ -1,6 +1,8 @@
 package com.orasi.web.webelements;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
@@ -13,13 +15,20 @@ import com.orasi.DriverManager;
 import com.orasi.web.OrasiDriver;
 import com.orasi.web.WebBaseTest;
 import com.orasi.web.exceptions.OptionNotInListboxException;
+import com.orasi.web.exceptions.SelectElementNotFoundException;
 import com.orasi.web.webelements.impl.ListboxImpl;
+import com.orasi.web.webelements.impl.internal.ElementFactory;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestListbox extends WebBaseTest {
+	@FindBy(id="wrongID")
+	Listbox badSelect;
+	@FindBy(id="singleSelect")
+	Listbox listbox;
+	
     OrasiDriver driver = null;
 
     @BeforeClass(alwaysRun = true)
@@ -49,18 +58,6 @@ public class TestListbox extends WebBaseTest {
         Assert.assertNotNull((new ListboxImpl(driver, (By.id("singleSelect")))));
     }
 
-    /*
-     * @Features("Element Interfaces")
-     *
-     * @Stories("Listbox")
-     *
-     * @Title("constructorWithElementAndDriver")
-     *
-     * @Test(groups ={"regression", "interfaces", "listbox"})
-     * public void constructorWithElementAndDriver(){
-     * Assert.assertNotNull((new ListboxImpl(driver.findWebElement((By.id("singleSelect"))), driver)));
-     * }
-     */
     @Features("Element Interfaces")
     @Stories("Listbox")
     @Title("isMultiple")
@@ -179,6 +176,25 @@ public class TestListbox extends WebBaseTest {
         listbox.select("Soccer");
         listbox.deselectAll();
         Assert.assertNull(listbox.getFirstSelectedOption());
+    }
+    
+    @Features("Element Interfaces")
+    @Stories("Listbox")
+    @Title("select via page factory negative scenario")
+    @Test(groups = { "regression", "interfaces", "listbox", "mustard" }, expectedExceptions = SelectElementNotFoundException.class)
+    public void negativePageFactoryTest() {
+    	ElementFactory.initElements(getDriver(), this);
+    	badSelect.select("Sports");
+    }
+    
+    @Features("Element Interfaces")
+    @Stories("Listbox")
+    @Title("select via page factory")
+    @Test(groups = { "regression", "interfaces", "listbox", "mustard" })
+    public void pageFactoryTest() {
+    	ElementFactory.initElements(getDriver(), this);
+    	listbox.select("Sports");
+    	Assert.assertTrue(listbox.getFirstSelectedOption().getText().equals("Sports"));
     }
 
 }
