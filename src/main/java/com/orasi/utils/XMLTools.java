@@ -404,7 +404,7 @@ public class XMLTools {
         Document doc = null;
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
-            logTrace("Attempting to from file and save as to XML. File [ " + file.getPath() + " ]");
+            logTrace("Attempting to open file and save as to XML. File [ " + file.getPath() + " ]");
             doc = builder.parse(file);
         } catch (SAXException saxe) {
             throw new AutomationException("Failed to parse the xml", saxe);

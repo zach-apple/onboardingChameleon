@@ -9,11 +9,14 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.orasi.DriverManager;
+import com.orasi.DriverType;
+import com.orasi.web.OrasiDriver;
 import com.orasi.web.WebBaseTest;
 import com.orasi.web.exceptions.ElementAttributeValueNotMatchingException;
 import com.orasi.web.exceptions.ElementCssValueNotMatchingException;
@@ -28,12 +31,12 @@ import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestElement extends WebBaseTest {
-    @BeforeTest(groups = { "regression", "interfaces", "element", "dev" })
+    private OrasiDriver driver;
+
+    @BeforeClass(groups = { "regression", "interfaces", "element", "dev" })
     public void setup() {
         setApplicationUnderTest("Test Site");
         setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/element.html");
-        testStart("TestElement");
-        getDriver().findWebElement(By.id("text1")).sendKeys("blah");
     }
 
     @Override
@@ -41,9 +44,11 @@ public class TestElement extends WebBaseTest {
     public void afterMethod(ITestResult testResults) {
     }
 
-    @AfterTest(groups = { "regression", "interfaces", "element", "dev" })
-    public void close(ITestContext testResults) {
-        endTest("TestAlert", testResults);
+    @Override
+    @AfterClass(alwaysRun = true)
+    public void afterClass(ITestContext testResults) {
+        DriverManager.setDriver(driver);
+        endTest(getTestName(), testResults);
     }
 
     @Features("Element Interfaces")
@@ -51,9 +56,11 @@ public class TestElement extends WebBaseTest {
     @Title("reload")
     @Test(groups = { "regression", "interfaces", "element" })
     public void reload() {
-        Element element = getDriver().findElement(By.id("text1"));
-        getDriver().get(pageUrl);
-        getDriver().debug().setHighlightOnSync(true);
+        driver = testStart("TestElement");
+        driver.findWebElement(By.id("text1")).sendKeys("blah");
+        Element element = driver.findElement(By.id("text1"));
+        driver.get(getPageURL());
+        driver.debug().setHighlightOnSync(true);
         Assert.assertTrue(element.isEnabled());
     }
 
@@ -62,7 +69,7 @@ public class TestElement extends WebBaseTest {
     @Title("clear")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void clear() {
-        Element element = getDriver().findElement(By.id("text1"));
+        Element element = driver.findElement(By.id("text1"));
         element.clear();
         Assert.assertTrue(element.getAttribute("value").equals(""));
     }
@@ -72,7 +79,7 @@ public class TestElement extends WebBaseTest {
     @Title("findElement")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void findElement() {
-        Element element = getDriver().findElement(By.id("radiogroup")).findElement(By.name("sex"));
+        Element element = driver.findElement(By.id("radiogroup")).findElement(By.name("sex"));
         element.highlight();
         Assert.assertTrue(element instanceof Element);
     }
@@ -145,14 +152,14 @@ public class TestElement extends WebBaseTest {
     @Title("click")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "clear", alwaysRun = true)
     public void click() {
-        Element element = getDriver().findElement(By.id("buttonForText1"));
-        if (getBrowserUnderTest().toLowerCase().contains("edge")) {
+        Element element = driver.findElement(By.id("buttonForText1"));
+        if (DriverType.EDGE.equals(driver.getDriverType())) {
             element.jsClick();
         } else {
             element.click();
         }
         // temporary fix for edge click
-        Assert.assertTrue(getDriver().findElement(By.id("text1")).getAttribute("value").equals("Clicked button"));
+        Assert.assertTrue(driver.findElement(By.id("text1")).getAttribute("value").equals("Clicked button"));
     }
 
     @Features("Element Interfaces")
@@ -160,7 +167,7 @@ public class TestElement extends WebBaseTest {
     @Title("elementWired")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "click", alwaysRun = true)
     public void elementWired() {
-        Element element = getDriver().findElement(By.id("text1"));
+        Element element = driver.findElement(By.id("text1"));
         Assert.assertTrue(element.elementWired());
     }
 
@@ -169,24 +176,8 @@ public class TestElement extends WebBaseTest {
     @Title("getAttribute")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
     public void getAttribute() {
-        Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
+        Element element = driver.findElement(By.xpath("//input[@value='female']"));
         Assert.assertTrue(element.getAttribute("type").equals("radio"));
-    }
-
-    @Features("Element Interfaces")
-    @Stories("Element")
-    @Title("getCoordinates")
-    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
-    public void getCoordinates() {
-        Element element = getDriver().findElement(By.id("text1"));
-        try {
-            Assert.assertTrue(element.getCoordinates().onPage().getX() > 0);
-            Assert.assertTrue(element.getCoordinates().onPage().getY() > 0);
-        } catch (WebDriverException wde) {
-            if (getBrowserUnderTest().toLowerCase().contains("edge")) {
-                throw new AssertionError("getCoordinates not supported by EdgeDriver");
-            }
-        }
     }
 
     @Features("Element Interfaces")
@@ -194,8 +185,8 @@ public class TestElement extends WebBaseTest {
     @Title("getCssValue")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
     public void getCssValue() {
-        Element element = getDriver().findElement(By.id("buttonForText1"));
-        if (getBrowserUnderTest().equalsIgnoreCase("html")) {
+        Element element = driver.findElement(By.id("buttonForText1"));
+        if (DriverType.HTML.equals(driver.getDriverType())) {
             Assert.assertTrue(element.getCssValue("font-family").equals("verdana"));
         } else {
             Assert.assertTrue(!element.getCssValue("font-family").isEmpty());
@@ -211,7 +202,7 @@ public class TestElement extends WebBaseTest {
      *
      * @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
      * public void getElementLocator() {
-     * Element element = getDriver().findElement(By.id("text1"));
+     * Element element = driver.findElement(By.id("text1"));
      * Assert.assertNotNull(element.getElementLocator());
      * }
      */
@@ -220,7 +211,7 @@ public class TestElement extends WebBaseTest {
     @Title("getElementLocatorInfo")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
     public void getElementLocatorInfo() {
-        Element element = getDriver().findElement(By.id("text1"));
+        Element element = driver.findElement(By.id("text1"));
         Assert.assertNotNull(element.getElementLocatorInfo());
     }
 
@@ -229,12 +220,12 @@ public class TestElement extends WebBaseTest {
     @Title("getLocation")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
     public void getLocation() {
-        Element element = getDriver().findElement(By.id("text1"));
+        Element element = driver.findElement(By.id("text1"));
         try {
             Assert.assertTrue(element.getLocation().getX() > 0);
             Assert.assertTrue(element.getLocation().getY() > 0);
         } catch (WebDriverException wde) {
-            if (getBrowserUnderTest().toLowerCase().contains("edge")) {
+            if (DriverType.EDGE.equals(driver.getDriverType())) {
                 throw new AssertionError("getLocation not supported by EdgeDriver");
             }
         }
@@ -245,7 +236,7 @@ public class TestElement extends WebBaseTest {
     @Title("getSize")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
     public void getSize() {
-        Element element = getDriver().findElement(By.id("text1"));
+        Element element = driver.findElement(By.id("text1"));
         Assert.assertTrue(element.getSize().getHeight() > 0);
         Assert.assertTrue(element.getSize().getWidth() > 0);
     }
@@ -255,7 +246,7 @@ public class TestElement extends WebBaseTest {
     @Title("getTagName")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
     public void getTagName() {
-        Element element = getDriver().findElement(By.id("text1"));
+        Element element = driver.findElement(By.id("text1"));
         Assert.assertTrue(element.getTagName().equals("input"));
     }
 
@@ -264,7 +255,7 @@ public class TestElement extends WebBaseTest {
     @Title("getText")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
     public void getText() {
-        Element element = getDriver().findElement(By.id("pageheader"));
+        Element element = driver.findElement(By.id("pageheader"));
         Assert.assertTrue(element.getText().equals("Element test page"));
     }
 
@@ -273,7 +264,7 @@ public class TestElement extends WebBaseTest {
     @Title("highlight")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "getAttribute", alwaysRun = true)
     public void highlight() {
-        Element element = getDriver().findElement(By.id("buttonForText1"));
+        Element element = driver.findElement(By.id("buttonForText1"));
         element.highlight();
         Assert.assertTrue(element.getAttribute("style").toLowerCase().contains("red"));
     }
@@ -283,7 +274,7 @@ public class TestElement extends WebBaseTest {
     @Title("isDisplayed")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
     public void isDisplayed() {
-        Element element = getDriver().findElement(By.id("text1"));
+        Element element = driver.findElement(By.id("text1"));
         Assert.assertTrue(element.isDisplayed());
     }
 
@@ -292,7 +283,7 @@ public class TestElement extends WebBaseTest {
     @Title("isEnabled")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
     public void isEnabled() {
-        Element element = getDriver().findElement(By.id("text1"));
+        Element element = driver.findElement(By.id("text1"));
         Assert.assertTrue(element.isEnabled());
     }
 
@@ -301,7 +292,7 @@ public class TestElement extends WebBaseTest {
     @Title("isSelected")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
     public void isSelected() {
-        Element element = getDriver().findElement(By.xpath("//*[@id='radiogroup']/input[1]"));
+        Element element = driver.findElement(By.xpath("//*[@id='radiogroup']/input[1]"));
         Assert.assertTrue(element.isSelected());
     }
 
@@ -310,7 +301,7 @@ public class TestElement extends WebBaseTest {
     @Title("isSelectedNegative")
     @Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void isSelectedNegative() {
-        Element element = getDriver().findElement(By.xpath("//*[@id='radiogroup']/input[2]"));
+        Element element = driver.findElement(By.xpath("//*[@id='radiogroup']/input[2]"));
         Assert.assertFalse(element.isSelected());
     }
 
@@ -319,10 +310,10 @@ public class TestElement extends WebBaseTest {
     @Title("jsClick")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "click", alwaysRun = true)
     public void jsClick() {
-        getDriver().findElement(By.id("text1")).sendKeys("blah");
-        Element element = getDriver().findElement(By.id("buttonForText1"));
+        driver.findElement(By.id("text1")).sendKeys("blah");
+        Element element = driver.findElement(By.id("buttonForText1"));
         element.jsClick();
-        Assert.assertTrue(getDriver().findElement(By.id("text1")).getAttribute("value").equals("Clicked button"));
+        Assert.assertTrue(driver.findElement(By.id("text1")).getAttribute("value").equals("Clicked button"));
     }
 
     @Features("Element Interfaces")
@@ -330,7 +321,7 @@ public class TestElement extends WebBaseTest {
     @Title("sendKeys")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "jsClick", alwaysRun = true)
     public void sendKeys() {
-        Element element = getDriver().findElement(By.id("text1"));
+        Element element = driver.findElement(By.id("text1"));
         element.sendKeys("testing");
         Assert.assertTrue(element.getAttribute("value").equals("Clicked buttontesting"));
     }
@@ -340,7 +331,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncDisabledBasic")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void syncDisabledBasic() {
-        Element element = getDriver().findElement(By.id("disable"));
+        Element element = driver.findElement(By.id("disable"));
         Assert.assertTrue(element.syncDisabled());
     }
 
@@ -349,7 +340,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncDisabledBasicNegative")
     @Test(groups = { "regression", "element" }, dependsOnMethods = { "syncDisabledBasic" }, alwaysRun = true, expectedExceptions = ElementNotDisabledException.class)
     public void syncDisabledBasicNegative() {
-        Element element = getDriver().findElement(By.id("text1"));
+        Element element = driver.findElement(By.id("text1"));
         element.syncDisabled();
     }
 
@@ -358,7 +349,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncDisabledAdvanced")
     @Test(groups = { "regression", "element" }, dependsOnMethods = { "syncDisabledBasic" }, alwaysRun = true)
     public void syncDisabledAdvanced() {
-        Element element = getDriver().findElement(By.id("disable"));
+        Element element = driver.findElement(By.id("disable"));
         Assert.assertTrue(element.syncDisabled(5, false));
     }
 
@@ -367,7 +358,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncDisabledAdvancedNegative")
     @Test(groups = { "regression", "element" }, dependsOnMethods = { "syncDisabledBasic" }, alwaysRun = true)
     public void syncDisabledAdvancedNegative() {
-        Element element = getDriver().findElement(By.id("text1"));
+        Element element = driver.findElement(By.id("text1"));
         Assert.assertFalse(element.syncDisabled(1, false));
     }
 
@@ -376,7 +367,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncHiddenBasic")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
     public void syncHiddenBasic() {
-        Element element = getDriver().findElement(By.id("hidden"));
+        Element element = driver.findElement(By.id("hidden"));
         Assert.assertTrue(element.syncHidden());
     }
 
@@ -385,7 +376,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncHiddenBasicNegative")
     @Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", alwaysRun = true, expectedExceptions = ElementNotHiddenException.class)
     public void syncHiddenBasicNegative() {
-        Element element = getDriver().findElement(By.id("text1"));
+        Element element = driver.findElement(By.id("text1"));
         element.syncHidden();
     }
 
@@ -394,7 +385,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncHiddenAdvanced")
     @Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
     public void syncHiddenAdvanced() {
-        Element element = getDriver().findElement(By.id("hidden"));
+        Element element = driver.findElement(By.id("hidden"));
         Assert.assertTrue(element.syncHidden(5, false));
     }
 
@@ -403,7 +394,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncHiddenAdvancedNegative")
     @Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
     public void syncHiddenAdvancedNegative() {
-        Element element = getDriver().findElement(By.id("text1"));
+        Element element = driver.findElement(By.id("text1"));
         Assert.assertFalse(element.syncHidden(1, false));
     }
 
@@ -412,7 +403,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncVisibleBasic")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
     public void syncVisibleBasic() {
-        Textbox element = getDriver().findTextbox(By.id("text1"));
+        Textbox element = driver.findTextbox(By.id("text1"));
         Assert.assertTrue(element.syncVisible());
     }
 
@@ -421,7 +412,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncVisibleBasicNegative")
     @Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", alwaysRun = true, expectedExceptions = ElementNotVisibleException.class)
     public void syncVisibleBasicNegative() {
-        Element element = getDriver().findElement(By.id("hidden"));
+        Element element = driver.findElement(By.id("hidden"));
         element.syncVisible();
     }
 
@@ -430,7 +421,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncVisibleAdvanced")
     @Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
     public void syncVisibleAdvanced() {
-        Element element = getDriver().findElement(By.id("text1"));
+        Element element = driver.findElement(By.id("text1"));
         Assert.assertTrue(element.syncVisible(5, false));
     }
 
@@ -439,7 +430,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncVisibleAdvancedNegative")
     @Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
     public void syncVisibleAdvancedNegative() {
-        Element element = getDriver().findElement(By.id("hidden"));
+        Element element = driver.findElement(By.id("hidden"));
         Assert.assertFalse(element.syncVisible(1, false));
     }
 
@@ -448,7 +439,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncEnabledBasic")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
     public void syncEnabledBasic() {
-        Element element = getDriver().findElement(By.id("text1"));
+        Element element = driver.findElement(By.id("text1"));
         Assert.assertTrue(element.syncEnabled());
     }
 
@@ -457,7 +448,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncEnabledBasicNegative")
     @Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun = true, expectedExceptions = ElementNotEnabledException.class)
     public void syncEnabledBasicNegative() {
-        Element element = getDriver().findElement(By.id("disable"));
+        Element element = driver.findElement(By.id("disable"));
         element.syncEnabled();
     }
 
@@ -466,7 +457,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncEnabledAdvanced")
     @Test(groups = { "regression", "element" }, dependsOnMethods = "elementWired", alwaysRun = true)
     public void syncEnabledAdvanced() {
-        Element element = getDriver().findElement(By.id("text1"));
+        Element element = driver.findElement(By.id("text1"));
         Assert.assertTrue(element.syncEnabled(5, false));
     }
 
@@ -475,7 +466,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncEnabledAdvancedNegative")
     @Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void syncEnabledAdvancedNegative() {
-        Element element = getDriver().findElement(By.id("disable"));
+        Element element = driver.findElement(By.id("disable"));
         Assert.assertFalse(element.syncEnabled(1, false));
     }
 
@@ -484,7 +475,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncTextInElementBasic")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void syncTextInElementBasic() {
-        Element element = getDriver().findElement(By.id("pageheader"));
+        Element element = driver.findElement(By.id("pageheader"));
         Assert.assertTrue(element.syncTextInElement("Element test page"));
     }
 
@@ -493,7 +484,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncTextInElementBasicNegative")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true, expectedExceptions = TextInElementNotPresentException.class)
     public void syncTextInElementBasicNegative() {
-        Element element = getDriver().findElement(By.id("pageheader"));
+        Element element = driver.findElement(By.id("pageheader"));
         element.syncTextInElement("Loading");
     }
 
@@ -502,7 +493,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncTextInElementAdvanced")
     @Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void syncTextInElementAdvanced() {
-        Element element = getDriver().findElement(By.id("pageheader"));
+        Element element = driver.findElement(By.id("pageheader"));
         Assert.assertTrue(element.syncTextInElement("Element test page", 5, false));
     }
 
@@ -511,7 +502,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncTextInElementAdvancedNegative")
     @Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void syncTextInElementAdvancedNegative() {
-        Element element = getDriver().findElement(By.id("pageheader"));
+        Element element = driver.findElement(By.id("pageheader"));
         Assert.assertFalse(element.syncTextInElement("negative", 2, false));
     }
 
@@ -520,7 +511,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncTextMatchesInElementBasic")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void syncTextMatchesInElementBasic() {
-        Element element = getDriver().findElement(By.id("pageheader"));
+        Element element = driver.findElement(By.id("pageheader"));
         Assert.assertTrue(element.syncTextMatchesInElement("(.*test page)"));
     }
 
@@ -529,7 +520,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncTextMatchesInElementBasicNegative")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true, expectedExceptions = TextInElementNotPresentException.class)
     public void syncTextMatchesInElementBasicNegative() {
-        Element element = getDriver().findElement(By.id("pageheader"));
+        Element element = driver.findElement(By.id("pageheader"));
         element.syncTextMatchesInElement("(.*tst pge)");
     }
 
@@ -538,7 +529,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncTextMatchesInElementAdvanced")
     @Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void syncTextMatchesInElementAdvanced() {
-        Element element = getDriver().findElement(By.id("pageheader"));
+        Element element = driver.findElement(By.id("pageheader"));
         Assert.assertTrue(element.syncTextMatchesInElement("(.*test page)", 5, false));
     }
 
@@ -547,7 +538,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncTextMatchesInElementAdvancedNegative")
     @Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void syncTextMatchesInElementAdvancedNegative() {
-        Element element = getDriver().findElement(By.id("pageheader"));
+        Element element = driver.findElement(By.id("pageheader"));
         Assert.assertFalse(element.syncTextMatchesInElement("(.*tst pge)", 2, false));
     }
 
@@ -556,7 +547,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncAttributeContainsValueBasic")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void syncAttributeContainsValueBasic() {
-        Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
+        Element element = driver.findElement(By.xpath("//input[@value='female']"));
         Assert.assertTrue(element.syncAttributeContainsValue("type", "radio"));
     }
 
@@ -565,7 +556,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncAttributeContainsValueBasicNegative")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true, expectedExceptions = ElementAttributeValueNotMatchingException.class)
     public void syncAttributeContainsValueBasicNegative() {
-        Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
+        Element element = driver.findElement(By.xpath("//input[@value='female']"));
         element.syncAttributeContainsValue("type", "Radio");
     }
 
@@ -574,7 +565,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncAttributeContainsValueAdvanced")
     @Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void syncAttributeContainsValueAdvanced() {
-        Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
+        Element element = driver.findElement(By.xpath("//input[@value='female']"));
         Assert.assertTrue(element.syncAttributeContainsValue("type", "radio", 5, false));
     }
 
@@ -583,7 +574,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncAttributeContainsValueAdvancedNegative")
     @Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void syncAttributeContainsValueAdvancedNegative() {
-        Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
+        Element element = driver.findElement(By.xpath("//input[@value='female']"));
         Assert.assertFalse(element.syncAttributeContainsValue("type", "Rao", 2, false));
     }
 
@@ -592,7 +583,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncAttributeMatchesValueBasic")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void syncAttributeMatchesValueBasic() {
-        Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
+        Element element = driver.findElement(By.xpath("//input[@value='female']"));
         Assert.assertTrue(element.syncAttributeMatchesValue("type", "(.*adi.*)"));
     }
 
@@ -601,7 +592,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncAttributeMatchesValueBasicNegative")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true, expectedExceptions = ElementAttributeValueNotMatchingException.class)
     public void syncAttributeMatchesValueBasicNegative() {
-        Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
+        Element element = driver.findElement(By.xpath("//input[@value='female']"));
         element.syncAttributeMatchesValue("type", "(.*adi)");
     }
 
@@ -610,7 +601,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncAttributeMatchesValueAdvanced")
     @Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void syncAttributeMatchesValueAdvanced() {
-        Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
+        Element element = driver.findElement(By.xpath("//input[@value='female']"));
         Assert.assertTrue(element.syncAttributeMatchesValue("type", "(.*adi.*)"));
     }
 
@@ -619,7 +610,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncAttributeMatchesValueAdvancedNegative")
     @Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void syncAttributeMatchesValueAdvancedNegative() {
-        Element element = getDriver().findElement(By.xpath("//input[@value='female']"));
+        Element element = driver.findElement(By.xpath("//input[@value='female']"));
         Assert.assertFalse(element.syncAttributeMatchesValue("type", "(.*adi)", 2, false));
     }
 
@@ -628,7 +619,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncCssPropertyContainsValueBasic")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = { "reload", "highlight" }, alwaysRun = true)
     public void syncCssPropertyContainsValueBasic() {
-        Element element = getDriver().findElement(By.id("buttonForText1"));
+        Element element = driver.findElement(By.id("buttonForText1"));
         Assert.assertTrue(element.syncCssPropertyContainsValue("display", "inline"));
 
     }
@@ -638,7 +629,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncCssPropertyContainsValueBasicNegative")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods ={ "reload", "highlight" }, alwaysRun = true, expectedExceptions = ElementCssValueNotMatchingException.class)
     public void syncCssPropertyContainsValueBasicNegative() {
-        Element element = getDriver().findElement(By.id("buttonForText1"));
+        Element element = driver.findElement(By.id("buttonForText1"));
         element.syncCssPropertyContainsValue("display", "Inline");
     }
 
@@ -647,7 +638,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncCssPropertyContainsValueAdvanced")
     @Test(groups = { "regression", "element" }, dependsOnMethods = { "reload", "highlight" }, alwaysRun = true)
     public void syncCssPropertyContainsValueAdvanced() {
-        Element element = getDriver().findElement(By.id("buttonForText1"));
+        Element element = driver.findElement(By.id("buttonForText1"));
         Assert.assertTrue(element.syncCssPropertyContainsValue("display", "inline", 5, false));
     }
 
@@ -656,12 +647,8 @@ public class TestElement extends WebBaseTest {
     @Title("syncCssPropertyContainsValueAdvancedNegative")
     @Test(groups = { "regression", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void syncCssPropertyContainsValueAdvancedNegative() {
-        Element element = getDriver().findElement(By.id("buttonForText1"));
-        if (getBrowserUnderTest().equalsIgnoreCase("html")) {
-            Assert.assertFalse(element.syncCssPropertyContainsValue("type", "transasdfpar", 2, false));
-        } else {
-            Assert.assertFalse(element.syncCssPropertyContainsValue("display", "Inline", 2, false));
-        }
+        Element element = driver.findElement(By.id("buttonForText1"));
+        Assert.assertFalse(element.syncCssPropertyContainsValue("display", "Inline", 2, false));
     }
 
     @Features("Element Interfaces")
@@ -669,7 +656,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncCssPropertyMatchesValueBasic")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods ={ "reload", "highlight" }, alwaysRun = true)
     public void syncCssPropertyMatchesValueBasic() {
-        Element element = getDriver().findElement(By.id("buttonForText1"));
+        Element element = driver.findElement(By.id("buttonForText1"));
         Assert.assertTrue(element.syncCssPropertyMatchesValue("display", "(.*inline.*)"));
     }
 
@@ -678,7 +665,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncCssPropertyMatchesValueBasicNegative")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods ={ "reload", "highlight" }, alwaysRun = true, expectedExceptions = ElementCssValueNotMatchingException.class)
     public void syncCssPropertyMatchesValueBasicNegative() {
-        Element element = getDriver().findElement(By.id("buttonForText1"));
+        Element element = driver.findElement(By.id("buttonForText1"));
         element.syncCssPropertyMatchesValue("display", "(.*Inline.*)");
     }
 
@@ -687,7 +674,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncCssPropertyMatchesValueAdvanced")
     @Test(groups = { "regression", "element" }, dependsOnMethods = { "reload", "highlight" }, alwaysRun = true)
     public void syncCssPropertyMatchesValueAdvanced() {
-        Element element = getDriver().findElement(By.id("buttonForText1"));
+        Element element = driver.findElement(By.id("buttonForText1"));
         Assert.assertTrue(element.syncCssPropertyMatchesValue("display", "(.*inline.*)", 2, false));
     }
 
@@ -696,7 +683,7 @@ public class TestElement extends WebBaseTest {
     @Title("syncCssPropertyMatchesValueAdvancedNegative")
     @Test(groups = { "regression", "element" }, dependsOnMethods = { "reload", "highlight" }, alwaysRun = true)
     public void syncCssPropertyMatchesValueAdvancedNegative() {
-        Element element = getDriver().findElement(By.id("buttonForText1"));
+        Element element = driver.findElement(By.id("buttonForText1"));
         Assert.assertFalse(element.syncCssPropertyMatchesValue("display", "(.*Inline-Block.*)", 2, false));
     }
 
@@ -705,8 +692,8 @@ public class TestElement extends WebBaseTest {
     @Title("syncInFrame")
     @Test(groups = { "regression" }, dependsOnGroups = "element", alwaysRun = true)
     public void syncInFrame() {
-        getDriver().get("http://orasi.github.io/Chameleon/sites/unitTests/orasi/utils/frameHandler.html");
-        getDriver().findElement(By.id("button_frame1")).syncInFrame();
+        driver.get("http://orasi.github.io/Chameleon/sites/unitTests/orasi/utils/frameHandler.html");
+        driver.findElement(By.id("button_frame1")).syncInFrame();
     }
 
 }

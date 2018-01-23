@@ -3,7 +3,6 @@ package com.orasi.utils;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
@@ -434,6 +433,6 @@ public class TestTestReporter extends WebBaseTest {
     }
 
     private synchronized boolean logHelper(final List<String> logs, String log) {
-        return logs.parallelStream().collect(Collectors.toList()).parallelStream().anyMatch(str -> str.contains(log));
+        return logs.parallelStream().anyMatch(str -> str.contains(log));
     }
 }

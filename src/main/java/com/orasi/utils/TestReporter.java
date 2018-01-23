@@ -117,7 +117,7 @@ public class TestReporter {
         return printClassPath;
     }
 
-    public static void logStep(String step) {
+    public synchronized static void logStep(String step) {
         Reporter.log("<br/><b><font size = 4>Step: " + step
                 + "</font></b><br/>");
         if (getPrintToConsole()) {
@@ -125,7 +125,7 @@ public class TestReporter {
         }
     }
 
-    public static void logScenario(String scenario) {
+    public synchronized static void logScenario(String scenario) {
         Reporter.log("<br/><b><font size = 4>Data Scenario: " + scenario
                 + "</font></b><br/>");
         if (getPrintToConsole()) {
@@ -133,22 +133,22 @@ public class TestReporter {
         }
     }
 
-    public static void interfaceLog(String message) {
+    public synchronized static void interfaceLog(String message) {
         logInfo(message);
     }
 
-    public static void interfaceLog(String message, boolean failed) {
+    public synchronized static void interfaceLog(String message, boolean failed) {
         logInfo("<font size = 2 color=\"red\">" + message + "</font>");
     }
 
-    public static void log(String message) {
+    public synchronized static void log(String message) {
         Reporter.log(getTimestamp() + " <i><b>" + getClassPath() + message + "</b></i><br />");
         if (getPrintToConsole()) {
             System.out.println(getTimestamp() + getClassPath() + trimHtml(message));
         }
     }
 
-    public static void logFailure(String message) {
+    public synchronized static void logFailure(String message) {
         Reporter.log(getTimestamp() + " <font size = 2 color=\"red\"><b><u> ERROR :: " + getClassPath() + message + "</font></u></b><br />");
         if (getPrintToConsole()) {
             System.out.println(getTimestamp() + trimHtml("ERROR :: " + getClassPath() + trimHtml(message)));
@@ -160,7 +160,7 @@ public class TestReporter {
      *
      * @param message
      */
-    public static void logTrace(String message) {
+    public synchronized static void logTrace(String message) {
         if (getDebugLevel() >= TRACE) {
             Reporter.log(getTimestamp() + "TRACE :: " + getClassPath() + message + "<br />");
             System.out.println(getTimestamp() + "TRACE :: " + getClassPath() + (trimHtml(message).trim()));
@@ -172,7 +172,7 @@ public class TestReporter {
      *
      * @param message
      */
-    public static void logInfo(String message) {
+    public synchronized static void logInfo(String message) {
         if (getDebugLevel() >= INFO) {
             Reporter.log(getTimestamp() + " INFO :: " + getClassPath() + message + "<br />");
             System.out.println(getTimestamp() + " INFO :: " + getClassPath() + trimHtml(message).trim());
@@ -184,21 +184,21 @@ public class TestReporter {
      *
      * @param message
      */
-    public static void logDebug(String message) {
+    public synchronized static void logDebug(String message) {
         if (getDebugLevel() >= DEBUG) {
             Reporter.log(getTimestamp() + "DEBUG :: " + getClassPath() + message + "<br />");
             System.out.println(getTimestamp() + "DEBUG :: " + getClassPath() + trimHtml(message).trim());
         }
     }
 
-    public static void logNoHtmlTrim(String message) {
+    public synchronized static void logNoHtmlTrim(String message) {
         Reporter.log(getTimestamp() + " :: " + getClassPath() + message + "<br />");
         if (getPrintToConsole()) {
             System.out.println(getTimestamp() + getClassPath() + message.trim());
         }
     }
 
-    public static void logNoXmlTrim(String message) {
+    public synchronized static void logNoXmlTrim(String message) {
         Reporter.setEscapeHtml(true);
         Reporter.log("");
         Reporter.log(message);
@@ -209,7 +209,7 @@ public class TestReporter {
         }
     }
 
-    public static void assertTrue(boolean condition, String description) {
+    public synchronized static void assertTrue(boolean condition, String description) {
         try {
             Assert.assertTrue(condition, description);
         } catch (AssertionError failure) {
@@ -225,7 +225,7 @@ public class TestReporter {
         }
     }
 
-    public static void assertFalse(boolean condition, String description) {
+    public synchronized static void assertFalse(boolean condition, String description) {
         try {
             Assert.assertFalse(condition, description);
         } catch (AssertionError failure) {
@@ -241,7 +241,7 @@ public class TestReporter {
         }
     }
 
-    public static void assertEquals(Object value1, Object value2, String description) {
+    public synchronized static void assertEquals(Object value1, Object value2, String description) {
         try {
             Assert.assertEquals(value1, value2, description);
         } catch (AssertionError failure) {
@@ -257,7 +257,7 @@ public class TestReporter {
         }
     }
 
-    public static void assertNotEquals(Object value1, Object value2, String description) {
+    public synchronized static void assertNotEquals(Object value1, Object value2, String description) {
         try {
             Assert.assertNotEquals(value1, value2, description);
         } catch (AssertionError failure) {
@@ -273,7 +273,7 @@ public class TestReporter {
         }
     }
 
-    public static void assertGreaterThanZero(int value) {
+    public synchronized static void assertGreaterThanZero(int value) {
         try {
             Assert.assertTrue(value > 0);
         } catch (AssertionError failure) {
@@ -289,15 +289,15 @@ public class TestReporter {
         }
     }
 
-    public static void assertGreaterThanZero(float value) {
+    public synchronized static void assertGreaterThanZero(float value) {
         assertGreaterThanZero((int) value);
     }
 
-    public static void assertGreaterThanZero(double value) {
+    public synchronized static void assertGreaterThanZero(double value) {
         assertGreaterThanZero((int) value);
     }
 
-    public static void assertNull(Object condition, String description) {
+    public synchronized static void assertNull(Object condition, String description) {
         try {
             Assert.assertNull(condition, description);
         } catch (AssertionError failure) {
@@ -313,7 +313,7 @@ public class TestReporter {
         }
     }
 
-    public static void assertNotNull(Object condition, String description) {
+    public synchronized static void assertNotNull(Object condition, String description) {
         try {
             Assert.assertNotNull(condition, description);
         } catch (AssertionError failure) {
@@ -329,7 +329,7 @@ public class TestReporter {
         }
     }
 
-    public static boolean softAssertTrue(boolean condition, String description) {
+    public synchronized static boolean softAssertTrue(boolean condition, String description) {
         try {
             Assert.assertTrue(condition, description);
             Reporter.log(getTimestamp() + " <font size = 2 color=\"green\"><b><u>Assert True - " + description
@@ -348,7 +348,7 @@ public class TestReporter {
         return true;
     }
 
-    public static boolean softAssertEquals(Object value1, Object value2, String description) {
+    public synchronized static boolean softAssertEquals(Object value1, Object value2, String description) {
 
         try {
             Assert.assertEquals(value1, value2, description);
@@ -369,7 +369,7 @@ public class TestReporter {
 
     }
 
-    public static boolean softAssertFalse(boolean condition, String description) {
+    public synchronized static boolean softAssertFalse(boolean condition, String description) {
         try {
             Assert.assertFalse(condition, description);
             Reporter.log(getTimestamp() + " <font size = 2 color=\"green\"><b><u>Assert False - " + description
@@ -388,7 +388,7 @@ public class TestReporter {
         return true;
     }
 
-    public static boolean softAssertNull(Object condition, String description) {
+    public synchronized static boolean softAssertNull(Object condition, String description) {
         try {
             Assert.assertNull(condition, description);
         } catch (AssertionError failure) {
@@ -408,7 +408,7 @@ public class TestReporter {
         return true;
     }
 
-    public static boolean softAssertNotNull(Object condition, String description) {
+    public synchronized static boolean softAssertNotNull(Object condition, String description) {
         try {
             Assert.assertNotNull(condition, description);
         } catch (AssertionError failure) {
@@ -428,7 +428,7 @@ public class TestReporter {
         return true;
     }
 
-    public static void assertAll() {
+    public synchronized static void assertAll() {
         boolean failed = assertFailed.get() == null ? false : assertFailed.get();
         if (failed) {
             assertFailed.set(false);
@@ -437,7 +437,7 @@ public class TestReporter {
         }
     }
 
-    public static void logScreenshot(WebDriver driver, String fileName) {
+    public synchronized static void logScreenshot(WebDriver driver, String fileName) {
         String slash = Constants.DIR_SEPARATOR;
 
         String destDir = Constants.SCREENSHOT_FOLDER + slash + fileName.replace(".", slash);
@@ -447,7 +447,7 @@ public class TestReporter {
         logScreenshot(driver, destFile, slash);
     }
 
-    public static void logScreenshot(WebDriver driver, String fileLocation, String slash) {
+    public synchronized static void logScreenshot(WebDriver driver, String fileLocation, String slash) {
         File file = new File("");
 
         try {
@@ -476,7 +476,7 @@ public class TestReporter {
         }
     }
 
-    public static void logAPI(boolean pass, String message, SoapService sp) {
+    public synchronized static void logAPI(boolean pass, String message, SoapService sp) {
         String failFormat = "";
         if (!pass) {
             failFormat = "<font size = 2 color=\"red\">";
@@ -500,7 +500,7 @@ public class TestReporter {
         }
     }
 
-    public static void logAPI(boolean pass, String message, RestResponse rs) {
+    public synchronized static void logAPI(boolean pass, String message, RestResponse rs) {
         String failFormat = "";
         if (!pass) {
             failFormat = "<font size = 2 color=\"red\">";

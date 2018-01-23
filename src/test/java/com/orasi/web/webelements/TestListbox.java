@@ -1,16 +1,16 @@
 package com.orasi.web.webelements;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
-import org.testng.SkipException;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.orasi.DriverManager;
+import com.orasi.web.OrasiDriver;
 import com.orasi.web.WebBaseTest;
 import com.orasi.web.exceptions.OptionNotInListboxException;
 import com.orasi.web.webelements.impl.ListboxImpl;
@@ -20,13 +20,12 @@ import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestListbox extends WebBaseTest {
-    WebDriver driver = null;
+    OrasiDriver driver = null;
 
-    @BeforeTest(alwaysRun = true)
+    @BeforeClass(alwaysRun = true)
     public void setup() {
         setApplicationUnderTest("Test Site");
         setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/listbox.html");
-        testStart("TestListbox");
     }
 
     @Override
@@ -34,9 +33,11 @@ public class TestListbox extends WebBaseTest {
     public void afterMethod(ITestResult testResults) {
     }
 
-    @AfterTest(alwaysRun = true)
-    public void close(ITestContext testResults) {
-        endTest("TestListbox", testResults);
+    @Override
+    @AfterClass(alwaysRun = true)
+    public void afterClass(ITestContext testResults) {
+        DriverManager.setDriver(driver);
+        endTest(getTestName(), testResults);
     }
 
     @Features("Element Interfaces")
@@ -44,7 +45,8 @@ public class TestListbox extends WebBaseTest {
     @Title("constructor")
     @Test(groups = { "regression", "interfaces", "listbox" })
     public void constructorWithElement() {
-        Assert.assertNotNull((new ListboxImpl(getDriver(), (By.id("singleSelect")))));
+        driver = testStart("TestListbox");
+        Assert.assertNotNull((new ListboxImpl(driver, (By.id("singleSelect")))));
     }
 
     /*
@@ -56,24 +58,24 @@ public class TestListbox extends WebBaseTest {
      *
      * @Test(groups ={"regression", "interfaces", "listbox"})
      * public void constructorWithElementAndDriver(){
-     * Assert.assertNotNull((new ListboxImpl(getDriver().findWebElement((By.id("singleSelect"))), getDriver())));
+     * Assert.assertNotNull((new ListboxImpl(driver.findWebElement((By.id("singleSelect"))), driver)));
      * }
      */
     @Features("Element Interfaces")
     @Stories("Listbox")
     @Title("isMultiple")
-    @Test(groups = { "regression", "interfaces", "listbox" })
+    @Test(groups = { "regression", "interfaces", "listbox" }, dependsOnMethods = "constructorWithElement")
     public void isMultiple() {
-        Listbox listbox = getDriver().findListbox(By.id("multiSelect"));
+        Listbox listbox = driver.findListbox(By.id("multiSelect"));
         Assert.assertTrue(listbox.isMultiple());
     }
 
     @Features("Element Interfaces")
     @Stories("Listbox")
     @Title("select")
-    @Test(groups = { "regression", "interfaces", "listbox", "mustard" })
+    @Test(groups = { "regression", "interfaces", "listbox", "mustard" }, dependsOnMethods = "constructorWithElement")
     public void select() {
-        Listbox listbox = getDriver().findListbox(By.id("singleSelect"));
+        Listbox listbox = driver.findListbox(By.id("singleSelect"));
         listbox.select("Sports");
         Assert.assertTrue(listbox.getFirstSelectedOption().getText().equals("Sports"));
     }
@@ -83,10 +85,7 @@ public class TestListbox extends WebBaseTest {
     @Title("selectNoText")
     @Test(groups = { "regression", "interfaces", "textbox" }, dependsOnMethods = "select")
     public void selectNoText() {
-        if (getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty()) {
-            throw new SkipException("Test not valid for HTMLUnitDriver");
-        }
-        Listbox listbox = getDriver().findListbox(By.id("singleSelect"));
+        Listbox listbox = driver.findListbox(By.id("singleSelect"));
         listbox.select("");
         Assert.assertTrue(listbox.getAttribute("value").equals("Sports"));
     }
@@ -96,7 +95,7 @@ public class TestListbox extends WebBaseTest {
     @Title("selectNegative")
     @Test(groups = { "regression", "interfaces", "textbox" }, dependsOnMethods = "select", expectedExceptions = OptionNotInListboxException.class)
     public void selectNegative() {
-        Listbox listbox = getDriver().findListbox(By.id("singleSelect"));
+        Listbox listbox = driver.findListbox(By.id("singleSelect"));
         listbox.select("text");
         Assert.assertTrue(false);
     }
@@ -104,9 +103,9 @@ public class TestListbox extends WebBaseTest {
     @Features("Element Interfaces")
     @Stories("Listbox")
     @Title("selectValue")
-    @Test(groups = { "regression", "interfaces", "listbox" })
+    @Test(groups = { "regression", "interfaces", "listbox" }, dependsOnMethods = "constructorWithElement")
     public void selectValue() {
-        Listbox listbox = getDriver().findListbox(By.id("singleSelect"));
+        Listbox listbox = driver.findListbox(By.id("singleSelect"));
         listbox.selectValue("Sports");
         Assert.assertTrue(listbox.getFirstSelectedOption().getText().equals("Sports"));
     }
@@ -116,10 +115,7 @@ public class TestListbox extends WebBaseTest {
     @Title("selectValueNoText")
     @Test(groups = { "regression", "interfaces", "listbox" }, dependsOnMethods = "select")
     public void selectValueNoText() {
-        if (getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty()) {
-            throw new SkipException("Test not valid for HTMLUnitDriver");
-        }
-        Listbox listbox = getDriver().findListbox(By.id("singleSelect"));
+        Listbox listbox = driver.findListbox(By.id("singleSelect"));
         listbox.selectValue("");
         Assert.assertTrue(listbox.getAttribute("value").equals("Sports"));
     }
@@ -129,10 +125,7 @@ public class TestListbox extends WebBaseTest {
     @Title("selectValueNegative")
     @Test(groups = { "regression", "interfaces", "listbox" }, dependsOnMethods = "select", expectedExceptions = OptionNotInListboxException.class)
     public void selectValueNegative() {
-        if (getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty()) {
-            throw new SkipException("Test not valid for HTMLUnitDriver");
-        }
-        Listbox listbox = getDriver().findListbox(By.id("singleSelect"));
+        Listbox listbox = driver.findListbox(By.id("singleSelect"));
         listbox.selectValue("text");
         Assert.assertTrue(false);
     }
@@ -142,7 +135,7 @@ public class TestListbox extends WebBaseTest {
     @Title("getAllOptions")
     @Test(groups = { "regression", "interfaces", "listbox" }, dependsOnMethods = "select")
     public void getAllOptions() {
-        Listbox listbox = getDriver().findListbox(By.id("singleSelect"));
+        Listbox listbox = driver.findListbox(By.id("singleSelect"));
         Assert.assertTrue(listbox.getOptions().get(0).getText().equals("Other"));
     }
 
@@ -151,7 +144,7 @@ public class TestListbox extends WebBaseTest {
     @Title("getAllOptionsSelected")
     @Test(groups = { "regression", "interfaces", "listbox" }, dependsOnMethods = "select")
     public void getAllSelectedOptions() {
-        Listbox listbox = getDriver().findListbox(By.id("singleSelect"));
+        Listbox listbox = driver.findListbox(By.id("singleSelect"));
         Assert.assertTrue(listbox.getAllSelectedOptions().get(0).getText().equals("Sports"));
     }
 
@@ -160,7 +153,7 @@ public class TestListbox extends WebBaseTest {
     @Title("isSelected")
     @Test(groups = { "regression", "interfaces", "listbox" }, dependsOnMethods = "getAllSelectedOptions")
     public void isSelected() {
-        Listbox listbox = getDriver().findListbox(By.id("singleSelect"));
+        Listbox listbox = driver.findListbox(By.id("singleSelect"));
         Assert.assertTrue(listbox.isSelected("Sports"));
     }
 
@@ -169,7 +162,7 @@ public class TestListbox extends WebBaseTest {
     @Title("deselectByVisibleText")
     @Test(groups = { "regression", "interfaces", "listbox" }, dependsOnMethods = "isSelected")
     public void deselectByVisibleText() {
-        Listbox listbox = getDriver().findListbox(By.id("multiSelect"));
+        Listbox listbox = driver.findListbox(By.id("multiSelect"));
         listbox.select("Baseball");
         Assert.assertTrue(listbox.isSelected("Baseball"));
         listbox.deselectByVisibleText("Baseball");
@@ -181,7 +174,7 @@ public class TestListbox extends WebBaseTest {
     @Title("deselectAll")
     @Test(groups = { "regression", "interfaces", "listbox" }, dependsOnMethods = "deselectByVisibleText")
     public void deselectAll() {
-        Listbox listbox = getDriver().findListbox(By.id("multiSelect"));
+        Listbox listbox = driver.findListbox(By.id("multiSelect"));
         listbox.select("Basketball");
         listbox.select("Soccer");
         listbox.deselectAll();

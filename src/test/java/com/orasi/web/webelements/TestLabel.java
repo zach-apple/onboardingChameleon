@@ -4,11 +4,13 @@ import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.orasi.DriverManager;
+import com.orasi.web.OrasiDriver;
 import com.orasi.web.WebBaseTest;
 import com.orasi.web.webelements.impl.LabelImpl;
 
@@ -17,12 +19,12 @@ import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestLabel extends WebBaseTest {
+    private OrasiDriver driver;
 
-    @BeforeTest(groups = { "regression", "interfaces", "label", "dev" })
+    @BeforeClass(groups = { "regression", "interfaces", "label", "dev" })
     public void setup() {
         setApplicationUnderTest("Test Site");
         setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/label.html");
-        testStart("TestLabel");
     }
 
     @Override
@@ -30,9 +32,11 @@ public class TestLabel extends WebBaseTest {
     public void afterMethod(ITestResult testResults) {
     }
 
-    @AfterTest(groups = { "regression", "interfaces", "label", "dev" })
-    public void close(ITestContext testResults) {
-        endTest("TestAlert", testResults);
+    @Override
+    @AfterClass(alwaysRun = true)
+    public void afterClass(ITestContext testResults) {
+        DriverManager.setDriver(driver);
+        endTest(getTestName(), testResults);
     }
 
     @Features("Element Interfaces")
@@ -40,15 +44,16 @@ public class TestLabel extends WebBaseTest {
     @Title("constructor")
     @Test(groups = { "regression", "interfaces", "label" })
     public void constructorWithElement() {
-        Assert.assertNotNull((new LabelImpl(getDriver(), (By.xpath("//*[@id='radioForm']/label[1]")))));
+        driver = testStart("TestLabel");
+        Assert.assertNotNull((new LabelImpl(driver, (By.xpath("//*[@id='radioForm']/label[1]")))));
     }
 
     @Features("Element Interfaces")
     @Stories("Label")
     @Title("getFor")
-    @Test(groups = { "regression", "interfaces", "label" })
+    @Test(groups = { "regression", "interfaces", "label" }, dependsOnMethods = "constructorWithElement")
     public void getFor() {
-        Label label = getDriver().findLabel(By.xpath("//*[@id='radioForm']/label[1]"));
+        Label label = driver.findLabel(By.xpath("//*[@id='radioForm']/label[1]"));
         Assert.assertTrue(label.getFor().equals("genderm"));
     }
 

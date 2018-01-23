@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.openxml4j.exceptions.OpenXML4JRuntimeException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -20,16 +21,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.orasi.AutomationException;
 
 public class ExcelDocumentReader {
-    private Sheet excelWSheet;
-    private Workbook excelWBook;
-    private Cell cell;
-    private String filepath;
-    private int startRow = 1;
-
-    public ExcelDocumentReader(String filepath) {
-        this.filepath = filepath;
-    }
-
     public ExcelDocumentReader() {
     }
 
@@ -43,89 +34,58 @@ public class ExcelDocumentReader {
      * @author Justin Phlegar
      * @return 2d array of test data
      */
-
-    public Object[][] readData(String sheetName) {
-        return (readData(sheetName, -1));
+    public static Object[][] readData(String filepath, String sheetName) {
+        return (readData(filepath, sheetName, -1, 1));
     }
 
-    public Object[][] readData(String filepath, String sheetName) {
-        return (readData(filepath, sheetName, -1));
+    public static Object[][] readData(String filepath, String sheetName, int rowToRead) {
+        return readData(filepath, sheetName, rowToRead, 1);
     }
 
-    public Object[][] readData(String sheetName, int rowToRead, int startRow) {
-        this.startRow = startRow;
-        return readData(filepath, sheetName, rowToRead);
-    }
-
-    public Object[][] readData(String sheetName, int rowToRead) {
-        return readData(filepath, sheetName, rowToRead);
-    }
-
-    public Object[][] readData(String filepath, String sheetName, int rowToRead) {
-
+    public static Object[][] readData(String filepath, String sheetName, int rowToRead, int startRow) {
         String[][] tabArray = null;
         int totalRows = 1;
 
-        try {
+        Sheet excelWSheet = openWorkbook(filepath, sheetName);
+        int startCol = 0;
+        int offsetRows = 0;
+        int ci, cj;
 
-            // Access the required test data sheet
-            if (filepath.toUpperCase().indexOf(".XLSX") > 0) {
-                excelWBook = new XSSFWorkbook(FileLoader.getAbosutePathForResource(filepath)); // XLSX
-            } else {
-                FileInputStream excelFile = new FileInputStream(FileLoader.getAbosutePathForResource(filepath));
-                excelWBook = new HSSFWorkbook(excelFile); // XLS
-            }
-
-            if (StringUtils.isNumeric(sheetName)) {
-                excelWSheet = excelWBook.getSheetAt(Integer.valueOf(sheetName));
-            } else {
-                excelWSheet = excelWBook.getSheet(sheetName);
-            }
-
-            int startCol = 0;
-            int offsetRows = 0;
-            int ci, cj;
-
-            if (startRow > 1) {
-                totalRows = excelWSheet.getLastRowNum();
-                offsetRows = totalRows - startRow;
-            } else if (rowToRead == -1 && startRow == 0) {
-                totalRows = excelWSheet.getLastRowNum() + 1;
-            } else if (rowToRead == -1) {
-                totalRows = excelWSheet.getLastRowNum();
-            } else {
-                startRow = rowToRead;
-                totalRows = startRow;
-            }
-
-            // you can write a function as well to get Column count
-
-            int totalCols = excelWSheet.getRow(startRow).getLastCellNum();
-
-            tabArray = new String[totalRows - offsetRows][totalCols];
-            if (offsetRows != 0) {
-                offsetRows--;
-            } else if (startRow == 0) {
-                offsetRows = 1;
-            }
-            ci = 0;
-            for (int i = startRow; i <= totalRows - offsetRows; i++, ci++) {
-                cj = 0;
-                for (int j = startCol; j < totalCols; j++, cj++) {
-                    tabArray[ci][cj] = getCellData(i, j);
-                }
-            }
-
-        } catch (FileNotFoundException e) {
-            throw new AutomationException("Failed to locate Excel file");
-        } catch (IOException e) {
-            throw new AutomationException("Could not read Excel file");
+        if (startRow > 1) {
+            totalRows = excelWSheet.getLastRowNum();
+            offsetRows = totalRows - startRow;
+        } else if (rowToRead == -1 && startRow == 0) {
+            totalRows = excelWSheet.getLastRowNum() + 1;
+        } else if (rowToRead == -1) {
+            totalRows = excelWSheet.getLastRowNum();
+        } else {
+            startRow = rowToRead;
+            totalRows = startRow;
         }
+
+        // you can write a function as well to get Column count
+
+        int totalCols = excelWSheet.getRow(startRow).getLastCellNum();
+
+        tabArray = new String[totalRows - offsetRows][totalCols];
+        if (offsetRows != 0) {
+            offsetRows--;
+        } else if (startRow == 0) {
+            offsetRows = 1;
+        }
+        ci = 0;
+        for (int i = startRow; i <= totalRows - offsetRows; i++, ci++) {
+            cj = 0;
+            for (int j = startCol; j < totalCols; j++, cj++) {
+                tabArray[ci][cj] = getCellData(excelWSheet, i, j);
+            }
+        }
+
         return (tabArray);
     }
 
-    private String getCellData(int rowNum, int colNum) {
-        cell = excelWSheet.getRow(rowNum).getCell(colNum);
+    private static String getCellData(Sheet excelWSheet, int rowNum, int colNum) {
+        Cell cell = excelWSheet.getRow(rowNum).getCell(colNum);
         if (cell == null) {
             return "";
         }
@@ -153,5 +113,30 @@ public class ExcelDocumentReader {
         }
 
         return cellData;
+    }
+
+    private static Sheet openWorkbook(String filepath, String sheetName) {
+        Sheet excelWSheet = null;
+        try (Workbook excelWBook = (filepath.toUpperCase().indexOf(".XLSX") > 0
+                ? new XSSFWorkbook(FileLoader.getAbsolutePathForResource(filepath)) // Opening XLSX
+                : new HSSFWorkbook(new FileInputStream(FileLoader.getAbsolutePathForResource(filepath))))) { // Opening XLS
+            if (StringUtils.isNumeric(sheetName)) {
+                excelWSheet = excelWBook.getSheetAt(Integer.valueOf(sheetName));
+            } else {
+                excelWSheet = excelWBook.getSheet(sheetName);
+            }
+        } catch (FileNotFoundException e) {
+            throw new AutomationException("Failed to locate Excel file");
+        } catch (IOException e) {
+            throw new AutomationException("Could not read Excel file");
+        } catch (OpenXML4JRuntimeException e) {
+            /**
+             * Closing a workbook that is open from many sources will try to autosave and become locked.
+             * This exception is thrown when this is called in parallel many times
+             * Catch this exception and throw it away by default as we are only reading and not writing.
+             */
+        }
+        return excelWSheet;
+
     }
 }

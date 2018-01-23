@@ -25,7 +25,7 @@ public class CSVDataProvider {
      * @author Jessica Marshall
      * @return 2d array of test data
      */
-    public static Object[][] getData(String filePath) {
+    public static Object[][] getData(String filePath, boolean excludeHeaderRow) {
         logTrace("Entering CSVDataProvider#getData");
         String line = "";
         String[][] dataArray = null;
@@ -61,8 +61,10 @@ public class CSVDataProvider {
             throw new AutomationException("Failed to read in CSV file", e);
         }
 
-        // Remove first line of headers
-        csvRowList.remove(0);
+        if (excludeHeaderRow) {
+            // Remove first line of headers
+            csvRowList.remove(0);
+        }
 
         logTrace("Determining column count based on delimiter [ " + delimiter + " ]");
         columnCount = csvRowList.get(0).split(delimiter).length;
@@ -96,9 +98,19 @@ public class CSVDataProvider {
         return dataArray;
     }
 
+    public static Object[][] getData(String filePath, String delimiterValue, boolean excludeHeaderRow) {
+        logTrace("Overriding default delimiter of [ , ] to be [ " + delimiter + " ]");
+        delimiter = delimiterValue;
+        return getData(filePath, excludeHeaderRow);
+    }
+
     public static Object[][] getData(String filePath, String delimiterValue) {
         logTrace("Overriding default delimiter of [ , ] to be [ " + delimiter + " ]");
         delimiter = delimiterValue;
-        return getData(filePath);
+        return getData(filePath, true);
+    }
+
+    public static Object[][] getData(String filePath) {
+        return getData(filePath, true);
     }
 }

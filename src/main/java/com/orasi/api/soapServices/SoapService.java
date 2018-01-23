@@ -370,10 +370,10 @@ public abstract class SoapService {
         Object[][] xlsSheet = null;
         if (filePath.toUpperCase().indexOf(".XLS") > 0) {
             logTrace("Retrieving data from ExcelDocumentReader");
-            xlsSheet = new ExcelDocumentReader(FileLoader.getAbosutePathForResource(filePath)).readData("0", -1, 0);
+            xlsSheet = ExcelDocumentReader.readData(FileLoader.getAbsolutePathForResource(filePath), "0", -1, 0);
         } else {
             logTrace("CSVDataProvider");
-            xlsSheet = CSVDataProvider.getData(FileLoader.getAbosutePathForResource(filePath));
+            xlsSheet = CSVDataProvider.getData(FileLoader.getAbsolutePathForResource(filePath), false);
         }
         logTrace("Successfully retrieved data");
 

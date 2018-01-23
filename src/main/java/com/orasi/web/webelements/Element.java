@@ -9,7 +9,6 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.support.FindBy;
@@ -162,13 +161,6 @@ public interface Element extends WebElement, WrapsElement, Locatable {
      */
     @Override
     String getCssValue(String propertyName);
-
-    /**
-     * @return {@link Coordinates}
-     * @see org.orasi.chameleon.interfaces.impl.ElementImpl#getCoordinates();
-     */
-    @Override
-    Coordinates getCoordinates();
 
     /**
      * @author Justin
