@@ -6,7 +6,6 @@ import static com.orasi.utils.TestReporter.logInfo;
 import static com.orasi.utils.TestReporter.logTrace;
 import static com.orasi.web.OrasiDriver.DEFAULT_SYNC_HANDLER;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -22,16 +21,15 @@ import org.openqa.selenium.Rectangle;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.internal.Coordinates;
-import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.orasi.Beta;
+import com.orasi.utils.Constants;
 import com.orasi.web.ExtendedExpectedConditions;
 import com.orasi.web.OrasiDriver;
 import com.orasi.web.debugging.Highlight;
@@ -96,7 +94,7 @@ public class ElementImpl implements Element {
     @Override
     public void jsClick() {
         logTrace("Entering ElementImpl#jsClick");
-        getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();", getWrappedElement());
+        driver.executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();", getWrappedElement());
         interfaceLog("Clicked [ <b>" + getElementLocatorInfo() + " </b>]");
         logTrace("Exiting ElementImpl#jsClick");
     }
@@ -104,7 +102,7 @@ public class ElementImpl implements Element {
     @Override
     public void focus() {
         logTrace("Entering ElementImpl#focus");
-        new Actions(getWrappedDriver()).moveToElement(getWrappedElement()).perform();
+        new Actions(driver).moveToElement(getWrappedElement()).perform();
         interfaceLog("Focus on  [ <b>" + getElementLocatorInfo() + " </b>]");
         logTrace("Exiting ElementImpl#focus");
     }
@@ -112,7 +110,7 @@ public class ElementImpl implements Element {
     @Override
     public void focusClick() {
         logTrace("Entering ElementImpl#focusClick");
-        new Actions(getWrappedDriver()).moveToElement(getWrappedElement()).click().perform();
+        new Actions(driver).moveToElement(getWrappedElement()).click().perform();
         interfaceLog("Focus Clicked [ <b>" + getElementLocatorInfo() + " </b>]");
         logTrace("Exiting ElementImpl#focusClick");
     }
@@ -127,7 +125,7 @@ public class ElementImpl implements Element {
                 " } else arguments[0].fireEvent('onblur');";
 
         try {
-            getWrappedDriver().executeJavaScript(jsFireEvent, getWrappedElement());
+            driver.executeJavaScript(jsFireEvent, getWrappedElement());
         } catch (WebDriverException wde) {
         }
         logTrace("Exiting ElementImpl#onBlur");
@@ -196,17 +194,18 @@ public class ElementImpl implements Element {
      */
     @Override
     public List<Element> findElements(By by) {
-    	logTrace("Entering ElementImpl#findElements");
+        logTrace("Entering ElementImpl#findElements");
         List<WebElement> elements = getWrappedElement().findElements(by);
         List<Element> elementList = new ArrayList<>();
-        elements.forEach(element -> elementList.add(new ElementImpl(getWrappedDriver(), by, element)));
+        elements.forEach(element -> elementList.add(new ElementImpl(driver, by, element)));
         logTrace("Exiting ElementImpl#findElements");
         return elementList;
     }
-    
+
     /**
      * @see org.openqa.selenium.WebElement#findElement(By)
      */
+    @Override
     public List<WebElement> findWebElements(By by) {
         logTrace("Entering ElementImpl#findWebElements");
         List<WebElement> elements = getWrappedElement().findElements(by);
@@ -242,14 +241,14 @@ public class ElementImpl implements Element {
      * @see org.openqa.selenium.WebElement#findElement(By)
      */
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     public Element findElement(By by) {
         logTrace("Entering ElementImpl#findElement");
         Element element = new ElementImpl(this.driver, by);
         logTrace("Exiting ElementImpl#findElement");
         return element;
     }
-    
+
     /**
      * @see org.openqa.selenium.WebElement#findElement(By)
      */
@@ -259,7 +258,7 @@ public class ElementImpl implements Element {
         WebElement element = getWrappedElement().findElement(by);
         logTrace("Exiting ElementImpl#findWebElement");
         return element;
-    }  
+    }
 
     /**
      * @see org.openqa.selenium.WebElement#isEnabled()
@@ -376,47 +375,6 @@ public class ElementImpl implements Element {
     }
 
     @Override
-    public OrasiDriver getWrappedDriver() {
-        if (driver != null) {
-            return driver;
-        }
-        WebDriver ldriver = null;
-        Field privateStringField = null;
-        if (element == null) {
-            getWrappedElement();
-        }
-        if (driver == null) {
-            if (element instanceof ElementImpl) {
-                try {
-                    WebElement wrappedElement = ((WrapsElement) element).getWrappedElement();
-
-                    privateStringField = wrappedElement.getClass().getDeclaredField("parent");
-                    privateStringField.setAccessible(true);
-                    ldriver = (WebDriver) privateStringField.get(wrappedElement);
-                    OrasiDriver oDriver = new OrasiDriver();
-                    oDriver.setDriver(ldriver);
-                    return oDriver;
-
-                } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException | SecurityException e) {
-                }
-            } else {
-
-                try {
-                    privateStringField = element.getClass().getDeclaredField("parent");
-                    privateStringField.setAccessible(true);
-                    ldriver = (WebDriver) privateStringField.get(element);
-                    OrasiDriver oDriver = new OrasiDriver();
-                    oDriver.setDriver(ldriver);
-                    return oDriver;
-                } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException | SecurityException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return driver;
-    }
-
-    @Override
     public boolean elementWired() {
         return (getWrappedElement() != null);
     }
@@ -438,14 +396,14 @@ public class ElementImpl implements Element {
     @Override
     public void highlight() {
         logTrace("Entering ElementImpl#highlight");
-        Highlight.highlight(getWrappedDriver(), getWrappedElement());
+        Highlight.highlight(driver, getWrappedElement());
         logTrace("Exiting ElementImpl#highlight");
     }
 
     @Override
     public void scrollIntoView() {
         logTrace("Entering ElementImpl#scrollIntoView");
-        getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);", element);
+        driver.executeJavaScript("arguments[0].scrollIntoView(true);", element);
         logTrace("Exiting ElementImpl#scrollIntoView");
     }
 
@@ -483,13 +441,13 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncVisible(Object... args) {
         logTrace("Entering ElementImpl#syncVisible");
-        int requestedTimeout = driver.getElementTimeout();
-        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
-        
+        int requestedTimeout = Constants.ELEMENT_TIMEOUT;
+        int originalTimeout = driver.getElementTimeout(); // to set back the implicit wait to original value
+
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
         try {
             if (args[0] != null) {
-            	requestedTimeout = Integer.valueOf(args[0].toString());
+                requestedTimeout = Integer.valueOf(args[0].toString());
             }
             if (args[1] != null) {
                 failTestOnSync = Boolean.parseBoolean(args[1].toString());
@@ -503,7 +461,7 @@ public class ElementImpl implements Element {
         StopWatch stopwatch = new StopWatch();
         boolean found = false;
         long timeLapse;
-        
+
         driver.setElementTimeout(0);
         WebDriverWait wait = new WebDriverWait(driver, 1);
         stopwatch.start();
@@ -564,13 +522,13 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncHidden(Object... args) {
         logTrace("Entering ElementImpl#syncHidden");
-        int requestedTimeout = driver.getElementTimeout();
-        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
+        int requestedTimeout = Constants.ELEMENT_TIMEOUT;
+        int originalTimeout = driver.getElementTimeout(); // to set back the implicit wait to original value
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
-        
+
         try {
             if (args[0] != null) {
-            	requestedTimeout = Integer.valueOf(args[0].toString());
+                requestedTimeout = Integer.valueOf(args[0].toString());
             }
             if (args[1] != null) {
                 failTestOnSync = Boolean.parseBoolean(args[1].toString());
@@ -641,10 +599,10 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncEnabled(Object... args) {
         logTrace("Entering ElementImpl#syncEnabled");
-        int requestedTimeout = driver.getElementTimeout();
-        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
+        int requestedTimeout = Constants.ELEMENT_TIMEOUT;
+        int originalTimeout = driver.getElementTimeout(); // to set back the implicit wait to original value
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
-        
+
         try {
             if (args[0] != null) {
                 requestedTimeout = Integer.valueOf(args[0].toString());
@@ -730,12 +688,12 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncDisabled(Object... args) {
         logTrace("Entering ElementImpl#syncDisabled");
-        int requestedTimeout = driver.getElementTimeout();
-        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
+        int requestedTimeout = Constants.ELEMENT_TIMEOUT;
+        int originalTimeout = driver.getElementTimeout(); // to set back the implicit wait to original value
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
         try {
             if (args[0] != null) {
-            	requestedTimeout = Integer.valueOf(args[0].toString());
+                requestedTimeout = Integer.valueOf(args[0].toString());
             }
             if (args[1] != null) {
                 failTestOnSync = Boolean.parseBoolean(args[1].toString());
@@ -818,12 +776,12 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncTextInElement(String text, Object... args) {
         logTrace("Entering ElementImpl#syncTextInElement");
-        int requestedTimeout = driver.getElementTimeout();
-        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
+        int requestedTimeout = Constants.ELEMENT_TIMEOUT;
+        int originalTimeout = driver.getElementTimeout(); // to set back the implicit wait to original value
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
         try {
             if (args[0] != null) {
-            	requestedTimeout = Integer.valueOf(args[0].toString());
+                requestedTimeout = Integer.valueOf(args[0].toString());
             }
             if (args[1] != null) {
                 failTestOnSync = Boolean.parseBoolean(args[1].toString());
@@ -908,13 +866,13 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncTextMatchesInElement(String regex, Object... args) {
         logTrace("Entering ElementImpl#syncTextMatchesInElement");
-        int requestedTimeout = driver.getElementTimeout();
-        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
+        int requestedTimeout = Constants.ELEMENT_TIMEOUT;
+        int originalTimeout = driver.getElementTimeout(); // to set back the implicit wait to original value
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
-        
+
         try {
             if (args[0] != null) {
-            	requestedTimeout = Integer.valueOf(args[0].toString());
+                requestedTimeout = Integer.valueOf(args[0].toString());
             }
             if (args[1] != null) {
                 failTestOnSync = Boolean.parseBoolean(args[1].toString());
@@ -930,7 +888,7 @@ public class ElementImpl implements Element {
                 + getElementLocatorInfo() + "</b> ] to be displayed within [ <b>" + requestedTimeout + "</b> ] seconds.</i>");
         stopwatch.start();
         WebDriverWait wait = new WebDriverWait(driver, 0);
-        
+
         do {
 
             try {
@@ -948,7 +906,7 @@ public class ElementImpl implements Element {
             } catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException e) {
             }
         } while (stopwatch.getTime() / 1000.0 < requestedTimeout);
-        
+
         stopwatch.stop();
         timeLapse = stopwatch.getTime();
         stopwatch.reset();
@@ -1003,20 +961,20 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncAttributeContainsValue(String attribute, String value, Object... args) {
         logTrace("Entering ElementImpl#syncAttributeContainsValue");
-        int requestedTimeout = driver.getElementTimeout();
-        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
+        int requestedTimeout = Constants.ELEMENT_TIMEOUT;
+        int originalTimeout = driver.getElementTimeout(); // to set back the implicit wait to original value
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
-        
+
         try {
             if (args[0] != null) {
-            	requestedTimeout = Integer.valueOf(args[0].toString());
+                requestedTimeout = Integer.valueOf(args[0].toString());
             }
             if (args[1] != null) {
                 failTestOnSync = Boolean.parseBoolean(args[1].toString());
             }
         } catch (ArrayIndexOutOfBoundsException aiobe) {
         }
-        
+
         boolean found = false;
         long timeLapse;
         driver.setElementTimeout(0);
@@ -1090,12 +1048,12 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncAttributeMatchesValue(String attribute, String regex, Object... args) {
         logTrace("Entering ElementImpl#syncAttributeMatchesValue");
-        int requestedTimeout = driver.getElementTimeout();
-        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
+        int requestedTimeout = Constants.ELEMENT_TIMEOUT;
+        int originalTimeout = driver.getElementTimeout(); // to set back the implicit wait to original value
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
         try {
             if (args[0] != null) {
-            	requestedTimeout = Integer.valueOf(args[0].toString());
+                requestedTimeout = Integer.valueOf(args[0].toString());
             }
             if (args[1] != null) {
                 failTestOnSync = Boolean.parseBoolean(args[1].toString());
@@ -1176,13 +1134,13 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncCssPropertyContainsValue(String cssProperty, String value, Object... args) {
         logTrace("Entering ElementImpl#syncCssPropertyContainsValue");
-        int requestedTimeout = driver.getElementTimeout();
-        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
+        int requestedTimeout = Constants.ELEMENT_TIMEOUT;
+        int originalTimeout = driver.getElementTimeout(); // to set back the implicit wait to original value
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
-        
+
         try {
             if (args[0] != null) {
-            	requestedTimeout = Integer.valueOf(args[0].toString());
+                requestedTimeout = Integer.valueOf(args[0].toString());
             }
             if (args[1] != null) {
                 failTestOnSync = Boolean.parseBoolean(args[1].toString());
@@ -1198,7 +1156,7 @@ public class ElementImpl implements Element {
                 + getElementLocatorInfo() + "</b> ] to be displayed within [ <b> " + requestedTimeout + "</b> ] seconds.</i>");
         WebDriverWait wait = new WebDriverWait(driver, 1);
         stopwatch.start();
-        
+
         while (((stopwatch.getTime()) / 1000.0) < requestedTimeout && !found) {
             try {
                 if (Highlight.getDebugMode()) {
@@ -1262,13 +1220,13 @@ public class ElementImpl implements Element {
     @Override
     public boolean syncCssPropertyMatchesValue(String cssProperty, String regex, Object... args) {
         logTrace("Entering ElementImpl#syncCssPropertyMatchesValue");
-        int requestedTimeout = driver.getElementTimeout();
-        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
+        int requestedTimeout = Constants.ELEMENT_TIMEOUT;
+        int originalTimeout = driver.getElementTimeout(); // to set back the implicit wait to original value
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
-        
+
         try {
             if (args[0] != null) {
-            	requestedTimeout = Integer.valueOf(args[0].toString());
+                requestedTimeout = Integer.valueOf(args[0].toString());
             }
             if (args[1] != null) {
                 failTestOnSync = Boolean.parseBoolean(args[1].toString());
@@ -1333,7 +1291,7 @@ public class ElementImpl implements Element {
         logTrace("Search DOM for element [ " + by.toString() + " ]");
 
         try {
-            WebDriverWait wait = new WebDriverWait(getWrappedDriver().getWebDriver(), getWrappedDriver().getElementTimeout());
+            WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), driver.getElementTimeout());
             el = wait.until(ExpectedConditions.presenceOfElementLocated(by));
         } catch (WebDriverException wde) {
             throw new NoSuchElementException("Failed locate element [ " + by.toString() + " ]");
@@ -1348,13 +1306,13 @@ public class ElementImpl implements Element {
     public boolean syncInFrame(Object... args) {
         logTrace("Entering ElementImpl#syncInFrame");
         final String action = "<b>FOUND IN FRAME</b>";
-        int requestedTimeout = driver.getElementTimeout();
-        int originalTimeout = driver.getElementTimeout(); //to set back the implicit wait to original value
+        int requestedTimeout = Constants.ELEMENT_TIMEOUT;
+        int originalTimeout = driver.getElementTimeout(); // to set back the implicit wait to original value
         boolean failTestOnSync = DEFAULT_SYNC_HANDLER;
-        
+
         try {
             if (args[0] != null) {
-            	requestedTimeout = Integer.valueOf(args[0].toString());
+                requestedTimeout = Integer.valueOf(args[0].toString());
             }
             if (args[1] != null) {
                 failTestOnSync = Boolean.parseBoolean(args[1].toString());

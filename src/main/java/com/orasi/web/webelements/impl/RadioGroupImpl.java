@@ -149,7 +149,7 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
                 currentIndex = loopCounter;
 
                 try {
-                    new ElementImpl(getWrappedDriver(), By.xpath("//input[" + (currentIndex + 1) + "]")).click();
+                    new ElementImpl(driver, By.xpath("//input[" + (currentIndex + 1) + "]")).click();
                 } catch (RuntimeException rte) {
                     interfaceLog("Select option <b> [ " + option
                             + " ] </b> from the radio group [ <b>" + getElementLocatorInfo() + " </b> ]",

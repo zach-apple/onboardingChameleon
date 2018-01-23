@@ -38,7 +38,7 @@ public class CheckboxImpl extends ElementImpl implements Checkbox {
     @Override
     public void jsToggle() {
         logTrace("Entering CheckboxImpl#jsToggle");
-        getWrappedDriver().executeJavaScript("if( document.createEvent ) {var click_ev = document.createEvent('MouseEvents'); click_ev.initEvent('click', true , true )"
+        driver.executeJavaScript("if( document.createEvent ) {var click_ev = document.createEvent('MouseEvents'); click_ev.initEvent('click', true , true )"
                 + ";arguments[0].dispatchEvent(click_ev);} else { arguments[0].click();}", element);
         logTrace("Exiting CheckboxImpl#jsToggle");
     }

@@ -83,67 +83,67 @@ public class TestElement extends WebBaseTest {
         element.highlight();
         Assert.assertTrue(element instanceof Element);
     }
-    
+
     @Features("Element Interfaces")
     @Stories("Element")
     @Title("findWebElement")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void findWebElement() {
-        WebElement webElement = getDriver().findWebElement(By.id("radiogroup"));
+        WebElement webElement = driver.findWebElement(By.id("radiogroup"));
         Assert.assertTrue(webElement instanceof WebElement);
     }
-    
+
     @Features("Element Interfaces")
     @Stories("Element")
     @Title("findElements")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void findElements() {
-        List<Element> elements = getDriver().findElement(By.id("radiogroup")).findElements(By.name("sex"));
+        List<Element> elements = driver.findElement(By.id("radiogroup")).findElements(By.name("sex"));
         Assert.assertTrue(elements.get(0) instanceof Element);
         Assert.assertTrue(elements.size() == 2);
     }
-    
+
     @Features("Element Interfaces")
     @Stories("Element")
     @Title("findWebElements")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void findWebElements() {
-        List<WebElement> webElements = getDriver().findWebElements(By.name("sex"));
+        List<WebElement> webElements = driver.findWebElements(By.name("sex"));
         Assert.assertTrue(webElements.get(0) instanceof WebElement);
         Assert.assertTrue(webElements.size() == 2);
     }
-    
+
     @Features("Element Interfaces")
     @Stories("Element")
     @Title("findElement Negative")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true, expectedExceptions = NoSuchElementException.class)
     public void negativeFindElement() {
-        Element element = getDriver().findElement(By.id("radiogroup")).findElement(By.name("foolocator123"));
+        Assert.assertNull(driver.findElement(By.id("radiogroup")).findElement(By.name("foolocator123")).getWrappedElement());
     }
-    
+
     @Features("Element Interfaces")
     @Stories("Element")
     @Title("findWebElement Negative")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true, expectedExceptions = NoSuchElementException.class)
     public void negativeFindWebElement() {
-        WebElement webElement = getDriver().findWebElement(By.id("foolocator123"));
+        driver.findWebElement(By.id("foolocator123"));
     }
-    
+
     @Features("Element Interfaces")
     @Stories("Element")
     @Title("findElements Negative")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void negativeFindElements() {
-        List<Element> elements = getDriver().findElement(By.id("radiogroup")).findElements(By.name("foolocator123"));
+        List<Element> elements = driver.findElement(By.id("radiogroup")).findElements(By.name("foolocator123"));
         Assert.assertTrue(elements.isEmpty());
     }
-    
+
     @Features("Element Interfaces")
     @Stories("Element")
     @Title("findWebElements Negative")
     @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = "reload", alwaysRun = true)
     public void negativeFindWebElements() {
-        List<WebElement> webElements = getDriver().findWebElements(By.name("foolocator123"));
+        List<WebElement> webElements = driver.findWebElements(By.name("foolocator123"));
         Assert.assertTrue(webElements.isEmpty());
     }
 
@@ -627,7 +627,7 @@ public class TestElement extends WebBaseTest {
     @Features("Element Interfaces")
     @Stories("Element")
     @Title("syncCssPropertyContainsValueBasicNegative")
-    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods ={ "reload", "highlight" }, alwaysRun = true, expectedExceptions = ElementCssValueNotMatchingException.class)
+    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = { "reload", "highlight" }, alwaysRun = true, expectedExceptions = ElementCssValueNotMatchingException.class)
     public void syncCssPropertyContainsValueBasicNegative() {
         Element element = driver.findElement(By.id("buttonForText1"));
         element.syncCssPropertyContainsValue("display", "Inline");
@@ -654,7 +654,7 @@ public class TestElement extends WebBaseTest {
     @Features("Element Interfaces")
     @Stories("Element")
     @Title("syncCssPropertyMatchesValueBasic")
-    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods ={ "reload", "highlight" }, alwaysRun = true)
+    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = { "reload", "highlight" }, alwaysRun = true)
     public void syncCssPropertyMatchesValueBasic() {
         Element element = driver.findElement(By.id("buttonForText1"));
         Assert.assertTrue(element.syncCssPropertyMatchesValue("display", "(.*inline.*)"));
@@ -663,7 +663,7 @@ public class TestElement extends WebBaseTest {
     @Features("Element Interfaces")
     @Stories("Element")
     @Title("syncCssPropertyMatchesValueBasicNegative")
-    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods ={ "reload", "highlight" }, alwaysRun = true, expectedExceptions = ElementCssValueNotMatchingException.class)
+    @Test(groups = { "regression", "interfaces", "element" }, dependsOnMethods = { "reload", "highlight" }, alwaysRun = true, expectedExceptions = ElementCssValueNotMatchingException.class)
     public void syncCssPropertyMatchesValueBasicNegative() {
         Element element = driver.findElement(By.id("buttonForText1"));
         element.syncCssPropertyMatchesValue("display", "(.*Inline.*)");

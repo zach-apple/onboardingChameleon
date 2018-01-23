@@ -51,7 +51,7 @@ public class ButtonImpl extends ElementImpl implements Button {
         logTrace("Entering ButtonImpl#jsClick");
         try {
             logTrace("Attempting to executed [ jsClick ] on element [ " + by.toString() + " ] ");
-            getWrappedDriver().executeJavaScript("arguments[0].click();", getWrappedElement());
+            driver.executeJavaScript("arguments[0].click();", getWrappedElement());
             logTrace("Successfully executed [ jsClick ] on element [ " + by.toString() + " ] ");
         } catch (RuntimeException rte) {
             logFailure("Clicked Button [ <b>" + getElementLocatorInfo() + "</b>]");

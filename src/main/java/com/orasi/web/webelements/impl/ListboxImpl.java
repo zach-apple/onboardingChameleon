@@ -11,7 +11,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
 import com.orasi.web.OrasiDriver;
-import com.orasi.web.WebException;
 import com.orasi.web.exceptions.OptionNotInListboxException;
 import com.orasi.web.exceptions.SelectElementNotFoundException;
 import com.orasi.web.webelements.Listbox;
@@ -32,10 +31,10 @@ public class ListboxImpl extends ElementImpl implements Listbox {
         super(driver, by);
         this.innerSelect = null;
         logTrace("Entering ListboxImpl#init");
-        //If element is null at this point, then do not try and set to selenium Select - otherwise hits a proxy exception
+        // If element is null at this point, then do not try and set to selenium Select - otherwise hits a proxy exception
         if (element != null) {
             this.innerSelect = new org.openqa.selenium.support.ui.Select(getWrappedElement());
-        } 
+        }
 
         logTrace("Exiting ListboxImpl#init");
     }
@@ -52,7 +51,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
         if (!text.isEmpty()) {
             try {
                 try {
-                	validateSelectNotNull().selectByVisibleText(text);
+                    validateSelectNotNull().selectByVisibleText(text);
                 } catch (RuntimeException rte) {
                     interfaceLog("Select option [ <b>" + text.toString()
                             + "</b> ] from Listbox [  <b>" + getElementLocatorInfo() + " </b>]", true);
@@ -71,7 +70,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
                         + getElementLocatorInfo() + " </b>]. Acceptable values are " + optionList + " ]");
                 logTrace("Exiting ListboxImpl#select");
                 throw new OptionNotInListboxException("The value of [ " + text + " ] was not found in Listbox [  "
-                        + getElementLocatorInfo() + " ]. Acceptable values are " + optionList, getWrappedDriver());
+                        + getElementLocatorInfo() + " ]. Acceptable values are " + optionList, driver);
             }
         } else {
             interfaceLog("Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
@@ -92,7 +91,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
         if (!value.isEmpty()) {
             try {
                 try {
-                	validateSelectNotNull().selectByValue(value);
+                    validateSelectNotNull().selectByValue(value);
                 } catch (RuntimeException rte) {
                     interfaceLog("Select option [ <b>" + value.toString()
                             + "</b> ] from Listbox [  <b>" + getElementLocatorInfo() + " </b>]", true);
@@ -111,7 +110,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
                         + getElementLocatorInfo() + " </b>]. Acceptable values are " + optionList + " ]");
                 logTrace("Exiting ListboxImpl#selectValue");
                 throw new OptionNotInListboxException("The value of [ " + value + " ] was not found in Listbox [  "
-                        + getElementLocatorInfo() + " ]. Acceptable values are " + optionList, getWrappedDriver());
+                        + getElementLocatorInfo() + " ]. Acceptable values are " + optionList, driver);
             }
         } else {
             interfaceLog("Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
@@ -206,11 +205,11 @@ public class ListboxImpl extends ElementImpl implements Listbox {
         logTrace("Exiting ListboxImpl#isMultiple");
         return multiple;
     }
-    
+
     private Select validateSelectNotNull() {
-    	if (innerSelect == null) {
-    		throw new SelectElementNotFoundException("Select Element was not created", driver);
-    	}
-    	return innerSelect;
+        if (innerSelect == null) {
+            throw new SelectElementNotFoundException("Select Element was not created", driver);
+        }
+        return innerSelect;
     }
 }

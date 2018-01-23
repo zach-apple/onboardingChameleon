@@ -9,7 +9,7 @@
  
 	<test name="Testbox Test" parallel="methods" thread-count="20">
 		<classes>
-			<class name="com.orasi.web.webelements.TestListbox" />
+			<class name="com.orasi.web.webelements.TestElement" />
 		</classes>
 	</test>
 	

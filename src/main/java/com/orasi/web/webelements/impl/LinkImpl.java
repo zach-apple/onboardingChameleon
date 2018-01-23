@@ -33,7 +33,7 @@ public class LinkImpl extends ElementImpl implements Link {
         logTrace("Entering LinkImpl#jsClick");
 
         try {
-            getWrappedDriver().executeJavaScript(
+            driver.executeJavaScript(
                     "if( document.createEvent ) {var click_ev = document.createEvent('MouseEvents'); click_ev.initEvent('click', true , true )"
                             + ";arguments[0].dispatchEvent(click_ev);} else { arguments[0].click();}",
                     element);

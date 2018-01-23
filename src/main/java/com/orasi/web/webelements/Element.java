@@ -7,7 +7,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.internal.WrapsElement;
@@ -32,8 +31,6 @@ public interface Element extends WebElement, WrapsElement, Locatable {
      */
     @Override
     void clear();
-
-    WebDriver getWrappedDriver();
 
     /**
      * @author Justin
@@ -106,7 +103,7 @@ public interface Element extends WebElement, WrapsElement, Locatable {
     @SuppressWarnings("unchecked")
     @Override
     Element findElement(By by);
-    
+
     /**
      * @author John Martin
      * @param by
@@ -128,7 +125,7 @@ public interface Element extends WebElement, WrapsElement, Locatable {
     @SuppressWarnings({ "unchecked" })
     @Override
     List<Element> findElements(By by);
-    
+
     /**
      * @author John Martin
      * @param by

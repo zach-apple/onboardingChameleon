@@ -52,7 +52,7 @@ public abstract class DriverManager {
     }
 
     protected String getDriverLocation(String filename) {
-        return FileLoader.getAbsolutePathForResource(Constants.DRIVERS_PATH_LOCAL + filename + ".exe");
+        return FileLoader.getAbsolutePathForResource(Constants.CURRENT_DIR + Constants.DRIVERS_PATH_LOCAL + filename + ".exe");
     }
 
     private void createOrasiDriver() {

@@ -1,7 +1,6 @@
 package com.orasi.web.webelements;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import org.testng.ITestContext;
@@ -24,11 +23,11 @@ import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestListbox extends WebBaseTest {
-	@FindBy(id="wrongID")
-	Listbox badSelect;
-	@FindBy(id="singleSelect")
-	Listbox listbox;
-	
+    @FindBy(id = "wrongID")
+    Listbox badSelect;
+    @FindBy(id = "singleSelect")
+    Listbox listbox;
+
     OrasiDriver driver = null;
 
     @BeforeClass(alwaysRun = true)
@@ -177,24 +176,24 @@ public class TestListbox extends WebBaseTest {
         listbox.deselectAll();
         Assert.assertNull(listbox.getFirstSelectedOption());
     }
-    
+
     @Features("Element Interfaces")
     @Stories("Listbox")
     @Title("select via page factory negative scenario")
-    @Test(groups = { "regression", "interfaces", "listbox", "mustard" }, expectedExceptions = SelectElementNotFoundException.class)
+    @Test(groups = { "regression", "interfaces", "listbox", "mustard" }, dependsOnMethods = "deselectByVisibleText", expectedExceptions = SelectElementNotFoundException.class)
     public void negativePageFactoryTest() {
-    	ElementFactory.initElements(getDriver(), this);
-    	badSelect.select("Sports");
+        ElementFactory.initElements(driver, this);
+        badSelect.select("Sports");
     }
-    
+
     @Features("Element Interfaces")
     @Stories("Listbox")
     @Title("select via page factory")
-    @Test(groups = { "regression", "interfaces", "listbox", "mustard" })
+    @Test(groups = { "regression", "interfaces", "listbox", "mustard" }, dependsOnMethods = "deselectByVisibleText")
     public void pageFactoryTest() {
-    	ElementFactory.initElements(getDriver(), this);
-    	listbox.select("Sports");
-    	Assert.assertTrue(listbox.getFirstSelectedOption().getText().equals("Sports"));
+        ElementFactory.initElements(driver, this);
+        listbox.select("Sports");
+        Assert.assertTrue(listbox.getFirstSelectedOption().getText().equals("Sports"));
     }
 
 }

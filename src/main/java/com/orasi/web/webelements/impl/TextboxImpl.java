@@ -104,7 +104,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
             } else {
                 interfaceLog(" Send Keys [ <b>" + text + "</b> ] to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
                 try {
-                    getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].setAttribute('value', arguments[1])", getWrappedElement(), text);
+                    driver.executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].setAttribute('value', arguments[1])", getWrappedElement(), text);
                 } catch (WebDriverException wde) {
                     getWrappedElement().clear();
                     getWrappedElement().sendKeys(text);
@@ -131,7 +131,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
         logTrace("Entering TextboxImpl#scrollAndSet");
         if (!text.isEmpty()) {
             try {
-                getWrappedDriver().executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();", getWrappedElement());
+                driver.executeJavaScript("arguments[0].scrollIntoView(true);arguments[0].click();", getWrappedElement());
                 getWrappedElement().clear();
                 getWrappedElement().sendKeys(text);
                 interfaceLog(" Send Keys [ <b>" + text + "</b> ] to Textbox [ <b>"
@@ -165,7 +165,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
         if (!text.isEmpty()) {
             try {
 
-                getWrappedDriver().executeJavaScript("arguments[0].setAttribute('value', arguments[1])", getWrappedElement(), "");
+                driver.executeJavaScript("arguments[0].setAttribute('value', arguments[1])", getWrappedElement(), "");
                 getWrappedElement().sendKeys(text);
                 getWrappedElement().sendKeys(Keys.TAB);
                 interfaceLog(" Send Keys [ <b>" + text + "</b> ] to Textbox [  <b>"
@@ -224,7 +224,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
         logTrace("Entering TextboxImpl#safeSetSecure");
         if (!text.isEmpty()) {
             try {
-                getWrappedDriver().executeJavaScript("arguments[0].setAttribute('value', arguments[1])", getWrappedElement(), "");
+                driver.executeJavaScript("arguments[0].setAttribute('value', arguments[1])", getWrappedElement(), "");
                 getWrappedElement().sendKeys(decodeString(text));
                 getWrappedElement().sendKeys(Keys.TAB);
                 interfaceLog(" Send encoded text [ <b>" + text + "</b> ] to Textbox [  <b>"

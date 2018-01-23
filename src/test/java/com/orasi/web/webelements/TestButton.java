@@ -46,7 +46,6 @@ public class TestButton extends WebBaseTest {
         driver = testStart("TestButton");
         Button button = driver.findButton(By.id("click"));
         button.click();
-        button.getWrappedDriver();
         Assert.assertTrue(driver.findElement(By.id("testClick")).getText().equals("Successful"));
     }
 
