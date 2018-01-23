@@ -5,15 +5,17 @@ import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
+import com.orasi.DriverManager;
+
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestWebBaseTest extends WebBaseTest {
     private String application = "application";
-    private String browserUnderTest = "html";
-    private String browserVersion = "1";
-    private String operatingSystem = "windows";
+    private String browserUnderTest = "firefox";
+    private String browserVersion = "57";
+    private String operatingSystem = "Win10";
     private String runLocation = "local";
     private String testingEnvironment = "stage";
     private String testingName = "TestEnvironment";
@@ -129,8 +131,12 @@ public class TestWebBaseTest extends WebBaseTest {
                 runLocation, testingEnvironment);
         te.setPageURL(pageURL);
         te.testStart(testingName);
-        Assert.assertTrue(te.getDriver().getTitle().equals("Unit test site"));
+        while (DriverManager.getDriver().getTitle().isEmpty()) {
+        }
 
+        String title = DriverManager.getDriver().getTitle();
+        DriverManager.quitDriver();
+        Assert.assertTrue(title.equalsIgnoreCase("Unit test site"));
     }
 
 }

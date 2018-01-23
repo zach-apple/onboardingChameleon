@@ -26,6 +26,6 @@ public class ExcelDataProvider {
     }
 
     public Object[][] getTestData() {
-        return new ExcelDocumentReader(this.filePath).readData(this.sheetName, this.row);
+        return ExcelDocumentReader.readData(this.filePath, this.sheetName, this.row);
     }
 }

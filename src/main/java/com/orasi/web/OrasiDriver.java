@@ -17,7 +17,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -27,6 +26,7 @@ import org.openqa.selenium.remote.RemoteKeyboard;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
+import com.orasi.DriverType;
 import com.orasi.utils.Constants;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataHelpers.DataWarehouse;
@@ -58,6 +58,7 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
     private int currentElementTimeout;
     private int currentScriptTimeout;
     public static boolean DEFAULT_SYNC_HANDLER = true;
+    private DriverType driverType;
 
     public OrasiDriver() {
     }
@@ -68,7 +69,9 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      *
      * @param caps
      *            - Selenium desired capabilities, used to configure the OrasiDriver
+     * @deprecated - Should use DriverManagerFactory to create OrasiDriver
      */
+    @Deprecated
     public OrasiDriver(DesiredCapabilities caps) {
         currentPageTimeout = Constants.PAGE_TIMEOUT;
         currentElementTimeout = Constants.ELEMENT_TIMEOUT;
@@ -83,8 +86,9 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      * @param caps
      *            - Selenium desired capabilities, used to configure the OrasiDriver
      * @param url
-     *            -
+     * @deprecated - Should use DriverManagerFactory to create OrasiDriver
      */
+    @Deprecated
     public OrasiDriver(DesiredCapabilities caps, URL url) {
         currentPageTimeout = Constants.PAGE_TIMEOUT;
         currentElementTimeout = Constants.ELEMENT_TIMEOUT;
@@ -104,6 +108,14 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
 
     public void setDriver(WebDriver driver) {
         this.driver = driver;
+    }
+
+    public DriverType getDriverType() {
+        return driverType;
+    }
+
+    public void setDriverType(DriverType driverType) {
+        this.driverType = driverType;
     }
 
     /**
@@ -670,10 +682,11 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
                 driver = new SafariDriver(caps);
                 break;
             case "htmlunit":
-            case "html":
-                driver = new HtmlUnitDriver(true);
-                break;
-
+                /*
+                 * case "html":
+                 * driver = new HtmlUnitDriver(true);
+                 * break;
+                 */
             case "edge":
             case "microsoftedge":
                 driver = new EdgeDriver(caps);
@@ -715,34 +728,42 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
     public class Capabilities {
 
         public String browserName() {
-            if (driver instanceof HtmlUnitDriver) {
-                return ((HtmlUnitDriver) driver).getCapabilities().getBrowserName();
-            }
+            /*
+             * if (driver instanceof HtmlUnitDriver) {
+             * return ((HtmlUnitDriver) driver).getCapabilities().getBrowserName();
+             * }
+             */
             return getRemoteWebDriver().getCapabilities().getBrowserName();
         }
 
         public String browserVersion() {
-            if (driver instanceof HtmlUnitDriver) {
-                return ((HtmlUnitDriver) driver).getCapabilities().getVersion();
-            }
+            /*
+             * if (driver instanceof HtmlUnitDriver) {
+             * return ((HtmlUnitDriver) driver).getCapabilities().getVersion();
+             * }
+             */
             return getRemoteWebDriver().getCapabilities().getVersion();
         }
 
         public String platformOS() {
-            if (driver instanceof HtmlUnitDriver) {
-                return ((HtmlUnitDriver) driver).getCapabilities().getPlatform().name() + " "
-                        + ((HtmlUnitDriver) driver).getCapabilities().getPlatform().getMajorVersion() + "."
-                        + ((HtmlUnitDriver) driver).getCapabilities().getPlatform().getMinorVersion();
-            }
+            /*
+             * if (driver instanceof HtmlUnitDriver) {
+             * return ((HtmlUnitDriver) driver).getCapabilities().getPlatform().name() + " "
+             * + ((HtmlUnitDriver) driver).getCapabilities().getPlatform().getMajorVersion() + "."
+             * + ((HtmlUnitDriver) driver).getCapabilities().getPlatform().getMinorVersion();
+             * }
+             */
             return getRemoteWebDriver().getCapabilities().getPlatform().name() + " "
                     + getRemoteWebDriver().getCapabilities().getPlatform().getMajorVersion() + "."
                     + getRemoteWebDriver().getCapabilities().getPlatform().getMinorVersion();
         }
 
         public Platform platform() {
-            if (driver instanceof HtmlUnitDriver) {
-                return ((HtmlUnitDriver) driver).getCapabilities().getPlatform();
-            }
+            /*
+             * if (driver instanceof HtmlUnitDriver) {
+             * return ((HtmlUnitDriver) driver).getCapabilities().getPlatform();
+             * }
+             */
 
             return getRemoteWebDriver().getCapabilities().getPlatform();
         }

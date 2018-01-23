@@ -570,7 +570,7 @@ public class TestPersonFactory {
         party.primaryPerson().primaryEmail().setOptIn(true);
         Assert.assertTrue(party.primaryPerson().primaryEmail().isOptIn());
     }
-    
+
     @Features("Utilities")
     @Stories("PersonFactory")
     @Title("personAllCreditCards")
@@ -578,42 +578,42 @@ public class TestPersonFactory {
     public void personAllCreditCards() {
         Assert.assertTrue(party.primaryPerson().getAllCreditCards().size() == 1);
     }
-    
+
     @Features("Utilities")
     @Stories("PersonFactory")
     @Title("personAddDefaultCreditCard")
     @Test(groups = { "regression", "utils", "Party" }, dependsOnMethods = "personAllCreditCards")
     public void personAddCreditCardDefault() {
         party.primaryPerson().addCreditCard();
-    	Assert.assertTrue(party.primaryPerson().getAllCreditCards().size() == 2);
+        Assert.assertTrue(party.primaryPerson().getAllCreditCards().size() == 2);
     }
-    
+
     @Features("Utilities")
     @Stories("PersonFactory")
     @Title("personAddCreditCardByString")
     @Test(groups = { "regression", "utils", "Party" }, dependsOnMethods = "personAddCreditCardDefault")
     public void personAddCreditCardConstructor() {
         CreditCard creditcard = CreditCards.getCreditCardByType("AMEX");
-    	party.primaryPerson().addCreditCard(creditcard);
-    	Assert.assertTrue(party.primaryPerson().getAllCreditCards().size() == 3);
+        party.primaryPerson().addCreditCard(creditcard);
+        Assert.assertTrue(party.primaryPerson().getAllCreditCards().size() == 3);
     }
 
     @Features("Utilities")
     @Stories("PersonFactory")
     @Title("personAddCreditCardByType")
-    @Test(groups = { "regression", "utils", "Party" }, dependsOnMethods = "personAddCreditCardDefault")
+    @Test(groups = { "regression", "utils", "Party" }, dependsOnMethods = "personAddCreditCardConstructor")
     public void personAddCreditCardConstructorEnum() {
         CreditCard creditcard = CreditCards.getCreditCardByType(CardTypes.DISCOVER);
-    	party.primaryPerson().addCreditCard(creditcard);
-    	Assert.assertTrue(party.primaryPerson().getAllCreditCards().size() == 4);
+        party.primaryPerson().addCreditCard(creditcard);
+        Assert.assertTrue(party.primaryPerson().getAllCreditCards().size() == 4);
     }
-    
+
     @Features("Utilities")
     @Stories("PersonFactory")
     @Title("personCreditCardPrimary")
     @Test(groups = { "regression", "utils", "Party" }, dependsOnMethods = "personAddCreditCardConstructor")
     public void personCreditCardPrimary() {
-    	Assert.assertNotNull(party.primaryPerson().primaryCreditCard());
-    	Assert.assertTrue(party.primaryPerson().primaryCreditCard().getCardType().equalsIgnoreCase("Visa"));
+        Assert.assertNotNull(party.primaryPerson().primaryCreditCard());
+        Assert.assertTrue(party.primaryPerson().primaryCreditCard().getCardType().equalsIgnoreCase("Visa"));
     }
 }

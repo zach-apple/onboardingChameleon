@@ -19,14 +19,13 @@ import com.orasi.utils.TestReporter;
 
 public class BaseTest {
     private static String environment;
-    private static String runLocation;
     private String testName;
     private int logLevel;
     private boolean reportToMustard = false;
 
     @BeforeSuite(alwaysRun = true)
-    @Parameters({ "environment", "runLocation", "logLevel", "reportToMustard" })
-    public void beforeSuite(@Optional String environment, @Optional String runLocation, @Optional String logLevel, @Optional String reportToMustard) {
+    @Parameters({ "environment", "logLevel", "reportToMustard" })
+    public void beforeSuite(@Optional String environment, @Optional String logLevel, @Optional String reportToMustard) {
 
         if (isNotEmpty(logLevel)) {
             log("Setting Test Reporter log level to [ " + logLevel + " ]");
@@ -40,13 +39,6 @@ public class BaseTest {
             BaseTest.environment = environment;
         } else {
             log("Parameter [ environment ] was not set or empty");
-        }
-
-        if (isNotEmpty(runLocation)) {
-            log("Setting parameter [ runLocation ] to [ " + runLocation + " ]");
-            setRunLocation(runLocation);
-        } else {
-            log("Parameter [ runLocation ] was not set or empty");
         }
 
         if (isNotEmpty(reportToMustard)) {
@@ -96,18 +88,6 @@ public class BaseTest {
 
         log("Ending test [ " + testName + " ] with status [ " + status + " ]. Execution time [ " + ((testResults.getEndMillis() - testResults.getStartMillis()) / 1000.0) + " ] seconds");
         logTrace("Exiting BaseTest#afterMethod");
-    }
-
-    protected void setRunLocation(String runLocation) {
-        if (runLocation.equalsIgnoreCase("jenkinsParameter")) {
-            BaseTest.runLocation = System.getProperty("jenkinsRunLocation".trim());
-        } else {
-            BaseTest.runLocation = runLocation;
-        }
-    }
-
-    public String getRunLocation() {
-        return runLocation;
     }
 
     protected void setEnvironment(String environment) {

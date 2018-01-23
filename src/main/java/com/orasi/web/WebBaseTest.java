@@ -1,8 +1,5 @@
 package com.orasi.web;
 
-import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
-
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -19,11 +16,15 @@ import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Parameters;
 
 import com.orasi.AutomationException;
 import com.orasi.BaseTest;
+import com.orasi.DriverManager;
+import com.orasi.DriverManagerFactory;
+import com.orasi.DriverOptionsManager;
+import com.orasi.DriverType;
 import com.orasi.utils.Base64Coder;
 import com.orasi.utils.Constants;
 import com.orasi.utils.TestReporter;
@@ -48,19 +49,37 @@ public class WebBaseTest extends BaseTest {
     /*
      * Test Environment Fields
      */
-    protected String applicationUnderTest = "";
-    protected String browserUnderTest = "";
-    protected String browserVersion = "";
-    protected String operatingSystem = "";
-    protected String pageUrl = "";
+    protected static ThreadLocal<String> applicationUnderTest = new ThreadLocal<>();
+    protected static ThreadLocal<String> browserUnderTest = new ThreadLocal<>();
+    protected static ThreadLocal<String> browserVersion = new ThreadLocal<>();
+    protected static ThreadLocal<String> operatingSystem = new ThreadLocal<>();
+    protected static ThreadLocal<String> runLocation = new ThreadLocal<>();
+    protected static ThreadLocal<String> pageUrl = new ThreadLocal<>();
 
     /*
      * WebDriver Fields
      */
+
+    /**
+     *
+     * Deprecated - not required anymore with DriverManager
+     */
+    @Deprecated
     private OrasiDriver driver;
+
+    /**
+     *
+     * Deprecated - not required anymore with DriverManager
+     */
+    @Deprecated
     private ThreadLocal<OrasiDriver> threadedDriver = new ThreadLocal<>();
+
+    /**
+     *
+     * Deprecated - not required anymore with DriverManager
+     */
     private boolean setThreadDriver = false;
-    protected ThreadLocal<String> sessionId = new ThreadLocal<>();
+    protected static ThreadLocal<String> sessionId = new ThreadLocal<>();
 
     /*
      * URL and Credential Repository Field
@@ -74,9 +93,9 @@ public class WebBaseTest extends BaseTest {
     /*
      * Mobile Fields
      */
-    protected String deviceID = "";
+    protected static ThreadLocal<String> deviceID = new ThreadLocal<>();
     protected String mobileHubURL = appURLRepository.getString("MOBILE_HUB_URL");
-    protected String mobileOSVersion = "";
+    protected static ThreadLocal<String> mobileOSVersion = new ThreadLocal<>();
     protected String mobileAppPath = appURLRepository.getString("MOBILE_APP_PATH");
 
     /*
@@ -108,6 +127,13 @@ public class WebBaseTest extends BaseTest {
      */
 
     public WebBaseTest() {
+        applicationUnderTest.set("");
+        browserUnderTest.set("");
+        browserVersion.set("");
+        operatingSystem.set("");
+        pageUrl.set("");
+        deviceID.set("");
+        mobileOSVersion.set("");
     };
 
     /**
@@ -130,73 +156,88 @@ public class WebBaseTest extends BaseTest {
                 operatingSystem,
                 environment));
 
-        this.applicationUnderTest = application;
+        applicationUnderTest.set(application);
         setEnvironment(environment);
         // Use setter methods for these fields as the data may be coming from a jenkins parameter
         setBrowserUnderTest(browserUnderTest);
         setBrowserVersion(browserVersion);
         setOperatingSystem(operatingSystem);
         setRunLocation(runLocation);
+        pageUrl.set("");
+        deviceID.set("");
+        mobileOSVersion.set("");
     }
 
     /*
      * Getters and setters
      */
     public void setApplicationUnderTest(String aut) {
-        applicationUnderTest = aut;
+        applicationUnderTest.set(aut);
     }
 
     public String getApplicationUnderTest() {
-        return applicationUnderTest;
+        return applicationUnderTest.get();
     }
 
     public void setPageURL(String url) {
-        pageUrl = url;
+        pageUrl.set(url);
     }
 
     public String getPageURL() {
-        return pageUrl;
+        return pageUrl.get();
     }
 
     public void setBrowserUnderTest(String but) {
         if (but.equalsIgnoreCase("jenkinsParameter")) {
-            browserUnderTest = System.getProperty("jenkinsBrowser").trim();
+            browserUnderTest.set(System.getProperty("jenkinsBrowser").trim());
         } else {
-            browserUnderTest = but;
+            browserUnderTest.set(but);
         }
     }
 
     public String getBrowserUnderTest() {
-        return browserUnderTest;
+        return browserUnderTest.get() == null ? "" : browserUnderTest.get();
     }
 
     public void setBrowserVersion(String bv) {
         if (bv.equalsIgnoreCase("jenkinsParameter")) {
             if (System.getProperty("jenkinsBrowserVersion") == null
                     || System.getProperty("jenkinsBrowserVersion") == "null") {
-                browserVersion = "";
+                browserVersion.set("");
             } else {
-                browserVersion = System.getProperty("jenkinsBrowserVersion").trim();
+                browserVersion.set(System.getProperty("jenkinsBrowserVersion").trim());
             }
         } else {
-            browserVersion = bv;
+            browserVersion.set(bv);
         }
     }
 
     public String getBrowserVersion() {
-        return browserVersion;
+        return browserVersion.get();
+    }
+
+    protected void setRunLocation(String location) {
+        if (location.equalsIgnoreCase("jenkinsParameter")) {
+            runLocation.set(System.getProperty("jenkinsRunLocation".trim()));
+        } else {
+            runLocation.set(location);
+        }
+    }
+
+    public String getRunLocation() {
+        return runLocation.get() == null ? "" : runLocation.get();
     }
 
     public void setOperatingSystem(String os) {
         if (os.equalsIgnoreCase("jenkinsParameter")) {
-            operatingSystem = System.getProperty("jenkinsOperatingSystem").trim();
+            operatingSystem.set(System.getProperty("jenkinsOperatingSystem").trim());
         } else {
-            operatingSystem = os;
+            operatingSystem.set(os);
         }
     }
 
     public String getOperatingSystem() {
-        return operatingSystem;
+        return operatingSystem.get() == null ? "" : operatingSystem.get();
     }
 
     public String getRemoteURL() {
@@ -219,12 +260,12 @@ public class WebBaseTest extends BaseTest {
     /*
      * Mobile Specific
      */
-    protected void setDeviceID(String deviceID) {
-        this.deviceID = deviceID;
+    protected void setDeviceID(String deviceId) {
+        deviceID.set(deviceId);
     }
 
-    protected void setMobileOSVersion(String mobileOSVersion) {
-        this.mobileOSVersion = mobileOSVersion;
+    protected void setMobileOSVersion(String mobileVersion) {
+        mobileOSVersion.set(mobileVersion);
     }
 
     // ************************************
@@ -242,12 +283,13 @@ public class WebBaseTest extends BaseTest {
      * @param browserVersion
      * @param operatingSystem
      */
-    @Parameters({ "browserUnderTest", "browserVersion", "operatingSystem" })
-    @BeforeTest(alwaysRun = true)
-    public void beforeWebTest(String browserUnderTest, String browserVersion, String operatingSystem) {
+    @Parameters({ "browserUnderTest", "browserVersion", "operatingSystem", "runLocation" })
+    @BeforeSuite(alwaysRun = true)
+    public void beforeWebTest(String browserUnderTest, String browserVersion, String operatingSystem, String runLocation) {
         setBrowserUnderTest(browserUnderTest);
         setBrowserVersion(browserVersion);
         setOperatingSystem(operatingSystem);
+        setRunLocation(runLocation);
         Highlight.setDebugMode(true);
     }
 
@@ -258,12 +300,13 @@ public class WebBaseTest extends BaseTest {
      * @param browserVersion
      * @param operatingSystem
      */
-    @Parameters({ "browserUnderTest", "browserVersion", "operatingSystem" })
+    @Parameters({ "browserUnderTest", "browserVersion", "operatingSystem", "runLocation" })
     @BeforeMethod(alwaysRun = true)
-    public void beforeWebMethod(String browserUnderTest, String browserVersion, String operatingSystem) {
+    public void beforeWebMethod(String browserUnderTest, String browserVersion, String operatingSystem, String runLocation) {
         setBrowserUnderTest(browserUnderTest);
         setBrowserVersion(browserVersion);
         setOperatingSystem(operatingSystem);
+        setRunLocation(runLocation);
     }
 
     @AfterMethod(alwaysRun = true)
@@ -273,38 +316,47 @@ public class WebBaseTest extends BaseTest {
 
     @AfterClass(alwaysRun = true)
     public void afterClass(ITestContext testResults) {
-        if (getDriver() != null && getDriver().getWindowHandles().size() > 0) {
-            endTest(getTestName(), testResults);
-        }
+        endTest(getTestName(), testResults);
     }
 
-    /*
+    /**
      * Getter and setter for the actual WebDriver
+     *
+     * Deprecated - not required anymore with DriverManager
      */
+    @Deprecated
     protected void setDriver(OrasiDriver driverSession) {
-        if (isThreadedDriver()) {
-            threadedDriver.set(driverSession);
-        } else {
-            driver = driverSession;
-        }
     }
 
+    /**
+     *
+     * Deprecated - not required anymore with DriverManager. Just call driverManager.getDriver() instead
+     *
+     * @return
+     */
+    @Deprecated
     public OrasiDriver getDriver() {
-        if (isThreadedDriver()) {
-            return threadedDriver.get();
-        } else {
-            return driver;
-        }
+        return DriverManager.getDriver();
     }
 
     /**
      * User controls to see the driver to be threaded or not. Only use when
      * using data provider threading
+     *
+     * Deprecated - not required anymore with DriverManager
      */
+    @Deprecated
     private boolean isThreadedDriver() {
         return setThreadDriver;
     }
 
+    /**
+     *
+     * Deprecated - not required anymore with DriverManager
+     *
+     * @param setThreadDriver
+     */
+    @Deprecated
     public void setThreadDriver(boolean setThreadDriver) {
         this.setThreadDriver = setThreadDriver;
     }
@@ -337,8 +389,7 @@ public class WebBaseTest extends BaseTest {
      * @return Nothing
      */
     private void launchApplication() {
-        launchApplication(appURLRepository
-                .getString(getApplicationUnderTest().toUpperCase() + "_" + getEnvironment().toUpperCase()));
+        launchApplication(appURLRepository.getString(getApplicationUnderTest().toUpperCase() + "_" + getEnvironment().toUpperCase()));
     }
 
     /**
@@ -359,13 +410,13 @@ public class WebBaseTest extends BaseTest {
         setTestName(testName);
         driverSetup();
         // launch the application under test normally
-        if (pageUrl.isEmpty()) {
+        if (getPageURL().isEmpty()) {
             launchApplication();
             // Otherwise if you have a specific page you want the test to start from
         } else {
-            launchApplication(pageUrl);
+            launchApplication(getPageURL());
         }
-        return getDriver();
+        return DriverManager.getDriver();
     }
 
     /**
@@ -376,14 +427,14 @@ public class WebBaseTest extends BaseTest {
      * test if reporting to sauce labs
      */
     protected void endTest(String testName, ITestResult testResults) {
+
         // Sauce labs specific to end test
         if (getRunLocation().equalsIgnoreCase("sauce")) {
             reportToSauceLabs(testResults.getStatus());
         }
+
         // quit driver
-        if (getDriver() != null && !getDriver().toString().contains("null") && isNotEmpty(getDriver().getWindowHandles())) {
-            getDriver().quit();
-        }
+        DriverManager.getDriver().quit();
     }
 
     /**
@@ -394,7 +445,14 @@ public class WebBaseTest extends BaseTest {
      * before closing test if reporting to sauce labs
      */
     protected void endTest(String testName, ITestContext testResults) {
-        if (getDriver().getWebDriver() != null && !getDriver().getWebDriver().toString().contains("null") && getDriver().getWebDriver().getWindowHandles().size() > 0) {
+        OrasiDriver driver = null;
+        try {
+            driver = DriverManager.getDriver();
+        } catch (AutomationException e) {
+
+        }
+        if (driver != null && driver.getWebDriver() != null && !driver.getWebDriver().toString().contains("null") &&
+                DriverManager.getDriver().getWebDriver().getWindowHandles().size() > 0) {
             if (getRunLocation().equalsIgnoreCase("sauce")) {
                 if (testResults.getFailedTests().size() == 0) {
                     reportToSauceLabs(ITestResult.SUCCESS);
@@ -403,11 +461,9 @@ public class WebBaseTest extends BaseTest {
                 }
             }
             // quit driver
-
-            if (!getDriver().toString().contains("null")) {
-                getDriver().quit();
-            }
+            DriverManager.quitDriver();
         }
+
     }
 
     /**
@@ -426,7 +482,7 @@ public class WebBaseTest extends BaseTest {
             updates.put("passed", true);
         }
         SauceREST client = new SauceREST(authentication.getUsername(), authentication.getAccessKey());
-        client.updateJobInfo(driver.getSessionId(), updates);
+        client.updateJobInfo(DriverManager.getDriver().getSessionId(), updates);
     }
 
     /**
@@ -456,15 +512,10 @@ public class WebBaseTest extends BaseTest {
                     "Parameter for run [Location] was not set to 'Local', 'Grid', 'Sauce', 'Mobile'");
         }
 
-        // Set the timeouts to the defaults according to the constants class
-        getDriver().setElementTimeout(Constants.ELEMENT_TIMEOUT);
-        getDriver().setPageTimeout(Constants.PAGE_TIMEOUT);
-        getDriver().setScriptTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
-
         // Microsoft Edge Browser
-        if (!browserUnderTest.toLowerCase().contains("edge") && !getRunLocation().toLowerCase().contains("mobile")) {
-            getDriver().manage().deleteAllCookies();
-            getDriver().manage().window().maximize();
+        if (DriverType.EDGE == DriverManager.getDriver().getDriverType() && !getRunLocation().equalsIgnoreCase("mobile")) {
+            DriverManager.getDriver().manage().deleteAllCookies();
+            DriverManager.getDriver().manage().window().maximize();
         }
     }
 
@@ -477,72 +528,15 @@ public class WebBaseTest extends BaseTest {
      * @date 9/13/2016
      */
     private void localDriverSetup() {
-
-        File file = null;
-        DesiredCapabilities caps = new DesiredCapabilities();
-
-        switch (browserUnderTest.toLowerCase().trim()) {
-            case "firefox":
-                caps = DesiredCapabilities.firefox();
-                file = new File(
-                        this.getClass()
-                                .getResource(Constants.DRIVERS_PATH_LOCAL + "geckodriver.exe").getPath());
-                System.setProperty("webdriver.gecko.driver", file.getAbsolutePath());
-                break;
-
-            case "ie":
-            case "internet explorer":
-            case "iexplore":
-                caps = DesiredCapabilities.internetExplorer();
-                caps.setCapability("ignoreZoomSetting", true);
-                caps.setCapability("enablePersistentHover", false);
-                file = new File(
-                        this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "IEDriverServer.exe").getPath());
-                System.setProperty("webdriver.ie.driver", file.getAbsolutePath());
-                break;
-
-            case "microsoftedge":
-                caps = DesiredCapabilities.edge();
-                file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "MicrosoftWebDriver.exe")
-                        .getPath());
-                System.setProperty("webdriver.edge.driver", file.getAbsolutePath());
-                break;
-
-            case "chrome":
-                caps = DesiredCapabilities.chrome();
-                file = new File(
-                        this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "chromedriver.exe").getPath());
-                System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
-                // Mac operating system with chrome browser
-                if (operatingSystem.equalsIgnoreCase("mac")) {
-                    file = new File(
-                            this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "mac/chromedriver").getPath());
-                    System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
-                    try {
-                        // Ensure the permission on the driver include
-                        // executable permissions
-                        Process proc = Runtime.getRuntime()
-                                .exec(new String[] { "/bin/bash", "-c", "chmod 777 " + file.getAbsolutePath() });
-                        proc.waitFor();
-
-                    } catch (IllegalStateException | IOException | InterruptedException ise) {
-                        throw new IllegalStateException(
-                                "This has been seen to occur when the chromedriver file does not have executable permissions. In a terminal, navigate to the directory to which Maven pulls the drivers at runtime (e.g \"/target/classes/drivers/\") and execute the following command: chmod +rx chromedriver", ise);
-                    }
-                }
-
-                break;
-            case "html":
-                caps = DesiredCapabilities.htmlUnit();
-                break;
-            case "safari":
-                caps = DesiredCapabilities.safari();
-                break;
-            default:
-                throw new AutomationException("Parameter not set for browser type");
+        if (DriverType.HTML.equals(DriverType.fromString(getBrowserUnderTest()))) {
+            DriverOptionsManager options = new DriverOptionsManager();
+            options.getFirefoxOptions().setHeadless(true);
+            setBrowserUnderTest("firefox");
+            DriverManagerFactory.getManager(DriverType.fromString(getBrowserUnderTest()), options).initalizeDriver();
+        } else {
+            DriverManagerFactory.getManager(DriverType.fromString(getBrowserUnderTest())).initalizeDriver();
         }
-
-        setDriver(new OrasiDriver(caps));
+        setDriver(DriverManager.getDriver());
     }
 
     /**
@@ -553,52 +547,43 @@ public class WebBaseTest extends BaseTest {
      * @date 9/13/2016
      */
     private void remoteDriverSetup() {
-        // Capabilities for the remote web driver
-        DesiredCapabilities caps = new DesiredCapabilities();
-        // Browser
-        caps.setCapability(CapabilityType.BROWSER_NAME, browserUnderTest);
-        // Browser version
-        if (!browserVersion.isEmpty()) {
-            caps.setCapability(CapabilityType.VERSION, browserVersion);
-        }
-        // gecko/firefox
-        if (browserUnderTest.equalsIgnoreCase("firefox")) {
+        DriverOptionsManager options = new DriverOptionsManager();
+        DriverType type = DriverType.fromString(getBrowserUnderTest());
 
-            // Marionette/gecko capability
-            if (browserVersion.isEmpty() || Integer.parseInt(browserVersion) > 47) {
-                caps.setCapability("marionette", true);
-            } else {
-                caps.setCapability("marionette", false);
-            }
-
+        if (!getBrowserVersion().isEmpty()) {
+            // Setting Browser version if desired
+            options.setBrowserVersion(type, getBrowserVersion());
         }
 
-        // safari
-        if (browserUnderTest.equalsIgnoreCase("safari")) {
-            SafariOptions options = new SafariOptions();
-            options.setUseCleanSession(true);
-            caps.setCapability(SafariOptions.CAPABILITY, options);
+        // Setting default Broswer options
+        switch (DriverType.fromString(getBrowserUnderTest())) {
+            case SAFARI:
+                options.getSafariOptions().useCleanSession(true);
+                options.getSafariOptions().setCapability(SafariOptions.CAPABILITY, options.getSafariOptions());
+                break;
+            case INTERNETEXPLORER:
+                options.getInternetExplorerOptions().ignoreZoomSettings();
+                break;
+            default:
+                break;
         }
 
         // Operating System
-        caps.setCapability(CapabilityType.PLATFORM, Platform.fromString(operatingSystem));
-
-        // IE specific capabilities
-        if (browserUnderTest.toLowerCase().contains("ie")
-                || browserUnderTest.toLowerCase().contains("iexplore") || browserUnderTest.equalsIgnoreCase("internet explorer")) {
-            caps.setCapability("ignoreZoomSetting", true);
-        }
-        caps.setCapability("name", getTestName());
+        options.setPlatform(type, getOperatingSystem());
+        options.setCapability(type, "name", getTestName());
         // Create the remote web driver
+        URL url = null;
         try {
-            setDriver(new OrasiDriver(caps, new URL(getRemoteURL())));
+            url = new URL(getRemoteURL());
+
         } catch (MalformedURLException e) {
-            throw new AutomationException("Problem with creatting the remote web driver: ", e);
-
+            System.out.println(getRemoteURL());
+            e.printStackTrace();
         }
-
+        DriverManagerFactory.getManager(type, options).initalizeDriver(url);
         // allows for local files to be uploaded via remote webdriver on grid machines
-        getDriver().setFileDetector();
+        DriverManager.getDriver().setFileDetector();
+        setDriver(DriverManager.getDriver());
     }
 
     /**
@@ -618,7 +603,7 @@ public class WebBaseTest extends BaseTest {
     private void mobileDriverSetup() {
         DesiredCapabilities caps = new DesiredCapabilities();
         // if a device ID is specified, go to that device
-        if (deviceID.isEmpty()) {
+        if (deviceID.get().isEmpty()) {
             // Which mobile OS platform to use, e.g. iOS, Android
             caps.setCapability("platformName", operatingSystem);
             // Mobile OS version, e.g. 7.1, 4.4
@@ -639,58 +624,5 @@ public class WebBaseTest extends BaseTest {
             throw new AutomationException("Could not generate the moblile remote driver", e);
         }
     }
-
-    /**
-     * Used to get the Platform used by Selenium
-     *
-     * @param os
-     * @return
-     */
-    /*
-     * private Platform getGridPlatformByOS(String os) {
-     * Platform.fromString(os);
-     * switch (os.toLowerCase()) {
-     * case "android":
-     * return Platform.ANDROID;
-     * case "windows":
-     * return Platform.WINDOWS;
-     * case "win7":
-     * case "windows 7":
-     * return Platform.VISTA;
-     * case "windows 8":
-     * case "win8":
-     * return Platform.WIN8;
-     * case "windows 8.1":
-     * case "win8.1":
-     * return Platform.WIN8_1;
-     * case "win10":
-     * case "windows 10":
-     * return Platform.WIN10;
-     * case "xp":
-     * return Platform.XP;
-     * case "linux":
-     * return Platform.LINUX;
-     * case "mac":
-     * return Platform.MAC;
-     * case "el capitan":
-     * case "el_capitan":
-     * return Platform.EL_CAPITAN;
-     * case "mavericks":
-     * return Platform.MAVERICKS;
-     * case "mountain lion":
-     * case "mountain_lion":
-     * return Platform.MOUNTAIN_LION;
-     * case "sierra":
-     * return Platform.SIERRA;
-     * case "snow leopard":
-     * case "snow_leopard":
-     * return Platform.SNOW_LEOPARD;
-     * case "yosemite":
-     * return Platform.YOSEMITE;
-     * default:
-     * throw new AutomationException("OS is not in supported list of platforms: " + os);
-     * }
-     * }
-     */
 
 }

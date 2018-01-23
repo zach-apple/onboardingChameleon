@@ -43,7 +43,7 @@ public class FileLoader {
         }
 
         logTrace("Attempting to load file from path [ " + filePath + " ]");
-        FileReader fileReader = new FileReader(getAbosutePathForResource(filePath));
+        FileReader fileReader = new FileReader(getAbsolutePathForResource(filePath));
         logTrace("Successfully loaded file into FileReader");
 
         logTrace("Loading FileReader object into BufferedReader");
@@ -72,11 +72,14 @@ public class FileLoader {
         return readable;
     }
 
-    public static String getAbosutePathForResource(String filePath) {
-        URL file = FileLoader.class.getResource(filePath);
-        if (null == file) {
+    public static String getAbsolutePathForResource(String filePath) {
+        URL url = FileLoader.class.getResource(filePath);
+        if (null == url) {
             return filePath;
         }
+
+        File file = new File(url.getPath());
+
         return file.getPath();
     }
 }

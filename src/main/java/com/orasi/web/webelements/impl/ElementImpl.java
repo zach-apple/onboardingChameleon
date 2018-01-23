@@ -27,7 +27,6 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.internal.Coordinates;
-import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -246,8 +245,7 @@ public class ElementImpl implements Element {
 	@Override
     public Element findElement(By by) {
         logTrace("Entering ElementImpl#findElement");
-        WebElement webElement = getWrappedElement().findElement(by);
-        Element element = new ElementImpl(this.driver,by,webElement);
+        Element element = new ElementImpl(this.driver, by);
         logTrace("Exiting ElementImpl#findElement");
         return element;
     }
@@ -416,14 +414,6 @@ public class ElementImpl implements Element {
             }
         }
         return driver;
-    }
-
-    /**
-     * @see org.openqa.selenium.internal.Locatable#getCoordinates();
-     */
-    @Override
-    public Coordinates getCoordinates() {
-        return ((Locatable) getWrappedElement()).getCoordinates();
     }
 
     @Override
@@ -1415,6 +1405,12 @@ public class ElementImpl implements Element {
 
     @Override
     public Rectangle getRect() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Coordinates getCoordinates() {
         // TODO Auto-generated method stub
         return null;
     }

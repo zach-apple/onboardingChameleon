@@ -16,13 +16,17 @@ import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.SkipException;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import com.orasi.DriverManager;
+import com.orasi.DriverManagerFactory;
+import com.orasi.DriverOptionsManager;
+import com.orasi.DriverType;
 import com.orasi.utils.Base64Coder;
 import com.orasi.utils.Constants;
 import com.orasi.utils.Sleeper;
@@ -60,7 +64,7 @@ public class TestOrasiDriver extends WebBaseTest {
     String operatingSystem = "";
     String environment = "";
 
-    @BeforeTest(groups = { "regression", "utils", "orasidriver" })
+    @BeforeClass(groups = { "regression", "utils", "orasidriver" })
     @Parameters({ "runLocation", "browserUnderTest", "browserVersion", "operatingSystem", "environment" })
     public void setup(@Optional String runLocation, String browserUnderTest, String browserVersion,
             String operatingSystem, String environment) {
@@ -93,37 +97,33 @@ public class TestOrasiDriver extends WebBaseTest {
         this.environment = environment;
         caps = new DesiredCapabilities();
         caps.setCapability("ignoreZoomSetting", true);
-        caps.setCapability(CapabilityType.BROWSER_NAME, this.browserUnderTest);
+        caps.setCapability(CapabilityType.BROWSER_NAME, this.browserUnderTest.equalsIgnoreCase("html") ? "firefox" : this.browserUnderTest);
         caps.setCapability(CapabilityType.VERSION, browserVersion);
         caps.setCapability(CapabilityType.PLATFORM, operatingSystem);
         caps.setCapability("enablePersistentHover", false);
         caps.setCapability("name", "TestOrasiDriver");
         setRunLocation(runLocation);
         if (runLocation.toLowerCase().equals("local")) {
-            if (browserUnderTest.equalsIgnoreCase("IE")
-                    || browserUnderTest.replace(" ", "").equalsIgnoreCase("internetexplorer")) {
-                file = new File(
-                        this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "IEDriverServer.exe").getPath());
-                System.setProperty("webdriver.ie.driver", file.getAbsolutePath());
-            } else if (browserUnderTest.equalsIgnoreCase("Chrome")) {
-                file = new File(
-                        this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "ChromeDriver.exe").getPath());
-                System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
-            } else if (browserUnderTest.replace(" ", "").equalsIgnoreCase("microsoftedge")) {
-                file = new File(
-                        this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "MicrosoftWebDriver.exe").getPath());
-                System.setProperty("webdriver.edge.driver", file.getAbsolutePath());
+
+            if (DriverType.HTML.equals(DriverType.fromString(this.browserUnderTest))) {
+                DriverOptionsManager options = new DriverOptionsManager();
+                options.getFirefoxOptions().setHeadless(true);
+                setBrowserUnderTest("firefox");
+                DriverManagerFactory.getManager(DriverType.fromString("firefox"), options).initalizeDriver();
+            } else {
+                DriverManagerFactory.getManager(DriverType.fromString(this.browserUnderTest)).initalizeDriver();
             }
-            driver = new OrasiDriver(caps);
+            driver = DriverManager.getDriver();
         } else {
-            WebBaseTest te = new WebBaseTest("", getBrowserUnderTest(), browserVersion, operatingSystem,
+            WebBaseTest te = new WebBaseTest("", browserUnderTest, browserVersion, operatingSystem,
                     runLocation, environment);
             try {
-                driver = new OrasiDriver(caps, new URL(te.getRemoteURL()));
+                DriverManagerFactory.getManager(DriverType.fromString(browserUnderTest)).initalizeDriver(new URL(te.getRemoteURL()));
             } catch (MalformedURLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+            driver = DriverManager.getDriver();
         }
         setDriver(driver);
         driver.get("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/testsite.html");
@@ -151,7 +151,7 @@ public class TestOrasiDriver extends WebBaseTest {
 
     }
 
-    @AfterTest(groups = { "regression", "utils", "orasidriver" })
+    @AfterClass(groups = { "regression", "utils", "orasidriver" })
     public void close(ITestContext testResults) {
         if (runLocation.equalsIgnoreCase("sauce")) {
             if (testResults.getFailedTests().size() == 0) {
@@ -404,9 +404,7 @@ public class TestOrasiDriver extends WebBaseTest {
     @Title("executeAsyncJavaScript")
     @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "findLink")
     public void executeAsyncJavaScript() {
-        if (browserUnderTest.toLowerCase().equals("html") || browserUnderTest.isEmpty()) {
-            throw new SkipException("Test not valid for HTMLUnitDriver");
-        }
+
         driver.get("http://cafetownsend-angular-rails.herokuapp.com/login");
         driver.executeAsyncJavaScript(
                 "var callback = arguments[arguments.length - 1];angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
