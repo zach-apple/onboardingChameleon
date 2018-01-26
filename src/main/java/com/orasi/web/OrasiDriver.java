@@ -28,6 +28,7 @@ import org.openqa.selenium.safari.SafariDriver;
 
 import com.orasi.DriverType;
 import com.orasi.utils.Constants;
+import com.orasi.utils.JavaUtilities;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataHelpers.DataWarehouse;
 import com.orasi.web.debugging.Colors;
@@ -638,7 +639,11 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      * @see https://github.com/SeleniumHQ/selenium/blob/master/java/client/src/org/openqa/selenium/remote/SessionId.java
      */
     public String getSessionId() {
-        return getRemoteWebDriver().getSessionId().toString();
+    	if (JavaUtilities.isValid(getRemoteWebDriver().getSessionId())) {
+    		return getRemoteWebDriver().getSessionId().toString();
+    	} else {
+    		return null;
+    	}   	
     }
 
     /**

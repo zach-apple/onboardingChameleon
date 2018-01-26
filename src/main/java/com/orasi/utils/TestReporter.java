@@ -533,26 +533,30 @@ public class TestReporter {
     public static void logConsoleErrors(OrasiDriver driver) {
         // Only capture logs for chrome browser
         if (driver != null) {
-            if (driver.getDriverCapability().browserName().equalsIgnoreCase("chrome")) {
-                Reporter.log("<br/><b><font size = 4>Chrome Browser Console errors: </font></b><br/>");
-                LogEntries logs = driver.manage().logs().get("browser");
-                List<LogEntry> logList = logs.getAll();
-                String color = "red";
-                // Go through all the log entries, and only output the severe level errors (rest are most likely warnings)
-                boolean flag = false;
-                for (LogEntry entry : logList) {
-                    if (entry.getLevel() == Level.SEVERE) {
-                        Reporter.log(" <font size = 2 color=\"" + color + "\"><b> Level :: " + entry.getLevel().getName()
-                                + "</font></b><br />");
-                        Reporter.log(" <font size = 2 color=\"" + color + "\"><b> Message :: " + entry.getMessage()
-                                + "</font></b><br />");
-                        flag = true;
+            if (driver.getDriverCapability().browserName().equalsIgnoreCase("chrome")) { 
+    		    if (driver.getSessionId()!= null) {
+    		    	Reporter.log("<br/><b><font size = 4>Chrome Browser Console errors: </font></b><br/>");
+                    LogEntries logs = driver.manage().logs().get("browser");
+                    List<LogEntry> logList = logs.getAll();
+                    String color = "red";
+                    // Go through all the log entries, and only output the severe level errors (rest are most likely warnings)
+                    boolean flag = false;
+                    for (LogEntry entry : logList) {
+                        if (entry.getLevel() == Level.SEVERE) {
+                            Reporter.log(" <font size = 2 color=\"" + color + "\"><b> Level :: " + entry.getLevel().getName()
+                                    + "</font></b><br />");
+                            Reporter.log(" <font size = 2 color=\"" + color + "\"><b> Message :: " + entry.getMessage()
+                                    + "</font></b><br />");
+                            flag = true;
+                        }
                     }
-                }
 
-                if (!flag) {
-                    Reporter.log("NO ERRORS");
-                }
+                    if (!flag) {
+                        Reporter.log("NO ERRORS");
+                    }
+    		    } else {
+    		    	TestReporter.log("Driver session ID was null, could not log console errors");
+    		    }               
             }
         } else {
             TestReporter.log("Driver was null, could not capture console errors");

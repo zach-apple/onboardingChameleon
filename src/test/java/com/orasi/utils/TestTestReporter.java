@@ -11,6 +11,7 @@ import org.testng.ITestResult;
 import org.testng.Reporter;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.orasi.api.restServices.RestResponse;
@@ -23,18 +24,19 @@ import com.orasi.web.WebBaseTest;
 
 public class TestTestReporter extends WebBaseTest {
     OrasiDriver driver = null;
+    
+    @BeforeMethod()
+    public void setup() {
+    	setApplicationUnderTest("Test Site");
+        setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/listbox.html");
+    }
 
     @AfterClass
     public void cleanup() {
         TestReporter.setDebugLevel(0);
-        driver.quit();
+        //driver.quit();
     }
-
-    @Override
-    @AfterMethod(alwaysRun = true)
-    public void afterMethod(ITestResult testResults) {
-    }
-
+    
     @Test
     public void testAssertEquals() {
         String log = "testAssertEquals";
@@ -393,11 +395,19 @@ public class TestTestReporter extends WebBaseTest {
 
     @Test(dependsOnMethods = { "testLogConsoleLogsNoErrors" })
     public void testLogConsoleLogsWithErrors() {
+    	driver = testStart("console");
         TestReporter.setDebugLevel(2);
         String log = "Chrome Browser Console errors";
         driver.executeJavaScript("console.error('blah')");
         TestReporter.logConsoleErrors(driver);
         Assert.assertTrue(logHelper(Reporter.getOutput(), log));
+    }
+    
+    @Test()
+    public void testLogConsoleErrorSessionIDNull() {
+    	driver = testStart("console");
+    	driver.quit();
+    	TestReporter.logConsoleErrors(driver);
     }
 
     @Test
