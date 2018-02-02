@@ -6,37 +6,29 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.testng.ITestResult;
 import org.testng.Reporter;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import com.orasi.BaseTest;
+import com.orasi.DriverManager;
+import com.orasi.DriverManagerFactory;
+import com.orasi.DriverOptionsManager;
+import com.orasi.DriverType;
 import com.orasi.api.restServices.RestResponse;
 import com.orasi.api.restServices.RestService;
 import com.orasi.api.restServices.exceptions.RestException;
 import com.orasi.api.soapServices.exceptions.SoapException;
 import com.orasi.api.soapServices.helpers.GetInfoByZip;
 import com.orasi.web.OrasiDriver;
-import com.orasi.web.WebBaseTest;
 
-public class TestTestReporter extends WebBaseTest {
-    OrasiDriver driver = null;
-    
-    @BeforeMethod()
-    public void setup() {
-    	setApplicationUnderTest("Test Site");
-        setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/listbox.html");
+public class TestTestReporter extends BaseTest {
+    private URL sauceUrl = null;
+    private String siteUrl = "http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/listbox.html";
+
+    public TestTestReporter() throws MalformedURLException {
+        sauceUrl = new URL("http://OrasiTesting:f0a63584-f52e-4d4b-9002-d7aeed40e4c3@ondemand.saucelabs.com:80/wd/hub");
     }
 
-    @AfterClass
-    public void cleanup() {
-        TestReporter.setDebugLevel(0);
-        //driver.quit();
-    }
-    
     @Test
     public void testAssertEquals() {
         String log = "testAssertEquals";
@@ -363,51 +355,50 @@ public class TestTestReporter extends WebBaseTest {
 
     @Test
     public void testLogScreenshot() {
+        DriverOptionsManager options = new DriverOptionsManager();
+        options.getFirefoxOptions().setHeadless(true);
+        DriverManagerFactory.getManager(DriverType.HTML, options).initalizeDriver(sauceUrl);
 
-        DesiredCapabilities caps = DesiredCapabilities.chrome();
-
-        try {
-            driver = new OrasiDriver(caps, new URL(sauceLabsURL));
-        } catch (MalformedURLException e) {
-        }
-        driver.get("http://www.google.com");
-
+        OrasiDriver driver = DriverManager.getDriver();
+        driver.get(siteUrl);
         TestReporter.logScreenshot(driver, "TestScreenshot");
         if (StringUtils.isEmpty(System.getProperty("jenkinsJobUrl"))) {
             System.setProperty("jenkinsJobUrl", "demo");
             TestReporter.logScreenshot(driver, "TestScreenshot");
         }
+        DriverManager.quitDriver();
     }
 
     @Test(dependsOnMethods = { "testLogScreenshot" })
     public void testLogConsoleLogsNoErrors() {
-        String log = "NO ERRORS";
-        TestReporter.logConsoleErrors(driver);
-        Assert.assertTrue(logHelper(Reporter.getOutput(), log));
-    }
+        String log = "NO LOGS";
+        DriverManagerFactory.getManager(DriverType.CHROME).initalizeDriver(sauceUrl);
 
-    @Test(dependsOnMethods = { "testLogScreenshot" })
-    public void testLogConsoleLogsNullDriver() {
-        String log = "Driver was null, could not capture console errors";
-        TestReporter.logConsoleErrors(null);
+        TestReporter.logConsoleLogging();
+        DriverManager.quitDriver();
         Assert.assertTrue(logHelper(Reporter.getOutput(), log));
     }
 
     @Test(dependsOnMethods = { "testLogConsoleLogsNoErrors" })
     public void testLogConsoleLogsWithErrors() {
-    	driver = testStart("console");
-        TestReporter.setDebugLevel(2);
-        String log = "Chrome Browser Console errors";
+        DriverManagerFactory.getManager(DriverType.CHROME).initalizeDriver(sauceUrl);
+        OrasiDriver driver = DriverManager.getDriver();
+
+        driver.get(siteUrl);
+        String log = "Chrome Browser Console logs for level";
         driver.executeJavaScript("console.error('blah')");
-        TestReporter.logConsoleErrors(driver);
+        TestReporter.logConsoleLogging();
+        DriverManager.quitDriver();
         Assert.assertTrue(logHelper(Reporter.getOutput(), log));
     }
-    
+
     @Test()
     public void testLogConsoleErrorSessionIDNull() {
-    	driver = testStart("console");
-    	driver.quit();
-    	TestReporter.logConsoleErrors(driver);
+        DriverManagerFactory.getManager(DriverType.CHROME).initalizeDriver(sauceUrl);
+        OrasiDriver driver = DriverManager.getDriver();
+        driver.get(siteUrl);
+        driver.quit();
+        TestReporter.logConsoleLogging();
     }
 
     @Test

@@ -86,7 +86,7 @@ public class TestListener extends TestListenerAdapter implements IReporter {
             // }
 
             // Log any console errors
-            TestReporter.logConsoleErrors(driver);
+            TestReporter.logConsoleLogging();
 
             if (reportToMustard) {
                 String screenshot = null;
