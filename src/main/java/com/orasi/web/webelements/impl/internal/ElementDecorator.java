@@ -158,7 +158,7 @@ public class ElementDecorator implements FieldDecorator {
     @SuppressWarnings("unchecked")
     protected <T> List<T> proxyForListLocator(ClassLoader loader, Class<T> interfaceType, ElementLocator locator, OrasiDriver driver) {
         InvocationHandler handler;
-        if (interfaceType.getName().contains("orasi")) {
+        if (Element.class.isAssignableFrom(interfaceType)) {
             handler = new ElementListHandler(interfaceType, locator, driver);
         } else {
             handler = new LocatingElementListHandler(locator);
