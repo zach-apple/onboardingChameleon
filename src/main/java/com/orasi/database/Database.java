@@ -110,7 +110,7 @@ public abstract class Database {
             Class.forName(driver);
             logTrace("Successfully loaded driver [ " + driver + " ]");
         } catch (ClassNotFoundException cnfe) {
-            throw new DatabaseException("Error loading driver", cnfe);
+            throw new DatabaseException("Driver class not found. Ensure requested driver jar is referenced in POM", cnfe);
         }
         logTrace("Exiting Database#loadDriver");
     }
