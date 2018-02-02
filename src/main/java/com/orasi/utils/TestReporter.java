@@ -18,8 +18,8 @@ import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.testng.Assert;
 import org.testng.Reporter;
+import org.testng.TestNGException;
 
-import com.orasi.AutomationException;
 import com.orasi.api.restServices.RestResponse;
 import com.orasi.api.restServices.exceptions.RestException;
 import com.orasi.api.soapServices.SoapService;
@@ -454,7 +454,11 @@ public class TestReporter {
             file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             FileUtils.copyFile(file, new File(fileLocation));
         } catch (IOException e) {
-            throw new AutomationException("Failed to capture screenshot", e);
+            TestReporter.log("Screenshot was not captured - IOException: " + e.getMessage());
+        } catch (TestNGException te) {
+            TestReporter.log("Screenshot was not captured - TestNGException: " + te.getMessage());
+        } catch (Exception e) {
+            TestReporter.log("Screenshot was not captured: " + e.getMessage());
         }
 
         String jenkinsPath = System.getProperty("jenkinsJobUrl");
@@ -533,9 +537,9 @@ public class TestReporter {
     public static void logConsoleErrors(OrasiDriver driver) {
         // Only capture logs for chrome browser
         if (driver != null) {
-            if (driver.getDriverCapability().browserName().equalsIgnoreCase("chrome")) { 
-    		    if (driver.getSessionId()!= null) {
-    		    	Reporter.log("<br/><b><font size = 4>Chrome Browser Console errors: </font></b><br/>");
+            if (driver.getDriverCapability().browserName().equalsIgnoreCase("chrome")) {
+                if (driver.getSessionId() != null) {
+                    Reporter.log("<br/><b><font size = 4>Chrome Browser Console errors: </font></b><br/>");
                     LogEntries logs = driver.manage().logs().get("browser");
                     List<LogEntry> logList = logs.getAll();
                     String color = "red";
@@ -554,9 +558,9 @@ public class TestReporter {
                     if (!flag) {
                         Reporter.log("NO ERRORS");
                     }
-    		    } else {
-    		    	TestReporter.log("Driver session ID was null, could not log console errors");
-    		    }               
+                } else {
+                    TestReporter.log("Driver session ID was null, could not log console errors");
+                }
             }
         } else {
             TestReporter.log("Driver was null, could not capture console errors");
