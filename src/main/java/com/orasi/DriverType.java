@@ -1,7 +1,15 @@
 package com.orasi;
 
 public enum DriverType {
-    CHROME("chrome", "ch"), FIREFOX("firefox", "ff"), INTERNETEXPLORER("internetexplorer", "ie", "iexplorer"), SAFARI("safari"), EDGE("edge", "microsoftedge"), ANDROID("android"), IOS("ios"), APPIUM("appium"), HTML("html");
+    CHROME("chrome", "ch"),
+    FIREFOX("firefox", "ff"),
+    INTERNETEXPLORER("internetexplorer", "ie", "iexplorer"),
+    SAFARI("safari"),
+    EDGE("edge", "microsoftedge"),
+    ANDROID("android"),
+    IOS("ios"),
+    APPIUM("appium"),
+    HTML("html");
 
     private final String[] driverType;
 

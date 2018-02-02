@@ -9,6 +9,8 @@ import org.openqa.selenium.safari.SafariOptions;
 
 import com.orasi.DriverManager;
 import com.orasi.DriverType;
+import com.orasi.web.WebDriverConstants;
+import com.orasi.web.WebException;
 
 public class SafariDriverManager extends DriverManager {
 
@@ -29,11 +31,11 @@ public class SafariDriverManager extends DriverManager {
             try {
                 service = new SafariDriverService.Builder()
                         .usingAnyFreePort()
-                        .usingTechnologyPreview(true)
+                        .usingTechnologyPreview(WebDriverConstants.SAFARI_USE_TECHNOLOGY_PREVIEW)
                         .build();
                 service.start();
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new WebException("Failed to start Safari driver service", e);
             }
         }
     }

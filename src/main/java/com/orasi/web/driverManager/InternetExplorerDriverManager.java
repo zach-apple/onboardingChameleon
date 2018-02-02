@@ -11,6 +11,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import com.orasi.DriverManager;
 import com.orasi.DriverType;
 import com.orasi.web.WebDriverConstants;
+import com.orasi.web.WebException;
 
 public class InternetExplorerDriverManager extends DriverManager {
 
@@ -37,7 +38,7 @@ public class InternetExplorerDriverManager extends DriverManager {
                         .build();
                 service.start();
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new WebException("Failed to start Internet Explorer driver service", e);
             }
         }
     }
