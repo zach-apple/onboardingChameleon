@@ -8,7 +8,7 @@
 	
 	<parameter name="browserUnderTest" value="html" />
 	<parameter name="environment" value="blah" />
-	<parameter name="runLocation" value="sauce" />
+	<parameter name="runLocation" value="local" />
 	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="windows 10" />
     <test name="Element" parallel="methods" thread-count="10">

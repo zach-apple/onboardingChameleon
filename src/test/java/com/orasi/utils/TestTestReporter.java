@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.Reporter;
 import org.testng.annotations.AfterClass;
@@ -24,19 +25,25 @@ import com.orasi.web.WebBaseTest;
 
 public class TestTestReporter extends WebBaseTest {
     OrasiDriver driver = null;
-    
+
     @BeforeMethod()
     public void setup() {
-    	setApplicationUnderTest("Test Site");
+        setApplicationUnderTest("Test Site");
         setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/listbox.html");
     }
 
-    @AfterClass
-    public void cleanup() {
-        TestReporter.setDebugLevel(0);
-        //driver.quit();
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
     }
-    
+
+    @Override
+    @AfterClass(alwaysRun = true)
+    public void afterClass(ITestContext testResults) {
+        TestReporter.setDebugLevel(0);
+        endTest(getTestName(), testResults);
+    }
+
     @Test
     public void testAssertEquals() {
         String log = "testAssertEquals";
@@ -395,19 +402,19 @@ public class TestTestReporter extends WebBaseTest {
 
     @Test(dependsOnMethods = { "testLogConsoleLogsNoErrors" })
     public void testLogConsoleLogsWithErrors() {
-    	driver = testStart("console");
+        driver = testStart("console");
         TestReporter.setDebugLevel(2);
         String log = "Chrome Browser Console errors";
         driver.executeJavaScript("console.error('blah')");
         TestReporter.logConsoleErrors(driver);
         Assert.assertTrue(logHelper(Reporter.getOutput(), log));
     }
-    
+
     @Test()
     public void testLogConsoleErrorSessionIDNull() {
-    	driver = testStart("console");
-    	driver.quit();
-    	TestReporter.logConsoleErrors(driver);
+        driver = testStart("console");
+        driver.quit();
+        TestReporter.logConsoleErrors(driver);
     }
 
     @Test
