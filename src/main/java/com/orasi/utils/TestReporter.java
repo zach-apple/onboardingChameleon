@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 
 import org.apache.commons.io.FileUtils;
@@ -15,11 +14,13 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.logging.LogEntries;
-import org.openqa.selenium.logging.LogEntry;
 import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.TestNGException;
 
+import com.orasi.AutomationException;
+import com.orasi.DriverManager;
+import com.orasi.DriverType;
 import com.orasi.api.restServices.RestResponse;
 import com.orasi.api.restServices.exceptions.RestException;
 import com.orasi.api.soapServices.SoapService;
@@ -527,43 +528,53 @@ public class TestReporter {
     }
 
     /**
-     * Logs any console errors with level of SEVERE to the test reporter
+     * Logs any console errors with level defined in Constant to the test reporter
      * This functionality is only available in the chrome browser.
-     * IE browser and Firefox do not support at this time (07/21/2017)
+     * IE browser and Firefox do not support at this time as W3C spec is not defined
+     *
+     * @see <a href="https://github.com/w3c/webdriver/issues/406">W3C logging spec can be tracked via https://github.com/w3c/webdriver/issues/406</a>
      *
      * @date 07/21/2017
-     * @param driver
      */
-    public static void logConsoleErrors(OrasiDriver driver) {
-        // Only capture logs for chrome browser
-        if (driver != null) {
-            if (driver.getDriverCapability().browserName().equalsIgnoreCase("chrome")) {
-                if (driver.getSessionId() != null) {
-                    Reporter.log("<br/><b><font size = 4>Chrome Browser Console errors: </font></b><br/>");
-                    LogEntries logs = driver.manage().logs().get("browser");
-                    List<LogEntry> logList = logs.getAll();
-                    String color = "red";
-                    // Go through all the log entries, and only output the severe level errors (rest are most likely warnings)
-                    boolean flag = false;
-                    for (LogEntry entry : logList) {
-                        if (entry.getLevel() == Level.SEVERE) {
-                            Reporter.log(" <font size = 2 color=\"" + color + "\"><b> Level :: " + entry.getLevel().getName()
-                                    + "</font></b><br />");
-                            Reporter.log(" <font size = 2 color=\"" + color + "\"><b> Message :: " + entry.getMessage()
-                                    + "</font></b><br />");
-                            flag = true;
-                        }
-                    }
+    public static void logConsoleLogging() {
+        logConsoleLogging(Constants.DEFAULT_BROWSER_LOGGING_LEVEL);
+    }
 
-                    if (!flag) {
-                        Reporter.log("NO ERRORS");
-                    }
+    /**
+     * Logs any console errors with level of SEVERE to the test reporter
+     * This functionality is only available in the chrome browser.
+     * IE browser and Firefox do not support at this time as W3C spec is not defined
+     *
+     * @see <a href="https://github.com/w3c/webdriver/issues/406">W3C logging spec can be tracked via https://github.com/w3c/webdriver/issues/406</a>
+     *
+     * @date 07/21/2017
+     * @param level
+     */
+    public static void logConsoleLogging(Level level) {
+        // Only capture logs for chrome browser
+        OrasiDriver driver = null;
+        try {
+            driver = DriverManager.getDriver();
+            if (DriverType.CHROME.equals(driver.getDriverType())
+                    && driver.getSessionId() != null) {
+                Reporter.log("<br/><b><font size = 4>Chrome Browser Console logs for level [ " + level.getName() + " ] </font></b><br/>");
+                LogEntries logs = driver.manage().logs().get("browser");
+
+                if (logs.getAll().isEmpty()) {
+                    Reporter.log("NO LOGS");
                 } else {
-                    TestReporter.log("Driver session ID was null, could not log console errors");
+                    // Go through all the log entries, and only output the desired level errors
+                    logs.forEach(log -> {
+                        if (log.getLevel() == level) {
+                            Reporter.log(" <font size = 2 color=\"red\"><b> Level :: " + log.getLevel().getName() + "</font></b><br />");
+                            Reporter.log(" <font size = 2 color=\"red\"><b> Message :: " + log.getMessage() + "</font></b><br />");
+                        }
+                    });
+
                 }
             }
-        } else {
-            TestReporter.log("Driver was null, could not capture console errors");
+
+        } catch (AutomationException e) {
         }
     }
 }
