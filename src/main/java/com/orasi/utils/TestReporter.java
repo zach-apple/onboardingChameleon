@@ -16,6 +16,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.logging.LogEntries;
 import org.testng.Assert;
 import org.testng.Reporter;
+import org.testng.TestNGException;
 
 import com.orasi.AutomationException;
 import com.orasi.DriverManager;
@@ -454,7 +455,11 @@ public class TestReporter {
             file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             FileUtils.copyFile(file, new File(fileLocation));
         } catch (IOException e) {
-            throw new AutomationException("Failed to capture screenshot", e);
+            TestReporter.log("Screenshot was not captured - IOException: " + e.getMessage());
+        } catch (TestNGException te) {
+            TestReporter.log("Screenshot was not captured - TestNGException: " + te.getMessage());
+        } catch (Exception e) {
+            TestReporter.log("Screenshot was not captured: " + e.getMessage());
         }
 
         String jenkinsPath = System.getProperty("jenkinsJobUrl");
@@ -565,6 +570,7 @@ public class TestReporter {
                             Reporter.log(" <font size = 2 color=\"red\"><b> Message :: " + log.getMessage() + "</font></b><br />");
                         }
                     });
+
                 }
             }
 

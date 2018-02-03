@@ -27,7 +27,6 @@ public class TestTestReporter extends BaseTest {
 
     public TestTestReporter() throws MalformedURLException {
         sauceUrl = new URL("http://OrasiTesting:f0a63584-f52e-4d4b-9002-d7aeed40e4c3@ondemand.saucelabs.com:80/wd/hub");
-    }
 
     @Test
     public void testAssertEquals() {

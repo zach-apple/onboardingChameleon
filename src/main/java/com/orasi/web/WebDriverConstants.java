@@ -16,6 +16,7 @@ public class WebDriverConstants {
     public final static String DRIVER_EXE_NAME_EDGE = "MicrosofWebDriver";
     public final static String DRIVER_EXE_NAME_FIREFOX = "geckodriver";
     public final static String DRIVER_EXE_NAME_INTERNET_EXPLORER = "IEDriverServer";
+    public final static String DRIVER_EXE_NAME_SAFARI = "IEDriverServer";
 
     public final static String SCREENSHOT_FOLDER = CURRENT_DIR + "selenium-reports" + DIR_SEPARATOR + "html" + DIR_SEPARATOR + "screenshots";
     public final static long DEFAULT_GLOBAL_DRIVER_TIMEOUT = 10000;
@@ -28,5 +29,7 @@ public class WebDriverConstants {
     public final static PageLoadStrategy DEFAULT_FIREFOX_PAGE_LOAD_STRATEGY = PageLoadStrategy.NONE;
     public final static PageLoadStrategy DEFAULT_INTERNET_EXPLORER_PAGE_LOAD_STRATEGY = PageLoadStrategy.NONE;
     public final static PageLoadStrategy DEFAULT_SAFARI_PAGE_LOAD_STRATEGY = PageLoadStrategy.NONE;
+
+    public static boolean SAFARI_USE_TECHNOLOGY_PREVIEW = true;
 
 }

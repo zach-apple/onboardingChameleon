@@ -2,6 +2,7 @@ package com.orasi;
 
 import java.net.URL;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.openqa.selenium.WebDriver;
 
 import com.orasi.utils.Constants;
@@ -52,7 +53,19 @@ public abstract class DriverManager {
     }
 
     protected String getDriverLocation(String filename) {
-        return FileLoader.getAbsolutePathForResource(Constants.CURRENT_DIR + Constants.DRIVERS_PATH_LOCAL + filename + ".exe");
+        String fileType = "";
+        String osFolder = "";
+        
+        if(SystemUtils.IS_OS_WINDOWS) {
+            osFolder = "windows/";
+            fileType = ".exe";
+        }else if(SystemUtils.IS_OS_LINUX) {
+            osFolder = "linux/";
+        }
+        
+        String filePath = Constants.CURRENT_DIR + Constants.DRIVERS_PATH_LOCAL + osFolder+filename + fileType;
+        
+        return FileLoader.getAbsolutePathForResource(filePath);
     }
 
     private void createOrasiDriver() {
@@ -64,4 +77,5 @@ public abstract class DriverManager {
         driver.setDriverType(getDriverType());
         orasiDriver.set(driver);
     }
+    
 }

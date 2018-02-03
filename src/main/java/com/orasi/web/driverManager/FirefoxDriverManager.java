@@ -12,6 +12,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import com.orasi.DriverManager;
 import com.orasi.DriverType;
 import com.orasi.web.WebDriverConstants;
+import com.orasi.web.WebException;
 
 public class FirefoxDriverManager extends DriverManager {
 
@@ -42,7 +43,7 @@ public class FirefoxDriverManager extends DriverManager {
                         .build();
                 service.start();
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new WebException("Failed to start Gecko/Firefox driver service", e);
             }
         }
     }

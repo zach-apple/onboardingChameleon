@@ -17,6 +17,7 @@ public class DriverManagerFactory {
                 driverManager = new ChromeDriverManager();
                 break;
             case FIREFOX:
+            case HTML:
                 driverManager = new FirefoxDriverManager();
                 break;
             case EDGE:

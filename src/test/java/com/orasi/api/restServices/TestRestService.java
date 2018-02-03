@@ -12,6 +12,7 @@ import com.orasi.api.APIBaseTest;
 import com.orasi.api.restServices.Headers.HeaderType;
 import com.orasi.api.restServices.exceptions.RestException;
 import com.orasi.api.restServices.helpers.PostRequest;
+import com.orasi.utils.Sleeper;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
@@ -307,8 +308,7 @@ public class TestRestService extends APIBaseTest {
     @Title("getJsonFromObjectExpectError")
     @Test(expectedExceptions = RestException.class)
     public void getJsonFromObjectExpectError() {
-        RestService rest = new RestService();
-        RestService.getJsonFromObject(rest);
+        RestService.getJsonFromObject(new Sleeper());
     }
 
     @Features("API")
