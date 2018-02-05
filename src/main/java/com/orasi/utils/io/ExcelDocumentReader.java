@@ -8,6 +8,7 @@ import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -117,24 +118,20 @@ public class ExcelDocumentReader {
 
     private static Sheet openWorkbook(String filepath, String sheetName) {
         Sheet excelWSheet = null;
-        try (Workbook excelWBook = (filepath.toUpperCase().indexOf(".XLSX") > 0
-                ? new XSSFWorkbook(FileLoader.getAbsolutePathForResource(filepath)) // Opening XLSX
-                : new HSSFWorkbook(new FileInputStream(FileLoader.getAbsolutePathForResource(filepath))))) { // Opening XLS
-            if (StringUtils.isNumeric(sheetName)) {
-                excelWSheet = excelWBook.getSheetAt(Integer.valueOf(sheetName));
-            } else {
-                excelWSheet = excelWBook.getSheet(sheetName);
-            }
+        try (InputStream is = new FileInputStream(FileLoader.getAbsolutePathForResource(filepath));
+                Workbook excelWBook = (filepath.toUpperCase().indexOf(".XLSX") > 0
+                ? new XSSFWorkbook(is) // Opening XLSX
+                : new HSSFWorkbook(is))) // Opening XLS 
+        { 
+            //Support ability to retrieve name by name or index           
+            excelWSheet = StringUtils.isNumeric(sheetName) 
+                    ? excelWBook.getSheetAt(Integer.valueOf(sheetName)) 
+                    : excelWBook.getSheet(sheetName);
+            
         } catch (FileNotFoundException e) {
             throw new AutomationException("Failed to locate Excel file");
         } catch (IOException e) {
             throw new AutomationException("Could not read Excel file");
-        } catch (OpenXML4JRuntimeException e) {
-            /**
-             * Closing a workbook that is open from many sources will try to autosave and become locked.
-             * This exception is thrown when this is called in parallel many times
-             * Catch this exception and throw it away by default as we are only reading and not writing.
-             */
         }
         return excelWSheet;
 
