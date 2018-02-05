@@ -1,6 +1,7 @@
 package com.orasi.utils;
 
 import java.io.File;
+import java.util.logging.Level;
 
 public class Constants {
 
@@ -28,6 +29,11 @@ public class Constants {
     public final static String USER_CREDENTIALS_PATH = "UserCredentials";
     public final static String SANDBOX_PATH = "/sandbox/";
     public final static String TNSNAMES_PATH = "/database/";
+
+    /*
+     * Default Browser Console logging level to report in TestReporter.logConsoleLogging
+     */
+    public final static Level DEFAULT_BROWSER_LOGGING_LEVEL = Level.SEVERE;
 
     /**
      * Defaults to "./" if there's an exception of any sort.
