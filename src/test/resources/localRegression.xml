@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
-<suite name="Core-Regression"  parallel="tests" thread-count="1">
+<suite name="Core-Regression"  parallel="tests" thread-count="20">
 	<listeners>
 		<listener class-name="com.orasi.utils.listeners.CustomizedEmailableReport" />
 	</listeners>
@@ -113,7 +113,7 @@
 		</classes>
 	</test>
 
-	<test name="ExcelDocumentReader" parallel="methods" thread-count="1">
+	<test name="ExcelDocumentReader" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.utils.TestExcelDocumentReader" />
 		</classes>
