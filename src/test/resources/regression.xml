@@ -112,7 +112,7 @@
 		</classes>
 	</test>
 	
-	<test name="ExcelDocumentReader" parallel="methods" thread-count="1">
+	<test name="ExcelDocumentReader" parallel="methods" thread-count="20">
 		<classes>
 			<class name="com.orasi.utils.TestExcelDocumentReader" />
 		</classes>
