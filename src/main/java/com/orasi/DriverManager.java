@@ -55,16 +55,18 @@ public abstract class DriverManager {
     protected String getDriverLocation(String filename) {
         String fileType = "";
         String osFolder = "";
-        
-        if(SystemUtils.IS_OS_WINDOWS) {
+
+        if (SystemUtils.IS_OS_WINDOWS) {
             osFolder = "windows/";
             fileType = ".exe";
-        }else if(SystemUtils.IS_OS_LINUX) {
+        } else if (SystemUtils.IS_OS_LINUX) {
             osFolder = "linux/";
+        } else if (SystemUtils.IS_OS_MAC) {
+            osFolder = "mac/";
         }
-        
-        String filePath = Constants.CURRENT_DIR + Constants.DRIVERS_PATH_LOCAL + osFolder+filename + fileType;
-        
+
+        String filePath = Constants.CURRENT_DIR + Constants.DRIVERS_PATH_LOCAL + osFolder + filename + fileType;
+
         return FileLoader.getAbsolutePathForResource(filePath);
     }
 
@@ -77,5 +79,5 @@ public abstract class DriverManager {
         driver.setDriverType(getDriverType());
         orasiDriver.set(driver);
     }
-    
+
 }
