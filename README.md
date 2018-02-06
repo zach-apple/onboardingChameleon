@@ -60,9 +60,9 @@ The capabilities of the Sauce Labs VM farm are harnessed to test the OS-Browser 
 
 * <strong>Sauce Labs:</strong> Contains results for individual tests as well as captures videos and screenshots.
 
-## [TestEnvironment.java](https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/utils/TestEnvironment.java)
+## [WebBaseTest.java](https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/web/WebBaseTest.java)
 
-This class is designed to be extended by test classes and can be passed into page classes. It houses test environment data and remote WebDrivers as well as page class methods used to sync page behavior.  The need for this arose due to the parallel behavior that indicated that WebDriver instances were crossing threads and testing on the wrong os/browser configurations.
+This class is designed to be extended by test classes and can be passed into page classes. It houses test environment data.
 
 Also contained in this class is the determination as to whether the test should be executed locally or remotely based on a TestNG parameter. Once this is established, a webdriver is created and executed appropriately.
 
