@@ -1,6 +1,6 @@
 package com.orasi.utils;
 
-import org.apache.commons.lang.time.StopWatch;
+import org.apache.commons.lang3.time.StopWatch;
 
 public class Sleeper {
     public static void sleep(long millis) {

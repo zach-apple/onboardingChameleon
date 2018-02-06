@@ -8,7 +8,6 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -21,7 +20,7 @@ import com.orasi.web.webelements.impl.internal.ImplementedBy;
  * will be added to all descendants.
  */
 @ImplementedBy(ElementImpl.class)
-public interface Element extends WebElement, WrapsElement, Locatable {
+public interface Element extends WebElement, WrapsElement {
 
     /**
      * @author Justin

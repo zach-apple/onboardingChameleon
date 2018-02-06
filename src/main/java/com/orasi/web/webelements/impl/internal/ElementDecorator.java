@@ -10,7 +10,6 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
@@ -108,8 +107,7 @@ public class ElementDecorator implements FieldDecorator {
             return false;
         }
 
-        @SuppressWarnings("rawtypes")
-        Class erasureClass = getErasureClass(field);
+        @SuppressWarnings("rawtypes") Class erasureClass = getErasureClass(field);
         if (erasureClass == null) {
             return false;
         }
@@ -136,7 +134,7 @@ public class ElementDecorator implements FieldDecorator {
         T proxy;
         logTrace("Create element proxy with ElementHandler information");
         proxy = interfaceType.cast(Proxy.newProxyInstance(
-                loader, new Class[] { interfaceType, WebElement.class, WrapsElement.class, Locatable.class }, handler));
+                loader, new Class[] { interfaceType, WebElement.class, WrapsElement.class }, handler));
         logTrace("Successfully created element proxy");
         logTrace("Exiting ElementDecorator#proxyForLocator");
         return proxy;

@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.naming.directory.NoSuchAttributeException;
 
-import org.apache.commons.collections.list.FixedSizeList;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
@@ -19,6 +18,7 @@ import com.orasi.web.webelements.RadioGroup;
 /**
  * Wrapper around a WebElement for the Select class in Selenium.
  */
+@SuppressWarnings("unchecked")
 public class RadioGroupImpl extends ElementImpl implements RadioGroup {
     private List<WebElement> radioButtons = null;
     private int numberOfRadioButtons;
@@ -99,10 +99,9 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
      *          radio group
      */
     @Override
-    @SuppressWarnings("unchecked")
     public List<String> getAllOptions() {
         logTrace("Entering RadioGroupImpl#getAllOptions");
-        stringOptions = FixedSizeList.decorate(Arrays.asList(new String[radioButtons.size()]));
+        stringOptions = Arrays.asList(new String[radioButtons.size()]);
         int loopCounter = 0;
 
         for (WebElement option : radioButtons) {
