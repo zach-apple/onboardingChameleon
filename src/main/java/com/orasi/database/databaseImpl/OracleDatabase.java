@@ -18,7 +18,6 @@ public class OracleDatabase extends Database {
 
     public OracleDatabase(String host, String port, String sid) {
         super.driver = "oracle.jdbc.driver.OracleDriver";
-        super.connectionString = "jdbc:oracle:thin:@" + host + ":" + port + ":"
-                + sid;
+        super.connectionString = "jdbc:oracle:thin:@" + host + ":" + port + "/" + sid;
     }
 }

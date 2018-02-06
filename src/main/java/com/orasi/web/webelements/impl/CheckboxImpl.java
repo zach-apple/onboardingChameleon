@@ -4,6 +4,7 @@ import static com.orasi.utils.TestReporter.interfaceLog;
 import static com.orasi.utils.TestReporter.logTrace;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import com.orasi.web.OrasiDriver;
 import com.orasi.web.webelements.Checkbox;
@@ -23,6 +24,10 @@ public class CheckboxImpl extends ElementImpl implements Checkbox {
         super(driver, by);
     }
 
+    public CheckboxImpl(OrasiDriver driver, By by, WebElement element) {
+        super(driver, by, element);
+    }
+
     @Override
     public void toggle() {
         logTrace("Entering CheckboxImpl#toggle");
@@ -33,7 +38,7 @@ public class CheckboxImpl extends ElementImpl implements Checkbox {
     @Override
     public void jsToggle() {
         logTrace("Entering CheckboxImpl#jsToggle");
-        getWrappedDriver().executeJavaScript("if( document.createEvent ) {var click_ev = document.createEvent('MouseEvents'); click_ev.initEvent('click', true , true )"
+        driver.executeJavaScript("if( document.createEvent ) {var click_ev = document.createEvent('MouseEvents'); click_ev.initEvent('click', true , true )"
                 + ";arguments[0].dispatchEvent(click_ev);} else { arguments[0].click();}", element);
         logTrace("Exiting CheckboxImpl#jsToggle");
     }

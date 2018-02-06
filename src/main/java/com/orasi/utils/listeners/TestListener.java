@@ -14,7 +14,6 @@ import java.util.List;
 
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.remote.Augmenter;
 import org.testng.IInvokedMethod;
 import org.testng.IReporter;
@@ -48,7 +47,7 @@ public class TestListener extends TestListenerAdapter implements IReporter {
 
         try {
             reportToMustard = ((BaseTest) currentClass).isReportingToMustard();
-            runLocation = ((BaseTest) currentClass).getRunLocation().toLowerCase();
+            runLocation = ((WebBaseTest) currentClass).getRunLocation().toLowerCase();
         } catch (Exception e) {
         }
 
@@ -73,21 +72,21 @@ public class TestListener extends TestListenerAdapter implements IReporter {
 
         if (driver != null) {
             WebDriver augmentDriver = driver.getWebDriver();
-            if (!(augmentDriver instanceof HtmlUnitDriver)) {
-                if (runLocation == "remote") {
-                    augmentDriver = new Augmenter().augment(driver.getWebDriver());
-                }
-
-                new File(destDir).mkdirs();
-
-                // Capture a screenshot for TestNG reporting
-                TestReporter.logScreenshot(augmentDriver, destFile, slash);
-                // Capture a screenshot for Allure reporting
-                failedScreenshot(augmentDriver);
+            // if (!(augmentDriver instanceof HtmlUnitDriver)) {
+            if (runLocation == "remote") {
+                augmentDriver = new Augmenter().augment(driver.getWebDriver());
             }
 
+            new File(destDir).mkdirs();
+
+            // Capture a screenshot for TestNG reporting
+            TestReporter.logScreenshot(augmentDriver, destFile, slash);
+            // Capture a screenshot for Allure reporting
+            failedScreenshot(augmentDriver);
+            // }
+
             // Log any console errors
-            TestReporter.logConsoleErrors(driver);
+            TestReporter.logConsoleLogging();
 
             if (reportToMustard) {
                 String screenshot = null;

@@ -3,28 +3,38 @@ package com.orasi.web;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.testng.ITestContext;
+import org.testng.ITestResult;
 import org.testng.SkipException;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.orasi.web.FrameHandler;
-import com.orasi.web.WebBaseTest;
+import com.orasi.DriverManager;
+import com.orasi.DriverType;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestFrameHandler extends WebBaseTest {
-    @BeforeTest(groups = { "regression", "utils", "dev", "framehandler" })
+    OrasiDriver driver = null;
+
+    @BeforeClass(groups = { "regression", "utils", "dev", "framehandler" })
     public void setup() {
         setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/utils/frameHandler.html");
-        testStart("TestFrame");
     }
 
-    @AfterTest(groups = { "regression", "utils", "dev" })
-    public void close(ITestContext testResults) {
-        endTest("TestFrame", testResults);
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
+    }
+
+    @Override
+    @AfterClass(alwaysRun = true)
+    public void afterClass(ITestContext testResults) {
+        DriverManager.setDriver(driver);
+        endTest(getTestName(), testResults);
     }
 
     @Features("Utilities")
@@ -33,9 +43,10 @@ public class TestFrameHandler extends WebBaseTest {
     @SuppressWarnings("deprecation")
     @Test(groups = { "regression", "utils", "dev", "framehandler" })
     public void findAndSwitchToFrameFromOutsideFrame() {
-        FrameHandler.findAndSwitchToFrame(getDriver(), "menu_page");
+        driver = testStart("TestFrame");
+        FrameHandler.findAndSwitchToFrame(driver, "menu_page");
         Assert.assertTrue("Link was not found in 'menu_page'",
-                getDriver().findElement(By.id("googleLink")).isDisplayed());
+                driver.findElement(By.id("googleLink")).isDisplayed());
     }
 
     @Features("Utilities")
@@ -45,7 +56,7 @@ public class TestFrameHandler extends WebBaseTest {
             "framehandler" }, dependsOnMethods = "findAndSwitchToFrameFromOutsideFrame")
     public void testGetCurrentFrameName() {
         Assert.assertTrue("Frame name was not 'menu_page' ",
-                FrameHandler.getCurrentFrameName(getDriver()).equals("menu_page"));
+                FrameHandler.getCurrentFrameName(driver).equals("menu_page"));
     }
 
     @Features("Utilities")
@@ -53,8 +64,8 @@ public class TestFrameHandler extends WebBaseTest {
     @Title("testGetDefaultContent")
     @Test(groups = { "regression", "utils", "dev" }, dependsOnMethods = "testGetCurrentFrameName")
     public void testGetDefaultContent() {
-        FrameHandler.moveToDefaultContext(getDriver());
-        Assert.assertNull("Failed to move to default Content", FrameHandler.getCurrentFrameName(getDriver()));
+        FrameHandler.moveToDefaultContext(driver);
+        Assert.assertNull("Failed to move to default Content", FrameHandler.getCurrentFrameName(driver));
     }
 
     @Features("Utilities")
@@ -62,9 +73,9 @@ public class TestFrameHandler extends WebBaseTest {
     @Title("testMoveToChildFrameWithName")
     @Test(groups = { "regression", "utils", "dev" }, dependsOnMethods = "testGetDefaultContent")
     public void testMoveToChildFrameWithName() {
-        FrameHandler.moveToChildFrame(getDriver(), "main_page");
+        FrameHandler.moveToChildFrame(driver, "main_page");
         Assert.assertTrue("Button was not found in frame 'main_page'",
-                FrameHandler.getCurrentFrameName(getDriver()).equals("main_page"));
+                FrameHandler.getCurrentFrameName(driver).equals("main_page"));
     }
 
     @Features("Utilities")
@@ -73,9 +84,9 @@ public class TestFrameHandler extends WebBaseTest {
     @Test(groups = { "regression", "utils", "dev" }, dependsOnMethods = "testMoveToChildFrameWithName")
     public void testMoveToChildFrameWithLocator() {
         By locator = By.name("main_frame1");
-        FrameHandler.moveToChildFrame(getDriver(), locator);
+        FrameHandler.moveToChildFrame(driver, locator);
         Assert.assertTrue("Button was not found in frame 'main_frame1'",
-                FrameHandler.getCurrentFrameName(getDriver()).equals("main_frame1"));
+                FrameHandler.getCurrentFrameName(driver).equals("main_frame1"));
     }
 
     @Features("Utilities")
@@ -83,12 +94,12 @@ public class TestFrameHandler extends WebBaseTest {
     @Title("testMoveToParentFrame")
     @Test(groups = { "regression", "utils", "dev" }, dependsOnMethods = "testMoveToChildFrameWithLocator")
     public void testMoveToParentFrame() {
-        if (this.browserUnderTest.toLowerCase().contains("safari") || getDriver().toString().contains("safari")) {
+        if (DriverType.SAFARI == driver.getDriverType()) {
             throw new SkipException("Test not valid for SafariDriver");
         }
-        FrameHandler.moveToParentFrame(getDriver());
+        FrameHandler.moveToParentFrame(driver);
         Assert.assertTrue("Button was not found in frame 'main_page'",
-                FrameHandler.getCurrentFrameName(getDriver()).equals("main_page"));
+                FrameHandler.getCurrentFrameName(driver).equals("main_page"));
     }
 
     @Features("Utilities")
@@ -96,13 +107,13 @@ public class TestFrameHandler extends WebBaseTest {
     @Title("testMoveToSiblingFrameWithName")
     @Test(groups = { "regression", "utils", "dev" }, dependsOnMethods = "testMoveToParentFrame")
     public void testMoveToSiblingFrameWithName() {
-        if (this.browserUnderTest.toLowerCase().contains("safari") || getDriver().toString().contains("safari")) {
+        if (DriverType.SAFARI == driver.getDriverType()) {
             throw new SkipException("Test not valid for SafariDriver");
         }
-        FrameHandler.moveToChildFrame(getDriver(), "main_frame1");
-        FrameHandler.moveToSiblingFrame(getDriver(), "main_frame2");
+        FrameHandler.moveToChildFrame(driver, "main_frame1");
+        FrameHandler.moveToSiblingFrame(driver, "main_frame2");
         Assert.assertTrue("Button was not found in frame 'main_page'",
-                FrameHandler.getCurrentFrameName(getDriver()).equals("main_frame2"));
+                FrameHandler.getCurrentFrameName(driver).equals("main_frame2"));
     }
 
     @Features("Utilities")
@@ -110,13 +121,13 @@ public class TestFrameHandler extends WebBaseTest {
     @Title("testMoveToSiblingFrameWithLocator")
     @Test(groups = { "regression", "utils", "dev" }, dependsOnMethods = "testMoveToSiblingFrameWithName")
     public void testMoveToSiblingFrameWithLocator() {
-        if (this.browserUnderTest.toLowerCase().contains("safari") || getDriver().toString().contains("safari")) {
+        if (DriverType.SAFARI == driver.getDriverType()) {
             throw new SkipException("Test not valid for SafariDriver");
         }
         By locator = By.name("main_frame1");
-        FrameHandler.moveToSiblingFrame(getDriver(), locator);
+        FrameHandler.moveToSiblingFrame(driver, locator);
         Assert.assertTrue("Button was not found in frame 'main_frame1'",
-                FrameHandler.getCurrentFrameName(getDriver()).equals("main_frame1"));
+                FrameHandler.getCurrentFrameName(driver).equals("main_frame1"));
     }
 
     @Features("Utilities")
@@ -124,10 +135,10 @@ public class TestFrameHandler extends WebBaseTest {
     @Title("testMoveToMultiChildFrameWithName")
     @Test(groups = { "regression", "utils", "dev" }, dependsOnMethods = "testMoveToSiblingFrameWithLocator")
     public void testMoveToMultiChildFrameWithName() {
-        FrameHandler.moveToDefaultContext(getDriver());
-        FrameHandler.moveToChildFrame(getDriver(), new String[] { "main_page", "main_frame1" });
+        FrameHandler.moveToDefaultContext(driver);
+        FrameHandler.moveToChildFrame(driver, new String[] { "main_page", "main_frame1" });
         Assert.assertTrue("Button was not found in frame 'main_frame1'",
-                FrameHandler.getCurrentFrameName(getDriver()).equals("main_frame1"));
+                FrameHandler.getCurrentFrameName(driver).equals("main_frame1"));
     }
 
     @Features("Utilities")
@@ -137,10 +148,10 @@ public class TestFrameHandler extends WebBaseTest {
     public void testMoveToMultiChildFrameWithLocator() {
         By locatorParentFrame = By.name("main_page");
         By locatorChildFrame = By.name("main_frame1");
-        FrameHandler.moveToDefaultContext(getDriver());
-        FrameHandler.moveToChildFrame(getDriver(), new By[] { locatorParentFrame, locatorChildFrame });
+        FrameHandler.moveToDefaultContext(driver);
+        FrameHandler.moveToChildFrame(driver, new By[] { locatorParentFrame, locatorChildFrame });
         Assert.assertTrue("Button was not found in frame 'main_frame1'",
-                FrameHandler.getCurrentFrameName(getDriver()).equals("main_frame1"));
+                FrameHandler.getCurrentFrameName(driver).equals("main_frame1"));
     }
 
 }

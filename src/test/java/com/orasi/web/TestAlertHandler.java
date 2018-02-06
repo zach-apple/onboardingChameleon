@@ -3,34 +3,37 @@ package com.orasi.web;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.testng.ITestContext;
-import org.testng.SkipException;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.orasi.web.AlertHandler;
-import com.orasi.web.WebBaseTest;
+import com.orasi.DriverManager;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestAlertHandler extends WebBaseTest {
-    @BeforeTest(groups = { "regression", "utils", "dev", "framehandler" })
+    OrasiDriver driver = null;
+
+    @BeforeClass(groups = { "regression", "utils", "dev", "framehandler" })
     public void setup() {
-        if (getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty()) {
-            throw new SkipException("Test not valid for HTMLUnitDriver");
-        }
-        if (getBrowserUnderTest().toLowerCase().equals("safari") || getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty()) {
-            throw new SkipException("Test not valid for SafariDriver");
-        }
+        setApplicationUnderTest("Test Site");
         setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/utils/alertHandler.html");
-        testStart("TestAlert");
     }
 
-    @AfterTest(groups = { "regression", "utils", "dev" })
-    public void close(ITestContext testResults) {
-        endTest("TestAlert", testResults);
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
+    }
+
+    @Override
+    @AfterClass(alwaysRun = true)
+    public void afterClass(ITestContext testResults) {
+        DriverManager.setDriver(driver);
+        endTest(getTestName(), testResults);
     }
 
     @Features("Utilities")
@@ -38,15 +41,16 @@ public class TestAlertHandler extends WebBaseTest {
     @Title("constructor")
     @Test(groups = { "regression", "interfaces", "textbox" })
     public void constructorWithElement() {
+        driver = testStart("TestAlert");
         Assert.assertNotNull((new AlertHandler()));
     }
 
     @Features("Utilities")
     @Stories("AlertHandler")
     @Title("isAlertPresent")
-    @Test(groups = { "regression", "utils", "dev", "alertHandler" })
+    @Test(groups = { "regression", "utils", "dev", "alertHandler" }, dependsOnMethods = "constructorWithElement")
     public void isAlertPresent() {
-        Assert.assertTrue("Alert was not present", AlertHandler.isAlertPresent(getDriver(), 1));
+        Assert.assertTrue("Alert was not present", AlertHandler.isAlertPresent(driver, 1));
     }
 
     @Features("Utilities")
@@ -54,8 +58,8 @@ public class TestAlertHandler extends WebBaseTest {
     @Title("handleAllAlerts")
     @Test(groups = { "regression", "utils", "dev", "alertHandler" }, dependsOnMethods = "isAlertPresent")
     public void handleAllAlerts() {
-        AlertHandler.handleAllAlerts(getDriver(), 1);
-        Assert.assertFalse("Alert was not handled", AlertHandler.isAlertPresent(getDriver(), 1));
+        AlertHandler.handleAllAlerts(driver, 1);
+        Assert.assertFalse("Alert was not handled", AlertHandler.isAlertPresent(driver, 1));
     }
 
     @Features("Utilities")
@@ -63,9 +67,9 @@ public class TestAlertHandler extends WebBaseTest {
     @Title("handleAlert")
     @Test(groups = { "regression", "utils", "dev", "alertHandler" }, dependsOnMethods = "handleAllAlerts")
     public void handleAlert() {
-        getDriver().findElement(By.id("button")).click();
-        AlertHandler.handleAlert(getDriver(), 1);
-        Assert.assertFalse("Alert was not handled", AlertHandler.isAlertPresent(getDriver(), 1));
+        driver.findElement(By.id("button")).click();
+        AlertHandler.handleAlert(driver, 1);
+        Assert.assertFalse("Alert was not handled", AlertHandler.isAlertPresent(driver, 1));
     }
 
 }

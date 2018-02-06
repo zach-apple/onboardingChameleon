@@ -1,6 +1,30 @@
 # Version History
 
-## Version 1.1.2 - 09/18/2017
+## Version 1.1.4 - 02/06/2018
+* **POM.xml**
+  * Updating to Selenium 3.7.0
+    * Removing support for HTMLUnit and PhantomJSDriver in favor of headless option for Firefox and Chrome
+  * Cleaned up unused dependencies and parameterized all version numbers for ease of use
+* **General**
+  * Pulling in and enhanced Selenium classes to support Generics for better handling of elements
+  and allowing use of findElements to return a List of Orasi Elements
+  * Moved default location for driver storage to resolve issue where unclosed driver sessions prevented project from refreshing
+  * Fixed issue in syncEnabled where if an element was under another element, syncEnabled would throw an ElementNotClickableException   
+  * Fixed issue during element reload where under certain conditions, element timeouts were not being honoured    
+  * Fixed issue when Listbox was instantiated and the element was not found, the proper error was buried within a proxy exception
+  * Fixed issue when driver fails to take a screenshot, it would throw exception. Now it will simply log an error
+  * Added an option in RestService to auto-trust SSL connections during rest API calls instead of having to load a certificate
+  * Added an option to override and set a default connection timeout for REST HTTP connections 
+  * Enhancements to CreditCard util and letting a Person start with a default Card
+* **New Utilities**
+  * CustomizedEmailableReport 
+    * A listener for test suites that will create a cleaner HTML than TestNG. This is intended for CI/CD tools to pickup and email out
+  * DriverManager
+    * The driver instantiation has been removed from WebBaseTest and is intended to be started via DriverManager. This removes the requirement OrasiDriver must be used by going through WebBaseTest when in some cases, WebBaseTest was not applicable. 
+    * It is still intended when using WebBaseTest, that the test is still started via testStart
+    * For more info, please start with the [Wiki](https://github.com/Orasi/Chameleon/wiki/DriverManager).  
+    
+## Version 1.1.3 - 09/18/2017
 * **POM.xml**
   * Updating to Selenium 3.5.3
   * Adding properties to access Jenkins Environment variables

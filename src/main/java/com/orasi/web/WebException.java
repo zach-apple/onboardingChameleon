@@ -13,7 +13,6 @@ import org.apache.http.message.BasicHttpEntityEnclosingRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.internal.BuildInfo;
 import org.openqa.selenium.remote.HttpCommandExecutor;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -95,31 +94,39 @@ public class WebException extends AutomationException {
     }
 
     private String browserName(WebDriver driver) {
-        if (driver instanceof HtmlUnitDriver) {
-            return "Html Unit";
-        }
+        /*
+         * if (driver instanceof HtmlUnitDriver) {
+         * return "Html Unit";
+         * }
+         */
         return ((RemoteWebDriver) driver).getCapabilities().getBrowserName();
     }
 
     private String browserVersion(WebDriver driver) {
-        if (driver instanceof HtmlUnitDriver) {
-            return "N/A";
-        }
+        /*
+         * if (driver instanceof HtmlUnitDriver) {
+         * return "N/A";
+         * }
+         */
         return ((RemoteWebDriver) driver).getCapabilities().getVersion();
     }
 
     private String sessionId(WebDriver driver) {
-        if (driver instanceof HtmlUnitDriver) {
-            return "N/A";
-        }
+        /*
+         * if (driver instanceof HtmlUnitDriver) {
+         * return "N/A";
+         * }
+         */
         String sessionId = ((RemoteWebDriver) driver).getSessionId() != null ? ((RemoteWebDriver) driver).getSessionId().toString().trim() : "N/A";
         return sessionId;
     }
 
     private String platformOS(WebDriver driver) {
-        if (driver instanceof HtmlUnitDriver) {
-            return "N/A";
-        }
+        /*
+         * if (driver instanceof HtmlUnitDriver) {
+         * return "N/A";
+         * }
+         */
         return ((RemoteWebDriver) driver).getCapabilities().getPlatform().name() + " "
                 + ((RemoteWebDriver) driver).getCapabilities().getPlatform().getMajorVersion() + "."
                 + ((RemoteWebDriver) driver).getCapabilities().getPlatform().getMinorVersion();

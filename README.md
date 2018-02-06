@@ -31,7 +31,7 @@ The core code uses the Java-based Selenium webdriver for GUI testing. It takes t
 |Webtable|tab|tabMemberNames|
 |Element (Generic Web Element)|ele|eleImage|
 
-All elements utilize the Orasi-developed [TestReporter](https://github.com/Orasi/Selenium-Toyota-POC/blob/master/src/main/java/com/orasi/utils/TestReporter.java) which extends the [TestNG](https://github.com/cbeust/testng) Reporter by concatenating a timestamp and HTML formatting for use in viewing the report in a web browser. This allows for a functional audit which can ensure requirements are being met by the automated test, as well as provide steps to reproduce a defect when one occurs.
+All elements utilize the Orasi-developed [TestReporter](https://github.com/Orasi/Chameleon/blob/master/src/main/java/com/orasi/utils/TestReporter.java) which extends the [TestNG](https://github.com/cbeust/testng) Reporter by concatenating a timestamp and HTML formatting for use in viewing the report in a web browser. This allows for a functional audit which can ensure requirements are being met by the automated test, as well as provide steps to reproduce a defect when one occurs.
 
 ## API Web Service Testing
 
@@ -41,7 +41,7 @@ These libraries contain a SOAP API testing solution which leverages Java and W3C
 
 ### REST Services  
   
-These libraries contain a SOAP API testing solution which leverages the Apache HttpClient libraries. Full XML and JSON support is included to parse responses for field-level values with which validation can be performed. 
+These libraries contain a REST API testing solution which leverages the Apache HttpClient libraries. Full XML and JSON support is included to parse responses for field-level values with which validation can be performed. 
 
 ## Jenkins Build Tool
 This project is designed to have a Jenkins CI instance hook into this repository and detect when changes are pushed to the Master branch. Ideally, this trigger will be changed to look for code changes pushed by developers, thereby triggering a new build to test the new application code.
@@ -60,9 +60,9 @@ The capabilities of the Sauce Labs VM farm are harnessed to test the OS-Browser 
 
 * <strong>Sauce Labs:</strong> Contains results for individual tests as well as captures videos and screenshots.
 
-## [TestEnvironment.java](https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/utils/TestEnvironment.java)
+## [WebBaseTest.java](https://github.com/Orasi/Selenium-Java-Core/blob/master/src/main/java/com/orasi/web/WebBaseTest.java)
 
-This class is designed to be extended by test classes and can be passed into page classes. It houses test environment data and remote WebDrivers as well as page class methods used to sync page behavior.  The need for this arose due to the parallel behavior that indicated that WebDriver instances were crossing threads and testing on the wrong os/browser configurations.
+This class is designed to be extended by test classes and can be passed into page classes. It houses test environment data.
 
 Also contained in this class is the determination as to whether the test should be executed locally or remotely based on a TestNG parameter. Once this is established, a webdriver is created and executed appropriately.
 

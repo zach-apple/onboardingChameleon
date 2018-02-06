@@ -1,11 +1,12 @@
 package com.orasi.web.by.angular;
 
 import org.testng.Assert;
-import org.testng.ITestContext;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.orasi.web.OrasiDriver;
 import com.orasi.web.WebBaseTest;
 import com.orasi.web.webelements.Element;
 import com.orasi.web.webelements.Label;
@@ -16,6 +17,7 @@ import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestAngular extends WebBaseTest {
+    private OrasiDriver driver;
 
     @FindByNG(ngController = "myCtrl")
     public Label findByController;
@@ -32,16 +34,15 @@ public class TestAngular extends WebBaseTest {
     @FindByNG()
     public Label findByNull;
 
-    @BeforeTest(groups = { "regression", "interfaces", "angular", "dev" })
+    @BeforeClass(groups = { "regression", "interfaces", "angular", "dev" })
     public void setup() {
-
+        setApplicationUnderTest("Test Site");
         setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/angular/angularPage.html");
-        testStart("TestAngular");
     }
 
-    @AfterTest(groups = { "regression", "interfaces", "angular", "dev" })
-    public void close(ITestContext testResults) {
-        endTest("TestAngular", testResults);
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
     }
 
     @Features("Element Interfaces")
@@ -49,75 +50,77 @@ public class TestAngular extends WebBaseTest {
     @Title("driverFindNGController")
     @Test(groups = { "regression", "interfaces" })
     public void driverFindNGController() {
-        Element controller = getDriver().findElement(ByNG.controller("myCtrl"));
+        driver = testStart("TestAngular");
+        Element controller = driver.findElement(ByNG.controller("myCtrl"));
         Assert.assertTrue(controller.elementWired());
     }
 
     @Features("Element Interfaces")
     @Stories("Angular")
     @Title("driverFindNGControllerNullSearchBy")
-    @Test(groups = { "regression", "interfaces" }, expectedExceptions = IllegalArgumentException.class)
+    @Test(groups = { "regression", "interfaces" }, dependsOnMethods = "driverFindNGController", expectedExceptions = IllegalArgumentException.class)
     public void driverFindNGControllerNullSearchBy() {
-        getDriver().findElement(ByNG.controller(""));
+        driver.findElement(ByNG.controller(""));
     }
 
     @Features("Element Interfaces")
     @Stories("Angular")
     @Title("driverFindNGModel")
-    @Test(groups = { "regression", "interfaces" })
+    @Test(groups = { "regression", "interfaces" }, dependsOnMethods = "driverFindNGController")
     public void driverFindNGModel() {
-        Element model = getDriver().findElement(ByNG.model("lastName"));
+        Element model = driver.findElement(ByNG.model("lastName"));
         Assert.assertTrue(model.elementWired());
+
     }
 
     @Features("Element Interfaces")
     @Stories("Angular")
     @Title("driverFindNGModelNullSearchBy")
-    @Test(groups = { "regression", "interfaces" }, expectedExceptions = IllegalArgumentException.class)
+    @Test(groups = { "regression", "interfaces" }, dependsOnMethods = "driverFindNGController", expectedExceptions = IllegalArgumentException.class)
     public void driverFindNGModelNullSearchBy() {
-        getDriver().findElement(ByNG.model(""));
+        driver.findElement(ByNG.model(""));
     }
 
     @Features("Element Interfaces")
     @Stories("Angular")
     @Title("driverFindNGRepeater")
-    @Test(groups = { "regression", "interfaces" })
+    @Test(groups = { "regression", "interfaces" }, dependsOnMethods = "driverFindNGController")
     public void driverFindNGRepeater() {
-        Element repeater = getDriver().findElement(ByNG.repeater("x in names | orderBy:'country'"));
+        Element repeater = driver.findElement(ByNG.repeater("x in names | orderBy:'country'"));
         Assert.assertTrue(repeater.elementWired());
     }
 
     @Features("Element Interfaces")
     @Stories("Angular")
     @Title("driverFindNGRepeaterNullSearchBy")
-    @Test(groups = { "regression", "interfaces" }, expectedExceptions = IllegalArgumentException.class)
+    @Test(groups = { "regression", "interfaces" }, dependsOnMethods = "driverFindNGController", expectedExceptions = IllegalArgumentException.class)
     public void driverFindNGRepeaterNullSearchBy() {
-        getDriver().findElement(ByNG.repeater(""));
+        driver.findElement(ByNG.repeater(""));
     }
 
     @Features("Element Interfaces")
     @Stories("Angular")
     @Title("driverFindNGShow")
-    @Test(groups = { "regression", "interfaces" })
+    @Test(groups = { "regression", "interfaces" }, dependsOnMethods = "driverFindNGController")
     public void driverFindNGShow() {
-        Element show = getDriver().findElement(ByNG.show("myVar"));
+        Element show = driver.findElement(ByNG.show("myVar"));
         Assert.assertTrue(show.elementWired());
     }
 
     @Features("Element Interfaces")
     @Stories("Angular")
     @Title("driverFindNGShowNullSearchBy")
-    @Test(groups = { "regression", "interfaces" }, expectedExceptions = IllegalArgumentException.class)
+    @Test(groups = { "regression", "interfaces" }, dependsOnMethods = "driverFindNGController", expectedExceptions = IllegalArgumentException.class)
     public void driverFindNGShowNullSearchBy() {
-        getDriver().findElement(ByNG.show(""));
+        driver.findElement(ByNG.show(""));
     }
 
     @Features("Element Interfaces")
     @Stories("Angular")
     @Title("pageFactoryFindNGNull")
-    @Test(groups = { "regression", "interfaces" }, expectedExceptions = IllegalArgumentException.class)
+    @Test(groups = { "regression", "interfaces" }, dependsOnMethods = "driverFindNGController", expectedExceptions = IllegalArgumentException.class)
     public void pageFactoryFindNGNull() {
-        ElementFactory.initElements(getDriver(), this);
+        ElementFactory.initElements(driver, this);
     }
 
     @Features("Element Interfaces")

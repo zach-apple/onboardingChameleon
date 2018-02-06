@@ -37,6 +37,7 @@ import org.xml.sax.SAXException;
 import com.orasi.AutomationException;
 import com.orasi.api.soapServices.exceptions.MissingFunctionParameterValueException;
 import com.orasi.api.soapServices.exceptions.SoapException;
+import com.orasi.utils.exception.XMLTransformException;
 import com.orasi.utils.exception.XPathInvalidExpression;
 import com.orasi.utils.exception.XPathNotFoundException;
 
@@ -404,7 +405,7 @@ public class XMLTools {
         Document doc = null;
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
-            logTrace("Attempting to from file and save as to XML. File [ " + file.getPath() + " ]");
+            logTrace("Attempting to open file and save as to XML. File [ " + file.getPath() + " ]");
             doc = builder.parse(file);
         } catch (SAXException saxe) {
             throw new AutomationException("Failed to parse the xml", saxe);
@@ -457,7 +458,7 @@ public class XMLTools {
             xml = sw.toString();
         } catch (TransformerException | IOException e) {
             logTrace("Failed to transform XML to String ");
-            throw new SoapException(
+            throw new XMLTransformException(
                     "Failed to transform Request XML Document. Ensure XML Document has been successfully loaded.", e);
         }
 

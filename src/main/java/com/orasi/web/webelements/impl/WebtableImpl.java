@@ -30,9 +30,9 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 
     private List<WebElement> getRowCollection() {
         logTrace("Entering WebtableImpl#getRowCollection");
-        getWrappedDriver().setElementTimeout(1, TimeUnit.SECONDS);
+        driver.setElementTimeout(1, TimeUnit.SECONDS);
         List<WebElement> rowCollection = reload().findElements(By.xpath("tr|tbody/tr"));
-        getWrappedDriver().setElementTimeout(getWrappedDriver().getElementTimeout(), TimeUnit.SECONDS);
+        driver.setElementTimeout(driver.getElementTimeout(), TimeUnit.SECONDS);
         logTrace("Exiting WebtableImpl#getRowCollection");
         return rowCollection;
 
@@ -40,9 +40,9 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 
     private List<WebElement> getColumnCollection(WebElement row) {
         logTrace("Entering WebtableImpl#getColumnCollection");
-        getWrappedDriver().setElementTimeout(1, TimeUnit.MILLISECONDS);
+        driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
         List<WebElement> columnCollection = row.findElements(By.xpath("th|td"));
-        getWrappedDriver().setElementTimeout(getWrappedDriver().getElementTimeout(), TimeUnit.SECONDS);
+        driver.setElementTimeout(driver.getElementTimeout(), TimeUnit.SECONDS);
         logTrace("Exiting WebtableImpl#getColumnCollection");
         return columnCollection;
     }
@@ -97,10 +97,10 @@ public class WebtableImpl extends ElementImpl implements Webtable {
     @Override
     public Element getCell(int row, int column) {
         logTrace("Entering WebtableImpl#getCell");
-        getWrappedDriver().setElementTimeout(1, TimeUnit.SECONDS);
-        Element cell = new ElementImpl(getWrappedDriver(), By.xpath(getElementIdentifier() + "/tbody/tr[" + row + "]/td[" + column + "]|" + getElementIdentifier() + "/tbody/tr[" + row + "]/th[" + column
+        driver.setElementTimeout(1, TimeUnit.SECONDS);
+        Element cell = new ElementImpl(driver, By.xpath(getElementIdentifier() + "/tbody/tr[" + row + "]/td[" + column + "]|" + getElementIdentifier() + "/tbody/tr[" + row + "]/th[" + column
                 + "]|" + getElementIdentifier() + "/tr[" + row + "]/td[" + column + "]|" + getElementIdentifier() + "/tr[" + row + "]/th[" + column + "]"));
-        getWrappedDriver().setElementTimeout(getWrappedDriver().getElementTimeout(), TimeUnit.SECONDS);
+        driver.setElementTimeout(driver.getElementTimeout(), TimeUnit.SECONDS);
         logTrace("Exiting WebtableImpl#getCell");
         return cell;
     }

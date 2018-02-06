@@ -8,16 +8,18 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 import com.orasi.web.OrasiDriver;
 import com.orasi.web.exceptions.OptionNotInListboxException;
+import com.orasi.web.exceptions.SelectElementNotFoundException;
 import com.orasi.web.webelements.Listbox;
 
 /**
  * Wrapper around a WebElement for the Select class in Selenium.
  */
 public class ListboxImpl extends ElementImpl implements Listbox {
-    private final org.openqa.selenium.support.ui.Select innerSelect;
+    private org.openqa.selenium.support.ui.Select innerSelect;
 
     /**
      * @summary - Wraps a WebElement with listbox functionality.
@@ -27,8 +29,13 @@ public class ListboxImpl extends ElementImpl implements Listbox {
 
     public ListboxImpl(OrasiDriver driver, By by) {
         super(driver, by);
+        this.innerSelect = null;
         logTrace("Entering ListboxImpl#init");
-        this.innerSelect = new org.openqa.selenium.support.ui.Select(driver.findWebElement(by));
+        // If element is null at this point, then do not try and set to selenium Select - otherwise hits a proxy exception
+        if (element != null) {
+            this.innerSelect = new org.openqa.selenium.support.ui.Select(getWrappedElement());
+        }
+
         logTrace("Exiting ListboxImpl#init");
     }
 
@@ -44,7 +51,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
         if (!text.isEmpty()) {
             try {
                 try {
-                    innerSelect.selectByVisibleText(text);
+                    validateSelectNotNull().selectByVisibleText(text);
                 } catch (RuntimeException rte) {
                     interfaceLog("Select option [ <b>" + text.toString()
                             + "</b> ] from Listbox [  <b>" + getElementLocatorInfo() + " </b>]", true);
@@ -55,7 +62,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
                         + "</b> ] from Listbox [  <b>" + getElementLocatorInfo() + " </b>]");
             } catch (NoSuchElementException e) {
                 String optionList = "";
-                List<WebElement> optionsList = innerSelect.getOptions();
+                List<WebElement> optionsList = validateSelectNotNull().getOptions();
                 for (WebElement option : optionsList) {
                     optionList += option.getText() + " | ";
                 }
@@ -63,7 +70,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
                         + getElementLocatorInfo() + " </b>]. Acceptable values are " + optionList + " ]");
                 logTrace("Exiting ListboxImpl#select");
                 throw new OptionNotInListboxException("The value of [ " + text + " ] was not found in Listbox [  "
-                        + getElementLocatorInfo() + " ]. Acceptable values are " + optionList, getWrappedDriver());
+                        + getElementLocatorInfo() + " ]. Acceptable values are " + optionList, driver);
             }
         } else {
             interfaceLog("Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
@@ -84,7 +91,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
         if (!value.isEmpty()) {
             try {
                 try {
-                    innerSelect.selectByValue(value);
+                    validateSelectNotNull().selectByValue(value);
                 } catch (RuntimeException rte) {
                     interfaceLog("Select option [ <b>" + value.toString()
                             + "</b> ] from Listbox [  <b>" + getElementLocatorInfo() + " </b>]", true);
@@ -95,7 +102,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
                         + "</b> ] from Listbox [  <b>" + getElementLocatorInfo() + " </b>]");
             } catch (NoSuchElementException e) {
                 String optionList = "";
-                List<WebElement> optionsList = innerSelect.getOptions();
+                List<WebElement> optionsList = validateSelectNotNull().getOptions();
                 for (WebElement option : optionsList) {
                     optionList += option.getAttribute("value") + " | ";
                 }
@@ -103,7 +110,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
                         + getElementLocatorInfo() + " </b>]. Acceptable values are " + optionList + " ]");
                 logTrace("Exiting ListboxImpl#selectValue");
                 throw new OptionNotInListboxException("The value of [ " + value + " ] was not found in Listbox [  "
-                        + getElementLocatorInfo() + " ]. Acceptable values are " + optionList, getWrappedDriver());
+                        + getElementLocatorInfo() + " ]. Acceptable values are " + optionList, driver);
             }
         } else {
             interfaceLog("Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
@@ -118,7 +125,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
     @Override
     public void deselectAll() {
         logTrace("Entering ListboxImpl#deselectAll");
-        innerSelect.deselectAll();
+        validateSelectNotNull().deselectAll();
         logTrace("Exiting ListboxImpl#deselectAll");
     }
 
@@ -130,7 +137,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
     @Override
     public List<WebElement> getOptions() {
         logTrace("Entering ListboxImpl#getOptions");
-        List<WebElement> options = innerSelect.getOptions();
+        List<WebElement> options = validateSelectNotNull().getOptions();
         logTrace("Exiting ListboxImpl#getOptions");
         return options;
     }
@@ -144,7 +151,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
     @Override
     public void deselectByVisibleText(String text) {
         logTrace("Entering ListboxImpl#deselectByVisibleText");
-        innerSelect.deselectByVisibleText(text);
+        validateSelectNotNull().deselectByVisibleText(text);
         logTrace("Exiting ListboxImpl#deselectByVisibleText");
     }
 
@@ -157,7 +164,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
     public WebElement getFirstSelectedOption() {
         logTrace("Entering ListboxImpl#getFirstSelectedOption");
         try {
-            WebElement option = innerSelect.getFirstSelectedOption();
+            WebElement option = validateSelectNotNull().getFirstSelectedOption();
             logTrace("Exiting ListboxImpl#deselectByVisibleText");
             return option;
         } catch (NoSuchElementException nse) {
@@ -172,7 +179,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
     @Override
     public boolean isSelected(String option) {
         logTrace("Entering ListboxImpl#isSelected");
-        List<WebElement> selectedOptions = innerSelect.getAllSelectedOptions();
+        List<WebElement> selectedOptions = validateSelectNotNull().getAllSelectedOptions();
         for (WebElement selectOption : selectedOptions) {
             if (selectOption.getText().equals(option)) {
                 logTrace("Exiting ListboxImpl#isSelected");
@@ -186,7 +193,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
     @Override
     public List<WebElement> getAllSelectedOptions() {
         logTrace("Entering ListboxImpl#getAllSelectedOptions");
-        List<WebElement> options = innerSelect.getAllSelectedOptions();
+        List<WebElement> options = validateSelectNotNull().getAllSelectedOptions();
         logTrace("Exiting ListboxImpl#getAllSelectedOptions");
         return options;
     }
@@ -194,8 +201,15 @@ public class ListboxImpl extends ElementImpl implements Listbox {
     @Override
     public boolean isMultiple() {
         logTrace("Entering ListboxImpl#isMultiple");
-        boolean multiple = innerSelect.isMultiple();
+        boolean multiple = validateSelectNotNull().isMultiple();
         logTrace("Exiting ListboxImpl#isMultiple");
         return multiple;
+    }
+
+    private Select validateSelectNotNull() {
+        if (innerSelect == null) {
+            throw new SelectElementNotFoundException("Select Element was not created", driver);
+        }
+        return innerSelect;
     }
 }

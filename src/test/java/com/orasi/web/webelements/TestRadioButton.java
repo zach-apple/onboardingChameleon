@@ -5,29 +5,41 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.ITestContext;
+import org.testng.ITestResult;
 import org.testng.SkipException;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.orasi.DriverManager;
+import com.orasi.DriverType;
+import com.orasi.web.OrasiDriver;
 import com.orasi.web.WebBaseTest;
-import com.orasi.web.webelements.RadioGroup;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestRadioButton extends WebBaseTest {
-    @BeforeTest(groups = { "regression", "interfaces", "radiogroup", "dev" })
+    private OrasiDriver driver;
+
+    @BeforeClass(groups = { "regression", "interfaces", "radiogroup", "dev" })
     public void setup() {
         setApplicationUnderTest("Test Site");
         setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/radioGroup.html");
-        testStart("TestRadiogroup");
     }
 
-    @AfterTest(groups = { "regression", "interfaces", "radiogroup", "dev" })
-    public void close(ITestContext testResults) {
-        endTest("TestAlert", testResults);
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
+    }
+
+    @Override
+    @AfterClass(alwaysRun = true)
+    public void afterClass(ITestContext testResults) {
+        DriverManager.setDriver(driver);
+        endTest(getTestName(), testResults);
     }
 
     /*
@@ -39,7 +51,7 @@ public class TestRadioButton extends WebBaseTest {
      *
      * @Test(groups ={"regression", "interfaces", "textbox"})
      * public void constructorWithElement(){
-     * Assert.assertNotNull((new RadioGroupImpl(getDriver().findWebElement((By.id("radioForm"))),driver)));
+     * Assert.assertNotNull((new RadioGroupImpl(driver.findWebElement((By.id("radioForm"))),driver)));
      * }
      */
 
@@ -49,32 +61,33 @@ public class TestRadioButton extends WebBaseTest {
     @Test(groups = { "regression", "interfaces", "radiogroup" })
     public void getNumberOfOptions() {
 
-        RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
+        driver = testStart("TestRadiogroup");
+        RadioGroup radiogroup = driver.findRadioGroup(By.id("radioForm"));
         Assert.assertTrue(radiogroup.getNumberOfOptions() == 3);
     }
 
     /*
      * @Test(groups ={"regression", "interfaces", "radiogroup"})
      * public void getNumberOfRadioButtons(){
-     * RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
+     * RadioGroup radiogroup = driver.findRadioGroup(By.id("radioForm"));
      * Assert.assertTrue(radiogroup.getNumberOfRadioButtons() == 2 );
      * }
      */
     @Features("Element Interfaces")
     @Stories("RadioGroup")
     @Title("getSelectedIndex")
-    @Test(groups = { "regression", "interfaces", "radiogroup" })
+    @Test(groups = { "regression", "interfaces", "radiogroup" }, dependsOnMethods = "getNumberOfOptions")
     public void getSelectedIndex() {
-        RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
+        RadioGroup radiogroup = driver.findRadioGroup(By.id("radioForm"));
         Assert.assertTrue(radiogroup.getSelectedIndex() == 1);
     }
 
     @Features("Element Interfaces")
     @Stories("RadioGroup")
     @Title("getSelectedOption")
-    @Test(groups = { "regression", "interfaces", "radiogroup" })
+    @Test(groups = { "regression", "interfaces", "radiogroup" }, dependsOnMethods = "getNumberOfOptions")
     public void getSelectedOption() {
-        RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
+        RadioGroup radiogroup = driver.findRadioGroup(By.id("radioForm"));
         Assert.assertTrue(radiogroup.getSelectedOption().equals("female"));
     }
 
@@ -83,7 +96,7 @@ public class TestRadioButton extends WebBaseTest {
     @Title("selectByIndex")
     @Test(groups = { "regression", "interfaces", "radiogroup" }, dependsOnMethods = "getSelectedIndex")
     public void selectByIndex() {
-        RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
+        RadioGroup radiogroup = driver.findRadioGroup(By.id("radioForm"));
         radiogroup.selectByIndex(1);
         Assert.assertTrue(radiogroup.getSelectedIndex() == 1);
     }
@@ -93,7 +106,7 @@ public class TestRadioButton extends WebBaseTest {
     @Title("selectIndexOutOfBounds")
     @Test(groups = { "regression", "interfaces", "radiogroup" }, dependsOnMethods = "selectByIndex")
     public void selectByIndexOutOfBounds() {
-        RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
+        RadioGroup radiogroup = driver.findRadioGroup(By.id("radioForm"));
         boolean valid = false;
         try {
             radiogroup.selectByIndex(3);
@@ -108,7 +121,7 @@ public class TestRadioButton extends WebBaseTest {
     @Title("selectByOption")
     @Test(groups = { "regression", "interfaces", "radiogroup" }, dependsOnMethods = "selectByIndex")
     public void selectByOption() {
-        RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
+        RadioGroup radiogroup = driver.findRadioGroup(By.id("radioForm"));
         radiogroup.selectByOption("male");
         Assert.assertTrue(radiogroup.getSelectedIndex() == 0);
     }
@@ -118,13 +131,10 @@ public class TestRadioButton extends WebBaseTest {
     @Title("selectByOptionNoText")
     @Test(groups = { "regression", "interfaces", "radiogroup" }, dependsOnMethods = "selectByOption")
     public void selectByOptionNoText() {
-        if (getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty()) {
-            throw new SkipException("Test not valid for HTMLUnitDriver");
-        }
-        if (getDriver().getDriverCapability().browserName().contains("explorer")) {
+        if (DriverType.INTERNETEXPLORER.equals(driver.getDriverType())) {
             throw new SkipException("Test not valid for Internet Explorer");
         }
-        RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
+        RadioGroup radiogroup = driver.findRadioGroup(By.id("radioForm"));
         radiogroup.selectByOption("");
         Assert.assertTrue(radiogroup.getSelectedIndex() == 0);
     }
@@ -134,16 +144,10 @@ public class TestRadioButton extends WebBaseTest {
     @Title("selectByOptionNegative")
     @Test(groups = { "regression", "interfaces", "radiogroup" }, dependsOnMethods = "selectByOption")
     public void selectByOptionNegative() {
-        if (getDriver().getDriverCapability().browserName().contains("explorer")) {
+        if (DriverType.INTERNETEXPLORER.equals(driver.getDriverType())) {
             throw new SkipException("Test not valid for Internet Explorer");
         }
-        if (getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty()) {
-            throw new SkipException("Test not valid for HTMLUnitDriver");
-        }
-        if (getBrowserUnderTest().toLowerCase().equals("html") || getBrowserUnderTest().isEmpty()) {
-            throw new SkipException("Test not valid for HTMLUnitDriver");
-        }
-        RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
+        RadioGroup radiogroup = driver.findRadioGroup(By.id("radioForm"));
         boolean valid = false;
         try {
             radiogroup.selectByOption("disabled");
@@ -156,9 +160,9 @@ public class TestRadioButton extends WebBaseTest {
     @Features("Element Interfaces")
     @Stories("RadioGroup")
     @Title("getAllOptions")
-    @Test(groups = { "regression", "interfaces", "radiogroup" })
+    @Test(groups = { "regression", "interfaces", "radiogroup" }, dependsOnMethods = "getNumberOfOptions")
     public void getAllOptions() {
-        RadioGroup radiogroup = getDriver().findRadioGroup(By.id("radioForm"));
+        RadioGroup radiogroup = driver.findRadioGroup(By.id("radioForm"));
         List<String> group = radiogroup.getAllOptions();
         Assert.assertTrue(group.get(0).equals("male"));
         Assert.assertTrue(group.get(1).equals("female"));

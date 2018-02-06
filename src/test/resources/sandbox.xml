@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Core-Regression" parallel="methods" thread-count="10">
-	
-	<parameter name="browserUnderTest" value="chrome" />
+<suite name="Core-Regression" parallel="methods" thread-count="20">
+	<parameter name="browserUnderTest" value="jenkinsParameter" />
 	<parameter name="environment" value="staging" />
 	<parameter name="runLocation" value="sauce" />
-	<parameter name="browserVersion" value="" />
-	<parameter name="operatingSystem" value="windows 10" />
+	<parameter name="browserVersion" value="jenkinsParameter" />
+	<parameter name="operatingSystem" value="jenkinsParameter" />
  
-	<test name="Textbox" parallel="methods" thread-count="20">
+	<test name="Testbox Test" parallel="methods" thread-count="20">
 		<classes>
-			<class name="com.orasi.web.by.common.TestCommon" />
+			<class name="com.orasi.web.TestOrasiDriver" />
 		</classes>
 	</test>
+	
 </suite> <!-- Suite -->

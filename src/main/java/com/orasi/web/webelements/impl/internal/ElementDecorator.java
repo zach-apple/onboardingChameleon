@@ -10,7 +10,6 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
@@ -82,7 +81,7 @@ public class ElementDecorator implements FieldDecorator {
             return proxy;
         } else if (List.class.isAssignableFrom(fieldType)) {
             Class<?> erasureClass = getErasureClass(field);
-            Object proxy = proxyForListLocator(loader, erasureClass, locator);
+            Object proxy = proxyForListLocator(loader, erasureClass, locator, driverRef);
             logTrace("Successfully created element Proxy for field name [ " + field.getName() + " ]");
             logTrace("Exiting ElementDecorator#ElementDecorator");
             return proxy;
@@ -108,8 +107,7 @@ public class ElementDecorator implements FieldDecorator {
             return false;
         }
 
-        @SuppressWarnings("rawtypes")
-        Class erasureClass = getErasureClass(field);
+        @SuppressWarnings("rawtypes") Class erasureClass = getErasureClass(field);
         if (erasureClass == null) {
             return false;
         }
@@ -136,36 +134,7 @@ public class ElementDecorator implements FieldDecorator {
         T proxy;
         logTrace("Create element proxy with ElementHandler information");
         proxy = interfaceType.cast(Proxy.newProxyInstance(
-                loader, new Class[] { interfaceType, WebElement.class, WrapsElement.class, Locatable.class }, handler));
-        logTrace("Successfully created element proxy");
-        logTrace("Exiting ElementDecorator#proxyForLocator");
-        return proxy;
-    }
-
-    /**
-     * Generate a type-parameterized locator proxy for the element in question. We use our customized InvocationHandler
-     * here to wrap classes.
-     *
-     * @param loader
-     *            ClassLoader of the wrapping class
-     * @param interfaceType
-     *            Interface wrapping the underlying WebElement
-     * @param locator
-     *            ElementLocator pointing at a proxy of the object on the page
-     * @param <T>
-     *            The interface of the proxy.
-     * @return a proxy representing the class we need to wrap.
-     */
-    protected <T> T proxyForLocator(ClassLoader loader, Class<T> interfaceType, ElementLocator locator) {
-        logTrace("Entering ElementDecorator#proxyForLocator");
-
-        logTrace("Create ElementHandler and embbed locator in it");
-        InvocationHandler handler = new ElementHandler(interfaceType, locator);
-
-        T proxy;
-        logTrace("Create element proxy with ElementHandler information");
-        proxy = interfaceType.cast(Proxy.newProxyInstance(
-                loader, new Class[] { interfaceType, WebElement.class, WrapsElement.class, Locatable.class }, handler));
+                loader, new Class[] { interfaceType, WebElement.class, WrapsElement.class }, handler));
         logTrace("Successfully created element proxy");
         logTrace("Exiting ElementDecorator#proxyForLocator");
         return proxy;
@@ -185,10 +154,10 @@ public class ElementDecorator implements FieldDecorator {
      * @return proxy with the same type as we started with.
      */
     @SuppressWarnings("unchecked")
-    protected <T> List<T> proxyForListLocator(ClassLoader loader, Class<T> interfaceType, ElementLocator locator) {
+    protected <T> List<T> proxyForListLocator(ClassLoader loader, Class<T> interfaceType, ElementLocator locator, OrasiDriver driver) {
         InvocationHandler handler;
-        if (interfaceType.getName().contains("orasi")) {
-            handler = new ElementListHandler(interfaceType, locator);
+        if (Element.class.isAssignableFrom(interfaceType)) {
+            handler = new ElementListHandler(interfaceType, locator, driver);
         } else {
             handler = new LocatingElementListHandler(locator);
         }

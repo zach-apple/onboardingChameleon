@@ -5,6 +5,7 @@ import static com.orasi.utils.TestReporter.logFailure;
 import static com.orasi.utils.TestReporter.logTrace;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import com.orasi.web.OrasiDriver;
 import com.orasi.web.WebException;
@@ -23,6 +24,10 @@ public class ButtonImpl extends ElementImpl implements Button {
 
     public ButtonImpl(OrasiDriver driver, By by) {
         super(driver, by);
+    }
+
+    public ButtonImpl(OrasiDriver driver, By by, WebElement element) {
+        super(driver, by, element);
     }
 
     @Override
@@ -46,7 +51,7 @@ public class ButtonImpl extends ElementImpl implements Button {
         logTrace("Entering ButtonImpl#jsClick");
         try {
             logTrace("Attempting to executed [ jsClick ] on element [ " + by.toString() + " ] ");
-            getWrappedDriver().executeJavaScript("arguments[0].click();", getWrappedElement());
+            driver.executeJavaScript("arguments[0].click();", getWrappedElement());
             logTrace("Successfully executed [ jsClick ] on element [ " + by.toString() + " ] ");
         } catch (RuntimeException rte) {
             logFailure("Clicked Button [ <b>" + getElementLocatorInfo() + "</b>]");

@@ -1,5 +1,6 @@
 package com.orasi.api.restServices;
 
+import static com.orasi.api.WebServiceConstants.DEFAULT_REST_TIMEOUT;
 import static com.orasi.utils.TestReporter.logInfo;
 import static com.orasi.utils.TestReporter.logTrace;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -7,6 +8,8 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +19,7 @@ import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpOptions;
@@ -27,7 +31,6 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.message.BasicHeader;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -41,7 +44,25 @@ import com.orasi.utils.exception.DataProviderInputFileNotFound;
 import com.orasi.utils.io.FileLoader;
 
 public class RestService {
+    private int timeout = DEFAULT_REST_TIMEOUT;
     private List<BasicHeader> customHeaders = null;
+    private boolean acceptAllSSL = false;
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
+    }
+
+    public int getTimeout() {
+        return this.timeout;
+    }
+
+    public void setAcceptAllSSL(boolean acceptAllSSL) {
+        this.acceptAllSSL = acceptAllSSL;
+    }
+
+    public boolean getAcceptAllSSL() {
+        return this.acceptAllSSL;
+    }
 
     public void addCustomHeaders(String header, String value) {
         if (customHeaders == null) {
@@ -149,6 +170,10 @@ public class RestService {
      * @throws ClientProtocolException
      * @throws IOException
      */
+    public RestResponse sendPostRequest(String url, HeaderType headers) {
+        return sendPostRequest(url, headers, null, null);
+    }
+
     public RestResponse sendPostRequest(String url, HeaderType headers, List<NameValuePair> params) {
         return sendPostRequest(url, headers, params, null);
     }
@@ -158,7 +183,7 @@ public class RestService {
     }
 
     public RestResponse sendPutRequest(String url, HeaderType type, List<NameValuePair> params, String json) {
-        logTrace("Entering RestService#sendGetRequest");
+        logTrace("Entering RestService#sendPutRequest");
         logTrace("Creating Http PUT instance with URL of [ " + url + " ]");
         HttpPut httpPut = new HttpPut(url);
 
@@ -334,17 +359,30 @@ public class RestService {
     private RestResponse sendRequest(HttpUriRequest request) {
         logTrace("Entering RestService#sendRequest");
         RestResponse response = null;
+        CloseableHttpClient sslHttpClient = null;
+        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(timeout * 1000).setConnectionRequestTimeout(timeout * 1000).setSocketTimeout(timeout * 1000).build();
 
-        try (CloseableHttpClient httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build()) {
+        if (acceptAllSSL) {
+            sslHttpClient = TrustedSSLContext.buildHttpClient(timeout);
+        }
+
+        try (CloseableHttpClient client = (sslHttpClient == null
+                ? HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build()
+                : sslHttpClient)) {
+
             logTrace("Sending request");
             StopWatch execution = StopWatch.createStarted();
-            HttpResponse httpResponse = httpClient.execute(request);
+            HttpResponse httpResponse = client.execute(request);
             execution.stop();
             String executionTime = execution.toString();
             response = new RestResponse(request, httpResponse, executionTime);
+        } catch (SocketTimeoutException | SocketException t1) {
+            logTrace("Failed to establish connection after [ " + timeout + " ] seconds: " + t1.getMessage());
+            throw new RestException("Failed to establish connection after [ " + timeout + " ] seconds", t1);
         } catch (IOException e) {
             throw new RestException("Failed to send request to " + request.getURI().toString(), e);
         }
+
         logTrace("Returning RestResponse to calling method");
         logTrace("Exiting RestService#sendRequest");
         return response;

@@ -1,6 +1,8 @@
 package com.orasi.utils;
 
 import org.junit.Assert;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import com.orasi.AutomationException;
@@ -13,6 +15,11 @@ import ru.yandex.qatools.allure.annotations.Title;
 
 public class TestExcelDocumentReader extends WebBaseTest {
 
+    @Override
+    @AfterMethod(alwaysRun = true)
+    public void afterMethod(ITestResult testResults) {
+    }
+
     @Features("Utilities")
     @Stories("ExcelDocumentReader")
     @Title("readDataFilePathConstructorAllRows")
@@ -20,7 +27,7 @@ public class TestExcelDocumentReader extends WebBaseTest {
     public void readDataFilePathConstructorAllRows() {
         Object[][] data = null;
         String filepath = "/excelsheets/TestData.xlsx";
-        data = new ExcelDocumentReader(filepath).readData("Data");
+        data = ExcelDocumentReader.readData(filepath, "Data");
 
         Assert.assertNotNull(data);
         Assert.assertTrue(data.length == 3);
@@ -36,7 +43,7 @@ public class TestExcelDocumentReader extends WebBaseTest {
     public void readDataFilePathConstructorSingleRow() {
         Object[][] data = null;
         String filepath = "/excelsheets/TestData.xlsx";
-        data = new ExcelDocumentReader(filepath).readData("Data", 1);
+        data = ExcelDocumentReader.readData(filepath, "Data", 1);
 
         Assert.assertNotNull(data);
         Assert.assertTrue(data.length == 1);
@@ -52,7 +59,7 @@ public class TestExcelDocumentReader extends WebBaseTest {
     public void readDataFilePathConstructorSheetNameSingleRow() {
         Object[][] data = null;
         String filepath = "/excelsheets/TestData.xlsx";
-        data = new ExcelDocumentReader(filepath).readData("Data", 1);
+        data = ExcelDocumentReader.readData(filepath, "Data", 1);
 
         Assert.assertNotNull(data);
         Assert.assertTrue(data.length == 1);
@@ -68,7 +75,7 @@ public class TestExcelDocumentReader extends WebBaseTest {
     public void readDataDefaultConstructorAllRows() {
         Object[][] data = null;
         String filepath = "/excelsheets/TestData.xlsx";
-        data = new ExcelDocumentReader().readData(filepath, "Data");
+        data = ExcelDocumentReader.readData(filepath, "Data");
 
         Assert.assertNotNull(data);
         Assert.assertTrue(data.length == 3);
@@ -84,7 +91,7 @@ public class TestExcelDocumentReader extends WebBaseTest {
     public void readDataDefaultConstructorAllRowsIncludeColumns() {
         Object[][] data = null;
         String filepath = "/excelsheets/TestData.xlsx";
-        data = new ExcelDocumentReader(filepath).readData("Data", -1, 0);
+        data = ExcelDocumentReader.readData(filepath, "Data", -1, 0);
 
         Assert.assertNotNull(data);
         Assert.assertTrue(data.length == 4);
@@ -99,7 +106,7 @@ public class TestExcelDocumentReader extends WebBaseTest {
     public void readDataDefaultConstructorAllRowsStartRow() {
         Object[][] data = null;
         String filepath = "/excelsheets/TestData.xlsx";
-        data = new ExcelDocumentReader(filepath).readData("Data", -1, 2);
+        data = ExcelDocumentReader.readData(filepath, "Data", -1, 2);
 
         Assert.assertNotNull(data);
         Assert.assertTrue(data.length == 2);
@@ -115,7 +122,7 @@ public class TestExcelDocumentReader extends WebBaseTest {
     public void readDataDefaultConstructorSingleRow() {
         Object[][] data = null;
         String filepath = "/excelsheets/TestData.xlsx";
-        data = new ExcelDocumentReader().readData(filepath, "Data", 1);
+        data = ExcelDocumentReader.readData(filepath, "Data", 1);
 
         Assert.assertNotNull(data);
         Assert.assertTrue(data.length == 1);
@@ -131,7 +138,7 @@ public class TestExcelDocumentReader extends WebBaseTest {
     public void readDataXlsFile() {
         Object[][] data = null;
         String filepath = "/excelsheets/TestData_xls.xls";
-        data = new ExcelDocumentReader().readData(filepath, "Data", 1);
+        data = ExcelDocumentReader.readData(filepath, "Data", 1);
 
         Assert.assertNotNull(data);
         Assert.assertTrue(data.length == 1);
@@ -145,7 +152,7 @@ public class TestExcelDocumentReader extends WebBaseTest {
     @Title("readDataMissingXlsFile")
     @Test(groups = "regression", expectedExceptions = { AutomationException.class })
     public void readDataMissingXlsFile() {
-        new ExcelDocumentReader().readData("/excelsheets/TestData_blah.xls", "Data", 1);
+        ExcelDocumentReader.readData("/excelsheets/TestData_blah.xls", "Data", 1);
     }
 
     @Features("Utilities")
@@ -154,7 +161,7 @@ public class TestExcelDocumentReader extends WebBaseTest {
     @Test(groups = "regression", expectedExceptions = { AutomationException.class })
     public void readDataInvalidXlsFile() {
         String filepath = "/excelsheets/TestData_csv.csv";
-        new ExcelDocumentReader().readData(filepath, "Data", 1);
+        ExcelDocumentReader.readData(filepath, "Data", 1);
     }
 
     @Features("Utilities")
@@ -164,7 +171,7 @@ public class TestExcelDocumentReader extends WebBaseTest {
     public void readDataSheetAsIndex() {
         Object[][] data = null;
         String filepath = "/excelsheets/TestData.xlsx";
-        data = new ExcelDocumentReader().readData(filepath, "0");
+        data = ExcelDocumentReader.readData(filepath, "0");
 
         Assert.assertNotNull(data);
         Assert.assertTrue(data.length == 3);

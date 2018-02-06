@@ -6,11 +6,11 @@ import static org.testng.ITestResult.SUCCESS;
 
 import java.util.ResourceBundle;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.testng.ITestResult;
 
-import com.orasi.api.restServices.Headers.HeaderType;
 import com.orasi.Beta;
+import com.orasi.api.restServices.Headers.HeaderType;
 import com.orasi.api.restServices.RestService;
 import com.orasi.utils.Constants;
 import com.orasi.web.OrasiDriver;
@@ -67,7 +67,7 @@ public class Mustard {
 
         if ("fail".equalsIgnoreCase(status)) {
             mustardResult.getResult().setComment(result.getThrowable().getMessage());
-            mustardResult.getResult().setStacktrace(ExceptionUtils.getFullStackTrace(result.getThrowable()));
+            mustardResult.getResult().setStacktrace(ExceptionUtils.getStackTrace(result.getThrowable()));
         }
 
         if (isNotEmpty(base64Screenshot)) {

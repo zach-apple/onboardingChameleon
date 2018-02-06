@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.naming.directory.NoSuchAttributeException;
 
-import org.apache.commons.collections.list.FixedSizeList;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
@@ -19,6 +18,7 @@ import com.orasi.web.webelements.RadioGroup;
 /**
  * Wrapper around a WebElement for the Select class in Selenium.
  */
+@SuppressWarnings("unchecked")
 public class RadioGroupImpl extends ElementImpl implements RadioGroup {
     private List<WebElement> radioButtons = null;
     private int numberOfRadioButtons;
@@ -42,7 +42,7 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
         driver.setElementTimeout(0);
         this.radioButtons = element.findElements(By.tagName("input"));
         if (radioButtons.size() == 0) {
-            radioButtons = driver.findElements(by);
+            radioButtons = driver.findWebElements(by);
         }
         driver.setElementTimeout(timeout);
         getNumberOfRadioButtons();
@@ -99,10 +99,9 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
      *          radio group
      */
     @Override
-    @SuppressWarnings("unchecked")
     public List<String> getAllOptions() {
         logTrace("Entering RadioGroupImpl#getAllOptions");
-        stringOptions = FixedSizeList.decorate(Arrays.asList(new String[radioButtons.size()]));
+        stringOptions = Arrays.asList(new String[radioButtons.size()]);
         int loopCounter = 0;
 
         for (WebElement option : radioButtons) {
@@ -149,7 +148,7 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
                 currentIndex = loopCounter;
 
                 try {
-                    new ElementImpl(getWrappedDriver(), By.xpath("//input[" + (currentIndex + 1) + "]")).click();
+                    new ElementImpl(driver, By.xpath("//input[" + (currentIndex + 1) + "]")).click();
                 } catch (RuntimeException rte) {
                     interfaceLog("Select option <b> [ " + option
                             + " ] </b> from the radio group [ <b>" + getElementLocatorInfo() + " </b> ]",

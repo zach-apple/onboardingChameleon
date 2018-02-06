@@ -1,6 +1,7 @@
 package com.orasi.web;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -16,7 +17,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -26,7 +26,9 @@ import org.openqa.selenium.remote.RemoteKeyboard;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
+import com.orasi.DriverType;
 import com.orasi.utils.Constants;
+import com.orasi.utils.JavaUtilities;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataHelpers.DataWarehouse;
 import com.orasi.web.debugging.Colors;
@@ -57,6 +59,7 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
     private int currentElementTimeout;
     private int currentScriptTimeout;
     public static boolean DEFAULT_SYNC_HANDLER = true;
+    private DriverType driverType;
 
     public OrasiDriver() {
     }
@@ -67,7 +70,9 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      *
      * @param caps
      *            - Selenium desired capabilities, used to configure the OrasiDriver
+     * @deprecated - Should use DriverManagerFactory to create OrasiDriver
      */
+    @Deprecated
     public OrasiDriver(DesiredCapabilities caps) {
         currentPageTimeout = Constants.PAGE_TIMEOUT;
         currentElementTimeout = Constants.ELEMENT_TIMEOUT;
@@ -82,8 +87,9 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      * @param caps
      *            - Selenium desired capabilities, used to configure the OrasiDriver
      * @param url
-     *            -
+     * @deprecated - Should use DriverManagerFactory to create OrasiDriver
      */
+    @Deprecated
     public OrasiDriver(DesiredCapabilities caps, URL url) {
         currentPageTimeout = Constants.PAGE_TIMEOUT;
         currentElementTimeout = Constants.ELEMENT_TIMEOUT;
@@ -103,6 +109,14 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
 
     public void setDriver(WebDriver driver) {
         this.driver = driver;
+    }
+
+    public DriverType getDriverType() {
+        return driverType;
+    }
+
+    public void setDriverType(DriverType driverType) {
+        this.driverType = driverType;
     }
 
     /**
@@ -275,8 +289,11 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElements-org.openqa.selenium.By-
      */
     @Override
-    public List<WebElement> findElements(By by) {
-        return findWebElements(by);
+    public List<Element> findElements(By by) {
+        List<WebElement> elements = driver.findElements(by);
+        List<Element> el = new ArrayList<>();
+        elements.forEach(element -> el.add(new ElementImpl(this, by, element)));
+        return el;
     }
 
     /**
@@ -303,6 +320,7 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
      * @see http://github.com/Orasi/Chameleon/blob/master/src/main/java/com/orasi/web/webelements/impl/ElementImpl.java
      */
+    @SuppressWarnings("unchecked")
     @Override
     public Element findElement(By by) {
         return new ElementImpl(this, by);
@@ -323,6 +341,23 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
     }
 
     /**
+     * Method to find a single Textbox for a given page, using a Selenium <b><i>By</i></b> locator
+     *
+     * @param by
+     *            - Selenium <b><i>By</i></b> locator with which to locate the Textbox
+     * @return Textbox, if any, found by using the Selenium <b><i>By</i></b> locator
+     * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
+     * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+     * @see http://github.com/Orasi/Chameleon/blob/master/src/main/java/com/orasi/web/webelements/impl/TextboxImpl.java
+     */
+    public List<Textbox> findTextboxes(By by) {
+        List<WebElement> elements = findWebElements(by);
+        List<Textbox> textboxes = new ArrayList<>();
+        elements.forEach(element -> textboxes.add(new TextboxImpl(this, by, element)));
+        return textboxes;
+    }
+
+    /**
      * Method to find a single Button for a given page, using a Selenium <b><i>By</i></b> locator
      *
      * @param by
@@ -334,6 +369,23 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      */
     public Button findButton(By by) {
         return new ButtonImpl(this, by);
+    }
+
+    /**
+     * Method to find Buttons for a given page, using a Selenium <b><i>By</i></b> locator
+     *
+     * @param by
+     *            - Selenium <b><i>By</i></b> locator with which to locate the Buttons
+     * @return Button, if any, found by using the Selenium <b><i>By</i></b> locator
+     * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
+     * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
+     * @see http://github.com/Orasi/Chameleon/blob/master/src/main/java/com/orasi/web/webelements/impl/ButtonImpl.java
+     */
+    public List<Button> findButtons(By by) {
+        List<WebElement> elements = findWebElements(by);
+        List<Button> buttons = new ArrayList<>();
+        elements.forEach(element -> buttons.add(new ButtonImpl(this, by, element)));
+        return buttons;
     }
 
     /**
@@ -350,6 +402,13 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
         return new CheckboxImpl(this, by);
     }
 
+    public List<Checkbox> findCheckboxes(By by) {
+        List<WebElement> elements = findWebElements(by);
+        List<Checkbox> checkboxes = new ArrayList<>();
+        elements.forEach(element -> checkboxes.add(new CheckboxImpl(this, by, element)));
+        return checkboxes;
+    }
+
     /**
      * Method to find a single Label for a given page, using a Selenium <b><i>By</i></b> locator
      *
@@ -364,6 +423,13 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
         return new LabelImpl(this, by);
     }
 
+    public List<Label> findLabels(By by) {
+        List<WebElement> elements = findWebElements(by);
+        List<Label> labels = new ArrayList<>();
+        elements.forEach(element -> labels.add(new LabelImpl(this, by, element)));
+        return labels;
+    }
+
     /**
      * Method to find a single Link for a given page, using a Selenium <b><i>By</i></b> locator
      *
@@ -376,6 +442,13 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      */
     public Link findLink(By by) {
         return new LinkImpl(this, by);
+    }
+
+    public List<Link> findLinks(By by) {
+        List<WebElement> elements = findWebElements(by);
+        List<Link> links = new ArrayList<>();
+        elements.forEach(element -> links.add(new LinkImpl(this, by, element)));
+        return links;
     }
 
     /**
@@ -566,7 +639,11 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      * @see https://github.com/SeleniumHQ/selenium/blob/master/java/client/src/org/openqa/selenium/remote/SessionId.java
      */
     public String getSessionId() {
-        return getRemoteWebDriver().getSessionId().toString();
+    	if (JavaUtilities.isValid(getRemoteWebDriver().getSessionId())) {
+    		return getRemoteWebDriver().getSessionId().toString();
+    	} else {
+    		return null;
+    	}   	
     }
 
     /**
@@ -610,10 +687,11 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
                 driver = new SafariDriver(caps);
                 break;
             case "htmlunit":
-            case "html":
-                driver = new HtmlUnitDriver(true);
-                break;
-
+                /*
+                 * case "html":
+                 * driver = new HtmlUnitDriver(true);
+                 * break;
+                 */
             case "edge":
             case "microsoftedge":
                 driver = new EdgeDriver(caps);
@@ -655,34 +733,42 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
     public class Capabilities {
 
         public String browserName() {
-            if (driver instanceof HtmlUnitDriver) {
-                return ((HtmlUnitDriver) driver).getCapabilities().getBrowserName();
-            }
+            /*
+             * if (driver instanceof HtmlUnitDriver) {
+             * return ((HtmlUnitDriver) driver).getCapabilities().getBrowserName();
+             * }
+             */
             return getRemoteWebDriver().getCapabilities().getBrowserName();
         }
 
         public String browserVersion() {
-            if (driver instanceof HtmlUnitDriver) {
-                return ((HtmlUnitDriver) driver).getCapabilities().getVersion();
-            }
+            /*
+             * if (driver instanceof HtmlUnitDriver) {
+             * return ((HtmlUnitDriver) driver).getCapabilities().getVersion();
+             * }
+             */
             return getRemoteWebDriver().getCapabilities().getVersion();
         }
 
         public String platformOS() {
-            if (driver instanceof HtmlUnitDriver) {
-                return ((HtmlUnitDriver) driver).getCapabilities().getPlatform().name() + " "
-                        + ((HtmlUnitDriver) driver).getCapabilities().getPlatform().getMajorVersion() + "."
-                        + ((HtmlUnitDriver) driver).getCapabilities().getPlatform().getMinorVersion();
-            }
+            /*
+             * if (driver instanceof HtmlUnitDriver) {
+             * return ((HtmlUnitDriver) driver).getCapabilities().getPlatform().name() + " "
+             * + ((HtmlUnitDriver) driver).getCapabilities().getPlatform().getMajorVersion() + "."
+             * + ((HtmlUnitDriver) driver).getCapabilities().getPlatform().getMinorVersion();
+             * }
+             */
             return getRemoteWebDriver().getCapabilities().getPlatform().name() + " "
                     + getRemoteWebDriver().getCapabilities().getPlatform().getMajorVersion() + "."
                     + getRemoteWebDriver().getCapabilities().getPlatform().getMinorVersion();
         }
 
         public Platform platform() {
-            if (driver instanceof HtmlUnitDriver) {
-                return ((HtmlUnitDriver) driver).getCapabilities().getPlatform();
-            }
+            /*
+             * if (driver instanceof HtmlUnitDriver) {
+             * return ((HtmlUnitDriver) driver).getCapabilities().getPlatform();
+             * }
+             */
 
             return getRemoteWebDriver().getCapabilities().getPlatform();
         }
