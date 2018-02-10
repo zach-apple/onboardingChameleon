@@ -1,7 +1,5 @@
 package com.orasi.web.webelements;
 
-import org.openqa.selenium.WebElement;
-
 import com.orasi.web.webelements.impl.WebtableImpl;
 import com.orasi.web.webelements.impl.internal.ImplementedBy;
 
@@ -28,7 +26,7 @@ public interface Webtable extends Element {
     /**
      * @summary - Return the Cell of the specified row and Column in a Webtable
      */
-    WebElement getCell(int row, int column);
+    Element getCell(int row, int column);
 
     /**
      * @summary - Click cell in the specified row and Column in a Webtable

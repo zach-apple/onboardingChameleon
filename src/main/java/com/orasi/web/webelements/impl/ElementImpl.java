@@ -1284,14 +1284,15 @@ public class ElementImpl implements Element {
     }
 
     @Beta
-    protected WebElement reload() {
+    protected Element reload() {
         logTrace("Entering ElementImpl#reload");
-        WebElement el = null;
+        Element el = null;
         logTrace("Search DOM for element [ " + by.toString() + " ]");
 
         try {
             WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), driver.getElementTimeout());
-            el = wait.until(ExpectedConditions.presenceOfElementLocated(by));
+            wait.until(ExpectedConditions.presenceOfElementLocated(by));
+            el = driver.findElement(by);
         } catch (WebDriverException wde) {
             throw new NoSuchElementException("Failed locate element [ " + by.toString() + " ]");
         }
