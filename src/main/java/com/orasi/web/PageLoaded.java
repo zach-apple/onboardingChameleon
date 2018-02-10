@@ -153,16 +153,16 @@ public class PageLoaded {
      * @author Justin Phlegar
      *
      */
-    public static void isAngularComplete(OrasiDriver oDriver) {
+    public static boolean isAngularComplete(OrasiDriver oDriver) {
         try {
             oDriver.executeAsyncJavaScript("var callback = arguments[arguments.length - 1];"
                     + "angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
         } catch (WebDriverException wde) {
             logFailure(
                     "Unable to perform Angular sync. This is most likely because the $browser service is not injected within the Angular Controller. Performing a IsDomComplete instead");
-            isDomComplete(oDriver);
+            return isDomComplete(oDriver);
         }
-
+        return true;
     }
 
     /**

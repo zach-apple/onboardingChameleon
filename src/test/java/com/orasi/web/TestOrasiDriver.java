@@ -406,6 +406,7 @@ public class TestOrasiDriver extends WebBaseTest {
     public void executeAsyncJavaScript() {
 
         driver.get("http://cafetownsend-angular-rails.herokuapp.com/login");
+        Sleeper.sleep(3000);
         driver.executeAsyncJavaScript(
                 "var callback = arguments[arguments.length - 1];angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
     }
@@ -511,4 +512,45 @@ public class TestOrasiDriver extends WebBaseTest {
     public void updateNoKeyFound() {
         driver.data().update("password", "Orasi123");
     }
+
+    @Features("Utilities")
+    @Stories("OrasiDriver")
+    @Title("isAngularComplete")
+    @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "executeAsyncJavaScript")
+    public void isAngularComplete() {
+        Assert.assertNotNull(driver.page().isAngularComplete());
+    }
+
+    @Features("Utilities")
+    @Stories("OrasiDriver")
+    @Title("isDomComplete")
+    @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "executeAsyncJavaScript")
+    public void isDomComplete() {
+        Assert.assertNotNull(driver.page().isDomComplete());
+    }
+
+    @Features("Utilities")
+    @Stories("OrasiDriver")
+    @Title("isDomCompleteWithTimeout")
+    @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "executeAsyncJavaScript")
+    public void isDomCompleteWithTimeout() {
+        Assert.assertNotNull(driver.page().isDomComplete(3));
+    }
+
+    @Features("Utilities")
+    @Stories("OrasiDriver")
+    @Title("isDomInteractive")
+    @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "executeAsyncJavaScript")
+    public void isDomInteractive() {
+        Assert.assertNotNull(driver.page().isDomInteractive());
+    }
+
+    @Features("Utilities")
+    @Stories("OrasiDriver")
+    @Title("isDomInteractiveWithTimeout")
+    @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "executeAsyncJavaScript")
+    public void isDomInteractiveWithTimeout() {
+        Assert.assertNotNull(driver.page().isDomInteractive(3));
+    }
+
 }

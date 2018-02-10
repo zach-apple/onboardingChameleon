@@ -288,6 +288,7 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      * @see http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/By.html
      * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElements-org.openqa.selenium.By-
      */
+    @SuppressWarnings("unchecked")
     @Override
     public List<Element> findElements(By by) {
         List<WebElement> elements = driver.findElements(by);
@@ -639,11 +640,11 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      * @see https://github.com/SeleniumHQ/selenium/blob/master/java/client/src/org/openqa/selenium/remote/SessionId.java
      */
     public String getSessionId() {
-    	if (JavaUtilities.isValid(getRemoteWebDriver().getSessionId())) {
-    		return getRemoteWebDriver().getSessionId().toString();
-    	} else {
-    		return null;
-    	}   	
+        if (JavaUtilities.isValid(getRemoteWebDriver().getSessionId())) {
+            return getRemoteWebDriver().getSessionId().toString();
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -733,43 +734,20 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
     public class Capabilities {
 
         public String browserName() {
-            /*
-             * if (driver instanceof HtmlUnitDriver) {
-             * return ((HtmlUnitDriver) driver).getCapabilities().getBrowserName();
-             * }
-             */
             return getRemoteWebDriver().getCapabilities().getBrowserName();
         }
 
         public String browserVersion() {
-            /*
-             * if (driver instanceof HtmlUnitDriver) {
-             * return ((HtmlUnitDriver) driver).getCapabilities().getVersion();
-             * }
-             */
             return getRemoteWebDriver().getCapabilities().getVersion();
         }
 
         public String platformOS() {
-            /*
-             * if (driver instanceof HtmlUnitDriver) {
-             * return ((HtmlUnitDriver) driver).getCapabilities().getPlatform().name() + " "
-             * + ((HtmlUnitDriver) driver).getCapabilities().getPlatform().getMajorVersion() + "."
-             * + ((HtmlUnitDriver) driver).getCapabilities().getPlatform().getMinorVersion();
-             * }
-             */
             return getRemoteWebDriver().getCapabilities().getPlatform().name() + " "
                     + getRemoteWebDriver().getCapabilities().getPlatform().getMajorVersion() + "."
                     + getRemoteWebDriver().getCapabilities().getPlatform().getMinorVersion();
         }
 
         public Platform platform() {
-            /*
-             * if (driver instanceof HtmlUnitDriver) {
-             * return ((HtmlUnitDriver) driver).getCapabilities().getPlatform();
-             * }
-             */
-
             return getRemoteWebDriver().getCapabilities().getPlatform();
         }
 
@@ -780,8 +758,38 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      *
      * @return <b><i>PageLoaded</i></b> class
      */
-    public PageLoaded page() {
-        return new PageLoaded();
+    public Page page() {
+        return new Page();
+    }
+
+    public class Page {
+        public boolean isAngularComplete() {
+            return PageLoaded.isAngularComplete(getOrasiDriver());
+        }
+
+        public boolean isDomComplete() {
+            return PageLoaded.isDomComplete(getOrasiDriver());
+        }
+
+        public boolean isDomComplete(int timeout) {
+            return PageLoaded.isDomComplete(getOrasiDriver(), timeout);
+        }
+
+        public boolean isDomInteractive() {
+            return PageLoaded.isDomInteractive(getOrasiDriver());
+        }
+
+        public boolean isDomInteractive(int timeout) {
+            return PageLoaded.isDomInteractive(getOrasiDriver(), timeout);
+        }
+
+        public boolean isDomComplete(@SuppressWarnings("rawtypes") Class clazz, Element obj) {
+            return PageLoaded.isElementLoaded(clazz, getOrasiDriver(), obj);
+        }
+
+        public boolean isDomComplete(@SuppressWarnings("rawtypes") Class clazz, Element obj, int timeout) {
+            return PageLoaded.isElementLoaded(clazz, getOrasiDriver(), obj, timeout);
+        }
     }
 
     /*
