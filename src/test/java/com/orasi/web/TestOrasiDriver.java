@@ -23,6 +23,7 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import com.orasi.AutomationException;
 import com.orasi.DriverManager;
 import com.orasi.DriverManagerFactory;
 import com.orasi.DriverOptionsManager;
@@ -516,41 +517,76 @@ public class TestOrasiDriver extends WebBaseTest {
     @Features("Utilities")
     @Stories("OrasiDriver")
     @Title("isAngularComplete")
-    @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "executeAsyncJavaScript")
+    @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "findNGRepeater")
     public void isAngularComplete() {
+        DriverManager.setDriver(driver);
         Assert.assertNotNull(driver.page().isAngularComplete());
     }
 
     @Features("Utilities")
     @Stories("OrasiDriver")
     @Title("isDomComplete")
-    @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "executeAsyncJavaScript")
+    @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "isAngularComplete")
     public void isDomComplete() {
+        DriverManager.setDriver(driver);
         Assert.assertNotNull(driver.page().isDomComplete());
     }
 
     @Features("Utilities")
     @Stories("OrasiDriver")
     @Title("isDomCompleteWithTimeout")
-    @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "executeAsyncJavaScript")
+    @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "isDomComplete")
     public void isDomCompleteWithTimeout() {
+        DriverManager.setDriver(driver);
         Assert.assertNotNull(driver.page().isDomComplete(3));
     }
 
     @Features("Utilities")
     @Stories("OrasiDriver")
     @Title("isDomInteractive")
-    @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "executeAsyncJavaScript")
+    @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "isDomCompleteWithTimeout")
     public void isDomInteractive() {
+        DriverManager.setDriver(driver);
         Assert.assertNotNull(driver.page().isDomInteractive());
     }
 
     @Features("Utilities")
     @Stories("OrasiDriver")
     @Title("isDomInteractiveWithTimeout")
-    @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "executeAsyncJavaScript")
+    @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "isDomInteractive")
     public void isDomInteractiveWithTimeout() {
+        DriverManager.setDriver(driver);
         Assert.assertNotNull(driver.page().isDomInteractive(3));
+    }
+
+    @Features("Utilities")
+    @Stories("OrasiDriver")
+    @Title("isJQueryComplete")
+    @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "isDomInteractiveWithTimeout")
+    public void isJQueryComplete() {
+        driver.get("http://www.kariyer.net/");
+        DriverManager.setDriver(driver);
+        Assert.assertNotNull(driver.page().isJQueryComplete());
+    }
+
+    @Features("Utilities")
+    @Stories("OrasiDriver")
+    @Title("isJQueryCompleteWithTimeout")
+    @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "isDomInteractiveWithTimeout")
+    public void isJQueryCompleteWithTimeout() {
+        driver.get("http://www.kariyer.net/");
+        DriverManager.setDriver(driver);
+        Assert.assertNotNull(driver.page().isJQueryComplete(15));
+    }
+
+    @Features("Utilities")
+    @Stories("OrasiDriver")
+    @Title("isJQueryCompleteOnNonJQueryPage")
+    @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "isJQueryComplete", expectedExceptions = AutomationException.class)
+    public void isJQueryCompleteOnNonJQueryPage() {
+        driver.get("http://www.google.com/");
+        DriverManager.setDriver(driver);
+        Assert.assertNotNull(driver.page().isJQueryComplete());
     }
 
 }
