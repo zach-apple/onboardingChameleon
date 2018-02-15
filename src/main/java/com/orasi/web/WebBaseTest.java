@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -17,6 +18,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
 import com.orasi.AutomationException;
@@ -285,11 +287,11 @@ public class WebBaseTest extends BaseTest {
      */
     @Parameters({ "browserUnderTest", "browserVersion", "operatingSystem", "runLocation" })
     @BeforeSuite(alwaysRun = true)
-    public void beforeWebTest(String browserUnderTest, String browserVersion, String operatingSystem, String runLocation) {
-        setBrowserUnderTest(browserUnderTest);
-        setBrowserVersion(browserVersion);
-        setOperatingSystem(operatingSystem);
-        setRunLocation(runLocation);
+    public void beforeWebTest(@Optional String browserUnderTest, @Optional String browserVersion, @Optional String operatingSystem, @Optional String runLocation) {
+        setBrowserUnderTest(StringUtils.isNotEmpty(browserUnderTest) ? browserUnderTest : Constants.TESTNG_PARAM_BROWSER);
+        setBrowserVersion(StringUtils.isNotEmpty(browserVersion) ? browserVersion : "");
+        setOperatingSystem(StringUtils.isNotEmpty(operatingSystem) ? operatingSystem : "");
+        setRunLocation(StringUtils.isNotEmpty(runLocation) ? runLocation : Constants.TESTNG_PARAM_RUN_LOCATION);
         Highlight.setDebugMode(true);
     }
 
@@ -302,11 +304,11 @@ public class WebBaseTest extends BaseTest {
      */
     @Parameters({ "browserUnderTest", "browserVersion", "operatingSystem", "runLocation" })
     @BeforeMethod(alwaysRun = true)
-    public void beforeWebMethod(String browserUnderTest, String browserVersion, String operatingSystem, String runLocation) {
-        setBrowserUnderTest(browserUnderTest);
-        setBrowserVersion(browserVersion);
-        setOperatingSystem(operatingSystem);
-        setRunLocation(runLocation);
+    public void beforeWebMethod(@Optional String browserUnderTest, @Optional String browserVersion, @Optional String operatingSystem, @Optional String runLocation) {
+        setBrowserUnderTest(StringUtils.isNotEmpty(browserUnderTest) ? browserUnderTest : Constants.TESTNG_PARAM_BROWSER);
+        setBrowserVersion(StringUtils.isNotEmpty(browserVersion) ? browserVersion : "");
+        setOperatingSystem(StringUtils.isNotEmpty(operatingSystem) ? operatingSystem : "");
+        setRunLocation(StringUtils.isNotEmpty(runLocation) ? runLocation : Constants.TESTNG_PARAM_RUN_LOCATION);
     }
 
     @AfterMethod(alwaysRun = true)

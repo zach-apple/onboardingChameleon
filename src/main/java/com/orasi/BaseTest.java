@@ -15,6 +15,7 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
+import com.orasi.utils.Constants;
 import com.orasi.utils.TestReporter;
 
 public class BaseTest {
@@ -38,7 +39,7 @@ public class BaseTest {
             log("Setting parameter [ environment ] to [ " + environment + " ]");
             BaseTest.environment = environment;
         } else {
-            log("Parameter [ environment ] was not set or empty");
+            BaseTest.environment = Constants.TESTNG_PARAM_ENVIRONMENT;
         }
 
         if (isNotEmpty(reportToMustard)) {
