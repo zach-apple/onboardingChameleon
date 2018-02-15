@@ -29,6 +29,9 @@ public class Constants {
     public final static String USER_CREDENTIALS_PATH = "UserCredentials";
     public final static String SANDBOX_PATH = "/sandbox/";
     public final static String TNSNAMES_PATH = "/database/";
+    public final static String TESTNG_PARAM_RUN_LOCATION = "local";
+    public final static String TESTNG_PARAM_BROWSER = "FIREFOX";
+    public final static String TESTNG_PARAM_ENVIRONMENT = "Staging";
 
     /*
      * Default Browser Console logging level to report in TestReporter.logConsoleLogging
