@@ -1,11 +1,14 @@
 package com.orasi.web.by.common;
 
 import org.testng.Assert;
+import org.testng.ITestContext;
 import org.testng.ITestResult;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.orasi.DriverManager;
 import com.orasi.web.OrasiDriver;
 import com.orasi.web.WebBaseTest;
 import com.orasi.web.webelements.Element;
@@ -37,6 +40,13 @@ public class TestCommon extends WebBaseTest {
     @Override
     @AfterMethod(alwaysRun = true)
     public void afterMethod(ITestResult testResults) {
+    }
+
+    @Override
+    @AfterClass(alwaysRun = true)
+    public void afterClass(ITestContext testResults) {
+        DriverManager.setDriver(driver);
+        endTest(getTestName(), testResults);
     }
 
     @Features("Element Interfaces")

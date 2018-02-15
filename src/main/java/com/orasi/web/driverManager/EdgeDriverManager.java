@@ -15,7 +15,6 @@ import com.orasi.web.WebException;
 
 public class EdgeDriverManager extends DriverManager {
 
-    private EdgeDriverService service;
     private EdgeOptions options = null;
 
     public EdgeDriverManager() {
@@ -29,13 +28,13 @@ public class EdgeDriverManager extends DriverManager {
 
     @Override
     public void startService() {
-        if (null == service) {
+        if (null == driverService.get()) {
             try {
-                service = new EdgeDriverService.Builder()
+                driverService.set(new EdgeDriverService.Builder()
                         .usingDriverExecutable(new File(getDriverLocation(WebDriverConstants.DRIVER_EXE_NAME_EDGE)))
                         .usingAnyFreePort()
-                        .build();
-                service.start();
+                        .build());
+                driverService.get().start();
             } catch (Exception e) {
                 throw new WebException("Failed to start Edge driver service", e);
             }
@@ -43,15 +42,8 @@ public class EdgeDriverManager extends DriverManager {
     }
 
     @Override
-    public void stopService() {
-        if (null != service && service.isRunning()) {
-            service.stop();
-        }
-    }
-
-    @Override
     public void createDriver() {
-        driver = new EdgeDriver(service, options);
+        driver = new EdgeDriver((EdgeDriverService) driverService.get(), options);
     }
 
     @Override

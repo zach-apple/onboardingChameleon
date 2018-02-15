@@ -10,10 +10,24 @@ public class ExcelDataProvider {
     private String sheetName;
     private int row;
 
+    @Deprecated
+    /**
+     * Move to use static ExcelDataProvider.getTestData
+     * 
+     * @param filePath
+     * @param sheetName
+     */
     public ExcelDataProvider(String filePath, String sheetName) {
         this(filePath, sheetName, -1);
     }
 
+    @Deprecated
+    /**
+     * Move to use static ExcelDataProvider.getTestData
+     * 
+     * @param filePath
+     * @param sheetName
+     */
     public ExcelDataProvider(String filePath, String sheetName, int rowToRead) {
         URL file = getClass().getResource(filePath);
         if (file == null) {
@@ -25,7 +39,22 @@ public class ExcelDataProvider {
         this.row = rowToRead;
     }
 
+    @Deprecated
+    /**
+     * Move to use static ExcelDataProvider.getTestData
+     * 
+     * @param filePath
+     * @param sheetName
+     */
     public Object[][] getTestData() {
         return ExcelDocumentReader.readData(this.filePath, this.sheetName, this.row);
+    }
+
+    public static Object[][] getTestData(String filePath, String sheetName) {
+        return getTestData(filePath, sheetName, -1);
+    }
+
+    public static Object[][] getTestData(String filePath, String sheetName, int rowToRead) {
+        return ExcelDocumentReader.readData(filePath, sheetName, rowToRead);
     }
 }

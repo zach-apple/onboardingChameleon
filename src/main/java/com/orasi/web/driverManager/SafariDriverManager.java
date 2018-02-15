@@ -14,7 +14,6 @@ import com.orasi.web.WebException;
 
 public class SafariDriverManager extends DriverManager {
 
-    private SafariDriverService service;
     private SafariOptions options = null;
 
     public SafariDriverManager() {
@@ -27,13 +26,13 @@ public class SafariDriverManager extends DriverManager {
 
     @Override
     public void startService() {
-        if (null == service) {
+        if (null == driverService.get()) {
             try {
-                service = new SafariDriverService.Builder()
+                driverService.set(new SafariDriverService.Builder()
                         .usingAnyFreePort()
                         .usingTechnologyPreview(WebDriverConstants.SAFARI_USE_TECHNOLOGY_PREVIEW)
-                        .build();
-                service.start();
+                        .build());
+                driverService.get().start();
             } catch (Exception e) {
                 throw new WebException("Failed to start Safari driver service", e);
             }
@@ -41,15 +40,8 @@ public class SafariDriverManager extends DriverManager {
     }
 
     @Override
-    public void stopService() {
-        if (null != service && service.isRunning()) {
-            service.stop();
-        }
-    }
-
-    @Override
     public void createDriver() {
-        driver = new SafariDriver(service, options);
+        driver = new SafariDriver((SafariDriverService) driverService.get(), options);
     }
 
     @Override

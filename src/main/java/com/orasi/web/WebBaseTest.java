@@ -410,7 +410,7 @@ public class WebBaseTest extends BaseTest {
         setTestName(testName);
         driverSetup();
         // launch the application under test normally
-        if (getPageURL().isEmpty()) {
+        if (getPageURL() == null || getPageURL().isEmpty()) {
             launchApplication();
             // Otherwise if you have a specific page you want the test to start from
         } else {
@@ -462,6 +462,7 @@ public class WebBaseTest extends BaseTest {
             }
             // quit driver
             DriverManager.quitDriver();
+            DriverManager.stopService();
         }
 
     }
