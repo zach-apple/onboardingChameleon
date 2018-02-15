@@ -764,31 +764,31 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
 
     public class Page {
         public boolean isAngularComplete() {
-            return PageLoaded.isAngularComplete(getOrasiDriver());
+            return PageLoaded.isAngularComplete();
         }
 
         public boolean isDomComplete() {
-            return PageLoaded.isDomComplete(getOrasiDriver());
+            return PageLoaded.isDomComplete();
         }
 
         public boolean isDomComplete(int timeout) {
-            return PageLoaded.isDomComplete(getOrasiDriver(), timeout);
+            return PageLoaded.isDomComplete(timeout);
+        }
+
+        public boolean isJQueryComplete() {
+            return PageLoaded.isJQueryComplete();
+        }
+
+        public boolean isJQueryComplete(int timeout) {
+            return PageLoaded.isJQueryComplete(timeout);
         }
 
         public boolean isDomInteractive() {
-            return PageLoaded.isDomInteractive(getOrasiDriver());
+            return PageLoaded.isDomInteractive();
         }
 
         public boolean isDomInteractive(int timeout) {
-            return PageLoaded.isDomInteractive(getOrasiDriver(), timeout);
-        }
-
-        public boolean isDomComplete(@SuppressWarnings("rawtypes") Class clazz, Element obj) {
-            return PageLoaded.isElementLoaded(clazz, getOrasiDriver(), obj);
-        }
-
-        public boolean isDomComplete(@SuppressWarnings("rawtypes") Class clazz, Element obj, int timeout) {
-            return PageLoaded.isElementLoaded(clazz, getOrasiDriver(), obj, timeout);
+            return PageLoaded.isDomInteractive(timeout);
         }
     }
 

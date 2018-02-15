@@ -1,4 +1,9 @@
 # Version History
+## Notes next release
+* Fixed bug hwere internal reload and Webtable getCell were returning WebElement instead of Element
+* Deprecating PageLoaded isElementLoaded and OrasiDriver.page.isElementLoaded in favor of it now being handled internally. Any sync will work in its place now
+* Deprecating PageLoaded method that had OrasiDriver to be passed as parameter in favor of DriverManager
+* Adding PageLoaded isJQueryComplete 
 
 ## Version 1.1.4 - 02/06/2018
 * **POM.xml**
