@@ -16,7 +16,6 @@ import com.orasi.web.WebException;
 
 public class FirefoxDriverManager extends DriverManager {
 
-    private GeckoDriverService service;
     private FirefoxOptions options = null;
 
     public FirefoxDriverManager() {
@@ -35,13 +34,13 @@ public class FirefoxDriverManager extends DriverManager {
 
     @Override
     public void startService() {
-        if (null == service) {
+        if (null == driverService.get()) {
             try {
-                service = new GeckoDriverService.Builder()
+                driverService.set(new GeckoDriverService.Builder()
                         .usingDriverExecutable(new File(getDriverLocation(WebDriverConstants.DRIVER_EXE_NAME_FIREFOX)))
                         .usingAnyFreePort()
-                        .build();
-                service.start();
+                        .build());
+                driverService.get().start();
             } catch (Exception e) {
                 throw new WebException("Failed to start Gecko/Firefox driver service", e);
             }
@@ -49,15 +48,8 @@ public class FirefoxDriverManager extends DriverManager {
     }
 
     @Override
-    public void stopService() {
-        if (null != service && service.isRunning()) {
-            service.stop();
-        }
-    }
-
-    @Override
     public void createDriver() {
-        driver = new FirefoxDriver(service, options);
+        driver = new FirefoxDriver((GeckoDriverService) driverService.get(), options);
     }
 
     @Override

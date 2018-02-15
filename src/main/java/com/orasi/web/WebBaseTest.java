@@ -462,6 +462,7 @@ public class WebBaseTest extends BaseTest {
             }
             // quit driver
             DriverManager.quitDriver();
+            DriverManager.stopService();
         }
 
     }

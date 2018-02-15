@@ -161,6 +161,8 @@ public class TestOrasiDriver extends WebBaseTest {
             }
         }
         driver.quit();
+        DriverManager.quitDriver();
+        DriverManager.stopService();
     }
 
     @Features("Utilities")

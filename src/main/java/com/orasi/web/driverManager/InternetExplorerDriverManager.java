@@ -15,7 +15,6 @@ import com.orasi.web.WebException;
 
 public class InternetExplorerDriverManager extends DriverManager {
 
-    private InternetExplorerDriverService service;
     private InternetExplorerOptions options = null;
 
     public InternetExplorerDriverManager() {
@@ -30,13 +29,13 @@ public class InternetExplorerDriverManager extends DriverManager {
 
     @Override
     public void startService() {
-        if (null == service) {
+        if (null == driverService.get()) {
             try {
-                service = new InternetExplorerDriverService.Builder()
+                driverService.set(new InternetExplorerDriverService.Builder()
                         .usingDriverExecutable(new File(getDriverLocation(WebDriverConstants.DRIVER_EXE_NAME_INTERNET_EXPLORER)))
                         .usingAnyFreePort()
-                        .build();
-                service.start();
+                        .build());
+                driverService.get().start();
             } catch (Exception e) {
                 throw new WebException("Failed to start Internet Explorer driver service", e);
             }
@@ -44,15 +43,8 @@ public class InternetExplorerDriverManager extends DriverManager {
     }
 
     @Override
-    public void stopService() {
-        if (null != service && service.isRunning()) {
-            service.stop();
-        }
-    }
-
-    @Override
     public void createDriver() {
-        driver = new InternetExplorerDriver(service, options);
+        driver = new InternetExplorerDriver((InternetExplorerDriverService) driverService.get(), options);
     }
 
     @Override
