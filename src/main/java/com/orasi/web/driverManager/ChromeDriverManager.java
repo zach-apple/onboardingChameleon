@@ -15,7 +15,6 @@ import com.orasi.web.WebException;
 
 public class ChromeDriverManager extends DriverManager {
 
-    private ChromeDriverService service;
     private ChromeOptions options = null;
 
     public ChromeDriverManager() {
@@ -29,13 +28,13 @@ public class ChromeDriverManager extends DriverManager {
 
     @Override
     public void startService() {
-        if (null == service) {
+        if (null == driverService.get()) {
             try {
-                service = new ChromeDriverService.Builder()
+                driverService.set(new ChromeDriverService.Builder()
                         .usingDriverExecutable(new File(getDriverLocation(WebDriverConstants.DRIVER_EXE_NAME_CHROME)))
                         .usingAnyFreePort()
-                        .build();
-                service.start();
+                        .build());
+                driverService.get().start();
             } catch (Exception e) {
                 throw new WebException("Failed to start Chrome driver service", e);
             }
@@ -43,15 +42,8 @@ public class ChromeDriverManager extends DriverManager {
     }
 
     @Override
-    public void stopService() {
-        if (null != service && service.isRunning()) {
-            service.stop();
-        }
-    }
-
-    @Override
     public void createDriver() {
-        driver = new ChromeDriver(service, options);
+        driver = new ChromeDriver((ChromeDriverService) driverService.get(), options);
     }
 
     @Override

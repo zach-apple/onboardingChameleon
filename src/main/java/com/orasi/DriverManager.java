@@ -4,6 +4,8 @@ import java.net.URL;
 
 import org.apache.commons.lang3.SystemUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.remote.service.DriverService;
 
 import com.orasi.utils.Constants;
 import com.orasi.utils.io.FileLoader;
@@ -12,11 +14,10 @@ import com.orasi.web.OrasiDriver;
 public abstract class DriverManager {
 
     protected WebDriver driver = null;
+    protected static ThreadLocal<DriverService> driverService = new ThreadLocal<>();
     private static ThreadLocal<OrasiDriver> orasiDriver = new ThreadLocal<>();
 
     protected abstract void startService();
-
-    protected abstract void stopService();
 
     protected abstract void createDriver();
 
@@ -27,6 +28,15 @@ public abstract class DriverManager {
     public static void quitDriver() {
         if (null != orasiDriver && null != orasiDriver.get()) {
             orasiDriver.get().quit();
+            orasiDriver.remove();
+        }
+    }
+
+    public static void stopService() {
+        if (null != driverService.get() && driverService.get().isRunning()) {
+            driverService.get().stop();
+            driverService.remove();
+            System.gc();
         }
     }
 
@@ -35,9 +45,15 @@ public abstract class DriverManager {
     }
 
     public void initalizeDriver() {
-        startService();
-        createDriver();
-        createOrasiDriver();
+        try {
+            startService();
+            createDriver();
+            createOrasiDriver();
+        } catch (WebDriverException e) {
+            // If driver or session fails to create, then it is possible for service to remain open.
+            // Explicitly close driver service here to prevent orphaned processes
+            stopService();
+        }
     }
 
     public void initalizeDriver(URL url) {
