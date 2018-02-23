@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Core-Regression" parallel="methods" thread-count="10">
-	<parameter name="browserUnderTest" value="html" />
-	<parameter name="environment" value="staging" />
+	<parameter name="browserUnderTest" value="chrome" />
+	<parameter name="environment" value="QA" />
 	<parameter name="runLocation" value="local" />
 	<parameter name="browserVersion" value="" />
-	<parameter name="operatingSystem" value="" />
- 
+	<parameter name="operatingSystem" value="Windows 10" />
+
 	<test name="Testbox Test" parallel="methods" thread-count="10">
 		<classes>
-			<class name="com.orasi.web.TestOrasiDriver" />
+			<!-- Note: issue found during login verification when running all at once -->
+			<class name="AppleTests.SuccessfulLogin" />
+			<class name="AppleTests.UnsuccessfulLogin" />
+			<class name="AppleTests.AddProject" />
+			<class name="AppleTests.InactivesHidden" />
+			<class name="AppleTests.CompanySearchSuccess" />
+			<class name="AppleTests.TitleAdd" />
+			<class name="AppleTests.TitleEdit" />
 		</classes>
 	</test>
-	
+
 </suite> <!-- Suite -->
