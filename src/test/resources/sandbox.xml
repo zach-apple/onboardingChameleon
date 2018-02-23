@@ -10,13 +10,13 @@
 	<test name="Testbox Test" parallel="methods" thread-count="10">
 		<classes>
 			<!-- Note: issue found during login verification when running all at once -->
-			<class name="AppleTests.SuccessfulLogin" />
-			<class name="AppleTests.UnsuccessfulLogin" />
-			<class name="AppleTests.AddProject" />
-			<class name="AppleTests.InactivesHidden" />
-			<class name="AppleTests.CompanySearchSuccess" />
+<!-- 			<class name="AppleTests.SuccessfulLogin" /> -->
+<!-- 			<class name="AppleTests.UnsuccessfulLogin" /> -->
+<!-- 			<class name="AppleTests.AddProject" /> -->
+<!-- 			<class name="AppleTests.InactivesHidden" /> -->
+<!-- 			<class name="AppleTests.CompanySearchSuccess" /> -->
 			<class name="AppleTests.TitleAdd" />
-			<class name="AppleTests.TitleEdit" />
+<!-- 			<class name="AppleTests.TitleEdit" /> -->
 		</classes>
 	</test>
 

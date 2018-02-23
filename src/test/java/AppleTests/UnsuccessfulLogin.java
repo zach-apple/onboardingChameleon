@@ -20,6 +20,5 @@ public class UnsuccessfulLogin extends WebBaseTest {
 		loginPage.invalidLogin();
 		TestReporter.logStep("Verify alert for username not found");
 		TestReporter.assertTrue(loginPage.notLoggedIn(), "Alert is visible");
-
 	}
 }

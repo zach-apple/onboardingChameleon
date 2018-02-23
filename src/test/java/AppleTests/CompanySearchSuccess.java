@@ -1,5 +1,6 @@
 package AppleTests;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.orasi.utils.TestReporter;
@@ -10,16 +11,23 @@ import blueSource.LoginPage;
 import blueSource.TopNavigationBar;
 
 public class CompanySearchSuccess extends WebBaseTest {
-	@Test
-	public void testSearch() {
-		TestReporter.logScenario("Verify the user can search for companies by name");
+	private TopNavigationBar topNav;
+
+	@BeforeMethod
+	private void getLoggedIn() {
+		TestReporter.logScenario("Verify the user can add a Title");
 		TestReporter.logStep("Navigate to the BlueSource landing page and log in with valid credentials");
 		setPageURL("https://bluesourcestaging.herokuapp.com");
-		testStart("Successful Company Search");
+		testStart("Successful Title Add");
 		LoginPage loginPage = new LoginPage();
 		loginPage.login();
-		TopNavigationBar topNav = new TopNavigationBar();
+		topNav = new TopNavigationBar();
 		TestReporter.assertTrue(topNav.isLogoutVisible(), "Logout is visible");
+	}
+
+	@Test
+	public void testSearch() {
+
 		TestReporter.logStep("Navigate to the Directory page");
 		topNav.navToDirectory();
 		TestReporter.logStep("Verify the user is on the Directory page");

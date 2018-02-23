@@ -1,5 +1,6 @@
 package AppleTests;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.orasi.utils.TestReporter;
@@ -10,16 +11,22 @@ import blueSource.ProjectsPage;
 import blueSource.TopNavigationBar;
 
 public class AddProject extends WebBaseTest {
-	@Test
-	public void testAddProject() {
-		TestReporter.logScenario("Verify that the user can add a project");
+	private TopNavigationBar topNav;
+
+	@BeforeMethod
+	private void getLoggedIn() {
+		TestReporter.logScenario("Verify the user can add a Title");
 		TestReporter.logStep("Navigate to the BlueSource landing page and log in with valid credentials");
 		setPageURL("https://bluesourcestaging.herokuapp.com");
-		testStart("Successful Project Add");
+		testStart("Successful Title Add");
 		LoginPage loginPage = new LoginPage();
 		loginPage.login();
-		TopNavigationBar topNav = new TopNavigationBar();
+		topNav = new TopNavigationBar();
 		TestReporter.assertTrue(topNav.isLogoutVisible(), "Logout is visible");
+	}
+
+	@Test
+	public void testAddProject() {
 		TestReporter.logStep("Navigate to the Projects page");
 		topNav.navToProjects();
 		TestReporter.logStep("Verify that the user is at the Projects page");

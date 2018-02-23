@@ -44,7 +44,7 @@ public class NewTitlesPage {
 	public void addTitle() {
 		// sends the name of the title to add, with a random integer ending for slight
 		// ease on multiple test runs
-		titleNameBox.sendKeys(newTitle + (int) Math.random() * 500);
+		titleNameBox.sendKeys(newTitle + (int) (Math.random() * 500));
 		// clicks the 'Create Title' button to submit the new title
 		btnNewTitle.click();
 	}
